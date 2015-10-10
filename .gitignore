@@ -1,0 +1,10 @@
+
+/docs/*
+/tmp/*
+/vendor/*
+
+/.project
+/.settings
+
+
+/.buildpath

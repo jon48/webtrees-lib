@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpdoc>
+<title><![CDATA[webtrees-lib: MyArtJaub library for webtrees]]></title>
+  <parser>
+  	<default-package-name>MyArtJaub\Webtrees</default-package-name>
+    <target>docs/phpdoc/parser</target>
+  </parser>
+  <transformer>
+    <target>docs/phpdoc/output</target>
+  </transformer>
+  <transformations>
+  	<template name="clean" />
+  </transformations>
+  <files>
+    <directory>src</directory>
+  </files>
+  <logging>
+    <level>warn</level>
+    <paths>
+        <default>docs/phpdoc/logs/{DATE}.log</default>
+        <errors>docs/phpdoc/logs/{DATE}.errors.log</errors>
+    </paths>
+	</logging>
+</phpdoc>
