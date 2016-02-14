@@ -48,6 +48,22 @@ class Family extends GedcomRecord {
 		$this->_ismarriagesourced = $this->isFactSourced(WT_EVENTS_MARR.'|MARC');
 		return $this->_ismarriagesourced;
 	}
+	
+	/**
+	 * Find the spouse of a person, using the Xref comparison.
+	 *
+	 * @param Individual $person
+	 *
+	 * @return Individual|null
+	 */
+	public function getSpouseById(\Fisharebest\Webtrees\Individual $person) {
+		if ($this->gedcomrecord->getWife() && 
+				$person->getXref() === $this->gedcomrecord->getWife()->getXref()) {
+			return $this->gedcomrecord->getHusband();
+		} else {
+			return $this->gedcomrecord->getWife();
+		}
+	}
 		
 }
 
