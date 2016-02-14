@@ -13,6 +13,8 @@ namespace MyArtJaub\Webtrees;
  * Class to hold constants of the webtrees-lib library.
  */
 class Constants {
+    
+    const LIB_NAMESPACE = __NAMESPACE__;
 	
 	/** Internal name of the Hooks Module
 	 * @var string
@@ -28,6 +30,11 @@ class Constants {
 	 * @var string
 	 */
 	const MODULE_MAJ_MISC_NAME = 'myartjaub_misc';
+	
+	/** Internal name of the Patronymic Lineages Module
+	 * @var string
+	 */
+	const MODULE_MAJ_PATROLIN_NAME = 'myartjaub_patronymiclineage';
 	
 	/** Internal name of the Sosa Module
 	 * @var string

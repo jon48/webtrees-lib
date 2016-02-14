@@ -214,7 +214,7 @@ class FunctionsPrint {
 		$place = $fact->getPlace();
 		if($place){
 			$dplace = new Place($place);
-			$html .= $dplace->getFormattedName($format, $anchor);
+			$html .= $dplace->htmlFormattedName($format, $anchor);
 		}
 		return $html;
 	}

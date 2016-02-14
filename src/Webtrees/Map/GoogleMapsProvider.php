@@ -13,8 +13,8 @@ namespace MyArtJaub\Webtrees\Map;
 use \Fisharebest\Webtrees\Database;
 
 /**
- * Maps provider for GoogleMaps.
- * Based on the MapProvider interface, and the core GoogleMaps modules.
+ * Maps provider for GoogleMaps™.
+ * Based on the MapProvider interface, and the core Google Maps module.
  * 
  * @uses MapProviderInterface
  */
