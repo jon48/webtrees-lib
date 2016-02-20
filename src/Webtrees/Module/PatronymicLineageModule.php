@@ -11,10 +11,7 @@
 namespace MyArtJaub\Webtrees\Module;
 
 use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
 use \Fisharebest\Webtrees\I18N;
-use \Fisharebest\Webtrees\Functions\FunctionsPrintLists;
-use \MyArtJaub\Webtrees\Module\PatronymicLineage\PatronymicLineageController;
 use \MyArtJaub\Webtrees\Mvc\Dispatcher;
 
 /**

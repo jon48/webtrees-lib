@@ -10,6 +10,8 @@
  */
 namespace MyArtJaub\Webtrees\Mvc\View;
 
+use Fisharebest\Webtrees\Controller\BaseController;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 /**
  * Factory to generate views for compatible modules
  */
@@ -43,17 +45,20 @@ class ViewFactory {
      * Return the view specified by the controller and view name, using data from the ViewBag
      * 
      * @param string $view_name
+     * @param \MyArtJaub\Webtrees\Mvc\Controller\MvcControllerInterface $mvc_ctrl
      * @param \Fisharebest\Webtrees\Controller\BaseController $ctrl
      * @param \MyArtJaub\Webtrees\Mvc\View\ViewBag $data
      * @return \MyArtJaub\Webtrees\Mvc\View\AbstractView View
      * @throws \Exception
      */
-    public function makeView($view_name, \Fisharebest\Webtrees\Controller\BaseController $ctrl, ViewBag $data) {
-        if(!$ctrl) throw new \Exception('Controller not defined');
+    public function makeView($view_name, MvcController $mvc_ctrl, BaseController $ctrl, ViewBag $data) 
+    {
+        if(!$mvc_ctrl) throw new \Exception('Mvc Controller not defined');
+        if(!$ctrl) throw new \Exception('Base Controller not defined');
         if(!$view_name) throw new \Exception('View not defined');
         
-        $ctrl_refl = new \ReflectionObject($ctrl);
-        $view_class = $ctrl_refl->getNamespaceName() . '\\Views\\' . $view_name . 'View';       
+        $mvc_ctrl_refl = new \ReflectionObject($mvc_ctrl);
+        $view_class = $mvc_ctrl_refl->getNamespaceName() . '\\Views\\' . $view_name . 'View';       
         if(!class_exists($view_class)) throw new \Exception('View does not exist');
         
         return new $view_class($ctrl, $data);
@@ -63,13 +68,15 @@ class ViewFactory {
      * Static invocation of the makeView method
      * 
      * @param string $view_name
+     * @param \MyArtJaub\Webtrees\Mvc\Controller\MvcControllerInterface $mvc_ctrl
      * @param \Fisharebest\Webtrees\Controller\BaseController $ctrl
      * @param \MyArtJaub\Webtrees\Mvc\View\ViewBag $data
      * @return \MyArtJaub\Webtrees\Mvc\View\AbstractView View
      * @see \MyArtJaub\Webtrees\Mvc\View\ViewFactory::handle()
      */
-    public static function make($view_name, \Fisharebest\Webtrees\Controller\BaseController $ctrl, ViewBag $data) {
-        return self::getInstance()->makeView($view_name, $ctrl, $data);
+    public static function make($view_name, MvcController $mvc_ctrl, BaseController $ctrl, ViewBag $data) 
+    {
+        return self::getInstance()->makeView($view_name, $mvc_ctrl, $ctrl, $data);
     }
     
     /**

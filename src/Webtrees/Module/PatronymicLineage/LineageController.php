@@ -10,19 +10,20 @@
  */
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
 
-use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
 use \Fisharebest\Webtrees\I18N;
 use \Fisharebest\Webtrees\Filter;
 use \Fisharebest\Webtrees\Query\QueryName;
 use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 use MyArtJaub\Webtrees\Mvc\View\ViewBag;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Model\LineageBuilder;
+use Fisharebest\Webtrees\Controller\PageController;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use Fisharebest\Webtrees\Module\AbstractModule;
 
 /**
  * Controller for Lineage
  */
-class LineageController extends fw\Controller\PageController
+class LineageController extends MvcController
 {   
     
     /**
@@ -58,8 +59,8 @@ class LineageController extends fw\Controller\PageController
     /**
      * Constructor for LineageConstructor
      */
-    public function __construct() {                
-        parent::__construct();
+    public function __construct(AbstractModule $module) {
+        parent::__construct($module);
         
         $this->surname     = Filter::get('surname');
         $this->alpha       = Filter::get('alpha'); // All surnames beginning with this letter where "@"=unknown and ","=none
@@ -98,8 +99,6 @@ class LineageController extends fw\Controller\PageController
             $this->show     = 'none'; // Don't show lists until something is chosen
         }
         $this->legend = '<span dir="auto">' . $this->legend . '</span>';
-        
-        $this->setPageTitle(I18N::translate('Patronymic Lineages') . ' : ' . $this->legend);
           
     }
     
@@ -151,8 +150,11 @@ class LineageController extends fw\Controller\PageController
     public function index() {
         global $WT_TREE;
         
+        $controller = new PageController();
+        $controller->setPageTitle(I18N::translate('Patronymic Lineages') . ' : ' . $this->legend);
+        
         $view_bag = new ViewBag();
-        $view_bag->set('title', $this->getPageTitle());
+        $view_bag->set('title', $controller->getPageTitle());
         $view_bag->set('tree', $WT_TREE);
         $view_bag->set('alpha', $this->alpha);
         $view_bag->set('surname', $this->surname);
@@ -174,7 +176,7 @@ class LineageController extends fw\Controller\PageController
             }
         }
         
-        ViewFactory::make('Lineage', $this, $view_bag)->render();   
+        ViewFactory::make('Lineage', $this, $controller, $view_bag)->render();   
     }
     
     

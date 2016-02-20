@@ -11,8 +11,7 @@
 namespace MyArtJaub\Webtrees\Mvc;
 
 use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
-use MyArtJaub\Webtrees\Controller\ErrorController;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 
 /**
  * Standard concrete implementation of DispatcherInferface
@@ -68,7 +67,8 @@ class Dispatcher implements DispatcherInterface {
 		
 		$ctrl_class = $ctrl_namespace . $ctrl_name . 'Controller';
 		if(class_exists($ctrl_class) 
-			&& $ctrl = new $ctrl_class() ) {
+		    && is_subclass_of($ctrl_class, '\\MyArtJaub\\Webtrees\\Mvc\\Controller\\MvcController')
+			&& $ctrl = new $ctrl_class($module) ) {
 			if(method_exists($ctrl, $method)) {
 				call_user_func_array(array($ctrl, $method), array());
 			}
