@@ -33,7 +33,7 @@ class WelcomeBlockModule extends AbstractModule
      * {@inhericDoc}
      */
     public function getDescription() {
-        return /* I18N: Description of the “Patronymic lineage” module */ I18N::translate('The MyArtJaub Welcome block welcomes the visitor to the site, allows a quick login to the site, and displays statistics on visits.');
+        return /* I18N: Description of the “WelcomeBlock” module */ I18N::translate('The MyArtJaub Welcome block welcomes the visitor to the site, allows a quick login to the site, and displays statistics on visits.');
     }
     
     /**

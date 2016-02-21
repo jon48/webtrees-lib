@@ -49,7 +49,7 @@ class Hook {
 	public function subscribe($hsubscriber){
 		if(HookProvider::isModuleOperational()){
 			$statement = fw\Database::prepare(
-					"INSERT IGNORE INTO `##phooks` (ph_hook_function, ph_hook_context, ph_module_name)".
+					"INSERT IGNORE INTO `##maj_hooks` (majh_hook_function, majh_hook_context, majh_module_name)".
 					" VALUES (?, ?, ?)"
 			)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));
 		}
@@ -64,11 +64,11 @@ class Hook {
 	public function setPriority($hsubscriber, $priority){
 		if(HookProvider::isModuleOperational()){
 			fw\Database::prepare(
-			"UPDATE `##phooks`".
-			" SET ph_module_priority=?".
-			" WHERE ph_hook_function=?".
-			" AND ph_hook_context=?".
-			" AND ph_module_name=?"
+			"UPDATE `##maj_hooks`".
+			" SET majh_module_priority=?".
+			" WHERE majh_hook_function=?".
+			" AND majh_hook_context=?".
+			" AND majh_module_name=?"
 					)->execute(array($priority, $this->hook_function, $this->hook_context, $hsubscriber));
 		}
 	}
@@ -81,11 +81,11 @@ class Hook {
 	public function enable($hsubscriber){
 		if(HookProvider::isModuleOperational()){
 		fw\Database::prepare(
-			"UPDATE `##phooks`".
-			" SET ph_status='enabled'".
-			" WHERE ph_hook_function=?".
-			" AND ph_hook_context=?".
-			" AND ph_module_name=?"
+			"UPDATE `##maj_hooks`".
+			" SET majh_status='enabled'".
+			" WHERE majh_hook_function=?".
+			" AND majh_hook_context=?".
+			" AND majh_module_name=?"
 			)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));
 		}
 	}
@@ -98,11 +98,11 @@ class Hook {
 	public function disable($hsubscriber){
 		if(HookProvider::isModuleOperational()){
 		fw\Database::prepare(
-			"UPDATE `##phooks`".
-			" SET ph_status='disabled'".
-			" WHERE ph_hook_function=?".
-			" AND ph_hook_context=?".
-			" AND ph_module_name=?"
+			"UPDATE `##maj_hooks`".
+			" SET majh_status='disabled'".
+			" WHERE majh_hook_function=?".
+			" AND majh_hook_context=?".
+			" AND majh_module_name=?"
 			)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));
 		}
 	}
@@ -115,10 +115,10 @@ class Hook {
 	public function remove($hsubscriber){
 		if(HookProvider::isModuleOperational()){
 		fw\Database::prepare(
-			"DELETE FROM `##phooks`".
-			" WHERE ph_hook_function=?".
-			" AND ph_hook_context=?".
-			" AND ph_module_name=?"
+			"DELETE FROM `##maj_hooks`".
+			" WHERE majh_hook_function=?".
+			" AND majh_hook_context=?".
+			" AND majh_module_name=?"
 				)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));
 		}
 	}
@@ -143,19 +143,17 @@ class Hook {
 			$sqlparams = array($this->hook_function);
 			if($this->hook_context != 'all') {
 				$sqlparams = array($this->hook_function, $this->hook_context);
-				$sqlquery = " OR ph_hook_context=?";
+				$sqlquery = " OR majh_hook_context=?";
 			}
 			$module_names=fw\Database::prepare(
-					"SELECT ph_module_name AS module, ph_module_priority AS priority FROM `##phooks`".
-					" WHERE ph_hook_function = ? AND (ph_hook_context='all'".$sqlquery.") AND ph_status='enabled'".
-					" ORDER BY ph_module_priority ASC, module ASC"
+					"SELECT majh_module_name AS module, majh_module_priority AS priority FROM `##maj_hooks`".
+					" WHERE majh_hook_function = ? AND (majh_hook_context='all'".$sqlquery.") AND majh_status='enabled'".
+					" ORDER BY majh_module_priority ASC, module ASC"
 			)->execute($sqlparams)->fetchAssoc();
 			asort($module_names);
 			foreach ($module_names as $module_name => $module_priority) {
-				require_once WT_ROOT.WT_MODULES_DIR.$module_name.'/module.php';
-				$class=$module_name.'_WT_Module';
-				$hook_class=new $class();
-				$result[] = call_user_func_array(array($hook_class, $this->hook_function), $params);
+				$module = include WT_ROOT . WT_MODULES_DIR . $module_name . '/module.php';
+				$result[] = call_user_func_array(array($module, $this->hook_function), $params);
 			}
 		}
 		return $result;
@@ -172,11 +170,11 @@ class Hook {
 			$sqlparams = array($this->hook_function);
 			if($this->hook_context != 'all') {
 				$sqlparams = array($this->hook_function, $this->hook_context);
-				$sqlquery = " OR ph_hook_context=?";
+				$sqlquery = " OR majh_hook_context=?";
 			}
 			$module_names=fw\Database::prepare(
-					"SELECT ph_module_name AS modules FROM `##phooks`".
-					" WHERE ph_hook_function = ? AND (ph_hook_context='all'".$sqlquery.") AND ph_status='enabled'"
+					"SELECT majh_module_name AS modules FROM `##maj_hooks`".
+					" WHERE majh_hook_function = ? AND (majh_hook_context='all'".$sqlquery.") AND majh_status='enabled'"
 			)->execute($sqlparams)->fetchOneColumn();
 			return count($module_names);
 		}

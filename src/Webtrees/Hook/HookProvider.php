@@ -13,6 +13,7 @@ namespace MyArtJaub\Webtrees\Hook;
 use \Fisharebest\Webtrees as fw;
 use \MyArtJaub\Webtrees as mw;
 use \MyArtJaub\Webtrees\Constants;
+use Fisharebest\Webtrees\Auth;
 
 /**
  * Provider for hooks. 
@@ -29,6 +30,17 @@ class HookProvider implements HookProviderInterface {
 	 */
 	const DEFAULT_PRIORITY = 99;
 		
+	/**
+	 * Return an instance of the hook linked to the specifed function / context
+	 * 
+	 * @param string $hook_function
+	 * @param string $hook_context
+	 * @return Hook
+	 */
+	public static function get($hook_function, $hook_context = null) {
+	    return new Hook($hook_function, $hook_context);
+	}
+	
 	/**
 	 * Return whether the Hook module is active and the table has been created.
 	 *
@@ -50,16 +62,13 @@ class HookProvider implements HookProviderInterface {
 	 */
 	static public function getPossibleHooks() {
 		static $hooks=null;
-		if ($hooks===null) {
-			$modules = $module_names=fw\Database::prepare("SELECT module_name FROM `##module`")->execute()->fetchOneColumn();
-			$dir=opendir(WT_ROOT.WT_MODULES_DIR);
-			while (($file=readdir($dir))!==false) {
-				if (preg_match('/^[a-zA-Z0-9_]+$/', $file) && file_exists(WT_ROOT.WT_MODULES_DIR.$file.'/module.php')) {
-					require_once WT_ROOT.WT_MODULES_DIR.$file.'/module.php';
-					$class=$file.'_WT_Module';
-					$hook_class=new $class();
-					if( in_array($file, $modules) && $hook_class instanceof HookSubscriberInterface){
-						$subscribedhooks = $hook_class->getSubscribedHooks();
+		if ($hooks === null) {
+		    $hooks = array();
+		    foreach (glob(WT_ROOT . WT_MODULES_DIR . '*/module.php') as $file) {
+		        try {
+		            $module = include $file;
+		            if($module instanceof HookSubscriberInterface){
+						$subscribedhooks = $module->getSubscribedHooks();
 						if(is_array($subscribedhooks)){
 							foreach($subscribedhooks as $key => $value){
 								if(is_int($key)) {
@@ -78,13 +87,15 @@ class HookProvider implements HookProviderInterface {
 									$hook_func = $hook_item[0];
 									$hook_cont = 'all';
 								}
-								if(method_exists($hook_class, $hook_func)){
-									$hooks[$hook_class->getName().'#'.$hook_func.'#'.$hook_cont]=$priority;
+								if(method_exists($module, $hook_func)){
+									$hooks[$module->getName().'#'.$hook_func.'#'.$hook_cont]=$priority;
 								}
 							}
 						}
 					}
-				}
+    			} catch (\Exception $ex) {
+    				// Old or invalid module?
+    			}
 			}
 		}
 		return $hooks;
@@ -98,8 +109,8 @@ class HookProvider implements HookProviderInterface {
 	static public function getRawInstalledHooks(){
 		if(self::isModuleOperational()){
 			return fw\Database::prepare(
-					"SELECT ph_id AS id, ph_module_name AS module, ph_hook_function AS hook, ph_hook_context as context, ph_module_priority AS priority,  ph_status AS status".
-					" FROM `##phooks`".
+					"SELECT majh_id AS id, majh_module_name AS module, majh_hook_function AS hook, majh_hook_context as context, majh_module_priority AS priority,  majh_status AS status".
+					" FROM `##maj_hooks`".
 					" ORDER BY hook ASC, status ASC, priority ASC, module ASC"
 					)->execute()->fetchAll();
 		}
@@ -120,6 +131,40 @@ class HookProvider implements HookProviderInterface {
 			}
 		}
 		return $installedhooks;
+	}
+	
+	/**
+	 * Update the list of hooks, identifying missing ones and removed ones.
+	 */
+	static public function updateHooks() {
+	    
+	    if(Auth::isAdmin()){
+	        $ihooks = self::getInstalledHooks();
+	        $phooks = self::getPossibleHooks();
+	        	
+	        // Insert hooks not existing yet in the DB
+	        if($phooks!=null){
+	            foreach($phooks as $phook => $priority){
+	                $array_hook = explode('#', $phook);
+	                if($ihooks==null || !array_key_exists($phook, $ihooks)){
+	                    $chook = new Hook($array_hook[1], $array_hook[2]);
+	                    $chook->subscribe($array_hook[0]);
+	                    $chook->setPriority($array_hook[0], $priority);
+	                }
+	            }
+	        }
+	        	
+	        //Remove hooks not existing any more in the file system
+	        if($ihooks!=null){
+	            foreach($ihooks as $ihook => $status){
+	                $array_hook = explode('#', $ihook);
+	                if($phooks==null || !array_key_exists($ihook, $phooks)){
+	                    $chook = new Hook($array_hook[1], $array_hook[2]);
+	                    $chook->remove($array_hook[0]);
+	                }
+	            }
+	        }
+	    }
 	}
 	
 }
