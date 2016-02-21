@@ -104,13 +104,15 @@ class GedcomRecord {
 	 * @param int $access_level
 	 * @return boolean
 	 */
-	public function canDisplayIsSourced($access_level=WT_USER_ACCESS_LEVEL){
+	public function canDisplayIsSourced($access_level = null){
 		global $global_facts;
 
 		if(!$this->gedcomrecord->canShow($access_level)) return false;
+		if($access_level === null )
+		    $access_level = \Fisharebest\Webtrees\Auth::accessLevel($this->gedcomrecord->getTree());
 
 		if (isset($global_facts['SOUR'])) {
-			return $global_facts['SOUR']>=$access_level;
+			return $global_facts['SOUR'] >= $access_level;
 		}
 
 		return true;

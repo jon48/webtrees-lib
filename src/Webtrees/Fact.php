@@ -9,9 +9,7 @@
  */
 namespace MyArtJaub\Webtrees;
 
-use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
-
+use Fisharebest\Webtrees\Date;
 /**
  * Decorator class to extend native webtrees Fact class.
  * 
@@ -25,6 +23,12 @@ class Fact {
 	 * @var int
 	 */
 	const MAX_IS_SOURCED_LEVEL = 3;
+	
+	/**
+	 * Maximum timespan between the date of a source and the date of the event to consider the source precise
+	 * @var unknown DATE_PRECISION_MARGIN
+	 */
+	const DATE_PRECISION_MARGIN = 180;
 	
 	/** @var \Fisharebest\Webtrees\Fact Underlying base Fact */
 	protected $fact; 
@@ -53,9 +57,9 @@ class Fact {
 	public function isSourced(){
 		$isSourced=0;
 		$date = $this->fact->getDate(false);
-		if($date->JD()>0) {
+		if($date->isOK()) {
 			$isSourced=-1;
-			if($date->qual1=='' && $date->MinJD() == $date->MaxJD()){
+			if($date->qual1=='' && $date->minimumJulianDay() == $date->maximumJulianDay()){
 				$isSourced=-2;
 				$citations = $this->fact->getCitations();
 				foreach($citations as $citation){
@@ -64,8 +68,8 @@ class Fact {
  						$isSourced=max($isSourced, 2);
  						preg_match_all("/4 DATE (.*)/", $citation, $datessource, PREG_SET_ORDER);
  						foreach($datessource as $daterec){
- 							$datesource = new WT_Date($daterec[1]);
- 							if(abs($datesource->JD() - $date->JD()) < 180){
+ 							$datesource = new Date($daterec[1]);
+ 							if(abs($datesource->julianDay() - $date->julianDay()) < self::DATE_PRECISION_MARGIN){
  								$isSourced = max($isSourced, 3); //If this level increases, do not forget to change the constant MAX_IS_SOURCED_LEVEL
  							}
  						}

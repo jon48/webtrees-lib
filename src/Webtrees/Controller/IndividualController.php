@@ -12,6 +12,7 @@
 
 use \Fisharebest\Webtrees as fw;
 use \MyArtJaub\Webtrees as mw;
+use MyArtJaub\Webtrees\Hook\Hook;
 
 /**
  * Decorator class to extend native webtrees IndividualController class.
@@ -39,13 +40,13 @@ class IndividualController {
 	
 	/**
 	 * Print individual header extensions.
-	 * Use hooks h_extend_indi_header_left and h_extend_indi_header_right
+	 * Use hooks hExtendIndiHeaderLeft and hExtendIndiHeaderRight
 	 * 
 	 * @uses \MyArtJaub\Webtrees\Hook\Hook
 	 */
 	public function printHeaderExtensions(){
-		$hook_extend_indi_header_left = new mw\Hook\Hook('h_extend_indi_header_left');
-		$hook_extend_indi_header_right = new mw\Hook\Hook('h_extend_indi_header_right');
+		$hook_extend_indi_header_left = new mw\Hook\Hook('hExtendIndiHeaderLeft');
+		$hook_extend_indi_header_right = new mw\Hook\Hook('hExtendIndiHeaderRight');
 		$hook_extend_indi_header_left = $hook_extend_indi_header_left->execute($this->ctrlIndividual);
 		$hook_extend_indi_header_right = $hook_extend_indi_header_right->execute($this->ctrlIndividual);
 		
@@ -71,12 +72,12 @@ class IndividualController {
 	
 	/**
 	 * Print individual header extra icons.
-	 * Use hook h_extend_indi_header_icons
+	 * Use hook hExtendIndiHeaderIcons
 	 *
 	 * @uses \MyArtJaub\Webtrees\Hook\Hook
 	 */
 	public function printHeaderExtraIcons(){
-		$hook_extend_indi_header_icons = new mw\Hook\Hook('h_extend_indi_header_icons');
+		$hook_extend_indi_header_icons = new Hook('hExtendIndiHeaderIcons');
 		$hook_extend_indi_header_icons = $hook_extend_indi_header_icons->execute($this->ctrlIndividual);
 		
 		echo '<span id="indi_perso_icons">&nbsp;',
