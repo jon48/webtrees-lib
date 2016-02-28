@@ -113,9 +113,7 @@ class AdminConfigController extends MvcController
         ->addInlineJavascript('
 		  	jQuery(document).ready(function() {
 				jQuery("#'.$table_id.'").dataTable( {
-					'.I18N::datatablesI18N().',
-					jQueryUI: true,
-		
+					'.I18N::datatablesI18N().',		
 					sorting: [[ 2, "asc" ], [ 3, "asc" ]],
 					displayLength: 10,
 					pagingType: "full_numbers",

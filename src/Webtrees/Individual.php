@@ -9,8 +9,8 @@
  */
 namespace MyArtJaub\Webtrees;
 
-use \MyArtJaub\Webtrees as mw;
 use Fisharebest\Webtrees\Module;
+use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
 
 /**
  * Decorator class to extend native webtrees Individual class.
@@ -105,121 +105,12 @@ class Individual extends GedcomRecord {
 	}
 	
 	/**
-	 * Add Sosa to the list of individual's sosa numbers
-	 * Warning: the module cannot handle more than 64 generation (DB restriction)
-	 *
-	 * @uses \MyArtJaub\Webtrees\Functions\FunctionsSosa::getGeneration
-	 * @param number $sosa Sosa number to insert
-	 */
-	public function addSosa($sosa){
-		$gen = mw\Functions\FunctionsSosa::getGeneration($sosa);
-		if( $gen < 65){ // The DB table is not able to accept more than 64 generations
-			if($this->_sosa){
-				$this->_sosa[$sosa] = $gen;
-			}
-			else{
-				$this->_sosa = array($sosa => $gen);
-			}
-		}
-	}
-	
-	/**
-	 * Remove Sosa from the list of individual's sosa numbers
-	 *
-	 * @param number $sosa Sosa number to remove
-	 */
-	public function removeSosa($sosa){
-		if($this->_sosa && isset($this->_sosa[$sosa])){
-			unset($this->_sosa[$sosa]);
-		}
-	}
-	
-	/**
-	 * Add Sosa to the list of individual's sosa numbers, then add Sosas to his parents, if they exist.
-	 * Recursive function.
-	 * Require a $tmp_sosatable to store to-be-written Sosas
-	 *
-	 * @uses \MyArtJaub\Webtrees\Functions\FunctionsSosa::flushTmpSosaTable
-	 * @param number $sosa Sosa number to add
-	 */
-	public function addAndComputeSosa($sosa){
-		global $tmp_sosatable;
-		
-		$this->addSosa($sosa);
-	
-		$birth_year = $this->gedcomrecord->getEstimatedBirthDate()->gregorianYear();
-		$death_year = $this->gedcomrecord->getEstimatedDeathDate()->gregorianYear();
-		
-		if($this->_sosa && $this->_sosa[$sosa]){
-			$tmp_sosatable[] = array($this->gedcomrecord->getXref(), $this->gedcomrecord->getGedcomId(), $sosa, $this->_sosa[$sosa], $birth_year, $death_year); 
-			
-			mw\Functions\FunctionsSosa::flushTmpSosaTable();
-				
-			$fam=$this->gedcomrecord->getPrimaryChildFamily();
-			if($fam){
-				$husb=$fam->getHusband();
-				$wife=$fam->getWife();
-				if($husb){
-					$dhusb = new Individual($husb);
-					$dhusb->addAndComputeSosa(2* $sosa);
-				}
-				if($wife){
-					$dwife = new Individual($wife);
-					$dwife->addAndComputeSosa(2* $sosa + 1);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * Remove Sosa from the list of individual's sosa numbers, then remove Sosas from his parents, if they exist.
-	 * Recursive function.
-	 * Require a $tmp_removeSosaTab to store to-be-removed Sosas
-	 *
-	 * @param number $sosa Sosa number to add
-	 */
-	public function removeSosas(){
-		global $tmp_removeSosaTab;
-		
-		$sosalist = $this->getSosaNumbers();
-		if($sosalist){
-			$tmp_removeSosaTab = array_merge($tmp_removeSosaTab, array_keys($sosalist));
-			
-			mw\Functions\FunctionsSosa::flushTmpRemoveTable();
-			
-			$fam=$this->gedcomrecord->getPrimaryChildFamily();
-			if($fam){
-				$husb=$fam->getHusband();
-				$wife=$fam->getWife();
-				if($husb){
-					$dhusb = new Individual($husb);
-					$dhusb->removeSosas();
-				}
-				if($wife){
-					$dwife = new Individual($wife);
-					$dwife->removeSosas();
-				}
-			}
-		}
-		
-	}
-	
-	/**
 	 * Return whether an individual is a Sosa or not
 	 *
 	 * @return boolean Is the individual a Sosa ancestor
 	 */
 	public function isSosa(){
-		if($this->_sosa && count($this->_sosa)>0){
-			return true;
-		}
-		else{
-			$this->getSosaNumbers();
-			if($this->_sosa && count($this->_sosa)>0){
-				return true;
-			}
-		}
-		return false;
+	    return count($this->getSosaNumbers()) > 0;
 	}
 	
 	/**
@@ -230,16 +121,11 @@ class Individual extends GedcomRecord {
 	 * @return array List of Sosa numbers
 	 */
 	public function getSosaNumbers(){
-		if($this->_sosa){
-			return $this->_sosa;
-		}
-		if(mw\Module\ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_SOSA_NAME)){
-			$this->_sosa = WT_DB::prepare('SELECT ps_sosa, ps_gen FROM ##psosa WHERE ps_i_id=? AND ps_file=?')
-				->execute(array($this->gedcomrecord->getXref(), $this->gedcomrecord->getGedcomId()))
-				->fetchAssoc();
-			return $this->_sosa;
-		}
-		return array();
+	    if($this->_sosa === null) {
+	        $provider = new SosaProvider($this->gedcomrecord->getTree());
+	        $this->_sosa = $provider->getSosaNumbers($this->gedcomrecord);	        
+	    }
+	    return $this->_sosa;
 	}
 		
 	/** 

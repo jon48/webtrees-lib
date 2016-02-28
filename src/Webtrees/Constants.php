@@ -16,6 +16,11 @@ class Constants {
     
     const LIB_NAMESPACE = __NAMESPACE__;
 	
+    /** Internal name of the GeoDispersion Module
+     * @var string
+     */
+    const MODULE_MAJ_GEODISP_NAME = 'myartjaub_geodispersion';
+    
 	/** Internal name of the Hooks Module
 	 * @var string
 	 */

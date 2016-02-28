@@ -235,7 +235,7 @@ class FunctionsPrint {
 		switch($format){
 			case 1:
 				if(count($sosatab)>0){
-					$html = '<i class="icon-perso-sosa_'.$size.'" title="'.I18N::translate('Sosa').'"></i>';
+					$html = '<i class="icon-maj-sosa_'.$size.'" title="'.I18N::translate('Sosa').'"></i>';
 				}
 				break;
 			case 2:
@@ -244,7 +244,7 @@ class FunctionsPrint {
 					$tmp_html = array();
 					foreach ($sosatab as $sosa => $gen) {
 						$tmp_html[] = sprintf(
-								'<i class="icon-perso-sosa_%1$s" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>%2$d&nbsp;'.I18N::translate('(G%s)', $gen).'</strong>',
+								'<i class="icon-maj-sosa_%1$s" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>%2$d&nbsp;'.I18N::translate('(G%s)', $gen) .'</strong>',
 								$size,
 								$sosa
 							);
@@ -329,7 +329,7 @@ class FunctionsPrint {
 					default:
 						break;
 				}
-				if($image && $title) $html = '<i class="icon-perso-sourced-'.$size.'_'.$image.'" title="'.$title.'"></i>';
+				if($image && $title) $html = '<i class="icon-maj-sourced-'.$size.'_'.$image.'" title="'.$title.'"></i>';
 				break;
 			default:
 				break;
