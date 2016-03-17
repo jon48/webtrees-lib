@@ -26,7 +26,7 @@ use Fisharebest\Webtrees\Database;
 use MyArtJaub\Webtrees\Hook\Hook;
 
 /**
- * Controller for Lineage
+ * Controller for Hooks Admin Config
  */
 class AdminConfigController extends MvcController
 {

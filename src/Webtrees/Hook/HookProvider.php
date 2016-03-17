@@ -81,7 +81,7 @@ class HookProvider implements HookProviderInterface {
 								}
 								if($hook_item && count($hook_item) == 2){
 									$hook_func = $hook_item[0];
-									$hok_cont = $hook_item[1];
+									$hook_cont = $hook_item[1];
 								}
 								else{
 									$hook_func = $hook_item[0];

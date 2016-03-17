@@ -16,6 +16,11 @@ class Constants {
     
     const LIB_NAMESPACE = __NAMESPACE__;
 	
+    /** Internal name of the Certificates Module
+     * @var string
+     */
+    const MODULE_MAJ_CERTIF_NAME = 'myartjaub_certificates';
+    
     /** Internal name of the GeoDispersion Module
      * @var string
      */

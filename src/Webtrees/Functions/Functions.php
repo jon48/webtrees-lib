@@ -239,4 +239,30 @@ class Functions {
 		return(int)log($sosa, 2)+1;
 	}
 	
+	
+
+
+	/**
+	 * Returns whether the image type is supported by the system, and if so, return the standardised type
+	 *
+	 * @param string $reqtype Extension to test
+	 * @return boolean|string Is supported?
+	 */
+	public static function isImageTypeSupported($reqtype) {
+	    $supportByGD = array('jpg'=>'jpeg', 'jpeg'=>'jpeg', 'gif'=>'gif', 'png'=>'png');
+	    $reqtype = strtolower($reqtype);
+	
+	    if (empty($supportByGD[$reqtype])) {
+	        return false;
+	    }
+	
+	    $type = $supportByGD[$reqtype];
+	
+	    if (function_exists('imagecreatefrom'.$type) && function_exists('image'.$type)) {
+	        return $type;
+	    }
+	
+	    return false;
+	}
+		
 }

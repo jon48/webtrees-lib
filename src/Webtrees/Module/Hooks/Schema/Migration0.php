@@ -30,8 +30,8 @@ class Migration0 implements MigrationInterface {
 	       " majh_module_priority	INTEGER            	   NOT NULL DEFAULT 99,".
 	       " majh_status      		ENUM('enabled', 'disabled') NOT NULL DEFAULT 'enabled',".		   
 	       " PRIMARY KEY (majh_id),".
-	       " UNIQUE KEY uk (majh_hook_function, majh_hook_context, majh_module_name),".
-	       " FOREIGN KEY ph_fk1 (majh_module_name)".
+	       " UNIQUE KEY `##maj_hooks_uk` (majh_hook_function, majh_hook_context, majh_module_name),".
+	       " FOREIGN KEY `##module_name_fk1` (majh_module_name)".
 		   " REFERENCES `##module` (module_name) ON DELETE CASCADE ON UPDATE CASCADE".
 	       ") COLLATE utf8_unicode_ci ENGINE=InnoDB"
 		);
