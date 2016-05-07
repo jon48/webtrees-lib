@@ -10,20 +10,20 @@
  */
 namespace MyArtJaub\Webtrees\Module\Hooks;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Theme;
-use Fisharebest\Webtrees\Filter;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
-use MyArtJaub\Webtrees\Hook\HookProvider;
-use Rhumsaa\Uuid\Uuid;
-use Fisharebest\Webtrees\Theme\AdministrationTheme;
-use Fisharebest\Webtrees\Module;
+use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Database;
+use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module;
+use Fisharebest\Webtrees\Theme;
+use Fisharebest\Webtrees\Theme\AdministrationTheme;
 use MyArtJaub\Webtrees\Hook\Hook;
+use MyArtJaub\Webtrees\Hook\HookProvider;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
+use Rhumsaa\Uuid\Uuid;
 
 /**
  * Controller for Hooks Admin Config

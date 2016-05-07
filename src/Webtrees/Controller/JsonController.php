@@ -38,4 +38,20 @@ class JsonController extends BaseController {
     public function pageFooter() {
         return $this;
     }
+    
+    /**
+     * Restrict access.
+     *
+     * @param bool $condition
+     *
+     * @return $this
+     */
+    public function restrictAccess($condition) {
+        if ($condition !== true) {
+            http_response_code(403);
+            exit;
+        }
+    
+        return $this;
+    }
 }

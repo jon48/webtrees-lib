@@ -131,7 +131,7 @@ class SosaProvider {
     public function deleteAll() {
         if(!$this->is_setup) return;
         Database::prepare(
-            'DELETE FROM ##maj_sosa'.
+            'DELETE FROM `##maj_sosa`'.
             ' WHERE majs_gedcom_id= :tree_id and majs_user_id = :user_id ')
             ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -148,7 +148,7 @@ class SosaProvider {
         if(!$this->is_setup) return;
         $gen = Functions::getGeneration($sosa);
         Database::prepare(
-            'DELETE FROM ##maj_sosa'.
+            'DELETE FROM `##maj_sosa`'.
             ' WHERE majs_gedcom_id=:tree_id and majs_user_id = :user_id' .
             ' AND majs_gen >= :gen' .
             ' AND FLOOR(majs_sosa / (POW(2, (majs_gen - :gen)))) = :sosa'
@@ -194,7 +194,7 @@ class SosaProvider {
             $i++;
         }
         
-        $sql = 'REPLACE INTO ##maj_sosa' .
+        $sql = 'REPLACE INTO `##maj_sosa`' .
             ' (majs_gedcom_id, majs_user_id, majs_sosa, majs_i_id, majs_gen, majs_birth_year, majs_death_year)' .
             ' VALUES '. implode(',', $questionmarks_table);
         Database::prepare($sql)->execute($values_table);
@@ -214,7 +214,7 @@ class SosaProvider {
     public function getSosaNumbers(Individual $indi) {
         if(!$this->is_setup) return array();
         return Database::prepare(
-                'SELECT majs_sosa, majs_gen FROM ##maj_sosa'.
+                'SELECT majs_sosa, majs_gen FROM `##maj_sosa`'.
                 ' WHERE majs_i_id=:indi_id AND majs_gedcom_id=:tree_id AND majs_user_id=:user_id'
             )->execute(array(
                 'indi_id' => $indi->getXref(), 
@@ -231,7 +231,7 @@ class SosaProvider {
     public function getLastGeneration() {
         if(!$this->is_setup) return;
         return Database::prepare(
-                'SELECT MAX(majs_gen) FROM ##maj_sosa'.
+                'SELECT MAX(majs_gen) FROM `##maj_sosa`'.
                 ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'
             )->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -242,6 +242,26 @@ class SosaProvider {
     /*************
      * SOSA LISTS
      *************/
+    
+    /**
+     * Return the list of all sosas, with the generations it belongs to
+     *
+     * @param int $ged_id ID of the gedcom file
+     * @return array Associative array of Sosa ancestors, with their generation, comma separated
+     */
+    public function getAllSosaWithGenerations(){
+        if(!$this->is_setup) return array();
+        return Database::prepare(
+            'SELECT majs_i_id AS indi,' .
+            ' GROUP_CONCAT(DISTINCT majs_gen ORDER BY majs_gen ASC SEPARATOR ",") AS generations' .
+            ' FROM `##maj_sosa`' .
+            ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id' .
+            ' GROUP BY majs_i_id'
+        )->execute(array(
+            'tree_id' => $this->tree->getTreeId(),
+            'user_id' => $this->user->getUserId()
+        ))->fetchAssoc();
+    }
     
     /**
      * Get an associative array of Sosa individuals in generation G. Keys are Sosa numbers, values individuals.
@@ -258,7 +278,7 @@ class SosaProvider {
             if(!isset($this->sosa_list_by_gen[$gen])){
                 $this->sosa_list_by_gen[$gen] = Database::prepare(
                     'SELECT majs_sosa AS sosa, majs_i_id AS indi'.
-                    ' FROM ##maj_sosa'.
+                    ' FROM `##maj_sosa`'.
                     ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
                     ' AND majs_gen = :gen'.
                     ' ORDER BY majs_sosa ASC')
@@ -289,9 +309,9 @@ class SosaProvider {
             if(!isset($this->sosa_fam_list_by_gen[$gen])){
                 $this->sosa_fam_list_by_gen[$gen] = Database::prepare(
                     'SELECT s1.majs_sosa AS sosa, f_id AS fam'.
-                    ' FROM ##families'.
-                    ' INNER JOIN ##maj_sosa AS s1 ON (##families.f_husb = s1.majs_i_id AND ##families.f_file = s1.majs_gedcom_id)'.
-                    ' INNER JOIN ##maj_sosa AS s2 ON (##families.f_wife = s2.majs_i_id AND ##families.f_file = s2.majs_gedcom_id)'.
+                    ' FROM `##families`'.
+                    ' INNER JOIN `##maj_sosa` AS s1 ON (`##families`.f_husb = s1.majs_i_id AND `##families`.f_file = s1.majs_gedcom_id)'.
+                    ' INNER JOIN `##maj_sosa` AS s2 ON (`##families`.f_wife = s2.majs_i_id AND `##families`.f_file = s2.majs_gedcom_id)'.
                     ' WHERE s1.majs_sosa + 1 = s2.majs_sosa'.
                     ' AND s1.majs_gedcom_id= :tree_id AND s1.majs_user_id=:user_id'.
                     ' AND s2.majs_gedcom_id= :tree_id AND s2.majs_user_id=:user_id'.
@@ -321,9 +341,9 @@ class SosaProvider {
         if($gen){
             return $this->sosa_list_by_gen[$gen] = Database::prepare(
                 'SELECT schild.majs_sosa sosa, schild.majs_i_id indi, sfat.majs_sosa IS NOT NULL has_father, smot.majs_sosa IS NOT NULL has_mother'.
-                ' FROM ##maj_sosa schild'.
-                ' LEFT JOIN ##maj_sosa sfat ON ((schild.majs_sosa * 2) = sfat.majs_sosa AND schild.majs_gedcom_id = sfat.majs_gedcom_id AND schild.majs_user_id = sfat.majs_user_id)'.
-                ' LEFT JOIN ##maj_sosa smot ON ((schild.majs_sosa * 2 + 1) = smot.majs_sosa AND schild.majs_gedcom_id = smot.majs_gedcom_id AND schild.majs_user_id = smot.majs_user_id)'.
+                ' FROM `##maj_sosa` schild'.
+                ' LEFT JOIN `##maj_sosa` sfat ON ((schild.majs_sosa * 2) = sfat.majs_sosa AND schild.majs_gedcom_id = sfat.majs_gedcom_id AND schild.majs_user_id = sfat.majs_user_id)'.
+                ' LEFT JOIN `##maj_sosa` smot ON ((schild.majs_sosa * 2 + 1) = smot.majs_sosa AND schild.majs_gedcom_id = smot.majs_gedcom_id AND schild.majs_user_id = smot.majs_user_id)'.
                 ' WHERE schild.majs_gedcom_id = :tree_id AND schild.majs_user_id = :user_id'.
                 ' AND schild.majs_gen = :gen'.
                 ' AND (sfat.majs_sosa IS NULL OR smot.majs_sosa IS NULL)'.
@@ -397,7 +417,7 @@ class SosaProvider {
     public function getSosaCount(){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM ##maj_sosa' .
+            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id')
             ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -414,7 +434,7 @@ class SosaProvider {
     public function getSosaCountAtGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM ##maj_sosa' .
+            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen= :gen')
         ->execute(array(
@@ -433,7 +453,7 @@ class SosaProvider {
     public function getSosaCountUpToGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM ##maj_sosa' .
+            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen <= :gen')
         ->execute(array(
@@ -451,7 +471,7 @@ class SosaProvider {
     public function getDifferentSosaCount(){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM ##maj_sosa' .
+            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id')
         ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -468,7 +488,7 @@ class SosaProvider {
     public function getDifferentSosaCountUpToGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM ##maj_sosa' .
+            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen <= :gen')
         ->execute(array(
@@ -492,7 +512,7 @@ class SosaProvider {
         if(!$this->is_setup) return array('first' => 0, 'avg' => 0, 'last' => 0);
         return Database::prepare(
             'SELECT MIN(majs_birth_year) AS first, AVG(majs_birth_year) AS avg, MAX(majs_birth_year) AS last'.
-            ' FROM ##maj_sosa' .
+            ' FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen=:gen AND NOT majs_birth_year = :birth_year')
             ->execute(array(
@@ -567,7 +587,7 @@ class SosaProvider {
             '   FROM ('.
             '       SELECT DISTINCT majs_i_id i_id,'.
             '           POW(2, FLOOR(majs_sosa / POW(2, (majs_gen - :gen))) - POW(2, :gen -1)) branch'.
-            '       FROM ##maj_sosa'.
+            '       FROM `##maj_sosa`'.
             '       WHERE majs_gedcom_id = :tree_id AND majs_user_id = :user_id'.
             '           AND majs_gen >= :gen'.
             '   ) indistat'.

@@ -10,23 +10,23 @@
  */
 namespace MyArtJaub\Webtrees\Module\Certificates;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
-use Rhumsaa\Uuid\Uuid;
-use Fisharebest\Webtrees\Module;
 use Fisharebest\Webtrees\Html;
-use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
-use MyArtJaub\Webtrees\ImageBuilder;
-use MyArtJaub\Webtrees\Functions\Functions;
-use MyArtJaub\Webtrees\Module\Certificates\Model\CertificateProviderInterface;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Controller\JsonController;
+use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\ImageBuilder;
+use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
+use MyArtJaub\Webtrees\Module\Certificates\Model\CertificateProviderInterface;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
+use Rhumsaa\Uuid\Uuid;
 
 /**
  * Controller for Certificate
@@ -229,15 +229,13 @@ class CertificateController extends MvcController
         $controller = new JsonController();
         
         $city = Filter::get('city');
-        $contains = Filter::get('term');
-        
-        $controller->pageHeader();        
-        
-        $listCert = array();
-        if(Auth::isEditor($WT_TREE) && $city && $contains){
-            $listCert = $this->provider->getCertificatesListBeginWith($city, $contains);        
-        }        
+        $contains = Filter::get('term');        
 
+        $controller
+            ->restrictAccess(Auth::isEditor($WT_TREE) && $city && $contains)
+            ->pageHeader();
+        
+        $listCert = $this->provider->getCertificatesListBeginWith($city, $contains); 
         echo \Zend_Json::encode($listCert);
     }
 }

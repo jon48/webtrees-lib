@@ -63,12 +63,22 @@ class FunctionsPrint {
 		if($place = $fact->getPlace()) {
 			$iconPlace= $mapProvider->getPlaceIcon($place);	
 			if($iconPlace && strlen($iconPlace) > 0){
-				$html.=	'<div class="fact_flag">'.
-					'<img class="flag_h_50" src="' . $iconPlace . '" title="' . $place->getGedcomName() . '" alt="' . $place->getGedcomName() . '" />' .
-					'</div>';
+				$html.=	'<div class="fact_flag">'. self::htmlPlaceIcon($place, $iconPlace, 50). '</div>';
 			}
 		}
 		return $html;
+	}
+	
+	/**
+	 * Return HTML code to include a flag icon
+	 * 
+	 * @param \Fisharebest\Webtrees\Place $place
+	 * @param string $icon_path
+	 * @param number $size
+	 * @return string HTML code of the inserted flag
+	 */
+	public static function htmlPlaceIcon(\Fisharebest\Webtrees\Place $place, $icon_path , $size = 50) {
+	    return '<img class="flag_gm_h'. $size . '" src="' . $icon_path . '" title="' . $place->getGedcomName() . '" alt="' . $place->getGedcomName() . '" />';
 	}
 	
 	/**

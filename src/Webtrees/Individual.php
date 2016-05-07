@@ -10,6 +10,7 @@
 namespace MyArtJaub\Webtrees;
 
 use Fisharebest\Webtrees\Module;
+use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
 
 /**
@@ -34,15 +35,17 @@ class Individual extends GedcomRecord {
 	
 	/** @var bool|null Indicates whether the death event is sourced */
 	protected $_isdeathsourced = null;
-	
+		
 	/**
 	 * Extend \Fisharebest\Webtrees\Individual getInstance, in order to retrieve directly a  object 
-	 *
-	 * @param mixed $data Data to identify the individual
-	 * @return Individual|null \MyArtJaub\Webtrees\Individual instance
+	 * 
+	 * @param string $xref
+	 * @param Tree $tree
+	 * @param null|string $gedcom
+	 * @return null|Individual
 	 */
-	public static function getIntance($data){
-		$indi = \Fisharebest\Webtrees\Individual::getInstance($data);
+	public static function getIntance($xref, Tree $tree, $gedcom = null){
+		$indi = \Fisharebest\Webtrees\Individual::getInstance($xref, $tree, $gedcom);
 		if($indi){
 			return new Individual($indi);
 		}
@@ -102,6 +105,38 @@ class Individual extends GedcomRecord {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Returns a significant place for the individual
+	 *
+	 * @param boolean $perc Should the coefficient of reliability be returned
+	 * @return string|array Estimated birth place if found, null otherwise
+	 */
+	public function getSignificantPlace(){
+	    if($bplace = $this->gedcomrecord->getBirthPlace()){
+	        return $bplace;
+	    }
+	
+	    foreach ($this->gedcomrecord->getAllEventPlaces('RESI') as $rplace) {
+	        if ($rplace) {
+	            return $rplace;
+	        }
+	    }
+	
+	    if($dplace = $this->gedcomrecord->getDeathPlace()){
+	        return $dplace;
+	    }
+	
+	    foreach($this->gedcomrecord->getSpouseFamilies() as $fams) {
+	        foreach ($fams->getAllEventPlaces('RESI') as $rplace) {
+	            if ($rplace) {
+	                return $rplace;
+	            }
+	        }
+	    }
+	
+	    return null;
 	}
 	
 	/**

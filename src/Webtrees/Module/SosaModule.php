@@ -10,21 +10,22 @@
  */
 namespace MyArtJaub\Webtrees\Module;
 
-use Fisharebest\Webtrees\Module\AbstractModule;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module\ModuleConfigInterface;
-use Fisharebest\Webtrees\Database;
-use Fisharebest\Webtrees\Module\ModuleMenuInterface;
-use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender;
-use MyArtJaub\Webtrees\Constants;
-use Fisharebest\Webtrees\Menu;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\IndividualController;
-use MyArtJaub\Webtrees\Individual;
-use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Menu;
+use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Module\ModuleConfigInterface;
+use Fisharebest\Webtrees\Module\ModuleMenuInterface;
+use Fisharebest\Webtrees\Module;
+use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender;
+use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
+use MyArtJaub\Webtrees\Individual;
 
 /**
  * Sosa Module.
@@ -113,23 +114,15 @@ class SosaModule
                 $sosa_stat_menu                
             ));
             
-            /*
-            if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_GEODISP_NAME) 
-                && count(WT_Perso_Functions_Map::getEnabledGeoDispersionMaps())>0) 
+
+            if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_GEODISP_NAME)
+                && $ga_list = Module::getModuleByName(Constants::MODULE_MAJ_GEODISP_NAME)->getProvider()->getGeoAnalysisList()
+                )
             {
-                $geodisp_menu = new Menu(I18N::translate('Geographical Dispersion'), $root_url . 'mod_action=geodispersion', 'menu-maj-sosa-geodispersion');
-                // Add a submenu showing all available geodispersion maps
-                               
-                foreach (WT_Perso_Functions_Map::getEnabledGeoDispersionMaps() as $map) {
-                    $subsubmenu = new WT_Menu($map['title'], 'module.php?mod=perso_geodispersion&mod_action=geodispersion&geoid='.$map['id'],
-                        'menu-perso-sosa-geodispersion-'.$map['id'] // We don't use these, but a custom theme might
-                        );
-                    $submenu->addSubmenu($subsubmenu);
+                if(count($ga_list) > 0) {
+                    $submenus[] = new Menu(I18N::translate('Geographical Dispersion'), 'module.php?mod=' . Constants::MODULE_MAJ_GEODISP_NAME . '&ged=' . $WT_TREE->getNameUrl() . '&mod_action=GeoAnalysis@listAll', 'menu-maj-sosa-geodispersion');
                 }
-                $submenu->addClass('icon_arrow', '', 'icon_arrow');
-                $menu->addSubMenu($submenu);
             }
-            */
             
             if(Auth::check()) {
                 $submenus[] = new Menu(
@@ -138,7 +131,7 @@ class SosaModule
                     'menu-maj-sosa-configuration',
                     array('rel' => 'nofollow'));
             }
-            
+                        
             //-- recompute Sosa submenu
             if (!empty($controller) && $controller instanceof IndividualController 
                 && Auth::check() && $WT_TREE->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID')

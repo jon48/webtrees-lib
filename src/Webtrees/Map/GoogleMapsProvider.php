@@ -26,7 +26,7 @@ class GoogleMapsProvider implements MapProviderInterface {
 	 */
 	public function getProviderPlaceId(\Fisharebest\Webtrees\Place $place) {
 		if(!$place->isEmpty()) {
-			$parent = array_reverse( explode (',', $place->getGedcomName()));
+			$parent = explode (',', $place->getGedcomName());
 			$place_id = 0;
 			for ($i=0; $i<count($parent); $i++) {
 				$parent[$i] = trim($parent[$i]);

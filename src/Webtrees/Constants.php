@@ -56,4 +56,10 @@ class Constants {
 	 */
 	const MODULE_MAJ_SOSA_TABLE = '##maj_sosa';
 	
+	/**
+	 * Path to Raphael JS library
+	 * @var unknown WT_RAPHAEL_JS_URL
+	 */
+	const WT_RAPHAEL_JS_URL = WT_STATIC_URL . 'packages/raphael-2.1.4/raphael-min.js';
+		
 }
