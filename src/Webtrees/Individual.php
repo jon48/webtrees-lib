@@ -59,7 +59,7 @@ class Individual extends GedcomRecord {
 	 */
 	public function getTitles(){
 		if(is_null($this->_titles) && $module = Module::getModuleByName(Constants::MODULE_MAJ_MISC_NAME)){
-			$pattern = '/(.*) (('.$module->getSetting('PG_TITLE_PREFIX', '').')(.*))/';
+			$pattern = '/(.*) (('.$module->getSetting('MAJ_TITLE_PREFIX', '').')(.*))/';
 			$this->_titles=array();
 			$titlefacts = $this->gedcomrecord->getFacts('TITL');
 			foreach($titlefacts as $titlefact){
@@ -68,7 +68,7 @@ class Individual extends GedcomRecord {
 					$this->_titles[$match2[1][0]][]= trim($match2[2][0]);
 				}
 				else{
-					$this->_titles[$titlefact->getValue()][]="";
+					$this->_titles[$titlefact->getValue()][]='';
 				}
 			}
 		}
