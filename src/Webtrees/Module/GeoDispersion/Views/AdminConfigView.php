@@ -84,7 +84,7 @@ class AdminConfigView extends AbstractView {
 		?>
 		</p>
 
-		<table id="<?php echo $table_id; ?>" class="table table-condensed table-bordered table-user-list">
+		<table id="<?php echo $table_id; ?>" class="table table-condensed table-bordered">
     		<thead>
     			<tr>
     				<th><?php echo I18N::translate('Edit'); ?></th>

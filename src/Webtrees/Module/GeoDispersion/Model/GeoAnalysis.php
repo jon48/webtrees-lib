@@ -17,7 +17,7 @@ use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Individual;
 
 /**
- * Provide Sosa data access
+ * Object to describe a geographical dispersion Analysis
  */
 class GeoAnalysis {
     

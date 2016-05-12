@@ -124,7 +124,7 @@ class AdminConfigView extends AbstractView {
         		</label>
     			<div class="col-sm-9">
     				<div class="row">
-    				    <!--  MAJ_WM_FONT_MINSIZE -->
+    				    <!--  MAJ_WM_FONT_COLOR -->
         				<div class="col-sm-3">
         					<div class="input-group">
         						<label class="input-group-addon" for="MAJ_WM_FONT_COLOR">

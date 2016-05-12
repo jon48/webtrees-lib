@@ -32,7 +32,7 @@ class MvcController implements MvcControllerInterface
     }
     
     /**
-     * {inheritdoc}
+     * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcControllerInterface::getModule()
      */
     public function getModule() {

@@ -123,7 +123,7 @@ class AdminConfigController extends MvcController
 				});
                 
                 ')
-                ->addInlineJavascript('
+                ->addInlineJavascript('				
                     function set_geoanalysis_status(ga_id, status, gedcom) {
                 		jQuery.ajax({
                             url: "module.php", 
@@ -240,7 +240,9 @@ class AdminConfigController extends MvcController
                     </ul>
                 </div>';
 		    $datum[1] = $ga->getId();
-		    $datum[2] = $ga->isEnabled() ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+		    $datum[2] = $ga->isEnabled() ? 
+				'<i class="fa fa-check"></i><span class="sr-only">'.I18N::translate('Enabled').'</span>' : 
+				'<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('Disabled').'</span>';
 		    $datum[3] = $ga->getTitle();
 		    $analysis_level = $ga->getAnalysisLevel();
 		    if($place_hierarchy['type'] == 'header') {
@@ -249,8 +251,8 @@ class AdminConfigController extends MvcController
 		        $datum[4] = $analysis_level . '(' . $place_hierarchy['hierarchy'][$analysis_level - 1] . ')';
 		    }
 		    $datum[5] = $ga->getAnalysisLevel();
-		    $datum[6] = '<i class="fa fa-times"></i>';
-		    $datum[7] = '<i class="fa fa-times"></i>';
+		    $datum[6] = '<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('None').'</span>';
+		    $datum[7] = '<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('None').'</span>';
 		    if($ga->hasMap()) {
 		        $datum[6] = $options->getMap()->getDescription();
 		        $datum[7] = '<span data-toggle="tooltip" title="' . $options->getMap()->getTopLevelName() . '" />';
@@ -262,7 +264,9 @@ class AdminConfigController extends MvcController
 		        }
 		        $datum[7] .= '</span>';
 		    }
-		    $datum[8] = $options->isUsingFlags() ? '<i class="fa fa-check"></i>' : '<i class="fa fa-times"></i>';
+		    $datum[8] = $options->isUsingFlags() ? 
+				'<i class="fa fa-check"></i><span class="sr-only">'.I18N::translate('Yes').'</span>' : 
+				'<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('No').'</span>';
 		    $datum[9] = $options->getMaxDetailsInGen() > 0 ? $options->getMaxDetailsInGen() : I18N::translate('All');
 		    
 		    $data[] = $datum;

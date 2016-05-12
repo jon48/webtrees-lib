@@ -32,7 +32,7 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 {
     
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::getTitle()
      */
     public function getTitle() {
@@ -40,7 +40,7 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
     }
     
    /**
-    * {inheritDoc}
+    * {@inheritDoc}
     * @see \Fisharebest\Webtrees\Module\AbstractModule::getDescription()
     */
     public function getDescription() {
@@ -63,7 +63,7 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
     }
     
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Hook\HookSubscriberInterface::getSubscribedHooks()
      */
 	public function getSubscribedHooks() {
@@ -75,13 +75,13 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderIcons()
 	 */
 	public function hExtendIndiHeaderIcons(IndividualController $ctrlIndi) { }
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderLeft()
 	 */
 	public function hExtendIndiHeaderLeft(IndividualController $ctrlIndi) { 
@@ -104,13 +104,13 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderRight()
 	 */
 	public function hExtendIndiHeaderRight(IndividualController $ctrlIndi) { }
 		
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtender::hPrintHeader()
 	 */
 	public function hPrintHeader() {	 
@@ -126,7 +126,7 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtender::hPrintFooter()
 	 */
 	public function hPrintFooter() {

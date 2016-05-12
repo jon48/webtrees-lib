@@ -10,18 +10,18 @@
  */
 namespace MyArtJaub\Webtrees\Module;
 
-use Fisharebest\Webtrees\Module\AbstractModule;
-use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
+use Fisharebest\Webtrees\Controller\IndividualController;
+use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
+use MyArtJaub\Webtrees\Family;
+use MyArtJaub\Webtrees\Functions\FunctionsPrint;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender;
-use Fisharebest\Webtrees\Controller\IndividualController;
+use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
-use MyArtJaub\Webtrees\Functions\FunctionsPrint;
-use Fisharebest\Webtrees\GedcomRecord;
-use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
-use Fisharebest\Webtrees\GedcomTag;
-use MyArtJaub\Webtrees\Family;
 /**
  * IsSourced Module
  */
@@ -30,7 +30,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 {
     
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::getTitle()
      */
     public function getTitle() {
@@ -38,7 +38,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
     }
     
    /**
-    * {inheritDoc}
+    * {@inheritDoc}
     * @see \Fisharebest\Webtrees\Module\AbstractModule::getDescription()
     */
     public function getDescription() {
@@ -46,7 +46,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
     }
     
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Hook\HookSubscriberInterface::getSubscribedHooks()
      */
 	public function getSubscribedHooks() {
@@ -57,7 +57,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderIcons()
 	 */
 	public function hExtendIndiHeaderIcons(IndividualController $ctrlIndi) {
@@ -70,25 +70,25 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderLeft()
 	 */
 	public function hExtendIndiHeaderLeft(IndividualController $ctrlIndi) { }
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderRight()
 	 */
 	public function hExtendIndiHeaderRight(IndividualController $ctrlIndi) { }
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNamePrepend()
 	 */
 	public function hRecordNamePrepend(GedcomRecord $grec){ }
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNameAppend()
 	 */
 	public function hRecordNameAppend(GedcomRecord $grec){
@@ -104,7 +104,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::defaultSidebarOrder()
 	 */
 	public function defaultSidebarOrder() {
@@ -112,7 +112,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::hasSidebarContent()
 	 */
 	public function hasSidebarContent(){ 
@@ -120,7 +120,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarAjaxContent()
 	 */
 	public function getSidebarAjaxContent() {
@@ -128,7 +128,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	}
 	
 	/**
-	 * {inheritDoc}
+	 * {@inheritDoc}
 	 * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarContent()
 	 */
 	public function getSidebarContent() {
