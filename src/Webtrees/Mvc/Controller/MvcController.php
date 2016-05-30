@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage Mvc
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) {beging_year}-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Mvc\Controller;
@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 class MvcController implements MvcControllerInterface 
 {
     /**
+     * Reference module
      * @var Fisharebest\Webtrees\Module\AbstractModule $module
      */
     protected $module;

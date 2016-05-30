@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage AdminTasks
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2012-2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
@@ -110,7 +110,7 @@ abstract class AbstractTask {
      * Set parameters of the Task
      *
      * @param bool $is_enabled Status of the task
-     * @param datetime $lastupdated Time of the last task run
+     * @param \DateTime $lastupdated Time of the last task run
      * @param bool $last_result Result of the last run, true for success, false for failure
      * @param int $frequency Frequency of execution in minutes
      * @param int $nb_occur Number of remaining occurrences, 0 for tasks not limited

@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage WelcomeBlock
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2015, Jonathan Jaubart
+ * @copyright Copyright (c) 2011-2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Module\WelcomeBlock;
@@ -35,7 +35,6 @@ class WelcomeBlockController extends MvcController
     /**
      * WelcomeBlock@index
      * 
-     * @param AbstractModule $module
      * @param PageController $parent_controller
      * @param Tree $tree
      * @param string $block_id
@@ -94,7 +93,6 @@ class WelcomeBlockController extends MvcController
     /**
      * WelcomeBlock@config
      * 
-     * @param AbstractModule $module
      * @param string $block_id
      */
     public function config($block_id) {

@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage Controller
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2010-2015, Jonathan Jaubart
+ * @copyright Copyright (c) 2011, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
  namespace MyArtJaub\Webtrees\Controller;

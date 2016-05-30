@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage PatronymicLineage
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2015, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
@@ -57,7 +57,8 @@ class LineageController extends MvcController
     private $legend;
     
     /**
-     * Constructor for LineageConstructor
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::__construct(AbstractModule $module)
      */
     public function __construct(AbstractModule $module) {
         parent::__construct($module);

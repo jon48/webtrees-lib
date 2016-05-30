@@ -76,8 +76,8 @@ class Certificate extends Media {
 	 * Extends the Media constructor.
 	 * Create a certificate from the file path
 	 * @param string $data
+	 * @param Tree $tree Reference tree
 	 * @param CertificateProviderInterface $provider
-	 * @param Tree Reference tree
 	 */
 	public function __construct($data, Tree $tree, CertificateProviderInterface $provider) {
 	    $this->provider = $provider;

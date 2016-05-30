@@ -60,7 +60,7 @@ class ImageBuilder {
 	/**
 	* Contructor for ImageBuilder
 	*
-	* @param \Fisharebest\Webtrees\Fact $fact_in The Fact to extend
+	* @param Media|null $media Reference media object
 	*/
 	public function __construct(Media $media = null){
 	    $this->media = $media;

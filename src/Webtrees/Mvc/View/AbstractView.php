@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage Mvc
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2015-2015, Jonathan Jaubart
+ * @copyright Copyright (c) 2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Mvc\View;
@@ -16,11 +16,13 @@ namespace MyArtJaub\Webtrees\Mvc\View;
 abstract class AbstractView {
     
     /**
-     * @var \Fisharebest\Webtrees\Controller\BaseController $data
+     * Reference controller
+     * @var \Fisharebest\Webtrees\Controller\BaseController $ctrl
      */
     protected $ctrl;
     
     /**
+     * Structure containing the data of the view
      * @var ViewBag $data
      */
     protected $data;

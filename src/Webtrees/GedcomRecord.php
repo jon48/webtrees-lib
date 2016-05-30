@@ -4,7 +4,7 @@
  *
  * @package MyArtJaub\Webtrees
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2010-2015, Jonathan Jaubart
+ * @copyright Copyright (c) 2011-2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 
@@ -147,6 +147,7 @@ class GedcomRecord {
 	 * @return int Level of sources
 	 */
 	public function isFactSourced($eventslist){
+	    if(empty($eventslist)) return 0;
 		$isSourced=0;
 		$facts = $this->gedcomrecord->getFacts($eventslist);
 		foreach($facts as $fact){

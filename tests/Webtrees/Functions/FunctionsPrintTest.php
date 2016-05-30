@@ -135,16 +135,16 @@ class FunctionsPrintTest extends \PHPUnit_Framework_TestCase {
 		
 		$sosa_array = array(15 => 4, 250 => 8, 1583 => 11);
 		
-		$html = '<i class="icon-perso-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>';		
+		$html = '<i class="icon-maj-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>';		
 		$this->assertEquals(str_replace('{size}', 'small', $html), FunctionsPrint::formatSosaNumbers($sosa_array));
 		$this->assertEquals(str_replace('{size}', 'small', $html), FunctionsPrint::formatSosaNumbers($sosa_array, 1));
 		$this->assertEquals(str_replace('{size}', 'small', $html), FunctionsPrint::formatSosaNumbers($sosa_array, 1, 'small'));
 		$this->assertEquals(str_replace('{size}', 'large', $html), FunctionsPrint::formatSosaNumbers($sosa_array, 1, 'large'));
 		$this->assertEquals(str_replace('{size}', 'random', $html), FunctionsPrint::formatSosaNumbers($sosa_array, 1, 'random'));
 		
-		$html2 = '<i class="icon-perso-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>15&nbsp;'.I18N::translate('(G%s)', 4).'</strong> - '.
-			'<i class="icon-perso-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>250&nbsp;'.I18N::translate('(G%s)', 8).'</strong> - '.
-			'<i class="icon-perso-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>1583&nbsp;'.I18N::translate('(G%s)', 11).'</strong>';
+		$html2 = '<i class="icon-maj-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>15&nbsp;'.I18N::translate('(G%s)', 4).'</strong> - '.
+			'<i class="icon-maj-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>250&nbsp;'.I18N::translate('(G%s)', 8).'</strong> - '.
+			'<i class="icon-maj-sosa_{size}" title="'.I18N::translate('Sosa').'"></i>&nbsp;<strong>1583&nbsp;'.I18N::translate('(G%s)', 11).'</strong>';
 		$this->assertEquals(str_replace('{size}', 'small', $html2), FunctionsPrint::formatSosaNumbers($sosa_array, 2));
 		$this->assertEquals(str_replace('{size}', 'large', $html2), FunctionsPrint::formatSosaNumbers($sosa_array, 2, 'large'));
 		$this->assertEquals(str_replace('{size}', 'random', $html2), FunctionsPrint::formatSosaNumbers($sosa_array, 2, 'random'));

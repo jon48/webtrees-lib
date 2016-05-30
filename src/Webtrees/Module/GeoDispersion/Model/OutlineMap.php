@@ -62,7 +62,8 @@ class OutlineMap {
     /**
      * Constructor for GeoAnalysisMap.
      *
-     * @param string $path
+     * @param string $filename Outline map file name
+     * @param bool $load Should the map be loaded immediately
      */
     public function __construct($filename, $load = false) {
         $this->filename = $filename;

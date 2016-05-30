@@ -54,8 +54,8 @@ class SosaListController extends MvcController
     protected $view_bag;
     
     /**
-     * Constructor for SosaListController
-     * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::construct(AbstractModule $module)
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::__construct(AbstractModule $module)
      */
     public function __construct(AbstractModule $module) {
         global $WT_TREE;

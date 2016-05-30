@@ -5,7 +5,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage Certificates
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 namespace MyArtJaub\Webtrees\Module\Certificates\Views;

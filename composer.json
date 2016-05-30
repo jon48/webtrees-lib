@@ -6,7 +6,7 @@
         "webtrees", "genealogy"   
     ],
     "homepage": "https://github.com/jon48/webtrees-lib",
-    "licence": "GPL-3.0+",
+    "license": "GPL-3.0+",
     "author": [{
         "name": "Jonathan Jaubart",
         "email": "dev@jaubart.com",
@@ -17,10 +17,10 @@
         "issues": "http://bugs.jaubart.com"
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "fisharebest/webtrees": "*"
     },
     "require-dev": {
-        "fisharebest/webtrees": "*",
         "mockery/mockery": "@stable",
         "phpunit/phpunit": "4.8.*"
     },

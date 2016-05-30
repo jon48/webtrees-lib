@@ -16,9 +16,22 @@ use Fisharebest\Webtrees\Module\AbstractModule;
  */
 class Cache{
 	
+    /**
+     * Underlying Zend Cache object
+     * @var \Zend_Cache_Core|\Zend_Cache_FrontEnd $cache
+     */
 	protected $cache=null;
+	
+	/**
+	 * Defines whether the cache has been initialised
+	 * @var bool $is_init
+	 */
 	protected $is_init = false;
 	
+	/**
+	 * *Cache* instance for Singleton pattern
+	 * @var Cache $instance
+	 */
 	protected static $instance = null;
 	
 	/**
@@ -173,5 +186,3 @@ class Cache{
 	}
 	
 }
-
-?>

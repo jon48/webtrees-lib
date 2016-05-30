@@ -11,7 +11,7 @@ use \MyArtJaub\Webtrees\GedcomRecord;
 class GedcomRecordTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var GedcomRecord $object
+     * @var \MyArtJaub\Webtrees\GedcomRecord $object
      */
     protected $object;
 
@@ -32,13 +32,16 @@ class GedcomRecordTest extends \PHPUnit_Framework_TestCase
     	self::$tree_mock->shouldReceive('getFactPrivacy')->andReturn(array());
     	self::$tree_mock->shouldReceive('getIndividualFactPrivacy')->andReturn(array());
 
-//     	self::$gedcomrecord_ged = '0 @'.self::$gedcomrecord_xref.'@ INDI'. .
-//     		'1 BIRT'. PHP_EOL .'2 DATE 2 JUN 1795'. PHP_EOL .'2 PLAC place1, place2'. PHP_EOL .
-//     		'2 DEAT'. PHP_EOL .'2 PLAC place3'. PHP_EOL .'1 SOUR'. PHP_EOL .'2_ACT place1/acte1.jpg'
-//     	;
     	self::$gedcomrecord_ged = '0 @'.self::$gedcomrecord_xref.'@ INDI'. "\n" .
     	'1 BIRT'. "\n" .'2 DATE 2 JUN 1795'. "\n" .'2 PLAC place1, place2'. "\n" .
-    	'1 DEAT'. "\n" .'2 PLAC place3'. "\n" .'1 SOUR'. "\n" .'2 _ACT place1/acte1.jpg';
+    	'1 DEAT'. "\n" .'2 PLAC place3'. "\n" .'1 SOUR'. "\n" .'2 _ACT place1/acte1.jpg'. "\n" .
+		'1 DEAT'. "\n" .'2 PLAC place3'. "\n" .'1 SOUR'. "\n" .'2 _ACT place1/acte1.jpg'. "\n" .
+		'1 CREM'. "\n" .'2 DATE 5 DEC 1838'. "\n". '1 SOUR'. "\n" .'2 _ACT place1/acte_crem.jpg'. "\n" .		
+		'1 FCOM'. "\n" .'2 DATE 12 MAR 1809'. "\n". '2 PLAC place4,place1'. "\n" .'1 SOUR TestSource'. "\n" .'2 QUAY 3'. "\n" .
+		'1 CHRA'. "\n" .'2 DATE 25 JAN 1799'. "\n". '2 PLAC place1'. "\n" .'1 SOUR TestSource'. "\n" .'2 QUAY 3'. "\n" .
+		'1 CHRA'. "\n" .'2 DATE 27 JAN 1799'. "\n". '2 PLAC place1'. "\n" .
+		'1 ORDN'. "\n" .'2 DATE 17 SEP 1824'. "\n". '2 PLAC place3'. "\n" .'1 SOUR'. "\n" .'2 _ACT place1/1824.09.18 D acte_crem.jpg'. "\n" .		
+		'1 GRAD'. "\n" .'2 DATE 1816'. "\n";
     	self::$gedcomrecord = new \Fisharebest\Webtrees\GedcomRecord(
     			self::$gedcomrecord_xref, 
     			self::$gedcomrecord_ged, 
@@ -96,19 +99,48 @@ class GedcomRecordTest extends \PHPUnit_Framework_TestCase
     	
     	$this->assertTrue($dnewgedrec->isNewAddition());    	
     }
-
+    
     /**
-     * @covers MyArtJaub\Webtrees\GedcomRecord::format_first_major_fact
-     * @todo   Implement testFormat_first_major_fact().
+     * @covers MyArtJaub\Webtrees\GedcomRecord::formatFirstMajorFact
+     * @dataProvider providerFormatFirstMajorFactWithInvalidArguments
      */
-    public function testFormat_first_major_fact()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
+    public function testFormatFirstMajorFactWithInvalidArguments($facts, $style)
+    {        
+        $this->assertEmpty($this->object->formatFirstMajorFact($facts, $style));
     }
-
+    
+    public function providerFormatFirstMajorFactWithInvalidArguments() 
+    {
+        return array(
+            array('', 1),
+            array('', 10),
+            array('', 15),
+            array('BIRT', 15),
+            array('RESI', 10),
+            array('DEAT', 10),
+            array('GRAD', 10),
+            
+        );
+    }    
+    
+    /**
+     * @covers MyArtJaub\Webtrees\GedcomRecord::formatFirstMajorFact
+     */
+    public function testFormatFirstMajorFactWithCustomShortStyle()
+    {    
+        $this->assertEquals('<i>Birth 1795&nbsp;place1</i>', $this->object->formatFirstMajorFact('BIRT', 10));
+    }
+    
+    /**
+     * @covers MyArtJaub\Webtrees\GedcomRecord::formatFirstMajorFact
+     */
+    public function testFormatFirstMajorFactWithStandardStyles()
+    {
+        $this->assertEquals(self::$gedcomrecord_mock->formatFirstMajorFact('BIRT', 1), $this->object->formatFirstMajorFact('BIRT', 1));
+        $this->assertEquals(self::$gedcomrecord_mock->formatFirstMajorFact('BIRT', 2), $this->object->formatFirstMajorFact('BIRT', 2));
+    }    
+    
+    
     /**
      * @covers MyArtJaub\Webtrees\GedcomRecord::canDisplayIsSourced
      * @todo   Implement testCanDisplayIsSourced().
@@ -132,13 +164,30 @@ class GedcomRecordTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers MyArtJaub\Webtrees\GedcomRecord::isFactSourced
-     * @todo   Implement testIsFactSourced().
+     * @dataProvider providerIsFactSourced 
      */
-    public function testIsFactSourced()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
+    public function testIsFactSourced($input, $expectedResult)
+    {        
+        $this->assertEquals($expectedResult, $this->object->isFactSourced($input));
+    }
+    
+    public function providerIsFactSourced() {
+        return array(
+            array(null, 0),
+            array('', 0),
+            array('RESI', 0),
+            array('DEAT', 0),
+            array('GRAD', -1),
+            array('BIRT', -1),
+            array('BIRT|GRAD', -1),
+            array('BIRT|GRAD|RESI', -1),
+            array('FCOM', 1),
+            array('CHRA', 1),
+            array('CREM', 2),
+            array('BIRT|CREM', 2),
+            array('ORDN', 3),
         );
     }
+    
+    
 }
