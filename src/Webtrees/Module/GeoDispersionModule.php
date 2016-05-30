@@ -26,7 +26,7 @@ class GeoDispersionModule extends AbstractModule implements ModuleConfigInterfac
 	// How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_GEODISP_SCHEMA_VERSION';
-    const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\\GeoDispersion\\Schema';
+    const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\GeoDispersion\Schema';
         
     /**
      * GeoDispersion analysis provider

@@ -43,35 +43,37 @@ class AdminConfigController extends MvcController
             	
             if($ihooks!=null){
                 foreach ($ihooks as $ihook => $params) {
-                    $array_hook = explode('#', $ihook);
-                    //Update status
-                    $new_status= Filter::postBool("status-{$params['id']}");
-                    if(in_array($array_hook[0], $module_names)) $new_status = false;
-                    $previous_status = $params['status'];
-                    if ($new_status !== null) {
-                        $new_status= $new_status ? 'enabled' : 'disabled';
-                        if($new_status != $previous_status){
-                            $chook = new Hook($array_hook[1], $array_hook[2]);
-                            switch($new_status){
-                                case 'enabled':
-                                    $chook->enable($array_hook[0]);
-                                    break;
-                                case 'disabled':
-                                    $chook->disable($array_hook[0]);
-                                    break;
-                                default:
-                                    break;
+                    if(Filter::post('hook-' . $params['id']) === 'yes') {                    
+                        $array_hook = explode('#', $ihook);
+                        //Update status
+                        $new_status= Filter::postBool('status-' . $params['id']);
+                        if(in_array($array_hook[0], $module_names)) $new_status = false;
+                        $previous_status = $params['status'];
+                        if ($new_status !== null) {
+                            $new_status= $new_status ? 'enabled' : 'disabled';
+                            if($new_status != $previous_status){
+                                $chook = new Hook($array_hook[1], $array_hook[2]);
+                                switch($new_status){
+                                    case 'enabled':
+                                        $chook->enable($array_hook[0]);
+                                        break;
+                                    case 'disabled':
+                                        $chook->disable($array_hook[0]);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
-                    }
-                    
-                    //Update priority
-                    $new_priority = Filter::postInteger("moduleorder-{$params['id']}");
-                    $previous_priority = $params['priority'];
-                    if ($new_priority !== null) {
-                        if($new_priority != $previous_priority){
-                            $chook = new Hook($array_hook[1], $array_hook[2]);
-                            $chook->setPriority($array_hook[0], $new_priority);
+                        
+                        //Update priority
+                        $new_priority = Filter::postInteger("moduleorder-{$params['id']}");
+                        $previous_priority = $params['priority'];
+                        if ($new_priority !== null) {
+                            if($new_priority != $previous_priority){
+                                $chook = new Hook($array_hook[1], $array_hook[2]);
+                                $chook->setPriority($array_hook[0], $new_priority);
+                            }
                         }
                     }
                 }

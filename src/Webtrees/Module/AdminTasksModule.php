@@ -26,7 +26,7 @@ implements ModuleConfigInterface, ModuleBlockInterface
     // How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_ADMTASKS_SCHEMA_VERSION';
-    const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\\AdminTasks\\Schema';
+    const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\AdminTasks\Schema';
     
     /**
      * Admin Task provider

@@ -94,11 +94,11 @@ class TaskController extends MvcController
         try{
             $this->provider->setTaskStatus($task, $status);
             $res['status'] = $status;
-			Log::addConfigurationLog('Module '.$this->module->getName().' : Admin Task "'.$task->getName().'" has been '. ($status ? 'enabled' : 'diabled') .'.');
+			Log::addConfigurationLog('Module '.$this->module->getName().' : Admin Task "'.$task->getName().'" has been '. ($status ? 'enabled' : 'disabled') .'.');
         }
         catch (\Exception $ex) {
             $res['error'] = $ex->getMessage();
-			Log::addErrorLog('Module '.$this->module->getName().' : Admin Task "'.$task->getName().'" could not be ' . ($status ? 'enabled' : 'diabled') .'. Error: '. $ex->getMessage());
+			Log::addErrorLog('Module '.$this->module->getName().' : Admin Task "'.$task->getName().'" could not be ' . ($status ? 'enabled' : 'disabled') .'. Error: '. $ex->getMessage());
         }
         
         $controller->pageHeader();

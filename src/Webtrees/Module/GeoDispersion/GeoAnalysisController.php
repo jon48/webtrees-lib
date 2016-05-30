@@ -75,7 +75,7 @@ class GeoAnalysisController extends MvcController
             $data->set('geoanalysis', $ga);
             
             $controller
-                ->addExternalJavascript(Constants::WT_RAPHAEL_JS_URL)
+                ->addExternalJavascript(Constants::WT_RAPHAEL_JS_URL())
                 ->addInlineJavascript('
                 jQuery("#geodispersion-tabs").tabs();
                 jQuery("#geodispersion-tabs").css("visibility", "visible");
@@ -145,11 +145,11 @@ class GeoAnalysisController extends MvcController
         try{
             $this->provider->setGeoAnalysisStatus($ga, $status);
             $res['status'] = $status;
-			Log::addConfigurationLog('Module '.$this->module->getName().' : Geo Analysis ID "'.$ga->getId().'" has been '. ($status ? 'enabled' : 'diabled') .'.');
+			Log::addConfigurationLog('Module '.$this->module->getName().' : Geo Analysis ID "'.$ga->getId().'" has been '. ($status ? 'enabled' : 'disabled') .'.');
         }
         catch (\Exception $ex) {
             $res['error'] = $ex->getMessage();
-			Log::addErrorLog('Module '.$this->module->getName().' : Geo Analysis ID "'.$ga->getId().'" could not be ' . ($status ? 'enabled' : 'diabled') .'. Error: '. $ex->getMessage());
+			Log::addErrorLog('Module '.$this->module->getName().' : Geo Analysis ID "'.$ga->getId().'" could not be ' . ($status ? 'enabled' : 'disabled') .'. Error: '. $ex->getMessage());
         }
         
         $controller->pageHeader();

@@ -56,10 +56,13 @@ class AdminConfigView extends AbstractView {
 						<tbody> 
 							<?php  
 							$hooks = $this->data->get('hook_list');
-							foreach ($hooks as $id => $hook) { 
+							foreach ($hooks as $hook) { 
 							?>
 							<tr>
-								<td><?php echo FunctionsEdit::twoStateCheckbox('status-'.($hook->id), ($hook->status)=='enabled'); ?></td>
+								<td>
+									<input type="hidden" name="hook-<?php echo $hook->id;?>" value="yes" >
+									<?php echo FunctionsEdit::twoStateCheckbox('status-'.($hook->id), ($hook->status)=='enabled'); ?>
+								</td>
 								<td><?php echo (($hook->status)=='enabled'); ?></td>
 								<td><?php echo $hook->hook; ?></td>
 								<td><?php echo $hook->context; ?></td>

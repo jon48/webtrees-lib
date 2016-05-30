@@ -41,7 +41,7 @@ class SosaModule
     // How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_SOSA_SCHEMA_VERSION';
-    const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\\Sosa\\Schema';
+    const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\Sosa\Schema';
         
     /**
      * {@inhericDoc}

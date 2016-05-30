@@ -184,7 +184,7 @@ class Functions {
 	 */
 	public static function encodeFileSystemToUtf8($string){
 		if (strtoupper(substr(php_uname('s'), 0, 7)) === 'WINDOWS') {
-		    return iconv('cp1252', 'utf-8',$string);
+		    return iconv('cp1252', 'utf-8//IGNORE',$string);
 		}
 		return $string;
 	}
@@ -196,8 +196,8 @@ class Functions {
 	 * @return string Filesystem encoded string
 	 */
 	public static function encodeUtf8ToFileSystem($string){
-		if (strtoupper(substr(php_uname('s'), 0, 7)) === 'WINDOWS') {
-			return iconv('utf-8', 'cp1252' ,$string);
+		if (preg_match('//u', $string) && strtoupper(substr(php_uname('s'), 0, 7)) === 'WINDOWS') {
+			return iconv('utf-8', 'cp1252//IGNORE' ,  $string);
 		}
 		return $string;
 	}

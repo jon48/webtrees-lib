@@ -22,7 +22,7 @@ class HooksModule extends AbstractModule implements ModuleConfigInterface {
     // How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_HOOKS_SCHEMA_VERSION';
-    const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\\Hooks\\Schema';
+    const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\Hooks\Schema';
         
     /**
      * {@inhericDoc}

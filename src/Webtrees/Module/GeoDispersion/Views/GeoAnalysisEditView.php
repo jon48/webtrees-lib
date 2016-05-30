@@ -138,7 +138,7 @@ class GeoAnalysisEditView extends AbstractView {
     				<?php echo I18N::translate('Top places number'); ?>
     			</label>
     			<div class="col-sm-9">
-    				<?php echo FunctionsEdit::selectEditControl('gen_details', $this->data->get('generation_details'), null, !$is_new && ($ga && $ga->getOptions()->getMaxDetailsInGen()), 'class="form-control"'); ?>
+    				<?php echo FunctionsEdit::selectEditControl('gen_details', $this->data->get('generation_details'), null, !$is_new && ($ga && $ga->getOptions()) ? $ga->getOptions()->getMaxDetailsInGen() : 0, 'class="form-control"'); ?>
 				    <p class="small text-muted">
     					<?php echo I18N::translate('Set the number of top places to display in the generation breakdown view.'); ?>
     				</p>

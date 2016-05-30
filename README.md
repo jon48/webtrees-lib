@@ -91,7 +91,6 @@ would be managed through the related module structure in the  **webtrees-geneaja
 
 It is required to run PHP 5.4 to be able to run the **webtrees-lib** library.
 Except the above, **webtrees-lib** shares the same requirements and system configuration as a standard **webtrees** installation.
-However, it is nece
 
 ### Installation / Upgrading
 
