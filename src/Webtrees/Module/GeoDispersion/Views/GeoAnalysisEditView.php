@@ -113,7 +113,7 @@ class GeoAnalysisEditView extends AbstractView {
         				<?php echo FunctionsEdit::selectEditControl('map_top_level', $places_hierarchy['hierarchy'], null, $is_new || ! $ga->hasMap() ? '' : $ga->getOptions()->getMapLevel() - 1, 'class="form-control"'); ?>
         				<p class="small text-muted">
         					<?php echo I18N::translate('Subdivision level of the parent subdivision(s) represented by the map.'); ?><br />
-        					<?php echo I18N::translate('For instance, if the map is intended to represent a country by county, then the map parent level would be “Country”, and the analysis level would be “County”.'); ?>
+        					<?php echo I18N::translate('For instance, if the map is intended to represent a country by county analysis, then the map parent level would be “Country”, and the analysis level would be “County”.'); ?>
         				</p>
         			</div>
         		</div>
@@ -127,7 +127,7 @@ class GeoAnalysisEditView extends AbstractView {
     			<div class="col-sm-9">
     				<?php echo FunctionsEdit::editFieldYesNo('use_flags', !$is_new && ($ga && $ga->getOptions()->isUsingFlags()) ? 1 : 0, 'class="radio-inline"'); ?>
 				    <p class="small text-muted">
-    					<?php echo I18N::translate('Display the place flags, instead of or in addition to the place name.'); ?>
+    					<?php echo I18N::translate('Display the place\'s flag, instead of or in addition to the place name.'); ?>
     				</p>
     			</div>
     		</div>

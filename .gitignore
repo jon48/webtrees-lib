@@ -8,3 +8,8 @@
 
 
 /.buildpath
+
+# Utilities configuration files
+/phpunit.xml
+/phpdoc.xml
+/pdepend.xml

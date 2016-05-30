@@ -59,17 +59,34 @@ class SosaStatsView extends AbstractView {
 				<thead>
 					<tr class="maj-row">
 						<th class="label" colspan="2" >&nbsp;</th>
-						<th class="label"><?php  echo I18N::translate('Theoretical'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Known'); ?></th>
-						<th class="label"><?php  echo I18N::translate('%'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Losses G-1'); ?></th>
-						<th class="label"><?php  echo I18N::translate('%'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Total known'); ?></th>
-						<th class="label"><?php  echo I18N::translate('%'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Different'); ?></th>
-						<th class="label"><?php  echo I18N::translate('%'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Total Different'); ?></th>
-						<th class="label"><?php  echo I18N::translate('Pedigree collapse'); ?></th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Theoretical number of ancestors in generation G.'); ?>">
+							<?php  echo I18N::translate('Theoretical'); ?>
+						</th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Number of ancestors found in generation G. A same individual can be counted several times.'); ?>">
+							<?php  echo I18N::translate('Known'); ?>
+						</th>				
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Ratio of found ancestors in generation G compared to the theoretical number.'); ?>">
+							<?php  echo I18N::translate('%'); ?>
+						</th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Number of ancestors not found in generation G, but whose children are known in generation G-1.'); ?>">
+							<?php  echo I18N::translate('Losses G-1'); ?>
+						</th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Ratio of not found ancestors in generation G amongst the theoretical ancestors in this generation whose children are known in generation G-1. This is an indicator of the completion of a generation relative to the completion of the previous generation.'); ?>">
+							<?php  echo I18N::translate('%'); ?>
+						</th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Cumulative number of ancestors found up to generation G. A same individual can be counted  several times.'); ?>">
+							<?php  echo I18N::translate('Total known'); ?>
+						</th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Ratio of cumulative found ancestors in generation G compared to the cumulative theoretical number.'); ?>">
+						<?php  echo I18N::translate('%'); ?></th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Number of distinct ancestors found in generation G. A same individual is counted only once.'); ?>">
+						<?php  echo I18N::translate('Different'); ?></th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Ratio of distinct individuals compared to the number of ancestors found in generation G.'); ?>">
+						<?php  echo I18N::translate('%'); ?></th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Number of cumulative distinct ancestors found up to generation G. A same individual is counted only once in the total number, even if present in different generations.'); ?>">
+						<?php  echo I18N::translate('Total Different'); ?></th>
+						<th class="label help_tooltip" title="<?php echo I18N::translate('Pedigree collapse at generation G. Pedigree collapse is a measure of the real number of ancestors of a person compared to its theorical number. The higher this number is, the more marriages between related persons have happened. Extreme examples of high pedigree collapse are royal families for which this number can be as high as nearly 90%% (Alfonso XII of Spain).'); ?>">
+						<?php  echo I18N::translate('Pedigree collapse'); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -105,6 +122,7 @@ class SosaStatsView extends AbstractView {
 					</tr>
 				</tfoot>
 			</table>
+			<div class="center"><em><?php echo I18N::translate('Hover the column headers to display some help on their meaning.'); ?></em></div>
 			
 			<h3><?php echo I18N::translate('Known Sosa ancestors\' family dispersion'); ?></h3>
 			<div class="center">

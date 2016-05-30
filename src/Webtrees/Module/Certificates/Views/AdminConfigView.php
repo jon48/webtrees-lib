@@ -147,7 +147,7 @@ class AdminConfigView extends AbstractView {
     			<div class="col-sm-9">    			
     				<div class="row">
     					<!--  MAJ_WM_FONT_MAXSIZE -->
-    					<div class="col-sm-4">
+    					<div class="col-sm-5">
         					<div class="input-group">
         						<label class="input-group-addon" for="MAJ_WM_FONT_MAXSIZE">
         							<?php echo I18N::translate('Maximum font size'); ?>

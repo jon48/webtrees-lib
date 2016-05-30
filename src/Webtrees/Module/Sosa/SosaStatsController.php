@@ -56,7 +56,9 @@ class SosaStatsController extends MvcController
         
         $controller = new PageController();
         $controller
-            ->setPageTitle(I18N::translate('Sosa Statistics'));
+            ->setPageTitle(I18N::translate('Sosa Statistics'))
+            ->addInlineJavascript('$(".help_tooltip").tooltip();')
+        ;
 
         $view_bag = new ViewBag();
         $view_bag->set('title', $controller->getPageTitle());
@@ -97,8 +99,6 @@ class SosaStatsController extends MvcController
                 $gen_equiv += $perc_sosa_count_theor;
                 $missing=2*$prev_known - $tab['sosaCount'];
                 $gen_diff=$tab['diffSosaTotalCount']-$prev_diff;
-                $percGenDiffSosaCount = Functions::safeDivision($gen_diff, $tab['sosaCount']);
-                $percmplex = 1 - Functions::safeDivision($tab['diffSosaTotalCount'], $tab['sosaTotalCount']);
                 
                 $generation_stats[$gen] = array(
                     'gen_min_birth' => $genY1,

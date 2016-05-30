@@ -295,6 +295,9 @@ class GeoAnalysisController extends MvcController
                 $html = ViewFactory::make('GeoAnalysisTabGeneralTable', $this, new BaseController(), $data)->getHtmlPartial();
             }
         }
+        else {
+            $html = '<p class="warning">' . I18N::translate('No data is available for the general analysis.') . '</p>';
+        }
         return $html;
     }
     
@@ -365,6 +368,9 @@ class GeoAnalysisController extends MvcController
             
             $html = ViewFactory::make('GeoAnalysisTabGenerations', $this, new BaseController(), $data)->getHtmlPartial();
             
+        }
+        else {
+            $html = '<p class="warning">' . I18N::translate('No data is available for the generations analysis.') . '</p>';
         }
         return $html;
     }
