@@ -1,3 +1,7 @@
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/41e26058-ff3c-4836-82c0-bd59ec7f8ecb/mini.png)](https://insight.sensiolabs.com/projects/41e26058-ff3c-4836-82c0-bd59ec7f8ecb)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jon48/webtrees-lib/?branch=master)
+[![Code Climate](https://codeclimate.com/github/jon48/webtrees-lib/badges/gpa.svg)](https://codeclimate.com/github/jon48/webtrees-lib)
+
 # webtrees-lib
 Library to extend webtrees core capabilities
 
@@ -15,7 +19,7 @@ Library to extend webtrees core capabilities
 
 * **webtrees-lib: MyArtJaub library for webtrees**
 * Copyright (C) 2009 to 2016 Jonathan Jaubart.
-* Derived from **webtrees** - Copyright (C) 2010 to 2014  webtrees development team.
+* Derived from **webtrees** - Copyright (C) 2010 to 2016  webtrees development team.
 * Derived from PhpGedView - Copyright (C) 2002 to 2010  PGV Development Team.
 
 This program is free software; you can redistribute it and/or modify it under the
@@ -75,10 +79,10 @@ Available modules:
   * Placeholder module for miscellaneous extensions.
 * **MyArtJaub Patronymic Lineage** (`myartjaub_patronymiclineage`)
   * Alternative to Branches page (created before the latter).
-* **MyArtJaub Sources** (`myartjaub_issourced`)
-  * Provides information about the level and quality of sourced for records.
 * **MyArtJaub Sosa** (`myartjaub_sosa`)
   * Module to manage Sosa ancestors, and provide statistics.
+* **MyArtJaub Sources** (`myartjaub_issourced`)
+  * Provides information about the level and quality of sourced for records.
 * **MyArtJaub Welcome Block** (`myartjaub_welcome_block`)
   * Merge of standard welcome and login blocks, with display of Piwik statistics
   

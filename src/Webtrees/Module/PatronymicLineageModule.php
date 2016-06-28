@@ -20,6 +20,8 @@ use \MyArtJaub\Webtrees\Mvc\Dispatcher;
 class PatronymicLineageModule extends fw\Module\AbstractModule 
     implements ModuleMenuItemInterface
 {
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
         
     /**
      * {@inhericDoc}

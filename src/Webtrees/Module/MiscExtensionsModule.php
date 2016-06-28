@@ -29,7 +29,9 @@ use MyArtJaub\Webtrees\Individual;
  */
 class MiscExtensionsModule extends AbstractModule 
 implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender, PageFooterExtender, ModuleConfigInterface
-{
+{    
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
     
     /**
      * {@inheritDoc}

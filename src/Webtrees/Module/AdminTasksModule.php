@@ -28,6 +28,9 @@ implements ModuleConfigInterface, ModuleBlockInterface
     const SCHEMA_SETTING_NAME     = 'MAJ_ADMTASKS_SCHEMA_VERSION';
     const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\AdminTasks\Schema';
     
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
+    
     /**
      * Admin Task provider
      * @var \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProviderInterface $provider

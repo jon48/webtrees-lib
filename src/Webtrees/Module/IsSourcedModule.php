@@ -28,6 +28,8 @@ use MyArtJaub\Webtrees\Individual;
 class IsSourcedModule extends AbstractModule 
 implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExtender, RecordNameTextExtender
 {
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
     
     /**
      * {@inheritDoc}

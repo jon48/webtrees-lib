@@ -21,6 +21,8 @@ use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockController;
 class WelcomeBlockModule extends AbstractModule
     implements ModuleBlockInterface
 {
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
         
     /**
      * {@inhericDoc}

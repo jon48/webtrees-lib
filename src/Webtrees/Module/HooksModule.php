@@ -23,7 +23,10 @@ class HooksModule extends AbstractModule implements ModuleConfigInterface {
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_HOOKS_SCHEMA_VERSION';
     const SCHEMA_MIGRATION_PREFIX = '\MyArtJaub\Webtrees\Module\Hooks\Schema';
-        
+    
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
+    
     /**
      * {@inhericDoc}
      */

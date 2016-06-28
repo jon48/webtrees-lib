@@ -33,6 +33,8 @@ class CertificatesModule
     extends AbstractModule 
     implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtender, CustomSimpleTagManager
 {
+    /** @var string For custom modules - link for support, upgrades, etc. */
+    const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
         
     /**
      * Provider for Certificates

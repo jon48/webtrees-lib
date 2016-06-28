@@ -44,7 +44,7 @@ class LineageView extends AbstractView {
             $extra_params = array ('mod' => Constants::MODULE_MAJ_PATROLIN_NAME, 'mod_action' => 'Lineage');
             // Show the surname list
             switch ($tree->getPreference('SURNAME_LIST_STYLE')) {
-                case 'style1';
+                case 'style1':
 					echo FunctionsPrintLists::surnameList($surns, 3, true, WT_SCRIPT_NAME, $tree, $extra_params);
 					break;
                 case 'style3':

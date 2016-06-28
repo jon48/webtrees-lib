@@ -61,6 +61,8 @@ class LineageController extends MvcController
      * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::__construct(AbstractModule $module)
      */
     public function __construct(AbstractModule $module) {
+        global $WT_TREE;
+        
         parent::__construct($module);
         
         $this->surname     = Filter::get('surname');
@@ -80,6 +82,11 @@ class LineageController extends MvcController
                 $this->legend = I18N::translateContext('Unknown surname', '…');
             } else {
                 $this->legend = Filter::escapeHtml($this->surname);
+                // The surname parameter is a root/canonical form.
+                // Display it as the actual surname
+                foreach (QueryName::surnames($WT_TREE, $this->surname, $this->alpha, false, false) as $details) {
+                    $this->legend = implode('/', array_keys($details));
+                }                
             }
             $this->show = 'lineage'; // SURN list makes no sense here
         } elseif ($this->alpha === '@') {
