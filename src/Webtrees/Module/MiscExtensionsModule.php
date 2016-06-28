@@ -19,16 +19,16 @@ use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\User;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtender;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtender;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtenderInterface;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
 /**
  * MiscExtension Module
  */
 class MiscExtensionsModule extends AbstractModule 
-implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender, PageFooterExtender, ModuleConfigInterface
+implements HookSubscriberInterface, IndividualHeaderExtenderInterface, PageHeaderExtenderInterface, PageFooterExtenderInterface, ModuleConfigInterface
 {    
     /** @var string For custom modules - link for support, upgrades, etc. */
     const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
@@ -78,13 +78,13 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderIcons()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderIcons()
 	 */
 	public function hExtendIndiHeaderIcons(IndividualController $ctrlIndi) { }
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderLeft()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderLeft()
 	 */
 	public function hExtendIndiHeaderLeft(IndividualController $ctrlIndi) { 
 	    $res = '';
@@ -107,13 +107,13 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderRight()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderRight()
 	 */
 	public function hExtendIndiHeaderRight(IndividualController $ctrlIndi) { }
 		
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtender::hPrintHeader()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtenderInterface::hPrintHeader()
 	 */
 	public function hPrintHeader() {	 
 	    global $WT_TREE;
@@ -129,7 +129,7 @@ implements HookSubscriberInterface, IndividualHeaderExtender, PageHeaderExtender
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtender::hPrintFooter()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtenderInterface::hPrintFooter()
 	 */
 	public function hPrintFooter() {
 	    global $WT_TREE;

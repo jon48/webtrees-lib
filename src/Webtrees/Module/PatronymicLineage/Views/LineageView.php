@@ -147,7 +147,7 @@ class LineageView extends AbstractView {
      */
     private function printRootLineage(LineageRootNode $node) {    	
     	print '<div class="patrolin_tree">';
-    	if($node->getIndividual() == null) {
+    	if($node->getIndividual() === null) {
     		$fam_nodes = $node->getFamiliesNodes();
     		foreach($fam_nodes as $fam){
     			foreach($fam_nodes[$fam] as $child_node) {

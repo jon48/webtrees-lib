@@ -18,15 +18,15 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
 use MyArtJaub\Webtrees\Family;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
 /**
  * IsSourced Module
  */
 class IsSourcedModule extends AbstractModule 
-implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExtender, RecordNameTextExtender
+implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExtenderInterface, RecordNameTextExtenderInterface
 {
     /** @var string For custom modules - link for support, upgrades, etc. */
     const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
@@ -60,7 +60,7 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderIcons()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderIcons()
 	 */
 	public function hExtendIndiHeaderIcons(IndividualController $ctrlIndi) {
 	    if($ctrlIndi){
@@ -73,25 +73,25 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderLeft()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderLeft()
 	 */
 	public function hExtendIndiHeaderLeft(IndividualController $ctrlIndi) { }
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderRight()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderRight()
 	 */
 	public function hExtendIndiHeaderRight(IndividualController $ctrlIndi) { }
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNamePrepend()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNamePrepend()
 	 */
 	public function hRecordNamePrepend(GedcomRecord $grec){ }
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNameAppend()
+	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNameAppend()
 	 */
 	public function hRecordNameAppend(GedcomRecord $grec){
 	    $html = '';

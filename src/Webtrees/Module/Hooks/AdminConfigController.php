@@ -15,7 +15,6 @@ use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Theme\AdministrationTheme;
 use MyArtJaub\Webtrees\Hook\Hook;
@@ -41,7 +40,7 @@ class AdminConfigController extends MvcController
                 "SELECT module_name FROM `##module` WHERE status='disabled'"
             )->fetchOneColumn();
             	
-            if($ihooks!=null){
+            if($ihooks !== null){
                 foreach ($ihooks as $ihook => $params) {
                     if(Filter::post('hook-' . $params['id']) === 'yes') {                    
                         $array_hook = explode('#', $ihook);

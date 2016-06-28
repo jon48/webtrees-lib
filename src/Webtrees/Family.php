@@ -44,7 +44,7 @@ class Family extends GedcomRecord {
 	* @return int Level of sources
 	* */
 	function isMarriageSourced(){
-		if($this->_ismarriagesourced != null) return $this->_ismarriagesourced;
+		if($this->_ismarriagesourced !== null) return $this->_ismarriagesourced;
 		$this->_ismarriagesourced = $this->isFactSourced(WT_EVENTS_MARR.'|MARC');
 		return $this->_ismarriagesourced;
 	}

@@ -2,12 +2,12 @@
     "name": "jon48/webtrees-lib",
     "description": "Library to extend webtrees core capabilities",
     "type": "library",
-    "keyword": [
+    "keywords": [
         "webtrees", "genealogy"   
     ],
     "homepage": "https://github.com/jon48/webtrees-lib",
     "license": "GPL-3.0+",
-    "author": [{
+    "authors": [{
         "name": "Jonathan Jaubart",
         "email": "dev@jaubart.com",
         "homepage": "http://www.jaubart.com",

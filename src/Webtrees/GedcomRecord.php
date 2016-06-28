@@ -10,10 +10,7 @@
 
 namespace MyArtJaub\Webtrees;
 
-use \Fisharebest\Webtrees as fw;
 use \MyArtJaub\Webtrees as mw;
-
-use fw\Auth;
 
 /**
  * Decorator class to extend native webtrees GedcomRecord class.
@@ -53,7 +50,7 @@ class GedcomRecord {
 	 */
 	public function isNewAddition() {
 		return $this->gedcomrecord->isPendingAddtion()
-			&& $this->gedcomrecord->privatizeGedcom(fw\Auth::PRIV_HIDE) === null;
+			&& $this->gedcomrecord->privatizeGedcom(\Fisharebest\Webtrees\Auth::PRIV_HIDE) === null;
 	}
 	
 
@@ -128,7 +125,7 @@ class GedcomRecord {
 	 * @return int Level of sources
 	 */
 	public function isSourced(){
-		if($this->_issourced != null) return $this->_issourced;
+		if($this->_issourced !== null) return $this->_issourced;
 		$this->_issourced=-1;
 		$sourcesfacts = $this->gedcomrecord->getFacts('SOUR');
 		foreach($sourcesfacts as $sourcefact){

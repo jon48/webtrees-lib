@@ -22,8 +22,8 @@ use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Module;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
 
@@ -35,8 +35,8 @@ class SosaModule
     implements  ModuleMenuInterface, 
                 ModuleConfigInterface,
                 HookSubscriberInterface,
-                IndividualHeaderExtender,
-                RecordNameTextExtender
+                IndividualHeaderExtenderInterface,
+                RecordNameTextExtenderInterface
 {
     // How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
@@ -199,7 +199,7 @@ class SosaModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderIcons()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderIcons()
      */
     public function hExtendIndiHeaderIcons(IndividualController $ctrlIndi) {
         if($ctrlIndi){
@@ -211,13 +211,13 @@ class SosaModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderLeft()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderLeft()
      */
     public function hExtendIndiHeaderLeft(IndividualController $ctrlIndi) { }
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtender::hExtendIndiHeaderRight()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface::hExtendIndiHeaderRight()
      */
     public function hExtendIndiHeaderRight(IndividualController $ctrlIndi) {
         if($ctrlIndi){
@@ -229,7 +229,7 @@ class SosaModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNameAppend()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNameAppend()
      */
     public function hRecordNameAppend(GedcomRecord $grec) {
         if($grec instanceof \Fisharebest\Webtrees\Individual){ // Only apply to individuals
@@ -241,7 +241,7 @@ class SosaModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtender::hRecordNamePrepend()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNamePrepend()
      */
     public function hRecordNamePrepend(GedcomRecord $grec) {}
     

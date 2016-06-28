@@ -10,16 +10,15 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use Fisharebest\Webtrees\Auth;
-use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
-use MyArtJaub\Webtrees\Functions\Functions;
-use MyArtJaub\Webtrees\Constants;
+use Fisharebest\Webtrees\Controller\PageController;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
+use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 
 /**
  * Controller for SosaStats
@@ -142,11 +141,6 @@ class SosaStatsController extends MvcController
         if(count($ancestorsDispGen2) == 0) return;
         
         $size = '600x300';
-        $sizes = explode('x', $size);
-        
-        $color_mother = 'ffd1dc';
-        $color_father = '84beff';
-        $color_shared = '777777';
         
         $total = array_sum($ancestorsDispGen2);
         $father_count = isset($ancestorsDispGen2[1]) ? $ancestorsDispGen2[1] : 0;
@@ -189,7 +183,7 @@ class SosaStatsController extends MvcController
         $ancestorsDispGen2 = $this->sosa_provider->getAncestorDispersionForGen(3);
         
         $size = '700x300';
-        $sizes = explode('x', $size);
+        
         $color_motmot = 'ffd1dc';
         $color_motfat = 'b998a0';
         $color_fatfat = '577292';

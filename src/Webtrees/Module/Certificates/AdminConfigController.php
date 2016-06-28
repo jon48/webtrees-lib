@@ -10,19 +10,18 @@
  */
 namespace MyArtJaub\Webtrees\Module\Certificates;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Theme;
-use Fisharebest\Webtrees\Filter;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
-use Fisharebest\Webtrees\Theme\AdministrationTheme;
-use Fisharebest\Webtrees\Module;
-use Fisharebest\Webtrees\FlashMessages;
+use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\File;
+use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\Html;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Theme;
+use Fisharebest\Webtrees\Theme\AdministrationTheme;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 
 /**
  * Controller for Certificates AdminConfig
@@ -33,7 +32,6 @@ class AdminConfigController extends MvcController
      * Manage updates sent from the AdminConfig@index form.
      */
     protected function update() {
-        global $WT_TREE;
         
         if(Auth::isAdmin()){
             

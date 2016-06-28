@@ -93,7 +93,7 @@ class Cache{
 	protected function getKeyName($value, AbstractModule $mod = null){
 	    $this->checkInit();
 		$mod_name = 'myartjaub';
-		if($mod != null) $mod_name = $mod->getName();
+		if($mod !== null) $mod_name = $mod->getName();
 		return $mod_name.'_'.$value;
 	}
 

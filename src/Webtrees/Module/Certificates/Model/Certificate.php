@@ -12,22 +12,21 @@
 
 namespace MyArtJaub\Webtrees\Module\Certificates\Model;
 
-use Fisharebest\Webtrees\Media;
-use MyArtJaub\Webtrees\Functions\Functions;
+use Fisharebest\Webtrees\Controller\IndividualController;
+use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\Date;
-use Fisharebest\Webtrees\File;
-use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Source;
-use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Module;
-use MyArtJaub\Webtrees\Constants;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Repository;
-use Fisharebest\Webtrees\Database;
-use Fisharebest\Webtrees\Controller\IndividualController;
 use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Family;
+use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Media;
+use Fisharebest\Webtrees\Module;
+use Fisharebest\Webtrees\Repository;
+use Fisharebest\Webtrees\Source;
+use Fisharebest\Webtrees\Tree;
+use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Functions\Functions;
 
 /**
  * Class for managing certificates, extending a Media object.
@@ -154,7 +153,7 @@ class Certificate extends Media {
 	 */
 	public function setSource($xref){
 		if($xref instanceof Source){
-			$this->source = $data;
+			$this->source = $xref;
 		} else {
 			$this->source = Source::getInstance($xref, $this->tree);
 		}

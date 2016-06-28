@@ -13,7 +13,7 @@ namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
 /**
  * Interface for modules which intends to extend the header of the page
  */
-interface PageHeaderExtender {
+interface PageHeaderExtenderInterface {
 		
     /**
      * Get HTML code for extending the header of a page.

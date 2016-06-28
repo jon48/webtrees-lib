@@ -28,7 +28,8 @@ class GoogleMapsProvider implements MapProviderInterface {
 		if(!$place->isEmpty()) {
 			$parent = explode (',', $place->getGedcomName());
 			$place_id = 0;
-			for ($i=0; $i<count($parent); $i++) {
+			$nb_levels = count($parent);
+			for ($i=0; $i < $nb_levels; $i++) {
 				$parent[$i] = trim($parent[$i]);
 				if (empty($parent[$i])) $parent[$i]='unknown';// GoogleMap module uses "unknown" while GEDCOM uses , ,
 				$pl_id=Database::prepare('SELECT pl_id FROM `##placelocation` WHERE pl_level=? AND pl_parent_id=? AND pl_place LIKE ? ORDER BY pl_place')

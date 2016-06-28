@@ -100,7 +100,7 @@ class Functions {
 		try {
 			fw\Database::prepare("SELECT 1 FROM {$table}")->fetchOne();
 			return true;
-		} catch (PDOException $ex) {
+		} catch (\PDOException $ex) {
 			return false;
 		}
 	}
@@ -167,9 +167,9 @@ class Functions {
 		$encrypted = str_replace('*', '=', $encrypted);
 		$encrypted = base64_decode($encrypted);
 		if(!$encrypted)
-			throw new InvalidArgumentException('The encrypted value is not in correct base64 format.');
+			throw new \InvalidArgumentException('The encrypted value is not in correct base64 format.');
 		if(strlen($encrypted) < self::ENCRYPTION_IV_SIZE) 
-			throw new InvalidArgumentException('The encrypted value does not contain enough characters for the key.');
+			throw new \InvalidArgumentException('The encrypted value does not contain enough characters for the key.');
 		$iv_dec = substr($encrypted, 0, self::ENCRYPTION_IV_SIZE);
 		$encrypted = substr($encrypted, self::ENCRYPTION_IV_SIZE);
 		$decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $encrypted, MCRYPT_MODE_CBC, $iv_dec);

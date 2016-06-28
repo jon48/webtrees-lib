@@ -10,9 +10,9 @@
  */
 namespace MyArtJaub\Webtrees\Module;
 
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
-use Fisharebest\Webtrees\I18N;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockController;
 
 /**

@@ -65,11 +65,11 @@ class LineageBuilder {
 				/** @var Fisharebest\Webtrees\Individual $indiFirst  */
 				$indiFirst= $this->getLineageRootIndividual($indi);
 				if($indiFirst){
-					$_usedIndis[$indiFirst->getXref()] = true;
+					$this->used_indis[$indiFirst->getXref()] = true;
 					if($indiFirst->canShow()){
 						//Check if the root individual has brothers and sisters, without parents
 						$indiChildFamily = $indiFirst->getPrimaryChildFamily();
-						if($indiChildFamily != null){
+						if($indiChildFamily !== null){
 							$root_node = new LineageRootNode(null); 
 							$root_node->addFamily($indiChildFamily);
 						}
@@ -129,7 +129,7 @@ class LineageBuilder {
 				$is_first=true;
 			}
 		}
-		if(isset($_usedIndis[$resIndi->getXref()])){
+		if(isset($this->used_indis[$resIndi->getXref()])){
 			return null;
 		}
 		else{
@@ -145,7 +145,7 @@ class LineageBuilder {
 	 * @return LineageNode Computed lineage
 	 */
 	protected function buildLineage(LineageNode $node) {
-		if($node == null) return;
+		if($node === null) return;
 		
 		$indi_surname = null;
 		

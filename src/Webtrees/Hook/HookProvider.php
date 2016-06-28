@@ -143,10 +143,10 @@ class HookProvider implements HookProviderInterface {
 	        $phooks = self::getPossibleHooks();
 	        	
 	        // Insert hooks not existing yet in the DB
-	        if($phooks!=null){
+	        if($phooks !== null){
 	            foreach($phooks as $phook => $priority){
 	                $array_hook = explode('#', $phook);
-	                if($ihooks==null || !array_key_exists($phook, $ihooks)){
+	                if($ihooks === null || !array_key_exists($phook, $ihooks)){
 	                    $chook = new Hook($array_hook[1], $array_hook[2]);
 	                    $chook->subscribe($array_hook[0]);
 	                    $chook->setPriority($array_hook[0], $priority);
@@ -155,10 +155,10 @@ class HookProvider implements HookProviderInterface {
 	        }
 	        	
 	        //Remove hooks not existing any more in the file system
-	        if($ihooks!=null){
+	        if($ihooks !== null){
 	            foreach($ihooks as $ihook => $status){
 	                $array_hook = explode('#', $ihook);
-	                if($phooks==null || !array_key_exists($ihook, $phooks)){
+	                if($phooks === null || !array_key_exists($ihook, $phooks)){
 	                    $chook = new Hook($array_hook[1], $array_hook[2]);
 	                    $chook->remove($array_hook[0]);
 	                }

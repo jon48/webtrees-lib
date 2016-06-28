@@ -220,7 +220,7 @@ class FunctionsPrint {
 	public static function formatFactPlaceShort(\Fisharebest\Webtrees\Fact $fact, $format, $anchor=false){
 		$html='';
 		
-		if ($fact==null) return $html;
+		if ($fact === null) return $html;
 		$place = $fact->getPlace();
 		if($place){
 			$dplace = new Place($place);

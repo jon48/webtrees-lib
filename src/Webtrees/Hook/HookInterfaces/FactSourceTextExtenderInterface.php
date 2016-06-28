@@ -13,7 +13,7 @@ namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
 /**
  * Interface for modules providing an extension feature for texts describing Facts sources.
  */
-interface FactSourceTextExtender {
+interface FactSourceTextExtenderInterface {
 
 	/**
 	 * Insert some content before the fact source text.

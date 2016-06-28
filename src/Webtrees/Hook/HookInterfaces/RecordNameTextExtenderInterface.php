@@ -15,7 +15,7 @@ use Fisharebest\Webtrees\GedcomRecord;
 /**
  * Interface for modules which intends to extend the display name of Gedcom Records
  */
-interface RecordNameTextExtender {
+interface RecordNameTextExtenderInterface {
 
 	/**
 	 * Insert some content before the record name text.

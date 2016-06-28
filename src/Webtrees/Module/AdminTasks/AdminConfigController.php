@@ -14,7 +14,6 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\AjaxController;
 use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
-use Fisharebest\Webtrees\Html;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Module;
@@ -43,7 +42,7 @@ class AdminConfigController extends MvcController
     
     /**
      * Constructor for Admin Config controller
-     * @param AbstractModule $module
+     * @param \Fisharebest\Webtrees\Module\AbstractModule $module
      */
     public function __construct(AbstractModule $module) {
         parent::__construct($module);

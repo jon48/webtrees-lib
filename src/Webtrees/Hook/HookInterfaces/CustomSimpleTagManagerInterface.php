@@ -15,7 +15,7 @@ namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
  * Support hook <strong>hHtmlSimpleTagDisplay</strong>,<strong>hHtmlSimpleTagEditor</strong>,
  * <strong>hAddSimpleTag</strong>, <strong>hHasHelpTextTag</strong>, <string>hGetHelpTextTag</strong> and <strong>hGetExpectedTags</strong>.
  */
-interface CustomSimpleTagManager {
+interface CustomSimpleTagManagerInterface {
 
 
     /**

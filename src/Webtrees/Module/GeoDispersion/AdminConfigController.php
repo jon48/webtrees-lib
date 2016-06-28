@@ -14,7 +14,6 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\FlashMessages;
-use Fisharebest\Webtrees\Html;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Module;
@@ -428,7 +427,7 @@ class AdminConfigController extends MvcController
         $data->set('places_hierarchy', $this->provider->getPlacesHierarchy());
     
         $map_list = array_map(
-            function($map) {
+            function(OutlineMap $map) {
                 return $map->getDescription();
             },
             $this->provider->getOutlineMapsList()

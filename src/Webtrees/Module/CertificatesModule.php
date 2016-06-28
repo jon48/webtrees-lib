@@ -10,20 +10,19 @@
  */
 namespace MyArtJaub\Webtrees\Module;
 
-use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Functions\FunctionsEdit;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Menu;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
+use Fisharebest\Webtrees\Tree;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface;
+use MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
+use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Model\CertificateFileProvider;
 use MyArtJaub\Webtrees\Module\Certificates\Model\CertificateProviderInterface;
-use Fisharebest\Webtrees\Menu;
-use Fisharebest\Webtrees\Tree;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtender;
-use Fisharebest\Webtrees\Auth;
-use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
-use Fisharebest\Webtrees\Source;
-use MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager;
-use Fisharebest\Webtrees\Functions\FunctionsEdit;
 use Rhumsaa\Uuid\Uuid;
 
 /**
@@ -31,7 +30,7 @@ use Rhumsaa\Uuid\Uuid;
  */
 class CertificatesModule 
     extends AbstractModule 
-    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtender, CustomSimpleTagManager
+    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtenderInterface, CustomSimpleTagManagerInterface
 {
     /** @var string For custom modules - link for support, upgrades, etc. */
     const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
@@ -98,7 +97,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtender::hFactSourcePrepend()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface::hFactSourcePrepend()
      */
     public function hFactSourcePrepend($srec) {
         global $WT_TREE;
@@ -115,9 +114,9 @@ class CertificatesModule
             if (preg_match('~^'.$levelSOUR.' SOUR @('.WT_REGEX_XREF.')@$~', $subrecords[0], $match)) {
                 $sid=$match[1];
             };
-            for ($i=0; $i<count($subrecords); $i++) {
+            $nb_subrecords = count($subrecords);
+            for ($i=0; $i < $nb_subrecords; $i++) {
                 $subrecords[$i] = trim($subrecords[$i]);
-                $level = substr($subrecords[$i], 0, 1);
                 $tag = substr($subrecords[$i], 2, 4);
                 $text = substr($subrecords[$i], 7);
                 if($tag == '_ACT') $certificate= new Certificate($text, $WT_TREE, $this->getProvider());
@@ -132,13 +131,13 @@ class CertificatesModule
    
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtender::hFactSourceAppend()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface::hFactSourceAppend()
      */
     public function hFactSourceAppend($srec) { }
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hGetExpectedTags()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hGetExpectedTags()
      */
     public function hGetExpectedTags() {
         return array('SOUR' => '_ACT');
@@ -146,7 +145,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hHtmlSimpleTagDisplay()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hHtmlSimpleTagDisplay()
      */
     public function hHtmlSimpleTagDisplay($tag, $value, $context = null, $contextid = null) {
         $html = '';
@@ -160,7 +159,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hHtmlSimpleTagEditor()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hHtmlSimpleTagEditor()
      */
     public function hHtmlSimpleTagEditor($tag, $value = null, $element_id = '', $element_name = '', $context = null, $contextid = null) {
         global $controller, $WT_TREE;
@@ -197,7 +196,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hAddSimpleTag()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hAddSimpleTag()
      */
     public function hAddSimpleTag($context, $level) {
         switch($context){
@@ -209,7 +208,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hHasHelpTextTag()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hHasHelpTextTag()
      */
     public function hHasHelpTextTag($tag) {
         switch($tag){
@@ -222,7 +221,7 @@ class CertificatesModule
     
     /**
      * {@inhericDoc}
-     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManager::hGetHelpTextTag()
+     * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hGetHelpTextTag()
      */
     public function hGetHelpTextTag($tag) {
         switch($tag){

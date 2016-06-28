@@ -13,9 +13,7 @@
 namespace MyArtJaub\Webtrees\Module\Certificates\Model;
 
 use MyArtJaub\Webtrees\Functions\Functions;
-use Fisharebest\Webtrees\File;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Module;
 
 /**
  * Provide access to certificates on the file system
@@ -111,7 +109,7 @@ class CertificateFileProvider implements CertificateProviderInterface {
      */
     public function getCertificatesListBeginWith($city, $contains, $limit= 9999){
         $tabFiles= array();
-        $dirPath=$certdir = $this->getRealCertificatesDirectory() . Functions::encodeUtf8ToFileSystem($city).'/';
+        $dirPath= $this->getRealCertificatesDirectory() . Functions::encodeUtf8ToFileSystem($city).'/';
         $contains = utf8_decode($contains);
         $nbCert = 0;
     

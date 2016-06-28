@@ -10,17 +10,16 @@
  */
 namespace MyArtJaub\Webtrees\Module\WelcomeBlock;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
-use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\AbstractModule;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Theme;
-use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Controller\BaseController;
+use Fisharebest\Webtrees\Controller\PageController;
+use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Theme;
+use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 
 /**
  * Controller for Lineage

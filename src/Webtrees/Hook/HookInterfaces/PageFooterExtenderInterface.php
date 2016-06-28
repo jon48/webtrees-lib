@@ -13,7 +13,7 @@ namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
 /**
  * Interface for modules which intends to extend the footer of the page
  */
-interface PageFooterExtender {
+interface PageFooterExtenderInterface {
 		
     /**
      * Get HTML code for extending the footer of a page.

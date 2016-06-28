@@ -169,7 +169,7 @@ class Individual extends GedcomRecord {
 	 * @return int Level of sources
 	 * */
 	public function isBirthSourced(){
-		if($this->_isbirthsourced != null) return $this->_isbirthsourced;
+		if($this->_isbirthsourced !== null) return $this->_isbirthsourced;
 		$this->_isbirthsourced = $this->isFactSourced(WT_EVENTS_BIRT);
 		return $this->_isbirthsourced;
 	}
@@ -180,7 +180,7 @@ class Individual extends GedcomRecord {
 	* @return int Level of sources
 	* */
 	public function isDeathSourced(){
-		if($this->_isdeathsourced != null) return $this->_isdeathsourced;
+		if($this->_isdeathsourced !== null) return $this->_isdeathsourced;
 		$this->_isdeathsourced = $this->isFactSourced(WT_EVENTS_DEAT);
 		return $this->_isdeathsourced;
 	}

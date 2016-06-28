@@ -15,7 +15,7 @@ use Fisharebest\Webtrees\Controller\IndividualController;
 /**
  * Interface for modules which intends to extend the header of individuals
  */
-interface IndividualHeaderExtender {
+interface IndividualHeaderExtenderInterface {
 		
 	/**
 	 * Get HTML code for extending the icons in the individual header

@@ -14,7 +14,6 @@ define('WT_REQUIRED_MYSQL_VERSION', '5.0.13');
 define('WT_REQUIRED_PHP_VERSION', '5.3.2');
 define('WT_MODULES_DIR', 'vendor/fisharebest/webtrees/modules_v3/');
 define('WT_ROOT', 'vendor/fisharebest/webtrees/');
-//define('WT_CLIENT_IP', $_SERVER['REMOTE_ADDR']);
 
 // Regular expressions for validating user input, etc.
 define('WT_MINIMUM_PASSWORD_LENGTH', 6);
