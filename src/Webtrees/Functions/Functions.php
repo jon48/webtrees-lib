@@ -15,8 +15,6 @@ use \MyArtJaub\Webtrees as mw;
 
 /**
  * General functions.
- * 
- * @todo snake_case
  */
 class Functions {
 

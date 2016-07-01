@@ -18,12 +18,11 @@ use MyArtJaub\Webtrees\Hook\Hook;
  * Decorator class to extend native webtrees IndividualController class.
  * 
  * @see \Fisharebest\Webtrees\Controller\IndividualController
- * @todo snake_case
  */
 class IndividualController {
 
-	/** @var \Fisharebest\Webtrees\Controller\IndividualController $ctrlIndividual Underlying base controller */
-	protected $ctrlIndividual;
+	/** @var \Fisharebest\Webtrees\Controller\IndividualController $ctrl_individual Underlying base controller */
+	protected $ctrl_individual;
 	
 	/** @var \MyArtJaub\Webtrees\Individual $dindi MyArtJaub Individual attached to the controller*/
 	protected $dindi;
@@ -31,11 +30,11 @@ class IndividualController {
 	/**
 	 * Constructor for the decorator
 	 *
-	 * @param \Fisharebest\Webtrees\Controller\IndividualController $ctrlIndividual_in The Individual Controller to extend
+	 * @param \Fisharebest\Webtrees\Controller\IndividualController $ctrl_individual_in The Individual Controller to extend
 	 */
-	public function __construct(fw\Controller\IndividualController $ctrlIndividual_in){
-		$this->ctrlIndividual = $ctrlIndividual_in;
-		$this->dindi = new mw\Individual($this->ctrlIndividual->getSignificantIndividual());
+	public function __construct(fw\Controller\IndividualController $ctrl_individual_in){
+		$this->ctrl_individual = $ctrl_individual_in;
+		$this->dindi = new mw\Individual($this->ctrl_individual->getSignificantIndividual());
 	}
 	
 	/**
@@ -47,8 +46,8 @@ class IndividualController {
 	public function printHeaderExtensions(){
 		$hook_extend_indi_header_left = new mw\Hook\Hook('hExtendIndiHeaderLeft');
 		$hook_extend_indi_header_right = new mw\Hook\Hook('hExtendIndiHeaderRight');
-		$hook_extend_indi_header_left = $hook_extend_indi_header_left->execute($this->ctrlIndividual);
-		$hook_extend_indi_header_right = $hook_extend_indi_header_right->execute($this->ctrlIndividual);
+		$hook_extend_indi_header_left = $hook_extend_indi_header_left->execute($this->ctrl_individual);
+		$hook_extend_indi_header_right = $hook_extend_indi_header_right->execute($this->ctrl_individual);
 		
 		echo '<div id="indi_perso_header">',
 			'<div id="indi_perso_header_left">';
@@ -78,7 +77,7 @@ class IndividualController {
 	 */
 	public function printHeaderExtraIcons(){
 		$hook_extend_indi_header_icons = new Hook('hExtendIndiHeaderIcons');
-		$hook_extend_indi_header_icons = $hook_extend_indi_header_icons->execute($this->ctrlIndividual);
+		$hook_extend_indi_header_icons = $hook_extend_indi_header_icons->execute($this->ctrl_individual);
 		
 		echo '<span id="indi_perso_icons">&nbsp;',
 			implode('&nbsp;', $hook_extend_indi_header_icons),

@@ -10,17 +10,15 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa\Views;
 
-use \MyArtJaub\Webtrees\Mvc\View\AbstractView;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
-use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use Fisharebest\Webtrees\Date;
+use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Functions\Functions;
 use Fisharebest\Webtrees\GedcomTag;
-use MyArtJaub\Webtrees\Module\ModuleManager;
-use MyArtJaub\Webtrees\Constants;
-use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
-use Fisharebest\Webtrees\Date;
+use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Module\ModuleManager;
 
 /**
  * View for SosaList@missing

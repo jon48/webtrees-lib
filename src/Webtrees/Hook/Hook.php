@@ -47,7 +47,7 @@ class Hook {
 	 * @param string $hsubscriber Name of the subscriber module
 	 */
 	public function subscribe($hsubscriber){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 			$statement = fw\Database::prepare(
 					"INSERT IGNORE INTO `##maj_hooks` (majh_hook_function, majh_hook_context, majh_module_name)".
 					" VALUES (?, ?, ?)"
@@ -62,7 +62,7 @@ class Hook {
 	 * @param int $priority Priority of execution
 	 */
 	public function setPriority($hsubscriber, $priority){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 			fw\Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_module_priority=?".
@@ -79,7 +79,7 @@ class Hook {
 	 * @param string $hsubscriber Name of the subscriber module
 	 */
 	public function enable($hsubscriber){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 		fw\Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_status='enabled'".
@@ -96,7 +96,7 @@ class Hook {
 	 * @param string $hsubscriber Name of the subscriber module
 	 */
 	public function disable($hsubscriber){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 		fw\Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_status='disabled'".
@@ -113,7 +113,7 @@ class Hook {
 	 * @param string $hsubscriber Name of the subscriber module
 	 */
 	public function remove($hsubscriber){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 		fw\Database::prepare(
 			"DELETE FROM `##maj_hooks`".
 			" WHERE majh_hook_function=?".
@@ -137,7 +137,7 @@ class Hook {
 	 */
 	public function execute(){
 		$result = array();
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 			$params = func_get_args();
 			$sqlquery = '';
 			$sqlparams = array($this->hook_function);
@@ -165,7 +165,7 @@ class Hook {
 	 * @return int Number of active modules
 	 */
 	public function getNumberActiveModules(){
-		if(HookProvider::isModuleOperational()){
+		if(HookProvider::getInstance()->isModuleOperational()){
 			$sqlquery = '';
 			$sqlparams = array($this->hook_function);
 			if($this->hook_context != 'all') {

@@ -10,9 +10,8 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa\Views;
 
-use \MyArtJaub\Webtrees\Mvc\View\AbstractView;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
+use MyArtJaub\Webtrees\Mvc\View\AbstractView;
 
 /**
  * View for SosaConfig@index

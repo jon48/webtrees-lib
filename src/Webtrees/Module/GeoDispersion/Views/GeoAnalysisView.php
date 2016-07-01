@@ -11,7 +11,6 @@
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Views;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysis;
 use MyArtJaub\Webtrees\Mvc\View\AbstractView;
 

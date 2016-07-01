@@ -62,7 +62,7 @@ class GeoAnalysisProvider {
     protected function loadGeoAnalysisFromRow($row) {
         $options = new GeoDisplayOptions();
         $options
-        ->setIsUsingFlags($row['majgd_useflagsgen'] == 'yes')
+        ->setUsingFlags($row['majgd_useflagsgen'] == 'yes')
         ->setMaxDetailsInGen($row['majgd_detailsgen']);
         
         if($row['majgd_map']) {

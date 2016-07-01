@@ -10,11 +10,10 @@
  */
 namespace MyArtJaub\Webtrees\Module\Certificates\Views;
 
-use \MyArtJaub\Webtrees\Mvc\View\AbstractView;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
-use MyArtJaub\Webtrees\Functions\Functions;
 use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\I18N;
+use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Mvc\View\AbstractView;
 
 /**
  * View for Certificate@listAll

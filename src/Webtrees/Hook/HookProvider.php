@@ -19,7 +19,6 @@ use Fisharebest\Webtrees\Auth;
  * Provider for hooks. 
  * 
  * Provide access to hooks.
- * @todo Singleton Pattern.
  */
 class HookProvider implements HookProviderInterface {
 
@@ -29,38 +28,48 @@ class HookProvider implements HookProviderInterface {
 	 * @var int DEFAULT_PRIORITY
 	 */
 	const DEFAULT_PRIORITY = 99;
-		
+
 	/**
-	 * Return an instance of the hook linked to the specifed function / context
-	 * 
-	 * @param string $hook_function
-	 * @param string $hook_context
-	 * @return Hook
+	 * @var HookProviderInterface $instance Singleton pattern instance
 	 */
-	public static function get($hook_function, $hook_context = null) {
+	private static $instance = null;
+	
+
+	/**
+	 * Returns the *HookProvider* instance of this class.
+	 *
+	 * @return HookProviderInterface The *Singleton* instance.
+	 */
+	public static function getInstance()
+	{
+	    if (null === static::$instance) {
+	        static::$instance = new static();
+	    }
+	
+	    return static::$instance;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::get()
+	 */
+	public function get($hook_function, $hook_context = null) {
 	    return new Hook($hook_function, $hook_context);
 	}
 	
 	/**
-	 * Return whether the Hook module is active and the table has been created.
-	 *
-	 * @uses \MyArtJaub\Webtrees\Module\ModuleManager to check if the module is operational
-	 * @return bool True if module active and table created, false otherwise
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::isModuleOperational()
 	 */
-	public static function isModuleOperational() {
+	public function isModuleOperational() {
 		return mw\Module\ModuleManager::getInstance()->isOperational(mw\Constants::MODULE_MAJ_HOOKS_NAME);
 	}
 	
 	/**
-	 * Get the list of possible hooks in the list of modules files.
-	 * A hook will be registered:
-	 * 		- for all modules already registered in Webtrees
-	 * 		- if the module implements HookSubscriberInterface
-	 * 		- if the method exist within the module
-	 *
-	 * @return Array List of possible hooks, with the priority
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::getPossibleHooks()
 	 */
-	static public function getPossibleHooks() {
+	public function getPossibleHooks() {
 		static $hooks=null;
 		if ($hooks === null) {
 		    $hooks = array();
@@ -102,11 +111,10 @@ class HookProvider implements HookProviderInterface {
 	}
 	
 	/**
-	 * Get the list of hooks intalled in webtrees, with their id, status and priority.
-	 *
-	 * @return array List of installed hooks
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::getRawInstalledHooks()
 	 */
-	static public function getRawInstalledHooks(){
+	public function getRawInstalledHooks(){
 		if(self::isModuleOperational()){
 			return fw\Database::prepare(
 					"SELECT majh_id AS id, majh_module_name AS module, majh_hook_function AS hook, majh_hook_context as context, majh_module_priority AS priority,  majh_status AS status".
@@ -118,11 +126,10 @@ class HookProvider implements HookProviderInterface {
 	}
 	
 	/**
-	 * Get the list of hooks intalled in webtrees, with their id, status and priority.
-	 *
-	 * @return Array List of installed hooks, with id, status and priority
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::getInstalledHooks()
 	 */
-	static public function getInstalledHooks(){
+	public function getInstalledHooks(){
 		static $installedhooks =null;
 		if($installedhooks===null){
 			$dbhooks=self::getRawInstalledHooks();
@@ -134,9 +141,10 @@ class HookProvider implements HookProviderInterface {
 	}
 	
 	/**
-	 * Update the list of hooks, identifying missing ones and removed ones.
+	 * {@inheritDoc}
+	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::updateHooks()
 	 */
-	static public function updateHooks() {
+	public function updateHooks() {
 	    
 	    if(Auth::isAdmin()){
 	        $ihooks = self::getInstalledHooks();

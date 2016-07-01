@@ -20,8 +20,6 @@ use Fisharebest\Webtrees\Date;
 
 /**
  * Additional functions to display information
- * 
- * @todo snake_case
  */
 class FunctionsPrint {
 
@@ -32,7 +30,7 @@ class FunctionsPrint {
 	 * @param array $array Array to convert
 	 * @return string List of elements
 	 */
-	static public function getListFromArray(array $array) {
+	public static function getListFromArray(array $array) {
 		$n=count($array);
 		switch ($n) {
 			case 0:
@@ -96,14 +94,14 @@ class FunctionsPrint {
 	public static function htmlListCloud($list, $totals) {
 		$minimum = PHP_INT_MAX;
 		$maximum = 1;
-		foreach ($list as $item => $params) {
+		foreach ($list as $params) {
 			if(array_key_exists('count', $params)) {
 				$maximum = max($maximum, $params['count']);
 				$minimum = min($minimum, $params['count']);
 			}
 		}
 		$html = '';
-		foreach ($list as $item => $params) {
+		foreach ($list as $params) {
 			$text = array_key_exists('text', $params) ? $params['text'] : '';
 			$count = array_key_exists('count', $params) ? $params['count'] : 0;
 			$url = array_key_exists('url', $params) ? $params['url'] : '';

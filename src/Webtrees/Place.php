@@ -16,12 +16,11 @@ use Fisharebest\Webtrees\Tree;
  * Decorator class to extend native webtrees Place class.
  * 
  * @see \Fisharebest\Webtrees\Place
- * @todo snake_case
  */
 class Place {
 
 	/** @var \Fisharebest\Webtrees\Place Underlying base Place */
-	protected $_place;
+	protected $place;
 
 	/**
 	 * Contructor for the decorator
@@ -29,7 +28,7 @@ class Place {
 	 * @param \Fisharebest\Webtrees\Place $place_in The Place to extend
 	 */
 	public function __construct(\Fisharebest\Webtrees\Place $place){
-		$this->_place = $place;
+		$this->place = $place;
 	}
 
 	/**
@@ -54,7 +53,7 @@ class Place {
 	 * @return \Fisharebest\Webtrees\Place Embedded place record
 	 */
 	public function getDerivedPlace(){
-		return $this->_place;
+		return $this->place;
 	}
 	
 	/**
@@ -69,7 +68,7 @@ class Place {
 	public function htmlFormattedName($format, $anchor = false){		
 		$html='';
 		
-		$levels = array_map('trim', explode(',', $this->_place->getGedcomName()));
+		$levels = array_map('trim', explode(',', $this->place->getGedcomName()));
 		$nbLevels = count($levels);
 		$displayPlace = $format;
 		preg_match_all('/%[^%]/', $displayPlace, $matches);
@@ -83,7 +82,7 @@ class Place {
 			}
 		}
 		if ($anchor && !Auth::isSearchEngine()) {
-			$html .='<a href="' . $this->_place->getURL() . '">' . $displayPlace . '</a>';
+			$html .='<a href="' . $this->place->getURL() . '">' . $displayPlace . '</a>';
 		} else {
 			$html .= $displayPlace;
 		}

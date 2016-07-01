@@ -11,7 +11,6 @@
 namespace MyArtJaub\Webtrees\Module;
 
 use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
 
 /**
  * Modules manager
@@ -20,7 +19,6 @@ use \MyArtJaub\Webtrees as mw;
  * Allow access and management of the modules.
  * 
  * @uses ModuleManagerInterface
- * @todo snake_case
  */
 class ModuleManager implements ModuleManagerInterface {
 
