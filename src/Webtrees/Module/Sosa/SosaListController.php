@@ -29,6 +29,7 @@ use MyArtJaub\Webtrees\Module\ModuleManager;
 use MyArtJaub\Webtrees\Constants;
 use Fisharebest\Webtrees\Stats;
 use Fisharebest\Webtrees\Family;
+use MyArtJaub\Webtrees\Functions\FunctionsPrint;
 
 /**
  * Controller for SosaList
@@ -248,8 +249,7 @@ class SosaListController extends MvcController
     				jQuery(".smissing-list").css("visibility", "visible");
     				jQuery(".loading-image").css("display", "none");
     			');
-                                    
-                $nb_displayed = 0;
+                        
                 $unique_indis = array();
                 $sum_missing_different = 0;
                 $sum_missing_different_without_hidden = 0;
@@ -425,8 +425,7 @@ class SosaListController extends MvcController
                 $nb_displayed++;
                 if ($birth_dates=$person->getAllBirthDates()) {
                     if (
-                        $birth_dates[0]->gregorianYear()>=1550 && 
-                        $birth_dates[0]->gregorianYear()<2030 && 
+                        FunctionsPrint::isDateWithinChartsRange($birth_dates[0]) &&
                         !isset($unique_indis[$person->getXref()])
                         ) {
                         $birt_by_decade[(int)($birth_dates[0]->gregorianYear()/10)*10] .= $person->getSex();
@@ -437,8 +436,7 @@ class SosaListController extends MvcController
                 }
                 if ($death_dates = $person->getAllDeathDates()) {
                     if (
-                        $death_dates[0]->gregorianYear() >= 1550 && 
-                        $death_dates[0]->gregorianYear() < 2030 && 
+                        FunctionsPrint::isDateWithinChartsRange($death_dates[0]) &&
                         !isset($unique_indis[$person->getXref()])
                         ) {
                         $deat_by_decade[(int) ($death_dates[0]->gregorianYear() / 10) * 10] .= $person->getSex();
@@ -589,7 +587,7 @@ class SosaListController extends MvcController
                 if( ($husb = $sfamily->getHusband()) && 
                     ($hdate = $husb->getBirthDate()) && 
                     $hdate->isOK() && $mdate->isOK()) {
-                    if ($hdate->gregorianYear() >= 1550 && $hdate->gregorianYear() < 2030) {
+                    if (FunctionsPrint::isDateWithinChartsRange($hdate)) {
                         $birt_by_decade[(int) ($hdate->gregorianYear() / 10) * 10] .= $husb->getSex();
                     }
                     $hage = Date::getAge($hdate, $mdate, 0);
@@ -601,7 +599,7 @@ class SosaListController extends MvcController
                 if(($wife = $sfamily->getWife()) &&
                     ($wdate=$wife->getBirthDate()) &&
                     $wdate->isOK() && $mdate->isOK()) {
-                    if ($wdate->gregorianYear() >= 1550 && $wdate->gregorianYear() < 2030) {
+                    if (FunctionsPrint::isDateWithinChartsRange($wdate)) {
                         $birt_by_decade[(int) ($wdate->gregorianYear() / 10) * 10] .= $wife->getSex();
                     }
                     $wage = Date::getAge($wdate, $mdate, 0);
@@ -610,7 +608,7 @@ class SosaListController extends MvcController
                     }
                 }                
 
-                if ($mdate->isOK() && $mdate->gregorianYear() >= 1550 && $mdate->gregorianYear() < 2030 && $husb && $wife) {
+                if ($mdate->isOK() && FunctionsPrint::isDateWithinChartsRange($mdate) && $husb && $wife) {
                     $marr_by_decade[(int) ($mdate->gregorianYear() / 10) * 10] .= $husb->getSex() . $wife->getSex();
                 }
                 
@@ -625,6 +623,5 @@ class SosaListController extends MvcController
         
         ViewFactory::make('SosaListFam', $this, $controller, $this->view_bag)->render();
     }
-    
     
 }

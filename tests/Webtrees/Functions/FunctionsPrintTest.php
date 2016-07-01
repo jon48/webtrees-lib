@@ -6,6 +6,7 @@ use \Mockery as m;
 
 use \Fisharebest\Webtrees\I18N;
 use \MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use Fisharebest\Webtrees\Date;
 
 /**
  * Test harness for the class \MyArtJaub\Webtrees\Functions\FunctionsPrint
@@ -152,6 +153,12 @@ class FunctionsPrintTest extends \PHPUnit_Framework_TestCase {
 	
 	public function testFormatIsSourcedIcon() {
 		$this->markTestIncomplete('testFormatIsSourcedIcon not implemented');		
+	}	
+
+	public function testIsDateWithinChartRange() {	    
+	    $this->assertTrue(FunctionsPrint::isDateWithinChartsRange(new Date('01 JUN 1835')));
+	    $this->assertFalse(FunctionsPrint::isDateWithinChartsRange(new Date('01 JUN 1335')));
+	    $this->assertFalse(FunctionsPrint::isDateWithinChartsRange(new Date('01 JUN 3535')));
 	}
 	
 }

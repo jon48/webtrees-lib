@@ -26,12 +26,14 @@ class Family extends GedcomRecord {
 	/**
 	 * Extend \Fisharebest\Webtrees\Family getInstance, in order to retrieve directly a \MyArtJaub\Webtrees\Family object 
 	 *
-	 * @param unknown_type $data Data to identify the individual
-	 * @return \MyArtJaub\Webtrees\Family|null \MyArtJaub\Webtrees\Family instance
+	 * @param string $xref
+	 * @param Tree $tree
+	 * @param string $gedcom
+	 * @return NULL|\MyArtJaub\Webtrees\Family
 	 */
-	public static function getIntance($data){
+	public static function getIntance($xref, Tree $tree, $gedcom = null){
 		$dfam = null;
-		$fam = fw\Family::getInstance($data);
+		$fam = fw\Family::getInstance($xref, $tree, $gedcom);
 		if($fam){
 			$dfam = new Family($fam);
 		}

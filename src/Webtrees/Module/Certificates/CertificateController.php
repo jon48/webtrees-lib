@@ -69,10 +69,8 @@ class CertificateController extends MvcController
         $cid = Filter::get('cid');
         
         $certificate = null;
-        $city = '';
-        if($cid && strlen($cid) > 22){
+        if(!empty($cid) && strlen($cid) > 22){
             $certificate = Certificate::getInstance($cid, $WT_TREE, null, $this->provider);
-            if($certificate) $city = $certificate->getCity();
         }
         
         $data = new ViewBag();
@@ -109,7 +107,7 @@ class CertificateController extends MvcController
                 $data->set('linked_indis', $linked_indis);
             }
             
-            if($linked_fams && count($linked_fams) > 0) {
+            if(!empty($linked_fams)) {
                 $data->set('has_linked_fams', true);
                 $data->set('linked_fams', $linked_fams);
             }
@@ -126,11 +124,11 @@ class CertificateController extends MvcController
         
         $cid   = Filter::get('cid');
         $certificate = null;
-        if($cid) $certificate =  Certificate::getInstance($cid, $WT_TREE, null, $this->provider);
+        if(!empty($cid)) $certificate =  Certificate::getInstance($cid, $WT_TREE, null, $this->provider);
         
         $imageBuilder = new ImageBuilder($certificate);
         
-        if (Filter::get('cb')) {
+        if (!empty(Filter::get('cb'))) {
             $imageBuilder->setExpireOffset($imageBuilder->getExpireOffset() * 7);
         }
         
@@ -159,7 +157,7 @@ class CertificateController extends MvcController
         
         $city = Filter::get('city');
         
-        if($city && strlen($city) > 22){
+        if(!empty($city) && strlen($city) > 22){
             $city = Functions::decryptFromSafeBase64($city);
             $controller->setPageTitle(I18N::translate('Certificates for %s', $city));
         }
@@ -174,11 +172,11 @@ class CertificateController extends MvcController
         $data->set('selected_city', $city);
         
         $data->set('has_list', false);        
-        if($city) {            
+        if(!empty($city)) {            
             $table_id = 'table-certiflist-' . Uuid::uuid4();
             
             $certif_list = $this->provider->getCertificatesList($city);            
-            if($certif_list) {                
+            if(!empty($certif_list)) {                
                 $data->set('has_list', true);
                 $data->set('table_id', $table_id);
                 $data->set('certificate_list', $certif_list);
@@ -231,7 +229,7 @@ class CertificateController extends MvcController
         $contains = Filter::get('term');        
 
         $controller
-            ->restrictAccess(Auth::isEditor($WT_TREE) && $city && $contains)
+            ->restrictAccess(Auth::isEditor($WT_TREE) && !empty($city) && !empty($contains))
             ->pageHeader();
         
         $listCert = $this->provider->getCertificatesListBeginWith($city, $contains); 

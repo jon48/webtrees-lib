@@ -15,6 +15,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Individual;
 use MyArtJaub\Webtrees\Place;
+use Fisharebest\Webtrees\Date;
 
 
 /**
@@ -171,8 +172,8 @@ class FunctionsPrint {
 				'">';
 			$html .= '<'.$tag.'>'.$individual->getFullName().'</'.$tag.'>&nbsp;('.$individual->getXref().')&nbsp;';
 			$html .= FunctionsPrint::formatSosaNumbers($dindi->getSosaNumbers(), 1, 'small');
-			$html .= '&nbsp;<span><small><em>'.$dindi->format_first_major_fact(WT_EVENTS_BIRT, 10).'</em></small></span>';
-			$html .= '&nbsp;<span><small><em>'.$dindi->format_first_major_fact(WT_EVENTS_DEAT, 10).'</em></small></span>';
+			$html .= '&nbsp;<span><small><em>'.$dindi->formatFirstMajorFact(WT_EVENTS_BIRT, 10).'</em></small></span>';
+			$html .= '&nbsp;<span><small><em>'.$dindi->formatFirstMajorFact(WT_EVENTS_DEAT, 10).'</em></small></span>';
 			$html .= '</a>';
 		}
 		else {
@@ -345,6 +346,16 @@ class FunctionsPrint {
 				break;
 		}
 		return $html;
+	}
+	
+	/**
+	 * Check whether the date is compatible with the Google Chart range (between 1550 and 2030).
+	 * 
+	 * @param Date $date
+	 * @return boolean
+	 */
+	public static function isDateWithinChartsRange(Date $date) {
+	    return $date->gregorianYear() >= 1550 && $date->gregorianYear() < 2030;
 	}
 
 }

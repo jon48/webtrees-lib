@@ -42,7 +42,7 @@ class LineageNode {
 	 * 
 	 * @param Fisharebest\Webtrees\Individual $node_indi Main individual
 	 * @param LineageRootNode $root_node Node of the lineage root
-	 * @param unknown $alt_surname Follow-up surname
+	 * @param null|string $alt_surname Follow-up surname
 	 */
 	public function __construct(Individual $node_indi = null, LineageRootNode $root_node = null, $alt_surname = null) {
 		$this->node_indi = $node_indi;

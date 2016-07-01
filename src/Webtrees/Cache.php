@@ -147,9 +147,9 @@ class Cache{
 	 * Cache a value to the specified key
 	 *
 	 * @param string $value Value name
-	 * @param unknown_type $data Value
+	 * @param mixed $data Value
 	 * @param AbstractModule $mod Calling module
-	 * @return unknown_type Cached value
+	 * @return mixed Cached value
 	 */
 	public function saveI($value, $data, AbstractModule $mod = null){
 		$this->checkInit();
@@ -161,9 +161,9 @@ class Cache{
 	 * Static invocation of the *set* method.
 	 *
 	 * @param string $value Value name
-	 * @param unknown_type $data Value
+	 * @param mixed $data Value
 	 * @param AbstractModule $mod Calling module
-	 * @return unknown_type Cached value
+	 * @return mixed Cached value
 	 */
 	public static function save($value, $data, AbstractModule $mod = null){
 	    self::getInstance()->saveI($value, $data, $mod);

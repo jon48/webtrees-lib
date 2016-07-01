@@ -52,22 +52,7 @@ class GedcomRecord {
 		return $this->gedcomrecord->isPendingAddtion()
 			&& $this->gedcomrecord->privatizeGedcom(\Fisharebest\Webtrees\Auth::PRIV_HIDE) === null;
 	}
-	
-
-	/**
-	 * Deprecated in favour of the formatFirstMajorFact functions, for naming convention reasons.
-	 * 
-	 * @see MyArtJaub\Webtrees\GedcomRecord::formatFirstMajorFact
-	 * @deprecated
-	 * 
-	 * @param string $facts List of facts to find information from
-	 * @param int $style Style to apply to the information. Number >= 10 should be used in this function, lower number will return the core function.
-
-	 */
-	public function format_first_major_fact($facts, $style) {
-		return $this->formatFirstMajorFact($facts, $style);
-	}
-	
+		
 	/**
 	 * Add additional options to the core formatFirstMajorFact function.
 	 * If no option is suitable, it will try returning the core function.

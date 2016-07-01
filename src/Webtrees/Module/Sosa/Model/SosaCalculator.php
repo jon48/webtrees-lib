@@ -98,7 +98,7 @@ class SosaCalculator {
     /**
      * Recursive method to add individual to the Sosa table, and flush it regularly
      * @param Individual $indi Individual to add
-     * @param unknown $sosa Individual's sosa
+     * @param int $sosa Individual's sosa
      */
     protected function addNode(Individual $indi, $sosa) {                
         $birth_year = $indi->getEstimatedBirthDate()->gregorianYear();
