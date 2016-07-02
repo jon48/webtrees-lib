@@ -15,7 +15,7 @@ engines:
   phpmd:
     enabled: true
     rulesets: "cleancode,codesize,design,naming,unusedcode"
-	
+
 ratings:
   paths:
   - src/**
