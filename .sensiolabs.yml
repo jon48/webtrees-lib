@@ -79,7 +79,7 @@ rules:
         enabled: true
     php.silenced_error:
         enabled: true
-        function_whitelist: [unlink, fopen, fwrite, fclose, rename, chmod, mkdir, rmdir, file_put_contents, move_uploaded_file, chgrp, lchgrp, chown, lchown, touch, symlink, highlight_file, ftp_get, ftp_close, ftp_size, ftp_chdir, ftp_delete, ftp_rmdir, ftp_put, ftp_mkdir, ftp_chmod, ftp_nlist]
+        function_whitelist: [unlink, fopen, fwrite, fclose, rename, chmod, serialise, unserialize, mkdir, rmdir, file_put_contents, move_uploaded_file, chgrp, lchgrp, chown, lchown, touch, symlink, highlight_file, ftp_get, ftp_close, ftp_size, ftp_chdir, ftp_delete, ftp_rmdir, ftp_put, ftp_mkdir, ftp_chmod, ftp_nlist]
     php.static_method_should_not_use_this:
         enabled: true
     php.strict_boolean_comparison_should_be_used:

@@ -209,7 +209,7 @@ class GeoAnalysisProvider {
 			
 			$ga = $this->getGeoAnalysis($ga->getId(), false);
 			
-			Database::commit();
+			 Database::commit();
 		}
 		catch(\Exception $ex) {		    
 			Database::rollback();

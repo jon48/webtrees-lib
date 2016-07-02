@@ -8,7 +8,7 @@ engines:
   fixme:
     enabled: true
   phpcodesniffer:
-    enabled: true
+    enabled: false
     config:
       standard: "PSR1,PSR2"
       ignore_warnings: true
