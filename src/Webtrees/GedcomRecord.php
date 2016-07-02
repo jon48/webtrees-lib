@@ -71,7 +71,6 @@ class GedcomRecord {
 				switch ($style) {
 					case 10:
 						return '<i>'.$fact->getLabel().' '. mw\Functions\FunctionsPrint::formatFactDateShort($fact) .'&nbsp;'. mw\Functions\FunctionsPrint::formatFactPlaceShort($fact, '%1') .'</i>';
-						break;
 					default:
 						return $this->gedcomrecord->formatFirstMajorFact($facts, $style);
 				}

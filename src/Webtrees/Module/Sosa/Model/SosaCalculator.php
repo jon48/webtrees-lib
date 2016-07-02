@@ -70,7 +70,6 @@ class SosaCalculator {
         $indi = Individual::getInstance($root_id, $this->tree);
         if($indi){
             $this->sosa_provider->deleteAll();
-            $tmp_sosatable = array();
             $this->addNode($indi, 1);
             $this->flushTmpSosaTable(true);
             return true;
@@ -84,7 +83,6 @@ class SosaCalculator {
      * @return bool Result of the computation
      */
     public function computeFromIndividual(Individual $indi) {
-        $tmp_sosatable = array();
         $dindi = new \MyArtJaub\Webtrees\Individual($indi);
         $current_sosas = $dindi->getSosaNumbers();
         foreach($current_sosas as $current_sosa => $gen) {

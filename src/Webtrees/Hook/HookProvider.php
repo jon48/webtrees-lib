@@ -32,7 +32,7 @@ class HookProvider implements HookProviderInterface {
 	/**
 	 * @var HookProviderInterface $instance Singleton pattern instance
 	 */
-	private static $instance = null;
+	protected static $instance = null;
 	
 
 	/**

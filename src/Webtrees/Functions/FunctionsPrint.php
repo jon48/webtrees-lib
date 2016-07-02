@@ -334,7 +334,6 @@ class FunctionsPrint {
 								break;
 						}
 						break;
-						break;
 					default:
 						break;
 				}

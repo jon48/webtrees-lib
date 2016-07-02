@@ -111,6 +111,7 @@ class CertificatesModule
             $certificate = null;
             $subrecords = explode("\n", $srec);
             $levelSOUR = substr($subrecords[0], 0, 1);
+            $match = null;
             if (preg_match('~^'.$levelSOUR.' SOUR @('.WT_REGEX_XREF.')@$~', $subrecords[0], $match)) {
                 $sid=$match[1];
             };
@@ -214,7 +215,6 @@ class CertificatesModule
         switch($tag){
 			case '_ACT':
 				return true;
-				break;
 		}
 		return false;
     }

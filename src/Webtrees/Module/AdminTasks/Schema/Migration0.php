@@ -28,7 +28,7 @@ class Migration0 implements MigrationInterface {
 		    ' majat_name 		    VARCHAR(32)                      NOT NULL,'.
 		    ' majat_status          ENUM(\'enabled\',\'disabled\') 	 NOT NULL DEFAULT \'disabled\','.
 		    ' majat_last_run 		DATETIME 					     NOT NULL DEFAULT \'2000-01-01 00:00:00\','.
-		    ' majat_last_result 	TINYINT(1)					     NOT NULL DEFAULT 1,'.		// 0 for error, 1 for success
+		    ' majat_last_result 	TINYINT(1)					     NOT NULL DEFAULT 1,'.		// 0 means error, 1 is success
 		    ' majat_frequency		INTEGER						     NOT NULL DEFAULT 10080,'.	// In min, Default every week
 		    ' majat_nb_occur	 	SMALLINT					     NOT NULL DEFAULT 0,'.
 		    ' majat_running 		TINYINT(1)					     NOT NULL DEFAULT 0,'.

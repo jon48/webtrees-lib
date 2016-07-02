@@ -48,7 +48,7 @@ class Hook {
 	 */
 	public function subscribe($hsubscriber){
 		if(HookProvider::getInstance()->isModuleOperational()){
-			$statement = fw\Database::prepare(
+			fw\Database::prepare(
 					"INSERT IGNORE INTO `##maj_hooks` (majh_hook_function, majh_hook_context, majh_module_name)".
 					" VALUES (?, ?, ?)"
 			)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));

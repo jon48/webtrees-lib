@@ -66,10 +66,10 @@ class HealthCheckEmailTask extends AbstractTask implements ConfigurableTaskInter
         // Check for updates
         $latest_version_txt = Functions::fetchLatestVersion();
         if (preg_match('/^[0-9.]+\|[0-9.]+\|/', $latest_version_txt)) {
-        	list($latest_version, $earliest_version, $download_url) = explode('|', $latest_version_txt);
+        	list($latest_version, , $download_url) = explode('|', $latest_version_txt);
         } else {
         	// Cannot determine the latest version
-        	list($latest_version, $earliest_version, $download_url) = explode('|', '||');
+        	list($latest_version, , $download_url) = explode('|', '||');
         }
 		
 		// Users statistics

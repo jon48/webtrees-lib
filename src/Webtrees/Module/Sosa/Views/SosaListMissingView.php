@@ -35,10 +35,8 @@ class SosaListMissingView extends SosaListView {
     			<h2><?php echo $this->data->get('title'); ?></h2>
     			
     			<?php  if($this->data->get('is_setup')) { 
-    			    $selectedgen = $this->data->get('generation');
     			    $this->renderSosaHeader();
     			    if($this->data->get('has_missing', false)) {
-    			        $missing_list = $this->data->get('missing_list');
     			        $table_id = $this->data->get('table_id');
     			        ?>
     			<div id="sosa-indi-missing" class="smissing-list">
@@ -211,10 +209,6 @@ class SosaListMissingView extends SosaListView {
 						<tr>
 							<td class="ui-state-default" colspan="16">
 								<div class="center">
-									<?php 
-									$missing_diff_count = $this->data->get('missing_diff_count');
-									$missing_hidden = $this->data->get('missing_hidden');
-									?>
 									<?php echo I18N::translate('Number of different missing ancestors: %s', I18N::number($this->data->get('missing_diff_count'))); ?>
 									<?php if($this->data->get('missing_hidden') > 0) echo ' ['. I18N::translate('%s hidden', I18N::number($this->data->get('missing_hidden'))).']'; ?>
 									<?php echo ' - ' . I18N::translate('Generation complete at %s', I18N::percentage($this->data->get('perc_sosa'), 2)); ?>

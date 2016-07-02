@@ -79,7 +79,7 @@ class Functions {
 	 * @return array array of ($width, $height). One of them must be $target
 	 */
 	static public function getResizedImageSize($file, $target=25){
-		list($width, $height, $type, $attr) = getimagesize($file);
+		list($width, $height, , ) = getimagesize($file);
 		$max = max($width, $height);
 		$rapp = $target / $max;
 		$width = intval($rapp * $width);
