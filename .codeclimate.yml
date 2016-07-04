@@ -14,8 +14,11 @@ engines:
       ignore_warnings: true
   phpmd:
     enabled: true
-    rulesets: "cleancode,codesize,design,naming,unusedcode"
-
+    config:
+      rulesets: "cleancode,codesize,design,naming,unusedcode"
 ratings:
   paths:
-  - src/**
+  - "src/**"
+  - "**.php"
+exclude_paths:
+  tests
