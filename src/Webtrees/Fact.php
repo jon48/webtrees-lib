@@ -56,7 +56,7 @@ class Fact {
 	*/
 	public function isSourced(){
 		$isSourced=0;
-		$date = $this->fact->getDate(false);
+		$date = $this->fact->getDate();
 		if($date->isOK()) {
 			$isSourced=-1;
 			if($date->qual1=='' && $date->minimumJulianDay() == $date->maximumJulianDay()){

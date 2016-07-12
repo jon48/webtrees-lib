@@ -92,6 +92,7 @@ class Certificate extends Media {
 				
 		$this->title = basename($this->getFilename(), '.'.$this->extension());
 		
+		$match = null;
 		$ct = preg_match("/(?<year>\d{1,4})(\.(?<month>\d{1,2}))?(\.(?<day>\d{1,2}))?( (?<type>[A-Z]{1,2}) )?(?<details>.*)/", $this->title, $match);
 		if($ct > 0){
 			$monthId = (int) $match['month'];
@@ -404,6 +405,7 @@ class Certificate extends Media {
 			$sourcefound = false;
 			foreach($gedlines as $gedline){
 				// Get the level
+				$match = null;
 				if (!$sourcefound && preg_match('~^('.WT_REGEX_INTEGER.') ~', $gedline, $match)) {
 					$level = $match[1];
 					//If we are not any more within the context of a source, reset
@@ -412,11 +414,13 @@ class Certificate extends Media {
 						$sid_tmp = null;
 					}
 					// If a source, get the level and the reference
+					$match2 = null;
 					if (preg_match('~^'.$level.' SOUR @('.WT_REGEX_XREF.')@$~', $gedline, $match2)) {
 						$levelsource = $level;
 						$sid_tmp=$match2[1];
 					}
 					// If the image has be found, get the source reference and exit.
+					$match3 = null;
 					if($levelsource>=0 && $sid_tmp && preg_match('~^'.$level.' _ACT '.preg_quote($this->getFilename()).'~', $gedline, $match3)){
 						$sid = $sid_tmp;
 						$sourcefound = true;

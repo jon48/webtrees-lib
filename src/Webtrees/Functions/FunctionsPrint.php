@@ -15,12 +15,11 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Individual;
 use MyArtJaub\Webtrees\Place;
+use Fisharebest\Webtrees\Date;
 
 
 /**
  * Additional functions to display information
- * 
- * @todo snake_case
  */
 class FunctionsPrint {
 
@@ -31,7 +30,7 @@ class FunctionsPrint {
 	 * @param array $array Array to convert
 	 * @return string List of elements
 	 */
-	static public function getListFromArray(array $array) {
+	public static function getListFromArray(array $array) {
 		$n=count($array);
 		switch ($n) {
 			case 0:
@@ -95,14 +94,14 @@ class FunctionsPrint {
 	public static function htmlListCloud($list, $totals) {
 		$minimum = PHP_INT_MAX;
 		$maximum = 1;
-		foreach ($list as $item => $params) {
+		foreach ($list as $params) {
 			if(array_key_exists('count', $params)) {
 				$maximum = max($maximum, $params['count']);
 				$minimum = min($minimum, $params['count']);
 			}
 		}
 		$html = '';
-		foreach ($list as $item => $params) {
+		foreach ($list as $params) {
 			$text = array_key_exists('text', $params) ? $params['text'] : '';
 			$count = array_key_exists('count', $params) ? $params['count'] : 0;
 			$url = array_key_exists('url', $params) ? $params['url'] : '';
@@ -171,8 +170,8 @@ class FunctionsPrint {
 				'">';
 			$html .= '<'.$tag.'>'.$individual->getFullName().'</'.$tag.'>&nbsp;('.$individual->getXref().')&nbsp;';
 			$html .= FunctionsPrint::formatSosaNumbers($dindi->getSosaNumbers(), 1, 'small');
-			$html .= '&nbsp;<span><small><em>'.$dindi->format_first_major_fact(WT_EVENTS_BIRT, 10).'</em></small></span>';
-			$html .= '&nbsp;<span><small><em>'.$dindi->format_first_major_fact(WT_EVENTS_DEAT, 10).'</em></small></span>';
+			$html .= '&nbsp;<span><small><em>'.$dindi->formatFirstMajorFact(WT_EVENTS_BIRT, 10).'</em></small></span>';
+			$html .= '&nbsp;<span><small><em>'.$dindi->formatFirstMajorFact(WT_EVENTS_DEAT, 10).'</em></small></span>';
 			$html .= '</a>';
 		}
 		else {
@@ -335,7 +334,6 @@ class FunctionsPrint {
 								break;
 						}
 						break;
-						break;
 					default:
 						break;
 				}
@@ -345,6 +343,16 @@ class FunctionsPrint {
 				break;
 		}
 		return $html;
+	}
+	
+	/**
+	 * Check whether the date is compatible with the Google Chart range (between 1550 and 2030).
+	 * 
+	 * @param Date $date
+	 * @return boolean
+	 */
+	public static function isDateWithinChartsRange(Date $date) {
+	    return $date->gregorianYear() >= 1550 && $date->gregorianYear() < 2030;
 	}
 
 }

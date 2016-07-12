@@ -69,7 +69,7 @@ class ViewBag {
      * Can define whether to override an existing value;
      * 
      * @param string $key
-     * @param unknown $value
+     * @param mixed $value
      * @param bool $override
      */
     public function set($key, $value, $override = true) {
@@ -83,7 +83,7 @@ class ViewBag {
      * Set the value for the specified key.
      * 
      * @param string $key
-     * @param unknown $value
+     * @param mixed $value
      */
     public function __set($key, $value) {
         $this->set($key, $value);

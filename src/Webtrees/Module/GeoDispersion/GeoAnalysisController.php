@@ -136,7 +136,7 @@ class GeoAnalysisController extends MvcController
         $controller->restrictAccess(
             true // Filter::checkCsrf()   -- Cannot use CSRF on a GET request (modules can only work with GET requests)
             &&  Auth::isManager($WT_TREE) 
-            && $ga
+            && $ga !== null
         );
         
         $status = Filter::getBool('status');
@@ -235,8 +235,7 @@ class GeoAnalysisController extends MvcController
     protected function htmlPlacesAnalysisGeneralTab(GeoAnalysis $ga, $placesGeneralResults, $flags= null) {
         global $WT_TREE;
         
-        $html = '';
-        if($placesGeneralResults){
+        if(!empty($placesGeneralResults)){
             $data = new ViewBag();
             
             $nb_found = $placesGeneralResults['knownsum'];
@@ -253,8 +252,6 @@ class GeoAnalysisController extends MvcController
             if($ga->hasMap()) {
                 $max = $placesGeneralResults['max'];
                 $map = $ga->getOptions()->getMap();
-                $maxcolor = $map->getCanvas()->max_color;
-                $hovercolor = $map->getCanvas()->hover_color;
                 $results_by_subdivs = $map->getSubdivisions();
                 $places_mappings = $map->getPlacesMappings();
                 foreach ($placesGeneralResults['places'] as $location => $count) {
@@ -311,8 +308,7 @@ class GeoAnalysisController extends MvcController
     protected function htmlPlacesAnalysisGenerationsTab(GeoAnalysis $ga, $placesGenerationsResults, $flags = null) {
         global $WT_TREE;
         
-        $html = '<p class="warning">'.I18N::translate('No data is available for the generations analysis.').'<p>';
-        if($placesGenerationsResults && $ga->getOptions()){
+        if(!empty($placesGenerationsResults) && $ga->getOptions()){
             $data = new ViewBag();
             
             ksort($placesGenerationsResults);
@@ -343,7 +339,6 @@ class GeoAnalysisController extends MvcController
                     if($display_all_places){
                         foreach($genData['places'] as $placename=> $count){
                             $results_by_gen[$gen]['places'][$placename]['count'] = $count;
-                            $levels = array_map('trim',explode(',', $placename));
                             
                             if($ga->getOptions() && $ga->getOptions()->isUsingFlags() && ($flag = $flags[$placename]) != ''){
                                 $results_by_gen[$gen]['places'][$placename]['place'] = new Place($placename, $WT_TREE);

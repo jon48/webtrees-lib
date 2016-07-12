@@ -11,7 +11,6 @@
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
 
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Place;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProviderInterface;
 
 /**
@@ -249,8 +248,7 @@ abstract class AbstractTask {
         if($this->last_updated->add(new \DateInterval('PT'.self::TASK_TIME_OUT.'S')) < new \DateTime())
             $this->is_running = false;
     
-        if(!$this->is_running){  //TODO put in place a time_out for running...
-            //TODO Log the executions in the logs
+        if(!$this->is_running){
             $this->last_result = false;
             $this->is_running = true;
             $this->save();

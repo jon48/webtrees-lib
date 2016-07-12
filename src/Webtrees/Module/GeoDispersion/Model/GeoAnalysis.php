@@ -11,7 +11,6 @@
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Model;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Individual;

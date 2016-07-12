@@ -11,7 +11,6 @@
 namespace MyArtJaub\Webtrees\Mvc;
 
 use \Fisharebest\Webtrees as fw;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 
 /**
  * Standard concrete implementation of DispatcherInferface

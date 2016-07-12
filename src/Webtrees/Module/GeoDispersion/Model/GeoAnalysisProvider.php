@@ -62,7 +62,7 @@ class GeoAnalysisProvider {
     protected function loadGeoAnalysisFromRow($row) {
         $options = new GeoDisplayOptions();
         $options
-        ->setIsUsingFlags($row['majgd_useflagsgen'] == 'yes')
+        ->setUsingFlags($row['majgd_useflagsgen'] == 'yes')
         ->setMaxDetailsInGen($row['majgd_detailsgen']);
         
         if($row['majgd_map']) {
@@ -166,7 +166,7 @@ class GeoAnalysisProvider {
 			$id = Database::lastInsertId();			
 			$ga = $this->getGeoAnalysis($id, false);
 			
-			$id = Database::commit();
+			Database::commit();
 		}
 		catch(\Exception $ex) {
 			Database::rollback();
@@ -209,7 +209,7 @@ class GeoAnalysisProvider {
 			
 			$ga = $this->getGeoAnalysis($ga->getId(), false);
 			
-			$id = Database::commit();
+			 Database::commit();
 		}
 		catch(\Exception $ex) {		    
 			Database::rollback();
@@ -381,7 +381,6 @@ class GeoAnalysisProvider {
      * @return array
      */
     protected function getPlacesHierarchyFromData() {
-        $random_place = null;
         $nb_levels = 0;
         
         //Select all '2 PLAC ' tags in the file and create array
@@ -399,6 +398,7 @@ class GeoAnalysisProvider {
             'gedcom_id' => $this->tree->getTreeId()            
         ))->fetchOneColumn();
         foreach ($ged_data as $ged_datum) {
+            $matches = null;
             preg_match_all('/\n2 PLAC (.+)/', $ged_datum, $matches);
             foreach ($matches[1] as $match) {
                 $places_list[$match]=true;
@@ -409,9 +409,7 @@ class GeoAnalysisProvider {
         $places_list=array_keys($places_list);
         
         //sort the array, limit to unique values, and count them
-        $places_parts=array();
         usort($places_list, array('I18N', 'strcasecmp'));
-        $nb_places = count($places_list);
         
         //calculate maximum no. of levels to display
         $has_found_good_example = false;
@@ -421,7 +419,7 @@ class GeoAnalysisProvider {
             if ($parts >= $nb_levels){
                 $nb_levels = $parts;
                 if(!$has_found_good_example){
-                    $random_place = $$place;
+                    $random_place = $place;
                     if(min(array_map('strlen', $levels)) > 0){
                         $has_found_good_example = true;
                     }
@@ -429,7 +427,7 @@ class GeoAnalysisProvider {
             }
         }
         
-        return array_reverse(array_map('trim',explode(',', $randomPlace)));
+        return array_reverse(array_map('trim',explode(',', $random_place)));
     }
     
     /**

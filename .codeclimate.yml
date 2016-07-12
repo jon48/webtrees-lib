@@ -1,0 +1,24 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+      - php
+  fixme:
+    enabled: true
+  phpcodesniffer:
+    enabled: false
+    config:
+      standard: "PSR1,PSR2"
+      ignore_warnings: true
+  phpmd:
+    enabled: true
+    config:
+      rulesets: "cleancode,codesize,design,naming,unusedcode"
+ratings:
+  paths:
+  - "src/**"
+  - "**.php"
+exclude_paths:
+  tests

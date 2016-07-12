@@ -330,7 +330,7 @@ class AdminConfigController extends MvcController
                 $ga->setAnalysisLevel($analysislevel + 1);
                 $options = $ga->getOptions();
                 if($options) {
-                    $options->setIsUsingFlags($use_flags);
+                    $options->setUsingFlags($use_flags);
                     $options->setMaxDetailsInGen($gen_details);
                     if($use_map) {
                         $options->setMap(new OutlineMap($map_file));

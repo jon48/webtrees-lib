@@ -34,7 +34,7 @@ class AdminConfigController extends MvcController
      */
     protected function update() {
         if(Auth::isAdmin()){
-            $ihooks = HookProvider::getInstalledHooks();
+            $ihooks = HookProvider::getInstance()->getInstalledHooks();
             	
             $module_names= Database::prepare(
                 "SELECT module_name FROM `##module` WHERE status='disabled'"
@@ -90,7 +90,7 @@ class AdminConfigController extends MvcController
     public function index() {      
         global $WT_TREE;
         
-        HookProvider::updateHooks();
+        HookProvider::getInstance()->updateHooks();
         
         $action = Filter::post('action');        
         if($action == 'update' && Filter::checkCsrf()) $this->update();
@@ -106,7 +106,7 @@ class AdminConfigController extends MvcController
         $view_bag = new ViewBag();
         $view_bag->set('title', $ctrl->getPageTitle());
         $view_bag->set('table_id', $table_id);
-        $view_bag->set('hook_list', HookProvider::getRawInstalledHooks());
+        $view_bag->set('hook_list', HookProvider::getInstance()->getRawInstalledHooks());
         
         $ctrl
         ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)

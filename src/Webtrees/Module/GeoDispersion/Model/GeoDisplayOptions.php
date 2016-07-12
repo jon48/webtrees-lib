@@ -94,7 +94,7 @@ class GeoDisplayOptions {
 	 * @param bool $use_flags
 	 * @return self Enable method-chaining
 	 */
-    public function setIsUsingFlags($use_flags) {
+    public function setUsingFlags($use_flags) {
         $this->use_flags = $use_flags;
         return $this;
     }

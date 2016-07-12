@@ -10,28 +10,29 @@
 namespace MyArtJaub\Webtrees;
 
 use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
+use Fisharebest\Webtrees\Tree;
 
 /**
  * Decorator class to extend native webtrees Individual class.
  * 
  * @see \Fisharebest\Webtrees\Family
- * @todo snake_case
  */
 class Family extends GedcomRecord {
 
 	/** @var bool|null Indicates whether the marriage event is sourced */
-	protected $_ismarriagesourced = null;
+	protected $is_marriage_sourced = null;
 	
 	/**
 	 * Extend \Fisharebest\Webtrees\Family getInstance, in order to retrieve directly a \MyArtJaub\Webtrees\Family object 
 	 *
-	 * @param unknown_type $data Data to identify the individual
-	 * @return \MyArtJaub\Webtrees\Family|null \MyArtJaub\Webtrees\Family instance
+	 * @param string $xref
+	 * @param Tree $tree
+	 * @param string $gedcom
+	 * @return NULL|\MyArtJaub\Webtrees\Family
 	 */
-	public static function getIntance($data){
+	public static function getIntance($xref, Tree $tree, $gedcom = null){
 		$dfam = null;
-		$fam = fw\Family::getInstance($data);
+		$fam = fw\Family::getInstance($xref, $tree, $gedcom);
 		if($fam){
 			$dfam = new Family($fam);
 		}
@@ -44,9 +45,9 @@ class Family extends GedcomRecord {
 	* @return int Level of sources
 	* */
 	function isMarriageSourced(){
-		if($this->_ismarriagesourced !== null) return $this->_ismarriagesourced;
-		$this->_ismarriagesourced = $this->isFactSourced(WT_EVENTS_MARR.'|MARC');
-		return $this->_ismarriagesourced;
+		if($this->is_marriage_sourced !== null) return $this->is_marriage_sourced;
+		$this->is_marriage_sourced = $this->isFactSourced(WT_EVENTS_MARR.'|MARC');
+		return $this->is_marriage_sourced;
 	}
 	
 	/**

@@ -11,12 +11,10 @@
 namespace MyArtJaub\Webtrees\Functions; 
 
 use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
+use Fisharebest\Webtrees\Filter;
 
 /**
  * General functions.
- * 
- * @todo snake_case
  */
 class Functions {
 
@@ -81,7 +79,7 @@ class Functions {
 	 * @return array array of ($width, $height). One of them must be $target
 	 */
 	static public function getResizedImageSize($file, $target=25){
-		list($width, $height, $type, $attr) = getimagesize($file);
+		list($width, $height, , ) = getimagesize($file);
 		$max = max($width, $height);
 		$rapp = $target / $max;
 		$width = intval($rapp * $width);
@@ -140,8 +138,8 @@ class Functions {
 	 */
 	public static function encryptToSafeBase64($data){
 		$key = 'STANDARDKEYIFNOSERVER';
-		if($_SERVER['SERVER_NAME'] && $_SERVER['SERVER_SOFTWARE'])
-			$key = md5($_SERVER['SERVER_NAME'].$_SERVER['SERVER_SOFTWARE']);
+		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
+			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
 		$iv = mcrypt_create_iv(self::ENCRYPTION_IV_SIZE, MCRYPT_RAND);
 		$id = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC,$iv);
 		$encrypted = base64_encode($iv.$id);
@@ -160,8 +158,8 @@ class Functions {
 	 */
 	public static function decryptFromSafeBase64($encrypted){
 		$key = 'STANDARDKEYIFNOSERVER';
-		if($_SERVER['SERVER_NAME'] && $_SERVER['SERVER_SOFTWARE'])
-			$key = md5($_SERVER['SERVER_NAME'].$_SERVER['SERVER_SOFTWARE']);
+		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
+			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
 		$encrypted = str_replace('-', '+', $encrypted);
 		$encrypted = str_replace('_', '/', $encrypted);
 		$encrypted = str_replace('*', '=', $encrypted);

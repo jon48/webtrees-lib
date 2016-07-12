@@ -11,10 +11,8 @@
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Views;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Module;
 use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysis;
 use MyArtJaub\Webtrees\Mvc\View\AbstractView;
 
 /**
@@ -29,7 +27,6 @@ class GeoAnalysisTabGenerationsView extends AbstractView {
     protected function renderContent() {       
 
         $max_details_gen = $this->data->get('max_details_gen');
-        $use_flags = $this->data->get('use_flags');
         $analysis_level = $this->data->get('analysis_level');
         $results_by_gen = $this->data->get('results_by_generations');
         $display_all_places = $this->data->get('display_all_places', true);
