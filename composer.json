@@ -17,7 +17,8 @@
         "issues": "http://bugs.jaubart.com"
     },
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ext-mcrypt": "*"
     },
     "require-dev": {
         "fisharebest/webtrees": "*",

@@ -17,6 +17,7 @@ use Fisharebest\Webtrees\Menu;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Tree;
+use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
@@ -30,7 +31,7 @@ use Rhumsaa\Uuid\Uuid;
  */
 class CertificatesModule 
     extends AbstractModule 
-    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtenderInterface, CustomSimpleTagManagerInterface
+    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtenderInterface, CustomSimpleTagManagerInterface, DependentInterface
 {
     /** @var string For custom modules - link for support, upgrades, etc. */
     const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
@@ -60,6 +61,14 @@ class CertificatesModule
      */
     public function modAction($mod_action) {
         \MyArtJaub\Webtrees\Mvc\Dispatcher::getInstance()->handle($this, $mod_action);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Module\DependentInterface::validatePrerequisites()
+     */
+    public function validatePrerequisites() {
+        return Functions::isEncryptionCompatible();    
     }
     
     /**
@@ -264,6 +273,7 @@ class CertificatesModule
         }
         return $html;
     }
+
 
 }
  

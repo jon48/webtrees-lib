@@ -129,6 +129,15 @@ class Functions {
 		return substr($md5token, 0, $length);		
 	} 
 	
+	/**
+	 * Checks whether the installation meets the requirements for encryption/decryption.
+	 * 
+	 * @return boolean
+	 */
+	public static function isEncryptionCompatible() {
+	    return function_exists('mcrypt_encrypt') && function_exists('mcrypt_encrypt') && function_exists('mcrypt_decrypt');
+	}
+	
 	/**	  
 	 * Encrypt a text, and encode it to base64 compatible with URL use
 	 * 	(no +, no /, no =)
@@ -137,6 +146,9 @@ class Functions {
 	 * @return string Encrypted and encoded text
 	 */
 	public static function encryptToSafeBase64($data){
+	    if(!self::isEncryptionCompatible())
+	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
+	    
 		$key = 'STANDARDKEYIFNOSERVER';
 		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
 			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
@@ -157,6 +169,9 @@ class Functions {
 	 * @return string Decrypted text
 	 */
 	public static function decryptFromSafeBase64($encrypted){
+	    if(!self::isEncryptionCompatible())
+	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
+	    
 		$key = 'STANDARDKEYIFNOSERVER';
 		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
 			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));

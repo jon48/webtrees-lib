@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "03a15449d3cb8f08789ad6840b0a1f32",
-    "content-hash": "7b460bf9ab3dc06e0f402a2912a810c7",
+    "hash": "91a62f8d6126909b7ea318a06501c49a",
+    "content-hash": "93620698e1416f855c26f677e21d7e76",
     "packages": [],
     "packages-dev": [
         {
@@ -1786,16 +1786,16 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
-                "reference": "7e0fcec41a9d91daa0373dd08d1e0907717bbaef"
+                "reference": "2c5e101f3fcaeae81b68b439db684a8269b16617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/intl/zipball/7e0fcec41a9d91daa0373dd08d1e0907717bbaef",
-                "reference": "7e0fcec41a9d91daa0373dd08d1e0907717bbaef",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/2c5e101f3fcaeae81b68b439db684a8269b16617",
+                "reference": "2c5e101f3fcaeae81b68b439db684a8269b16617",
                 "shasum": ""
             },
             "require": {
@@ -1857,7 +1857,7 @@
                 "l10n",
                 "localization"
             ],
-            "time": "2016-05-13 18:06:41"
+            "time": "2016-06-29 05:41:56"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -2552,16 +2552,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "c5a7e7fc273c758b92b85dcb9c46149ccda89623"
+                "reference": "2884c26ce4c1d61aebf423a8b912950fe7c764de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/c5a7e7fc273c758b92b85dcb9c46149ccda89623",
-                "reference": "c5a7e7fc273c758b92b85dcb9c46149ccda89623",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/2884c26ce4c1d61aebf423a8b912950fe7c764de",
+                "reference": "2884c26ce4c1d61aebf423a8b912950fe7c764de",
                 "shasum": ""
             },
             "require": {
@@ -2597,7 +2597,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2016-06-14 11:18:07"
+            "time": "2016-06-29 05:41:56"
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -2720,7 +2720,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "ext-mcrypt": "*"
     },
     "platform-dev": []
 }
