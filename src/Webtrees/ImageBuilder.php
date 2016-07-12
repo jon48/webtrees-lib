@@ -9,11 +9,12 @@
  */
 namespace MyArtJaub\Webtrees;
 
-use Fisharebest\Webtrees\Media;
-use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Config;
+use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Functions\FunctionsMedia;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Media;
 use MyArtJaub\Webtrees\Functions\Functions;
 
 /**
@@ -175,14 +176,14 @@ class ImageBuilder {
 	    
 	    // parse IF_MODIFIED_SINCE header from client
 	    $if_modified_since = 'x';
-	    if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-	        $if_modified_since = preg_replace('/;.*$/', '', $_SERVER['HTTP_IF_MODIFIED_SINCE']);
+	    if (!empty(Filter::server('HTTP_IF_MODIFIED_SINCE'))) {
+	        $if_modified_since = preg_replace('/;.*$/', '', Filter::server('HTTP_IF_MODIFIED_SINCE'));
 	    }
 	    
 	    // parse IF_NONE_MATCH header from client
 	    $if_none_match = 'x';
-	    if (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-	        $if_none_match = str_replace('"', '', $_SERVER['HTTP_IF_NONE_MATCH']);
+	    if (!empty(Filter::server('HTTP_IF_NONE_MATCH'))) {
+	        $if_none_match = str_replace('"', '', Filter::server('HTTP_IF_NONE_MATCH'));
 	    }
 	    
 	    // add caching headers.  allow browser to cache file, but not proxy
