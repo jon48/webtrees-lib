@@ -27,6 +27,13 @@ class SosaStatsView extends AbstractView {
         <div id="maj-sosa-stats-page">
 			<h2><?php echo $this->data->get('title'); ?></h2>
 			
+			<?php 
+			/** @var \Fisharebest\Webtrees\Individual $root_indi */
+			$root_indi = $this->data->get('root_indi');
+			if($root_indi !== null && $root_indi->canShowName()) { ?>
+			<h4 class="center"><?= I18N::translate('%s: %s', I18N::translate('Root individual'), $root_indi->getFullName()); ?><h4>
+			<?php } ?>
+			
 			<?php  if($this->data->get('is_setup')) {  
 			    $general_stats = $this->data->get('general_stats'); ?>
 			<h3><?php echo I18N::translate('General statistics'); ?></h3>
@@ -94,7 +101,7 @@ class SosaStatsView extends AbstractView {
 						<td class="label"><?php echo I18N::translate('<strong>G%d</strong>', $gen); ?></td>
 						<td class="label"><?php echo I18N::translate('%1$s <> %2$s', $row['gen_min_birth'], $row['gen_max_birth']); ?></td>
 						<td class="value"><?php echo I18N::number($row['theoretical']); ?></td>
-						<td class="value"><?php echo I18N::number($row['known']); ?></td>
+						<td class="value"><?php echo $row['known'] > 0 ? '<a href="'.$this->data->get('sosaanc_url').$gen.'">'.I18N::number($row['known']).'</a>' : I18N::number($row['known']); ?></td>
 						<td class="value"><?php echo I18N::percentage($row['perc_known'], 2); ?></td>
 						<td class="value"><?php echo $row['missing'] > 0 ? '<a href="'.$this->data->get('missinganc_url').$gen.'">'.I18N::number($row['missing']).'</a>' : I18N::number($row['missing']); ?></td>
 						<td class="value"><?php echo I18N::percentage($row['perc_missing'], 2); ?></td>
@@ -131,7 +138,7 @@ class SosaStatsView extends AbstractView {
 			</div>
 			
 			<?php   } else { ?>
-			<div class="warning"><?php echo I18N::translate('No Sosa root individual has been defined.'); ?></div>
+			<div class="center warning"><?php echo I18N::translate('No Sosa root individual has been defined.'); ?></div>
 			<?php }     
     }
     

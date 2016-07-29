@@ -66,6 +66,8 @@ class SosaStatsController extends MvcController
         if($this->sosa_provider->isSetup()) {
             $view_bag->set('is_setup', true);
             
+            $view_bag->set('root_indi', $this->sosa_provider->getRootIndi());
+            
             $sosaCount = $this->sosa_provider->getSosaCount();
             $diffSosaCount = $this->sosa_provider->getDifferentSosaCount();
             
@@ -80,6 +82,7 @@ class SosaStatsController extends MvcController
             
             $stats_gen = $this->sosa_provider->getStatisticsByGeneration();
             $view_bag->set('missinganc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList@missing&ged='.$WT_TREE->getNameUrl().'&gen=');
+            $view_bag->set('sosaanc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList&ged='.$WT_TREE->getNameUrl().'&gen=');
             
             $gen_theoretical=1;
             $total_theoretical=0;
@@ -143,21 +146,21 @@ class SosaStatsController extends MvcController
         $size = '600x300';
         
         $total = array_sum($ancestorsDispGen2);
-        $father_count = isset($ancestorsDispGen2[1]) ? $ancestorsDispGen2[1] : 0;
+        $father_count = array_key_exists(1, $ancestorsDispGen2) ? $ancestorsDispGen2[1] : 0;
         $father = array (
             'color' => '84beff', 
             'count' => $father_count, 
             'perc' => Functions::safeDivision($father_count, $total), 
             'name' => \Fisharebest\Webtrees\Functions\Functions::getRelationshipNameFromPath('fat')            
         );
-        $mother_count = isset($ancestorsDispGen2[2]) ? $ancestorsDispGen2[2] : 0;
+        $mother_count = array_key_exists(2, $ancestorsDispGen2) ? $ancestorsDispGen2[2] : 0;
         $mother = array (
             'color' => 'ffd1dc', 
             'count' => $mother_count, 
             'perc' => Functions::safeDivision($mother_count, $total),
             'name' => \Fisharebest\Webtrees\Functions\Functions::getRelationshipNameFromPath('mot')
         );
-        $shared_count = isset($ancestorsDispGen2[-1]) ? $ancestorsDispGen2[-1] : 0;
+        $shared_count = array_key_exists(-1, $ancestorsDispGen2) ? $ancestorsDispGen2[-1] : 0;
         $shared = array (
             'color' => '777777', 
             'count' => $shared_count, 
@@ -190,11 +193,11 @@ class SosaStatsController extends MvcController
         $color_fatmot = '84beff';
         $color_shared = '777777';
     
-        $total_fatfat = $ancestorsDispGen2[1] ?: 0;
-        $total_fatmot = $ancestorsDispGen2[2] ?: 0;
-        $total_motfat = $ancestorsDispGen2[4] ?: 0;
-        $total_motmot = $ancestorsDispGen2[8] ?: 0;
-        $total_sha = $ancestorsDispGen2[-1] ?: 0;
+        $total_fatfat = array_key_exists(1, $ancestorsDispGen2) ? $ancestorsDispGen2[1] : 0;
+        $total_fatmot = array_key_exists(2, $ancestorsDispGen2) ? $ancestorsDispGen2[2] : 0;
+        $total_motfat = array_key_exists(4, $ancestorsDispGen2) ? $ancestorsDispGen2[4] : 0;
+        $total_motmot = array_key_exists(8, $ancestorsDispGen2) ? $ancestorsDispGen2[8] : 0;
+        $total_sha = array_key_exists(-1, $ancestorsDispGen2) ? $ancestorsDispGen2[-1] : 0;
         $total = $total_fatfat + $total_fatmot + $total_motfat+ $total_motmot + $total_sha;
     
         $chd = $this->arrayToExtendedEncoding(array(

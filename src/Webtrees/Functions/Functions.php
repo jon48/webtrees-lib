@@ -150,7 +150,7 @@ class Functions {
 	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
 	    
 		$key = 'STANDARDKEYIFNOSERVER';
-		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
+		if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
 			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
 		$iv = mcrypt_create_iv(self::ENCRYPTION_IV_SIZE, MCRYPT_RAND);
 		$id = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC,$iv);
@@ -173,7 +173,7 @@ class Functions {
 	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
 	    
 		$key = 'STANDARDKEYIFNOSERVER';
-		if(Filter::server('SERVER_NAME') && Filter::server('SERVER_SOFTWARE'))
+		if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
 			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
 		$encrypted = str_replace('-', '+', $encrypted);
 		$encrypted = str_replace('_', '/', $encrypted);

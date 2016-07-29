@@ -94,13 +94,13 @@ class SosaProvider {
         if(strlen($this->user->getUserId()) == 0) $this->user = self::$default_user;
         
         // Check if the user, or the default user, has a root already setup;
-        if(!$this->getRootIndi()) {
+        if(empty($this->getRootIndiId())) {
             if($this->user == self::$default_user) {  // If the default user is not setup
                 $this->is_setup = false;
             }
             else {
                 $this->user = self::$default_user;
-                $this->is_setup = $this->getRootIndi() === null;
+                $this->is_setup = $this->getRootIndiId() === null;
             }            
         }
     }
@@ -114,11 +114,23 @@ class SosaProvider {
     }
     
     /**
-     * Return the root individual for the reference tree and user.
+     * Return the root individual ID for the reference tree and user.
      * @return string Individual ID
      */
-    public function getRootIndi() {
+    public function getRootIndiId() {
         return $this->tree->getUserPreference($this->user, 'MAJ_SOSA_ROOT_ID');
+    }
+    
+    /**
+     * Return the root individual for the reference tree and user.
+     * @return Individual Individual
+     */
+    public function getRootIndi() {
+        $root_indi_id = $this->getRootIndiId();
+        if(!empty($root_indi_id)) {
+            return Individual::getInstance($root_indi_id, $this->tree);
+        }
+        return null;
     }
        
     /*****************
