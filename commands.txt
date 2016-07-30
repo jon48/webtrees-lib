@@ -4,7 +4,7 @@ composer install
 composer install --prefer-source
 composer update
 
-phpunit --coverage-html ./docs/coverage_report/html/
+.\vendor\bin\phpunit --coverage-html ./docs/coverage_report/html/
 
 phpunit-skelgen generate-test --bootstrap="phpunit.php" MyArtJaub\Webtrees\GedcomRecord src\Webtrees\GedcomRecord.php MyArtJaub\Tests\Webtrees\GedcomRecordTest tests\Webtrees\GedcomRecordTest.php
 

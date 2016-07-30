@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\MvcException;
 use MyArtJaub\Webtrees\Mvc\View\ViewBag;
 use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 
@@ -100,8 +101,8 @@ class WelcomeBlockController extends MvcController
             $this->module->setBlockSetting($block_id, 'piwik_enabled', Filter::postBool('piwik_enabled'));
             $this->module->setBlockSetting($block_id, 'piwik_url', trim(Filter::postUrl('piwik_url')));
             $this->module->setBlockSetting($block_id, 'piwik_siteid', trim(Filter::post('piwik_siteid')));
-            $this->module->setBlockSetting($block_id, 'piwik_token', trim(Filter::post('piwik_token')));
-            exit;
+            $this->module->setBlockSetting($block_id, 'piwik_token', trim(Filter::post('piwik_token')));            
+            throw new MvcException(200); // Use this instead of exit
         }
         
         $view_bag = new ViewBag();

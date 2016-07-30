@@ -11,6 +11,7 @@
  namespace MyArtJaub\Webtrees\Controller;
 
 use Fisharebest\Webtrees\Controller\BaseController;
+use MyArtJaub\Webtrees\Mvc\MvcException;
 
 /**
  * Base controller for all Json pages
@@ -48,8 +49,7 @@ class JsonController extends BaseController {
      */
     public function restrictAccess($condition) {
         if ($condition !== true) {
-            http_response_code(403);
-            exit;
+            throw new MvcException(403);
         }
     
         return $this;

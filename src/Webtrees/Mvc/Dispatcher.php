@@ -69,7 +69,15 @@ class Dispatcher implements DispatcherInterface {
 		    && is_subclass_of($ctrl_class, '\\MyArtJaub\\Webtrees\\Mvc\\Controller\\MvcController')
 			&& $ctrl = new $ctrl_class($module) ) {
 			if(method_exists($ctrl, $method)) {
-				call_user_func_array(array($ctrl, $method), array());
+			    try {
+			        call_user_func_array(array($ctrl, $method), array());
+			    }
+			    catch (MvcException $ex) {
+			        if(!headers_sent()) {
+			            http_response_code($ex->getHttpCode());
+			        }
+			        echo $ex->getMessage();			        
+			    }
 			}
 			 else {
 				 throw new \Exception('The page requested does not exist');
