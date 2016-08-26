@@ -18,7 +18,7 @@ use Fisharebest\Webtrees\Database;
 /**
  * Hooks Module.
  */
-class HooksModule extends AbstractModule implements ModuleConfigInterface {
+class HooksModule extends AbstractModule implements ModuleConfigInterface, DependentInterface {
     // How to update the database schema for this module
     const SCHEMA_TARGET_VERSION   = 1;
     const SCHEMA_SETTING_NAME     = 'MAJ_HOOKS_SCHEMA_VERSION';
@@ -58,6 +58,19 @@ class HooksModule extends AbstractModule implements ModuleConfigInterface {
         Database::updateSchema(self::SCHEMA_MIGRATION_PREFIX, self::SCHEMA_SETTING_NAME, self::SCHEMA_TARGET_VERSION);
         
         return 'module.php?mod=' . $this->getName() . '&amp;mod_action=AdminConfig';
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Module\DependentInterface::validatePrerequisites()
+     */
+    public function validatePrerequisites() {
+        try {
+            Database::updateSchema(self::SCHEMA_MIGRATION_PREFIX, self::SCHEMA_SETTING_NAME, self::SCHEMA_TARGET_VERSION);
+            return true;
+        }
+        catch (\Exception $ex) { }
+        return false;
     }
     
 

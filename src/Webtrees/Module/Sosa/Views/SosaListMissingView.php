@@ -218,7 +218,7 @@ class SosaListMissingView extends SosaListView {
 						</tr>
 					</tfoot>
                 </table>
-    			 <?php } else { ?> 
+    			 <?php } else if ($this->data->get('generation', 0) > 0) { ?> 
     			<p><?php echo I18N::translate('No ancestors are missing for this generation. Generation complete at %s.', I18N::percentage($this->data->get('perc_sosa'), 2)); ?></p>
     			    <?php }   			    
     			} else { ?>

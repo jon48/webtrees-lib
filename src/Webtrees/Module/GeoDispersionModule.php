@@ -75,7 +75,13 @@ class GeoDispersionModule extends AbstractModule implements ModuleConfigInterfac
      * @see \MyArtJaub\Webtrees\Module\DependentInterface::validatePrerequisites()
      */
     public function validatePrerequisites() {
-        return !is_null(Module::getModuleByName(Constants::MODULE_MAJ_SOSA_NAME));
+        try {
+            Database::updateSchema(self::SCHEMA_MIGRATION_PREFIX, self::SCHEMA_SETTING_NAME, self::SCHEMA_TARGET_VERSION);
+            
+            return !is_null(Module::getModuleByName(Constants::MODULE_MAJ_SOSA_NAME));
+        }
+        catch (\Exception $ex) {  }
+        return false;
     }
     
 	/**

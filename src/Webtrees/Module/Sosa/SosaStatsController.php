@@ -201,11 +201,11 @@ class SosaStatsController extends MvcController
         $total = $total_fatfat + $total_fatmot + $total_motfat+ $total_motmot + $total_sha;
     
         $chd = $this->arrayToExtendedEncoding(array(
-            4095 * $total_fatfat / $total, 
-            4095 * $total_fatmot / $total,
-            4095 * $total_sha / $total, 
-            4095 * $total_motfat / $total,
-            4095 * $total_motmot / $total            
+	    4095 * Functions::safeDivision($total_fatfat, $total), 
+            4095 * Functions::safeDivision($total_fatmot, $total),
+            4095 * Functions::safeDivision($total_sha, $total), 
+            4095 * Functions::safeDivision($total_motfat, $total),
+            4095 * Functions::safeDivision($total_motmot, $total)          
         ));
         $chart_title = I18N::translate('Known Sosa ancestors\' dispersion - G3');
         $chl =
