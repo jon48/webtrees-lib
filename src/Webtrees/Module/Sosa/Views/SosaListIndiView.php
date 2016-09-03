@@ -237,9 +237,10 @@ class SosaListIndiView extends AbstractView {
     						<?php  echo $birth_date->display(true);
 			            }
             		} else {
-            		    $birth_date=$person->getEstimatedBirthDate();
+            		    $birth_date = new Date('');
             		    if ($person->getTree()->getPreference('SHOW_EST_LIST_DATES')) {
-            		        $birth_date->display(true);
+            		        $birth_date=$person->getEstimatedBirthDate();
+            		        echo $birth_date->display(true);
             		    } else {
             		        echo '&nbsp;';
             		    }
@@ -278,10 +279,12 @@ class SosaListIndiView extends AbstractView {
 					       echo $death_date->display(true);
         				} elseif ($person->isDead()) {
         					echo I18N::translate('yes');
+        					$death_date = new Date('');
         				} else {
         					echo '&nbsp;';
+        					$death_date = new Date('');
         				}
-                        $death_dates[0] = new Date('');
+        				$death_dates[0] = new Date('');
 			         } ?>
 			         </td>
 			         <td><?php echo $death_date->julianDay(); ?></td>

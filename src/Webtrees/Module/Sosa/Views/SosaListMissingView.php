@@ -173,9 +173,10 @@ class SosaListMissingView extends SosaListView {
             						<?php  echo $birth_date->display(true);
         			            }
                     		} else {
-                    		    $birth_date=$person->getEstimatedBirthDate();
+                    		    $birth_date = new Date('');
                     		    if ($person->getTree()->getPreference('SHOW_EST_LIST_DATES')) {
-                    		        $birth_date->display(true);
+                    		        $birth_date=$person->getEstimatedBirthDate();
+                    		        echo $birth_date->display(true);
                     		    } else {
                     		        echo '&nbsp;';
                     		    }
