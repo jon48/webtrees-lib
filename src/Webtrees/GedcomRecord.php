@@ -25,6 +25,10 @@ class GedcomRecord {
 	/** @var bool Is the GedcomRecord sourced (cache) */ 
 	protected $_issourced=null;
 
+	public static function decorate(\Fisharebest\Webtrees\GedcomRecord $gedcomrecord_in) {
+	    return new static($gedcomrecord_in);
+	}
+	
 	/**
 	 * Contructor for the decorator
 	 *
