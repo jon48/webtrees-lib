@@ -258,7 +258,6 @@ class SosaProvider {
     /**
      * Return the list of all sosas, with the generations it belongs to
      *
-     * @param int $ged_id ID of the gedcom file
      * @return array Associative array of Sosa ancestors, with their generation, comma separated
      */
     public function getAllSosaWithGenerations(){

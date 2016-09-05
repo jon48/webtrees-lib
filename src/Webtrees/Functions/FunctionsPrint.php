@@ -58,14 +58,14 @@ class FunctionsPrint {
 			\Fisharebest\Webtrees\Fact $fact,
 			\MyArtJaub\Webtrees\Map\MapProviderInterface $mapProvider
 	) {
-		$html='';
-		if($place = $fact->getPlace()) {
+		$place = $fact->getPlace();
+		if(!$place->isEmpty()) {
 			$iconPlace= $mapProvider->getPlaceIcon($place);	
 			if($iconPlace && strlen($iconPlace) > 0){
-				$html.=	'<div class="fact_flag">'. self::htmlPlaceIcon($place, $iconPlace, 50). '</div>';
+				return	'<div class="fact_flag">'. self::htmlPlaceIcon($place, $iconPlace, 50). '</div>';
 			}
 		}
-		return $html;
+		return '';
 	}
 	
 	/**

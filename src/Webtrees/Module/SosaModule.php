@@ -50,14 +50,14 @@ class SosaModule
      * {@inhericDoc}
      */
     public function getTitle() {
-        return /* I18N: Name of the “Hooks” module */ I18N::translate('Sosa');
+        return /* I18N: Name of the “Sosa” module */ I18N::translate('Sosa');
     }
     
     /**
      * {@inhericDoc}
      */
     public function getDescription() {
-        return /* I18N: Description of the “Hooks” module */ I18N::translate('Calculate and display Sosa ancestors of the root person.');
+        return /* I18N: Description of the “Sosa” module */ I18N::translate('Calculate and display Sosa ancestors of the root person.');
     }
     
     /**

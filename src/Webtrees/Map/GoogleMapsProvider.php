@@ -26,7 +26,7 @@ class GoogleMapsProvider implements MapProviderInterface {
 	 */
 	public function getProviderPlaceId(\Fisharebest\Webtrees\Place $place) {
 		if(!$place->isEmpty()) {
-			$parent = explode (',', $place->getGedcomName());
+			$parent = array_reverse(explode (',', $place->getGedcomName()));
 			$place_id = 0;
 			$nb_levels = count($parent);
 			for ($i=0; $i < $nb_levels; $i++) {
@@ -50,7 +50,7 @@ class GoogleMapsProvider implements MapProviderInterface {
 	public function getPlaceIcon(\Fisharebest\Webtrees\Place $place) {
 		if(!$place->isEmpty()){
 			$place_details =
-				Database::prepare("SELECT SQL_CACHE pl_icon FROM `##placelocation` WHERE pl_id=? ORDER BY pl_place")	
+				Database::prepare('SELECT SQL_CACHE pl_icon FROM `##placelocation` WHERE pl_id=? ORDER BY pl_place')	
 				->execute(array($this->getProviderPlaceId($place)))
 				->fetchOneRow();
 			if($place_details){

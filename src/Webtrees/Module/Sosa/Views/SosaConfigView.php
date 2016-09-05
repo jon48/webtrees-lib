@@ -48,7 +48,7 @@ class SosaConfigView extends AbstractView {
         				<?php 
         				    $users = $this->data->get('users_settings');
         				    if(count($users) == 1) {
-        				?>
+        				        $root_indi = $users[0]['rootid'];  ?>
         					<label>
         						<input id="maj_sosa_input_userid" type="hidden" name="userid" value="<?php echo $users[0]['user']->getUserId(); ?>" />
         						<?php echo $users[0]['user']->getRealNameHtml() ?>
@@ -56,8 +56,8 @@ class SosaConfigView extends AbstractView {
         				<?php  } else if(count($users) > 1) { ?>
         					<select id='maj-sosa-config-select' name="userid">
         					<?php 
-        					$root_indi = $users[0]['rootid'];
-        					foreach ($this->data->get('users_settings') as $user) { ?>
+        					   $root_indi = $users[0]['rootid'];
+        					   foreach ($this->data->get('users_settings') as $user) { ?>
         						<option value="<?php echo $user['user']->getUserId(); ?>"><?php echo $user['user']->getRealNameHtml() ?></option>
         					<?php  } ?>
         					</select>
