@@ -10,10 +10,11 @@
  */
 namespace MyArtJaub\Webtrees\Hook;
 
-use \Fisharebest\Webtrees as fw;
-use \MyArtJaub\Webtrees as mw;
-use \MyArtJaub\Webtrees\Constants;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Database;
+use Fisharebest\Webtrees\Module;
+use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Module\ModuleManager;
 
 /**
  * Provider for hooks. 
@@ -62,7 +63,7 @@ class HookProvider implements HookProviderInterface {
 	 * @see \MyArtJaub\Webtrees\Hook\HookProviderInterface::isModuleOperational()
 	 */
 	public function isModuleOperational() {
-		return mw\Module\ModuleManager::getInstance()->isOperational(mw\Constants::MODULE_MAJ_HOOKS_NAME);
+		return ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_HOOKS_NAME);
 	}
 	
 	/**
@@ -73,38 +74,44 @@ class HookProvider implements HookProviderInterface {
 		static $hooks=null;
 		if ($hooks === null) {
 		    $hooks = array();
-		    foreach (glob(WT_ROOT . WT_MODULES_DIR . '*/module.php') as $file) {
-		        try {
-		            $module = include $file;
-		            if($module instanceof HookSubscriberInterface){
-						$subscribedhooks = $module->getSubscribedHooks();
-						if(is_array($subscribedhooks)){
-							foreach($subscribedhooks as $key => $value){
-								if(is_int($key)) {
-									$hook_item = $value;
-									$priority = self::DEFAULT_PRIORITY;
-								}
-								else{
-									$hook_item = explode('#', $key, 2);
-									$priority = $value;
-								}
-								if($hook_item && count($hook_item) == 2){
-									$hook_func = $hook_item[0];
-									$hook_cont = $hook_item[1];
-								}
-								else{
-									$hook_func = $hook_item[0];
-									$hook_cont = 'all';
-								}
-								if(method_exists($module, $hook_func)){
-									$hooks[$module->getName().'#'.$hook_func.'#'.$hook_cont]=$priority;
-								}
+		    
+		    // Cannot use the same logic as the core Module loading,
+		    // as this forces a new include of the module.php file.
+		    // This causes issue when classes are defined in this file.
+		    // Cannot use Module::getActiveModules as well, as this is private.
+		    $module_names = Database::prepare(
+		        'SELECT SQL_CACHE module_name FROM `##module`'
+		    )->fetchOneColumn();
+		    
+		    foreach($module_names as $module_name) {
+		        $module = Module::getModuleByName($module_name);
+		        
+		        if($module instanceof HookSubscriberInterface){
+					$subscribedhooks = $module->getSubscribedHooks();
+					if(is_array($subscribedhooks)){
+						foreach($subscribedhooks as $key => $value){
+							if(is_int($key)) {
+								$hook_item = $value;
+								$priority = self::DEFAULT_PRIORITY;
+							}
+							else{
+								$hook_item = explode('#', $key, 2);
+								$priority = $value;
+							}
+							if($hook_item && count($hook_item) == 2){
+								$hook_func = $hook_item[0];
+								$hook_cont = $hook_item[1];
+							}
+							else{
+								$hook_func = $hook_item[0];
+								$hook_cont = 'all';
+							}
+							if(method_exists($module, $hook_func)){
+								$hooks[$module->getName().'#'.$hook_func.'#'.$hook_cont]=$priority;
 							}
 						}
 					}
-    			} catch (\Exception $ex) {
-    				// Old or invalid module?
-    			}
+		        }
 			}
 		}
 		return $hooks;
@@ -116,7 +123,7 @@ class HookProvider implements HookProviderInterface {
 	 */
 	public function getRawInstalledHooks(){
 		if(self::isModuleOperational()){
-			return fw\Database::prepare(
+			return Database::prepare(
 					"SELECT majh_id AS id, majh_module_name AS module, majh_hook_function AS hook, majh_hook_context as context, majh_module_priority AS priority,  majh_status AS status".
 					" FROM `##maj_hooks`".
 					" ORDER BY hook ASC, status ASC, priority ASC, module ASC"
@@ -164,7 +171,7 @@ class HookProvider implements HookProviderInterface {
 	        	
 	        //Remove hooks not existing any more in the file system
 	        if($ihooks !== null){
-	            foreach($ihooks as $ihook => $status){
+	            foreach(array_keys($ihooks) as $ihook){
 	                $array_hook = explode('#', $ihook);
 	                if($phooks === null || !array_key_exists($ihook, $phooks)){
 	                    $chook = new Hook($array_hook[1], $array_hook[2]);
