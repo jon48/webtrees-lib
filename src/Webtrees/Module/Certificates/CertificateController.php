@@ -233,6 +233,6 @@ class CertificateController extends MvcController
             ->pageHeader();
         
         $listCert = $this->provider->getCertificatesListBeginWith($city, $contains); 
-        echo \Zend_Json::encode($listCert);
+        $controller->encode($listCert);
     }
 }

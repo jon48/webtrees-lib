@@ -273,7 +273,7 @@ class AdminConfigController extends MvcController
         
         $controller->pageHeader();
         
-        echo \Zend_Json::encode(array(
+        $controller->encode(array(
             'draw'            => Filter::getInteger('draw'),
             'recordsTotal'    => $recordsTotal,
             'recordsFiltered' => $recordsFiltered,

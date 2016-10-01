@@ -11,14 +11,20 @@
 namespace MyArtJaub\Webtrees; 
 
 use Fisharebest\Webtrees\Module\AbstractModule;
+use Psr\Cache\CacheItemInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Stash\Driver\Apc;
+use Stash\Driver\Ephemeral;
+use Stash\Driver\FileSystem;
+
 /**
  * Cache component to speed up some potential data retrievals
  */
 class Cache{
 	
     /**
-     * Underlying Zend Cache object
-     * @var \Zend_Cache_Core|\Zend_Cache_FrontEnd $cache
+     * Underlying Cache object
+     * @var CacheItemPoolInterface $cache
      */
 	protected $cache=null;
 	
@@ -52,12 +58,9 @@ class Cache{
 	 * Initialise the Cache class
 	 *
 	 */
-	protected function init() {	
-		// The translation libraries only work with a cache.
-		$cache_options=array('automatic_serialization'=>true);
-	
-		if (ini_get('apc.enabled')) {
-			 $this->cache = \Zend_Cache::factory('Core', 'Apc', $cache_options, array());
+	protected function init() {		
+	    if(Apc::isAvailable()) {
+		    $driver = new Apc();
 		} else {
 			if (!is_dir(WT_DATA_DIR.DIRECTORY_SEPARATOR.'cache')) {
 				// We may not have permission - especially during setup, before we instruct
@@ -65,13 +68,14 @@ class Cache{
 				@mkdir(WT_DATA_DIR.DIRECTORY_SEPARATOR.'cache');
 			}
 			if (is_dir(WT_DATA_DIR.DIRECTORY_SEPARATOR.'cache')) {
-				$this->cache = \Zend_Cache::factory('Core', 'File', $cache_options, array('cache_dir'=>WT_DATA_DIR.DIRECTORY_SEPARATOR.'cache'));
+			    $driver = new FileSystem(array('path' => WT_DATA_DIR.DIRECTORY_SEPARATOR.'cache'));
 			} else {
-				// No cache available :-(
-				$this->cache = \Zend_Cache::factory('Core', 'Zend_Cache_Backend_BlackHole', $cache_options, array(), false, true);
+				// No cache available, let's just use a basic one :-(
+				$driver = new Ephemeral();
 			}
-		}
-		
+		}		
+
+		$this->cache = new \Stash\Pool($driver);		
 		$this->is_init = true;
 	}
 	
@@ -96,40 +100,17 @@ class Cache{
 		if($mod !== null) $mod_name = $mod->getName();
 		return $mod_name.'_'.$value;
 	}
-
-	/**
-	 * Checks whether the value is already cached
-	 *
-	 * @param string $value Value name
-	 * @param AbstractModule $mod Calling module
-	 * @return bool True is cached
-	 */
-	public function isCachedI($value, AbstractModule $mod = null) {
-		$this->checkInit();
-		return $this->cache->test($this->getKeyName($value, $mod));
-	}
-	
-	/**
-	 * Static invocation of the *isCached* method.
-	 *
-	 * @param string $value Value name
-	 * @param AbstractModule $mod Calling module
-	 * @return bool True is cached
-	 */
-	public static function isCached($value, AbstractModule $mod = null) {
-	    self::getInstance()->isCachedI($value, $mod);
-	}
 	
 	/**
 	 * Returns the cached value, if exists
-	 *
+	 * 
 	 * @param string $value Value name
 	 * @param AbstractModule $mod Calling module
-	 * @return unknown_type Cached value
+	 * @return \Psr\Cache\CacheItemInterface
 	 */
 	public function getI($value, AbstractModule $mod = null){
-		$this->checkInit();
-		return $this->cache->load($this->getKeyName($value, $mod));
+	    $this->checkInit();
+		return $this->cache->getItem($this->getKeyName($value, $mod));
 	}
 	
 	/**
@@ -137,36 +118,63 @@ class Cache{
 	 *
 	 * @param string $value Value name
 	 * @param AbstractModule $mod Calling module
-	 * @return unknown_type Cached value
+	 * @return \Psr\Cache\CacheItemInterface
 	 */
 	public static function get($value, AbstractModule $mod = null){
-	    self::getInstance()->getI($value, $mod);
+	    return self::getInstance()->getI($value, $mod);
 	}
 	
 	/**
 	 * Cache a value to the specified key
 	 *
-	 * @param string $value Value name
+	 * @param string|\Psr\Cache\CacheItemInterface $value Value name
 	 * @param mixed $data Value
 	 * @param AbstractModule $mod Calling module
-	 * @return mixed Cached value
 	 */
 	public function saveI($value, $data, AbstractModule $mod = null){
 		$this->checkInit();
-		$this->cache->save($data, $this->getKeyName($value, $mod));
-		return $this->get($value, $mod);
+		
+		$item = $value;
+		if(!($value instanceof CacheItemInterface)) {
+		    $item = new \Stash\Item();
+    		$item->setKey($this->getKeyName($value, $mod));
+		}		
+		$item->set($data);
+		$this->cache->save($item);
 	}
 	
 	/**
-	 * Static invocation of the *set* method.
+	 * Static invocation of the *save* method.
 	 *
-	 * @param string $value Value name
+	 * @param string|\Psr\Cache\CacheItemInterface $value Value name
 	 * @param mixed $data Value
 	 * @param AbstractModule $mod Calling module
-	 * @return mixed Cached value
 	 */
 	public static function save($value, $data, AbstractModule $mod = null){
 	    self::getInstance()->saveI($value, $data, $mod);
+	}
+	
+	/**
+	 * Delete the value associated to the specified key
+	 *
+	 * @param string $value Value name
+	 * @param AbstractModule $mod Calling module
+	 * @return bool Deletion successful?
+	 */
+	public function deleteI($value, AbstractModule $mod = null){
+	    $this->checkInit();	
+	    return $this->cache->deleteItem($this->getKeyName($value, $mod));
+	}
+	
+	/**
+	 * Static invocation of the *delete* method.
+	 *
+	 * @param string $value Value name
+	 * @param AbstractModule $mod Calling module
+	 * @return bool Deletion successful?
+	 */
+	public static function delete($value, AbstractModule $mod = null){
+	    return self::getInstance()->deleteI($value, $mod);
 	}
 	
 	/**
@@ -175,7 +183,7 @@ class Cache{
 	 */
 	public function cleanI(){
 	    $this->checkInit();
-		$this->cache->clean();
+		$this->cache->clear();
 	}
 	
 	/**

@@ -73,13 +73,13 @@ class PiwikController extends MvcController
         
         $block_id = Filter::get('block_id');        
         if($block_id){
-            if(Cache::isCached('piwikCountYear', $this->module)) {
-                $visitCountYear = Cache::get('piwikCountYear', $this->module);
-            }
-            else{
+            $cached_item = Cache::get('piwikCountYear', $this->module);
+            $visitCountYear = $cached_item->get();
+            if(!$cached_item->isHit()) {
                 $visitCountYear = $this->getNumberOfVisitsPiwik($block_id);
-                Cache::save('piwikCountYear', $visitCountYear, $this->module);
+                Cache::save($cached_item, $visitCountYear);
             }
+            
             if($visitCountYear){
                 $visitCountToday = max(0, $this->getNumberOfVisitsPiwik($block_id, 'day'));
                 $visitCountYear = max( 0, $visitCountYear);

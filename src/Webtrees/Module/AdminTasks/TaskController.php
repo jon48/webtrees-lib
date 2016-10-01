@@ -103,7 +103,7 @@ class TaskController extends MvcController
         $controller->pageHeader();
         if($res['error']) http_response_code(500);
         
-        echo \Zend_Json::encode($res);
+        $controller->encode($res);
     }
 	
 	/**

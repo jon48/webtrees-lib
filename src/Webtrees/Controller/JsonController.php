@@ -54,4 +54,14 @@ class JsonController extends BaseController {
     
         return $this;
     }
+    
+    /**
+     * Encode the data to JSON format.
+     * 
+     * @param array $data Data to encode
+     * @param number $options JSON options mask. See http://php.net/manual/fr/json.constants.php
+     */
+    public function encode(array $data, $options = 0) {
+        echo json_encode($data, $options);
+    }
 }

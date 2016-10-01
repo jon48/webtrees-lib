@@ -154,7 +154,7 @@ class GeoAnalysisController extends MvcController
         $controller->pageHeader();
         if($res['error']) http_response_code(500);
         
-        echo \Zend_Json::encode($res);
+        $controller->encode($res);
     }
     
 	/**
@@ -186,8 +186,8 @@ class GeoAnalysisController extends MvcController
     
         $controller->pageHeader();
         if($res['error']) http_response_code(500);
-    
-        echo \Zend_Json::encode($res);
+
+        $controller->encode($res);
     }
         	
     /**
@@ -220,8 +220,8 @@ class GeoAnalysisController extends MvcController
         
         $jsonArray['generaltab'] = $this->htmlPlacesAnalysisGeneralTab($ga, $placesDispGeneral, $flags);
         $jsonArray['generationstab'] = $this->htmlPlacesAnalysisGenerationsTab($ga, $placesDispGenerations, $flags);
-        
-        echo \Zend_Json::encode($jsonArray);
+
+        $controller->encode($jsonArray);
     }
     
 	/**
