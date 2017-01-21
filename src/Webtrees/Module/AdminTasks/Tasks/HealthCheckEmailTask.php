@@ -125,11 +125,11 @@ class HealthCheckEmailTask extends AbstractTask implements ConfigurableTaskInter
 				$stats = new Stats($tree);
 				$sql = 'SELECT ged_type AS type, COUNT(change_id) AS chgcount FROM wt_change'.
 					' JOIN ('.
-						' SELECT "indi" AS ged_type, i_id AS ged_id, i_file AS ged_file FROM wt_individuals'.
-						' UNION SELECT "fam" AS ged_type, f_id AS ged_id, f_file AS ged_file FROM wt_families'.
-						' UNION SELECT "sour" AS ged_type, s_id AS ged_id, s_file AS ged_file FROM wt_sources'.
-						' UNION SELECT "media" AS ged_type, m_id AS ged_id, m_file AS ged_file FROM wt_media'.
-						' UNION SELECT LOWER(o_type) AS ged_type, o_id AS ged_id, o_file AS ged_file FROM wt_other'.
+						' SELECT "indi" AS ged_type, i_id AS ged_id, i_file AS ged_file FROM `##individuals`'.
+						' UNION SELECT "fam" AS ged_type, f_id AS ged_id, f_file AS ged_file FROM `##families`'.
+						' UNION SELECT "sour" AS ged_type, s_id AS ged_id, s_file AS ged_file FROM `##sources`'.
+						' UNION SELECT "media" AS ged_type, m_id AS ged_id, m_file AS ged_file FROM `##media`'.
+						' UNION SELECT LOWER(o_type) AS ged_type, o_id AS ged_id, o_file AS ged_file FROM `##other`'.
 					') AS gedrecords ON (xref = ged_id AND gedcom_id = ged_file)'.
 					' WHERE change_time >= DATE_ADD( NOW(), INTERVAL - :nb_days DAY)'.
 					' AND status = :status AND gedcom_id = :gedcom_id'.

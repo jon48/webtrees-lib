@@ -88,12 +88,9 @@ class AdminConfigController extends MvcController
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addExternalJavascript(WT_DATATABLES_BOOTSTRAP_JS_URL)
             ->addInlineJavascript('
-                //Datatable initialisation
-				jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-				jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
-	
+				jQuery.fn.dataTableExt.oSort["text-asc"] = textCompareAsc;
+				jQuery.fn.dataTableExt.oSort["text-desc"] = textCompareDesc;
+                
 				var geoAnalysisTable = jQuery("#'.$table_id.'")
                 .on("draw.dt", function ( e, settings, json, xhr ) {
                     jQuery("[data-toggle=\'tooltip\']").tooltip();
@@ -109,15 +106,15 @@ class AdminConfigController extends MvcController
 					},
                     columns: [
 						/* 0 Edit		 	*/ { sortable: false, className: "text-center"},
-                        /* 1 ID             */ { visible: false },
+                        /* 1 ID             */ { sortable: false, visible: false},
 						/* 2 Enabled 		*/ { sortable: false, className: "text-center"  },
-						/* 3 Description	*/ null,
-						/* 4 Analysis Level	*/ { dataSort: 5, className: "text-center" },
-						/* 5 ANAL_LEVEL_SORT*/ { visible: false },
-						/* 6 Map 	        */ { sortable: false, className: "text-center" },
-						/* 7 Map Top Level 	*/ { sortable: false, className: "text-center" },
-						/* 8 Use Flags     	*/ { sortable: false, className: "text-center" },					
-						/* 9 Place Details	*/ { sortable: false, className: "text-center" }
+						/* 3 Description	*/ { type: "text" },
+						/* 4 Analysis Level	*/ { type: "text", dataSort: 5, className: "text-center" },
+						/* 5 ANAL_LEVEL_SORT*/ { type: "num", visible: false },
+						/* 6 Map 	        */ { type: "text", sortable: false, className: "text-center" },
+						/* 7 Map Top Level 	*/ { type: "text", sortable: false, className: "text-center" },
+						/* 8 Use Flags     	*/ { type: "text", sortable: false, className: "text-center" },					
+						/* 9 Place Details	*/ { type: "text", sortable: false, className: "text-center" }
 					],
 				});
                 

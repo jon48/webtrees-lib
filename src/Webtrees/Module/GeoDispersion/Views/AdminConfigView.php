@@ -88,11 +88,11 @@ class AdminConfigView extends AbstractView {
     		<thead>
     			<tr>
     				<th><?php echo I18N::translate('Edit'); ?></th>
-    				<th><!-- geoanalysis id --></th>
+    				<th hidden><!-- geoanalysis id --></th>
     				<th><?php echo I18N::translate('Enabled'); ?></th>
     				<th><?php echo I18N::translate('Description'); ?></th>
     				<th><?php echo I18N::translate('Level of analysis'); ?></th>
-    				<th><!-- Analysis Level -->
+    				<th><!-- Analysis Level --></th>
     				<th><?php echo I18N::translate('Map'); ?></th>
     				<th><?php echo I18N::translate('Map parent level'); ?></th>
     				<th><?php echo I18N::translate('Use flags'); ?></th>

@@ -10,26 +10,26 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa;
 
-use Fisharebest\Webtrees\I18N;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use Fisharebest\Webtrees\Controller\PageController;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Filter;
-use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
 use Fisharebest\Webtrees\Controller\AjaxController;
-use Fisharebest\Webtrees\Module\AbstractModule;
-use Rhumsaa\Uuid\Uuid;
-use Fisharebest\Webtrees\Functions\FunctionsPrintLists;
-use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\Date;
-use MyArtJaub\Webtrees\Functions\Functions;
-use MyArtJaub\Webtrees\Module\ModuleManager;
-use MyArtJaub\Webtrees\Constants;
-use Fisharebest\Webtrees\Stats;
 use Fisharebest\Webtrees\Family;
+use Fisharebest\Webtrees\Filter;
+use Fisharebest\Webtrees\Functions\FunctionsPrintLists;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Stats;
+use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Module\ModuleManager;
+use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
+use Rhumsaa\Uuid\Uuid;
 
 /**
  * Controller for SosaList
@@ -191,11 +191,8 @@ class SosaListController extends MvcController
                 $controller
                 ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
                 ->addInlineJavascript('
-    				/* Initialise datatables */
-    				jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-    				jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-    				jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-    				jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+				    jQuery.fn.dataTableExt.oSort["text-asc"] = textCompareAsc;
+				    jQuery.fn.dataTableExt.oSort["text-desc"] = textCompareDesc;
                     
     				jQuery("#'.$table_id.'").dataTable( {
                         dom: \'<"H"<"filtersH_' . $table_id . '">T<"dt-clear">pf<"dt-clear">irl>t<"F"pl<"dt-clear"><"filtersF_' . $table_id . '">>\',
@@ -205,23 +202,18 @@ class SosaListController extends MvcController
     					processing: true,
     					retrieve: true,
     					columns: [
-    						/* 0-Sosa */  		{ type: "num", class: "center" },
-    		                /* 1-ID */ 			{ class: "center" },
-    		                /* 2-givn */ 		{ dataSort: 4,  class: "left"},
-    						/* 3-surn */ 		{ dataSort: 5},
-    						/* 4-GIVN,SURN */ 	{ type: "unicode", visible: false},
-    						/* 5-SURN,GIVN */ 	{ type: "unicode", visible: false},
+    						/* 0-Sosa        */   { type: "num", class: "center" },
+    		                /* 1-ID          */   { type: "text", class: "center" },
+    		                /* 2-Given names */   { type: "text",  class: "left"},
+    						/* 3-Surnames    */   { type: "text" },
     		                /* PERSO Modify table to include IsSourced module */
-    		                /* 6-INDI_SOUR */	{ dataSort : 7, class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
-    	                	/* 7-SORT_INDISC */	{ visible : false},
-    		                /* 8-Father */		{ class: "center"},
-    		                /* 9-Mother */		{ class: "center"},
-    		                /* 10-Birth */		{ dataSort : 11 , class: "center"},
-    		                /* 11-SORT_BIRT */	{ visible : false},
-    		                /* 12-BIRT_PLAC */	{ type: "unicode", class: "center"},
-    		                /* 13-BIRT_SOUR */	{ dataSort : 14, class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
-    	                	/* 14-SORT_BIRTSC */{ visible : false},
-    		                /* 15-SEX */		{ visible : false}
+    		                /* 4-Indi source */	  { class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
+    		                /* 5-Father      */	  { type: "text", class: "center"},
+    		                /* 6-Mother      */   { type: "text", class: "center"},
+    		                /* 7-Birth date  */	  { type: "num", class: "center"},
+    		                /* 8-Birth place */	  { type: "text", class: "center"},
+    		                /* 9-Birth source*/	  { class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
+    		                /* 10-Filter sex */   { sortable: false },
     		                /* END PERSO */
     					],
     		            sorting: [[0,"asc"]],
@@ -321,11 +313,9 @@ class SosaListController extends MvcController
             $controller
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addInlineJavascript('
-                jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-				jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
-            
+                jQuery.fn.dataTableExt.oSort["text-asc"] = textCompareAsc;
+                jQuery.fn.dataTableExt.oSort["text-desc"] = textCompareDesc;
+                
                 jQuery("#'.$table_id.'").dataTable( {
 					dom: \'<"H"<"filtersH_' . $table_id . '">T<"dt-clear">pf<"dt-clear">irl>t<"F"pl<"dt-clear"><"filtersF_' . $table_id . '">>\',
 					' . I18N::datatablesI18N() . ',
@@ -334,29 +324,22 @@ class SosaListController extends MvcController
 					processing: true,
 					retrieve: true,
 					columns: [
-						/* 0-Sosa */  		{ type: "num", class: "center" },
-		                /* 1-ID */ 			{ visible: false },
-		                /* 2-givn */ 		{ dataSort: 4,  class: "left"},
-						/* 3-surn */ 		{ datasort: 5},
-						/* 4-GIVN,SURN */ 	{ type: "unicode", visible: false},
-						/* 5-SURN,GIVN */ 	{ type: "unicode", visible: false},
-		                /* 6-Birth */		{ dataSort : 7 , class: "center"},
-		                /* 7-SORT_BIRT */	{ visible : false},
-		                /* 8-BIRT_PLAC */	{ type: "unicode", class: "center"},
+						/* 0-Sosa          */     { type: "num", class: "center" },
+		                /* 1-ID            */     { type: "text", sortable: false },
+		                /* 2-Given names   */     { type: "text" },
+						/* 3-Surnames      */     { type: "text" },
+		                /* 4-Birth date    */     { type: "num", class: "center"},
+		                /* 5-Birth place   */     { type: "text", class: "center"},
 		                /* PERSO Modify table to include IsSourced module */
-		                /* 9-BIRT_SOUR */   { dataSort : 10, class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
-						/* 10-SORT_BIRTSC */{ visible : false},
-		                /* 11-Death */		{ dataSort : 12 , class: "center"},
-		                /* 12-SORT_DEAT */	{ visible : false},
-		                /* 13-Age */		{ dataSort : 14 , class: "center"},
-		                /* 14-AGE */		{ type: "num", visible: false},
-		                /* 15-DEAT_PLAC */	{ type: "unicode", class: "center" },
-		                /* 16-DEAT_SOUR */	{ dataSort : 17, class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
-		                /* 17-SORT_DEATSC */{ visible : false},
-		                /* 18-SEX */		{ visible : false},
-		                /* 19-BIRT */		{ visible : false},
-		                /* 20-DEAT */		{ visible : false},
-		                /* 21-TREE */		{ visible : false}
+		                /* 6-Birth source  */     { class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
+		                /* 7-Death date    */     { type: "num", class: "center"},
+		                /* 8-Age           */     { type: "num", class: "center"},
+		                /* 9-Death place   */     { type: "text", class: "center" },
+		                /* 10-Death source */     { class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
+						/* 11-Filter sex   */     { sortable: false },
+						/* 12-Filter birth */     { sortable: false },
+						/* 13-Filter death */     { sortable: false },
+						/* 14-Filter tree  */     { sortable: false }
 		                /* END PERSO */
 					],
 		            sorting: [[0,"asc"]],
@@ -486,11 +469,9 @@ class SosaListController extends MvcController
             $controller
             ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
             ->addInlineJavascript('
-                jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-				jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-				jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
-        
+				jQuery.fn.dataTableExt.oSort["text-asc"] = textCompareAsc;
+				jQuery.fn.dataTableExt.oSort["text-desc"] = textCompareDesc;
+                
                 jQuery("#'.$table_id.'").dataTable( {
 					dom: \'<"H"<"filtersH_' . $table_id . '"><"dt-clear">pf<"dt-clear">irl>t<"F"pl<"dt-clear"><"filtersF_' . $table_id . '">>\',
                     '.I18N::datatablesI18N(array(16, 32, 64, 128, -1)).',
@@ -499,30 +480,20 @@ class SosaListController extends MvcController
 					processing: true,
 					retrieve: true,
 					columns: [
-						/* 0-Sosa */  	   { dataSort: 1, class: "center"},
-		                /* 1-SOSA */ 	   { type: "num", visible: false },
-						/* 2-Husb Givn */  { dataSort: 4},
-						/* 3-Husb Surn */  { dataSort: 5},
-						/* 4-GIVN,SURN */  { type: "unicode", visible: false},
-						/* 5-SURN,GIVN */  { type: "unicode", visible: false},
-						/* 6-Husb Age  */  { dataSort: 7, class: "center"},
-						/* 7-AGE       */  { type: "num", visible: false},
-						/* 8-Wife Givn */  { dataSort: 10},
-						/* 9-Wife Surn */  { dataSort: 11},
-						/* 10-GIVN,SURN */ { type: "unicode", visible: false},
-						/* 11-SURN,GIVN */ { type: "unicode", visible: false},
-						/* 12-Wife Age  */ { dataSort: 13, class: "center"},
-						/* 13-AGE       */ { type: "num", visible: false},
-						/* 14-Marr Date */ { dataSort: 15, class: "center"},
-						/* 15-MARR:DATE */ { visible: false},
-						/* 16-Marr Plac */ { type: "unicode", class: "center"},
-						/* 17-Marr Sour */ { dataSort : 18, class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
-						/* 18-Sort Sour */ { visible: false},
-						/* 19-Children  */ { dataSort: 20, class: "center"},
-						/* 20-NCHI      */ { type: "num", visible: false},
-						/* 21-MARR      */ { visible: false},
-						/* 22-DEAT      */ { visible: false},
-						/* 23-TREE      */ { visible: false}
+						/* 0-Sosa            */   { type: "num", class: "center"},
+						/* 1-Given names     */   { type: "text" },
+						/* 2-Surnames        */   { type: "text" },
+						/* 3-Age             */   { type: "num", class: "center"},
+						/* 4-Given names     */   { type: "text" },
+						/* 5-Surnames        */   { type: "text" },
+						/* 6-Age             */   { type: "num", class: "center"},
+						/* 7-Marriage date   */   { type: "num", class: "center" },
+						/* 8-Marriage place  */   { type: "text" },
+                        /* 9-Marriage source */   { class: "center", visible: '.(ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME) ? 'true' : 'false').' },
+						/* 10-Children       */   { type: "num" },
+						/* 11-Filter marriage*/   { sortable: false },
+						/* 12-Filter dead    */   { sortable: false },
+						/* 13-Filter tree    */   { sortable: false }
 					],
 					sorting: [[0, "asc"]],
 					displayLength: 16,

@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Functions\FunctionsPrintLists;
 use MyArtJaub\Webtrees\Module\ModuleManager;
 
 /**
@@ -32,7 +33,7 @@ class SosaListMissingView extends SosaListView {
     protected function renderContent() {
         ?>
             <div id="maj-sosa-missing-page" class="center">
-    			<h2><?php echo $this->data->get('title'); ?></h2>
+    			<h2><?= $this->data->get('title') ?></h2>
     			
     			<?php  if($this->data->get('is_setup')) { 
     			    $this->renderSosaHeader();
@@ -40,70 +41,63 @@ class SosaListMissingView extends SosaListView {
     			        $table_id = $this->data->get('table_id');
     			        ?>
     			<div id="sosa-indi-missing" class="smissing-list">
-                	<table id="<?php echo $table_id;?>">
+                	<table id="<?= $table_id ?>">
         				<thead>     
             				<tr>
-    							<th colspan="16">
+    							<th colspan="11">
     								<div class="btn-toolbar">
     									<div class="btn-group">
     										<button
     											class="ui-state-default"
-    											data-filter-column="15"
+    											data-filter-column="10"
     											data-filter-value="M"
     											title="<?php I18N::translate('Show only males.'); ?>"
     											type="button"
     										>
-    										<?php echo Individual::sexImage('M', 'large'); ?>
+    										<?= Individual::sexImage('M', 'large') ?>
     										</button>
     										<button
     											class="ui-state-default"
-    											data-filter-column="15"
+    											data-filter-column="10"
     											data-filter-value="F"
     											title="<?php I18N::translate('Show only females.'); ?>"
     											type="button"
     										>
-    										<?php echo Individual::sexImage('F', 'large'); ?>
+    										<?= Individual::sexImage('F', 'large') ?>
     										</button>
     										<button
     											class="ui-state-default"
-    											data-filter-column="15"
+    											data-filter-column="10"
     											data-filter-value="U"
     											title="<?php I18N::translate('Show only individuals for whom the gender is not known.'); ?>"
     											type="button"
     										>
-    										<?php echo Individual::sexImage('U', 'large'); ?>
+    										<?= Individual::sexImage('U', 'large') ?>
     										</button>
     									</div>
     								</div>
     							</th>
     						</tr>       				
         					<tr>
-        						<th><?php echo I18N::translate('Sosa'); ?></th>
-        						<th><?php echo GedcomTag::getLabel('INDI'); ?></th>
-        						<th><?php echo GedcomTag::getLabel('GIVN'); ?></th>
-        						<th><?php echo GedcomTag::getLabel('SURN'); ?></th>
-        						<th>GIVN</th>
-        						<th>SURN</th>
+        						<th><?= I18N::translate('Sosa') ?></th>
+        						<th><?= GedcomTag::getLabel('INDI') ?></th>
+        						<th><?= GedcomTag::getLabel('GIVN') ?></th>
+        						<th><?= GedcomTag::getLabel('SURN') ?></th>
         						<?php if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME)) { ?>
-        						<th><i class="icon-source" title="<?php echo I18N::translate('Sourced individual'); ?>" border="0"></i></th>
-        						<th>SORT_BIRTSC</th>
+        						<th><i class="icon-source" title="<?= I18N::translate('Sourced individual') ?>" border="0"></i></th>
         						<?php } else { ?>
         						<th></th>
-        						<th></th>
         						<?php } ?>
-        						<th><?php echo Functions::getRelationshipNameFromPath('fat'); ?></th>
-								<th><?php echo Functions::getRelationshipNameFromPath('mot'); ?></th>        						
-        						<th><?php echo GedcomTag::getLabel('BIRT'); ?></th>
-        						<th>SORT_BIRT</th>
-        						<th><?php echo GedcomTag::getLabel('PLAC'); ?></th>
+        						<th><?= Functions::getRelationshipNameFromPath('fat') ?></th>
+								<th><?= Functions::getRelationshipNameFromPath('mot') ?></th>        						
+        						<th><?= GedcomTag::getLabel('BIRT') ?></th>
+        						<th><?= GedcomTag::getLabel('PLAC') ?></th>
         						<?php if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME)) { ?>
-        						<th><i class="icon-source" title="<?php echo I18N::translate('Sourced birth'); ?>" border="0"></i></th>
-        						<th>SORT_BIRTSC</th>
+        						<th><i class="icon-source" title="<?= I18N::translate('Sourced birth') ?>" border="0"></i></th>
         						<?php } else { ?>
         						<th></th>
-        						<th></th>
         						<?php } ?>
-        						<th>SEX</th>
+        						<th hidden>SEX</th>
         					</tr>
         				</thead>
         			<tbody>
@@ -120,11 +114,12 @@ class SosaListMissingView extends SosaListView {
         			        $class = '';
         			    }
         			    $dperson = new \MyArtJaub\Webtrees\Individual($person);
+        			    list($surn_givn, $givn_surn) = FunctionsPrintLists::sortableNames($person);
         			    ?>			
-                		<tr <?php echo $class?>>
-                			<td class="transparent"><?php echo $missing_tab['sosa']; ?></td>
-                			<td class="transparent"><?php echo $person->getXref(); ?></td>
-                			<td colspan="2">
+                		<tr <?= $class ?>>
+                			<td class="transparent"><?= $missing_tab['sosa'] ?></td>
+                			<td class="transparent"><?= $person->getXref() ?></td>
+                			<td colspan="2" data-sort="<?= Filter::escapeHtml($givn_surn) ?>">
                 			<?php foreach ($person->getAllNames() as $num=>$name) {
                 				if ($name['type']=='NAME') {
                 					$title='';
@@ -134,100 +129,78 @@ class SosaListMissingView extends SosaListView {
                 				if ($num==$person->getPrimaryName()) {
                 					$class=' class="name2"';
                 					$sex_image=$person->getSexImage();
-                					list($surn, $givn)=explode(',', $name['sort']);
                 				} else {
                 					$class='';
                 					$sex_image='';
                 				} ?>
-                				<a <?php echo $title.' '.$class; ?> href="<?php echo $person->getHtmlUrl(); ?>">
-                					<?php echo \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($name['full']); ?>
+                				<a <?= $title.' '.$class ?> href="<?= $person->getHtmlUrl() ?>">
+                					<?= \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($name['full']) ?>
                 				</a>
-                				<?php echo $sex_image.FunctionsPrint::formatSosaNumbers($dperson->getSosaNumbers(), 1, 'smaller'); ?>
+                				<?= $sex_image.FunctionsPrint::formatSosaNumbers($dperson->getSosaNumbers(), 1, 'smaller') ?>
                 				<br/>
                     		<?php }
                     		echo $person->getPrimaryParentsNames('parents details1', 'none');
                     		?>
                     		</td>
-                    		<td style="display:none;"></td>
-                    		<td>
-                    			<?php echo Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)) . 'AAAA' . Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)); ?>
-                    		</td>
-                    		<td>
-                    			<?php echo Filter::escapeHtml(str_replace('@N.N.', 'AAAA', $surn)) . 'AAAA' . Filter::escapeHtml(str_replace('@P.N.', 'AAAA', $givn)); ?>
-                    		</td>                    		
+							<td hidden data-sort="<?= Filter::escapeHtml($surn_givn) ?>"></td>             		
                 			<?php if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME)) {
         				        $isISourced = $dperson->isSourced(); ?>
-        				   	<td><?php echo FunctionsPrint::formatIsSourcedIcon('R', $isISourced, 'INDI', 1, 'medium'); ?></td>
-        					<td><?php echo $isISourced; ?></td>
+        				   	<td data-sort="<?= $isISourced ?>"><?= FunctionsPrint::formatIsSourcedIcon('R', $isISourced, 'INDI', 1, 'medium') ?></td>
         					<?php } else { ?>
         					<td>&nbsp;</td>
-        					<td></td>
         					<?php } ?>
-        					<td><?php echo $missing_tab['has_father'] ? '&nbsp;' : 'X';?></td>
-        					<td><?php echo $missing_tab['has_mother'] ? '&nbsp;' : 'X';?></td>
-        					<td>
-                    		<?php 
-                    		if ($birth_dates=$person->getAllBirthDates()) {
-        			            foreach ($birth_dates as $num=>$birth_date) {
-            					   if ($num) { ?><br/><?php } ?>
-            						<?php  echo $birth_date->display(true);
-        			            }
-                    		} else {
-                    		    $birth_date = new Date('');
-                    		    if ($person->getTree()->getPreference('SHOW_EST_LIST_DATES')) {
-                    		        $birth_date=$person->getEstimatedBirthDate();
-                    		        echo $birth_date->display(true);
-                    		    } else {
-                    		        echo '&nbsp;';
-                    		    }
-                    		    $birth_dates[0] = new Date('');
+        					<td><?= $missing_tab['has_father'] ? '&nbsp;' : 'X' ?></td>
+        					<td><?= $missing_tab['has_mother'] ? '&nbsp;' : 'X' ?></td>
+                    		<?php $birth_dates = $person->getAllBirthDates(); ?>
+                    		<td data-sort="<?= $person->getEstimatedBirthDate()->julianDay() ?>">
+                    		<?php                     		
+                    		foreach ($birth_dates as $n => $birth_date) {
+                    		    if ($n > 0) { ?> <br> <?php  } 
+                    		    echo $birth_date->display(true);
                     		}
                     		?>
                     		</td>
-                    		<td><?php echo $birth_date->julianDay();?></td>
                 			<td>
                 			<?php foreach ($person->getAllBirthPlaces() as $n => $birth_place) {
         				        $tmp = new \Fisharebest\Webtrees\Place($birth_place, $person->getTree());
-                				if ($n) { ?><br><?php } ?>
-                				<a href="'<?php echo $tmp->getURL(); ?>" title="<?php echo strip_tags($tmp->getFullName()); ?>">
-                					<?php echo \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($tmp->getShortName()); ?>
+                				if ($n > 0) { ?><br><?php } ?>
+                				<a href="'<?= $tmp->getURL(); ?>" title="<?= strip_tags($tmp->getFullName()) ?>">
+                					<?= \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($tmp->getShortName()) ?>
                 				</a>
                 			<?php } ?>
                 			</td>
         					<?php if (ModuleManager::getInstance()->isOperational(Constants::MODULE_MAJ_ISSOURCED_NAME)) {
         				        $isBSourced = $dperson->isBirthSourced(); ?>
-        				   	<td><?php echo FunctionsPrint::formatIsSourcedIcon('E', $isBSourced, 'BIRT', 1, 'medium'); ?></td>
-        					<td><?php echo $isBSourced; ?></td>
+        				   	<td data-sort="<?= $isBSourced ?>"><?= FunctionsPrint::formatIsSourcedIcon('E', $isBSourced, 'BIRT', 1, 'medium') ?></td>
         					<?php } else { ?>
         					<td>&nbsp;</td>
-        					<td></td>
         					<?php } ?>
-        					<td><?php  echo $person->getSex(); ?></td>
+        					<td hidden><?= $person->getSex() ?></td>
         				</tr>
                 	<?php } ?>
                 	</tbody>
                 	<tfoot>
 						<tr>
-							<td class="ui-state-default" colspan="16">
+							<td class="ui-state-default" colspan="11">
 								<div class="center">
-									<?php echo I18N::translate('Number of different missing ancestors: %s', I18N::number($this->data->get('missing_diff_count'))); ?>
+									<?= I18N::translate('Number of different missing ancestors: %s', I18N::number($this->data->get('missing_diff_count'))) ?>
 									<?php if($this->data->get('missing_hidden') > 0) echo ' ['. I18N::translate('%s hidden', I18N::number($this->data->get('missing_hidden'))).']'; ?>
-									<?php echo ' - ' . I18N::translate('Generation complete at %s', I18N::percentage($this->data->get('perc_sosa'), 2)); ?>
-									<?php echo ' [' . I18N::translate('Potential %s', I18N::percentage($this->data->get('perc_sosa_potential'),2)).']'; ?>
+									<?= ' - ' . I18N::translate('Generation complete at %s', I18N::percentage($this->data->get('perc_sosa'), 2)) ?>
+									<?= ' [' . I18N::translate('Potential %s', I18N::percentage($this->data->get('perc_sosa_potential'),2)).']' ?>
 								</div>
 							</td>
 						</tr>
 					</tfoot>
                 </table>
     			 <?php } else if ($this->data->get('generation', 0) > 0) { ?> 
-    			<p><?php echo I18N::translate('No ancestors are missing for this generation. Generation complete at %s.', I18N::percentage($this->data->get('perc_sosa'), 2)); ?></p>
+    			<p><?= I18N::translate('No ancestors are missing for this generation. Generation complete at %s.', I18N::percentage($this->data->get('perc_sosa'), 2)) ?></p>
     			    <?php }   			    
     			} else { ?>
-    			<p class="warning"><?php echo I18N::translate('The list could not be displayed. Reasons might be:'); ?><br/>
+    			<p class="warning"><?= I18N::translate('The list could not be displayed. Reasons might be:') ?><br/>
     				<ul>
-    					<li><?php echo I18N::translate('No Sosa root individual has been defined.'); ?></li>
-    					<li><?php echo I18N::translate('The Sosa ancestors have not been computed yet.'); ?></li>
-    					<li><?php echo I18N::translate('No generation were found.'); ?></li>
+    					<li><?= I18N::translate('No Sosa root individual has been defined.') ?></li>
+    					<li><?= I18N::translate('The Sosa ancestors have not been computed yet.') ?></li>
+    					<li><?= I18N::translate('No generation were found.') ?></li>
     				</ul>
     			</p>
     			<?php } ?>

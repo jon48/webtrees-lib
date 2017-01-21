@@ -31,31 +31,29 @@ class CertificatesListView extends AbstractView {
         
         ?>                
         <div id="maj-cert-list-page" class="center">
-			<h2><?php echo $this->data->get('title'); ?></h2>
+			<h2><?= $this->data->get('title') ?></h2>
 			
 			<form method="get" name="selcity" action="module.php">
-    			<input type="hidden" name="mod" value="<?php echo $this->data->get('url_module');?>">
-    			<input type="hidden" name="mod_action" value="<?php echo $this->data->get('url_action');?>">
-    			<input type="hidden" name="ged" value="<?php echo $this->data->get('url_ged');?>">
+    			<input type="hidden" name="mod" value="<?= $this->data->get('url_module') ?>">
+    			<input type="hidden" name="mod_action" value="<?= $this->data->get('url_action') ?>">
+    			<input type="hidden" name="ged" value="<?= $this->data->get('url_ged') ?>">
     			<select name="city">
     			<?php foreach ($cities as $city) { ?>
-    				<option value="<?php echo Functions::encryptToSafeBase64($city); ?>" <?php if(trim($city) == trim($selected_city)) echo 'selected="selected"'?> ><?php echo $city;?></option>
+    				<option value="<?= Functions::encryptToSafeBase64($city) ?>" <?php if(trim($city) == trim($selected_city)) echo 'selected="selected"'?> ><?= $city ?></option>
     			<?php } ?>
     			</select>
-    			<input type="submit" value="<?php echo I18N::translate('Show');?>" />
+    			<input type="submit" value="<?= I18N::translate('Show') ?>" />
     		</form>
     		
     		<?php if($this->data->get('has_list', false)) { ?>
     		<div class="loading-image">&nbsp;</div>
     		<div class="certificate-list">
-    			<table id="<?php echo $this->data->get('table_id');?>">
+    			<table id="<?= $this->data->get('table_id') ?>">
     				<thead>
     					<tr>
-    						<th><?php echo I18N::translate('Date'); ?></th>
-    						<th>datesort</th>
-    						<th><?php echo I18N::translate('Type'); ?></th>
-    						<th>certificatesort</th>
-    						<th><?php echo I18N::translate('Certificate'); ?></th>
+    						<th><?= I18N::translate('Date') ?></th>
+    						<th><?= I18N::translate('Type') ?></th>
+    						<th><?= I18N::translate('Certificate') ?></th>
     					</tr>
     				</thead>
     				<tbody>
@@ -65,14 +63,12 @@ class CertificatesListView extends AbstractView {
     					<tr>
     						<!-- Certificate date -->
     						<?php if($date = $certificate->getCertificateDate()) { ?>
-    						<td><?php echo $date->display(); ?></td>
-    						<td><?php echo $date->julianDay(); ?></td>
+    						<td data-sort="<?= $date->julianDay() ?>"><?= $date->display() ?></td>
     						<?php } else { ?>
-    						<td>&nbsp;</td>
-    						<td>0</td>
+    						<td data-sort="0">&nbsp;</td>
     						<?php  } ?>
     						<!--  Certificate Type -->
-    						<td><?php echo Filter::escapeHtml($certificate->getCertificateType() ?: '');  ?></td>
+    						<td><?= Filter::escapeHtml($certificate->getCertificateType() ?: '') ?></td>
     						<!--  Certificate Name -->
     						<?php 
     						$name = $certificate->getCertificateDetails() ?: '';
@@ -81,9 +77,8 @@ class CertificatesListView extends AbstractView {
     						if($ct_names > 0) $sortname = $match[1].'_';
     						$sortname .= $name;
     						?>
-    						<td><?php echo Filter::escapeHtml($sortname); ?></td>
-    						<td>
-    							<a href="<?php echo $certificate->getHtmlUrl(); ?>"><?php echo Filter::escapeHtml($name); ?></a>
+    						<td data-sort="<?= Filter::escapeHtml($sortname) ?>">
+    							<a href="<?= $certificate->getHtmlUrl() ?>"><?= Filter::escapeHtml($name) ?></a>
     						</td>
     					</tr>
     				<?php } ?>

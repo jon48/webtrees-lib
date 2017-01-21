@@ -184,11 +184,8 @@ class CertificateController extends MvcController
                 $controller
                     ->addExternalJavascript(WT_JQUERY_DATATABLES_JS_URL)
                     ->addInlineJavascript('
-                        /* Initialise datatables */
-        				jQuery.fn.dataTableExt.oSort["unicode-asc"  ]=function(a,b) {return a.replace(/<[^<]*>/, "").localeCompare(b.replace(/<[^<]*>/, ""))};
-        				jQuery.fn.dataTableExt.oSort["unicode-desc" ]=function(a,b) {return b.replace(/<[^<]*>/, "").localeCompare(a.replace(/<[^<]*>/, ""))};
-        				jQuery.fn.dataTableExt.oSort["num-html-asc" ]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a<b) ? -1 : (a>b ? 1 : 0);};
-        				jQuery.fn.dataTableExt.oSort["num-html-desc"]=function(a,b) {a=parseFloat(a.replace(/<[^<]*>/, "")); b=parseFloat(b.replace(/<[^<]*>/, "")); return (a>b) ? -1 : (a<b ? 1 : 0);};
+				        jQuery.fn.dataTableExt.oSort["text-asc"] = textCompareAsc;
+				        jQuery.fn.dataTableExt.oSort["text-desc"] = textCompareDesc;
                         
                         jQuery("#'.$table_id.'").dataTable( {
         					dom: \'<"H"<"filtersH_' . $table_id . '">T<"dt-clear">pf<"dt-clear">irl>t<"F"pl<"dt-clear"><"filtersF_' . $table_id . '">>\',
@@ -197,13 +194,11 @@ class CertificateController extends MvcController
         					autoWidth: false,
         					processing: true,
         					columns: [
-        		                    /* 0-Date */  			{ dataSort: 1, width: "15%", class: "center" },
-        							/* 1-DateSort */		{ type: "unicode", visible : false },
-        		                    /* 2-Type */ 			{ width: "5%", searchable: false, class: "center"},
-        		                    /* 3-CertificateSort */ { type: "unicode", visible : false },
-        		                    /* 4-Certificate */     { dataSort: 3, class: "left" }
+        		                    /* 0-Date */  			{ type: "num", width: "15%", class: "center" },
+        		                    /* 1-Type */ 			{ type: "text", width: "5%", searchable: false, class: "center"},
+        		                    /* 2-Certificate */     { type: "text", class: "left" }
         		                ],
-        		            sorting: [[0,"asc"], [2,"asc"]],
+        		            sorting: [[0,"asc"], [1,"asc"]],
         					displayLength: 20,
         					pagingType: "full_numbers"
         			   });
