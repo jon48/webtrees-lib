@@ -550,7 +550,7 @@ class SosaListController extends MvcController
             foreach($listFamSosa as $sosa => $fid) {
                 $sfamily = Family::getInstance($fid, $WT_TREE);
                 if(!$sfamily || !$sfamily->canShow()) {
-                    unset($sfamily[$sosa]);
+                    unset($listFamSosa[$sosa]);
                     continue;
                 }
                 $mdate=$sfamily->getMarriageDate();
