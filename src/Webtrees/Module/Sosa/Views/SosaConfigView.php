@@ -72,7 +72,7 @@ class SosaConfigView extends AbstractView {
         			</div>
         			<div class="label"></div>
         			<div class="value">
-        				<input type="submit" value="<?php echo /* I18N: button label */ I18N::translate('Save'); ?>">
+        				<input type="submit" value="<?php echo /* I18N: button label */ I18N::translate('save'); ?>">
         				<input type="button" value="<?php echo /* I18N: button label */ I18N::translate('Compute'); ?>" id="bt_sosa_compute">
         				<span id="bt_sosa_computing"></span>
         			</div>

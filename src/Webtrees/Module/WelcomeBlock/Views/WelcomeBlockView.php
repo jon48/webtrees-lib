@@ -50,7 +50,7 @@ class WelcomeBlockView extends AbstractView {
             $content .= '
                     <td>
                         <a href="' . WT_LOGIN_URL . '?action=register">
-                            <i class="icon-user_add"></i><br>'.I18N::translate('Request new user account').'
+                            <i class="icon-user_add"></i><br>'.I18N::translate('Request a new user account').'
                         </a>
                     </td>';
         }
@@ -76,9 +76,9 @@ class WelcomeBlockView extends AbstractView {
             <div class="center">
                 <form method="post" action="logout.php" name="logoutform" onsubmit="return true;">
                     <br>
-                    <a href="edituser.php" class="name2">' . I18N::translate('Logged in as ') . ' ' . Auth::user()->getRealNameHtml() . '</a>
+                    <a href="edituser.php" class="name2">' . I18N::translate('You are signed in as %s.', '<a href="edituser.php" class="name2">' . Auth::user()->getRealNameHtml() . '</a>') . '</a>
                     <br><br>
-                    <input type="submit" value="'.I18N::translate('Logout').'">
+                    <input type="submit" value="'.I18N::translate('sign out').'">
                     <br><br>
                 </form>
             </div>';
@@ -98,15 +98,15 @@ class WelcomeBlockView extends AbstractView {
 						</label>
 					</div>
 					<div>
-						<input type="submit" value="'. I18N::translate('Login'). '">
+						<input type="submit" value="'. I18N::translate('sign in'). '">
 					</div>
 					<div>
-						<a href="#" id="maj-passwd_click">'. I18N::translate('Request new password').'</a>
+						<a href="#" id="maj-passwd_click">'. I18N::translate('Request a new password').'</a>
 					</div>';
             if (Site::getPreference('USE_REGISTRATION_MODULE')) {
                 $content.= '
                     <div>
-                        <a href="'.WT_LOGIN_URL.'?action=register">'. I18N::translate('Request new user account').'</a>
+                        <a href="'.WT_LOGIN_URL.'?action=register">'. I18N::translate('Request a new user account').'</a>
                     </div>';
             }
             $content.= '

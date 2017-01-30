@@ -64,7 +64,7 @@ class WelcomeBlockController extends MvcController
     			');
     
             if (Auth::isAdmin()) {
-                $title='<a class="icon-admin" title="'.I18N::translate('Configure').'" href="block_edit.php?block_id='.$block_id.'&amp;ged=' . $tree->getNameHtml() . '&amp;ctype=gedcom"></a>';
+                $title='<a class="icon-admin" title="'.I18N::translate('Preferences').'" href="block_edit.php?block_id='.$block_id.'&amp;ged=' . $tree->getNameHtml() . '&amp;ctype=gedcom"></a>';
             } else {
                 $title='';
             }

@@ -85,7 +85,7 @@ class SosaListIndiView extends AbstractView {
     									class="ui-state-default"
     									data-filter-column="13"
     									data-filter-value="Y"
-    									title="<?= I18N::translate('Show individuals who are dead or couples where both partners are deceased.') ?>"
+    									title="<?= I18N::translate('Show individuals who are dead or couples where both partners are dead.') ?>"
     									type="button"
     								>
     									<?= I18N::translate('Dead') ?>
@@ -130,7 +130,7 @@ class SosaListIndiView extends AbstractView {
     									class="ui-state-default"
     									data-filter-column="14"
     									data-filter-value="R"
-    									title="<?= I18N::translate('Show “roots” couples or individuals.  These individuals may also be called “patriarchs”.  They are individuals who have no parents recorded in the database.') ?>"
+    									title="<?= I18N::translate('Show “roots” couples or individuals. These individuals may also be called “patriarchs”. They are individuals who have no parents recorded in the database.') ?>"
     									type="button"
     								>
     									<?= I18N::translate('Roots') ?>
@@ -139,7 +139,7 @@ class SosaListIndiView extends AbstractView {
     									class="ui-state-default"
     									data-filter-column="14"
     									data-filter-value="L"
-    									title="<?= I18N::translate('Show “leaves” couples or individuals.  These are individuals who are alive but have no children recorded in the database.') ?>"
+    									title="<?= I18N::translate('Show “leaves” couples or individuals. These are individuals who are alive but have no children recorded in the database.') ?>"
     									type="button"
     								>
     									<?= I18N::translate('Leaves') ?>

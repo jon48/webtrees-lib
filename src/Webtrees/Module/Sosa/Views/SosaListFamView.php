@@ -59,7 +59,7 @@ class SosaListFamView extends AbstractView {
 										data-filter-column="12"
 										data-filter-value="W"
 										class="ui-state-default"
-										title="<?php echo I18N::translate('Show couples where only the female partner is deceased.'); ?>"
+										title="<?php echo I18N::translate('Show couples where only the female partner is dead.'); ?>"
 									>
 									<?php echo I18N::translate('Widower');?>
 									</button>
@@ -68,7 +68,7 @@ class SosaListFamView extends AbstractView {
 										data-filter-column="12"
 										data-filter-value="H"
 										class="ui-state-default"
-										title="<?php echo I18N::translate('Show couples where only the male partner is deceased.'); ?>"
+										title="<?php echo I18N::translate('Show couples where only the male partner is dead.'); ?>"
 									>
 									<?php echo I18N::translate('Widow'); ?>
 									</button>
@@ -77,7 +77,7 @@ class SosaListFamView extends AbstractView {
 										data-filter-column="12"
 										data-filter-value="Y"
 										class="ui-state-default"
-										title="<?php echo I18N::translate('Show individuals who are dead or couples where both partners are deceased.'); ?>"
+										title="<?php echo I18N::translate('Show individuals who are dead or couples where both partners are dead.'); ?>"
 									>
 									<?php echo I18N::translate('Both dead'); ?>
 									</button>
@@ -88,7 +88,7 @@ class SosaListFamView extends AbstractView {
 										data-filter-column="13"
 										data-filter-value="R"
 										class="ui-state-default"
-										title="<?php echo I18N::translate('Show “roots” couples or individuals.  These individuals may also be called “patriarchs”.  They are individuals who have no parents recorded in the database.'); ?>"
+										title="<?php echo I18N::translate('Show “roots” couples or individuals. These individuals may also be called “patriarchs”. They are individuals who have no parents recorded in the database.'); ?>"
 									>
 									<?php echo I18N::translate('Roots'); ?>
 									</button>
@@ -97,7 +97,7 @@ class SosaListFamView extends AbstractView {
 										data-filter-column="13"
 										data-filter-value="L"
 										class="ui-state-default"
-										title="<?php echo I18N::translate('Show “leaves” couples or individuals.  These are individuals who are alive but have no children recorded in the database.'); ?>"
+										title="<?php echo I18N::translate('Show “leaves” couples or individuals. These are individuals who are alive but have no children recorded in the database.'); ?>"
 									>
 									<?php echo I18N::translate('Leaves'); ?>
 									</button>
