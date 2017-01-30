@@ -14,6 +14,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockController;
+use MyArtJaub\Webtrees\Mvc\MvcException;
 
 /**
  * Welcome Block Module.
@@ -85,9 +86,14 @@ class WelcomeBlockModule extends AbstractModule
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::configureBlock()
      */
     public function configureBlock($block_id) {
-
         $wb_controller = new WelcomeBlockController($this);
-        return $wb_controller->config($block_id);        
+        try {
+            return $wb_controller->config($block_id);
+        }
+        catch (MvcException $ex) {
+            if($ex->getHttpCode() != 200) throw $ex;
+            return;
+        }     
     }
 
 }

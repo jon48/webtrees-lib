@@ -96,7 +96,9 @@ class WelcomeBlockController extends MvcController
      * 
      * @param string $block_id
      */
-    public function config($block_id) {
+    public function config($block_id = null) {
+        
+        if(empty($block_id)) throw new MvcException(404);
 
         if (Filter::postBool('save') && Filter::checkCsrf()) {
             $this->module->setBlockSetting($block_id, 'piwik_enabled', Filter::postBool('piwik_enabled'));
@@ -118,7 +120,7 @@ class WelcomeBlockController extends MvcController
         // Piwik side id
         $view_bag->set('piwik_siteid', $this->module->getBlockSetting($block_id, 'piwik_siteid', ''));
         
-        ViewFactory::make('WelcomeBlockConfig', $this, new BaseController(), $view_bag)->renderPartial();
+        return ViewFactory::make('WelcomeBlockConfig', $this, new BaseController(), $view_bag)->getHtmlPartial();
     }
     
     
