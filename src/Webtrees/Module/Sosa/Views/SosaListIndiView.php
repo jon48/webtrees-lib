@@ -324,7 +324,7 @@ class SosaListIndiView extends AbstractView {
 								<button type="button" class="ui-state-default btn-toggle-parents">
 									<?= I18N::translate('Show parents') ?>
 								</button>
-								<button id="btn-toggle-statistics-<?php echo $table_id ;?>" type="button" class="ui-state-default btn-toggle-statistics">
+								<button id="btn-toggle-statistics-<?= $table_id ;?>" type="button" class="ui-state-default btn-toggle-statistics">
 									<?= I18N::translate('Show statistics charts') ?>
 								</button>
 							</div>
@@ -333,14 +333,14 @@ class SosaListIndiView extends AbstractView {
 				</tr>
 			</tfoot>
         	</table>
-				<div id="indi_list_table-charts_<?php echo $table_id; ?>" style="display:none">
+				<div id="indi_list_table-charts_<?= $table_id; ?>" style="display:none">
 					<table class="list-charts">
 						<tr>
 							<td><?= $this->data->get('chart_births') ?></td>
 							<td><?= $this->data->get('chart_deaths') ?></td>
 						</tr>
 						<tr>
-							<td colspan="2"><? $this->data->get('chart_ages') ?></td>
+							<td colspan="2"><?= $this->data->get('chart_ages') ?></td>
 						</tr>
 					</table>
 				</div>
