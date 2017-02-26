@@ -77,7 +77,10 @@ class PiwikController extends MvcController
             $visitCountYear = $cached_item->get();
             if(!$cached_item->isHit()) {
                 $visitCountYear = $this->getNumberOfVisitsPiwik($block_id);
-                Cache::save($cached_item, $visitCountYear);
+                if(!is_null($visitCountYear)) {
+                    $cached_item->expiresAt(new \DateTime('tomorrow'));  // Expires the next day at midnight
+                    Cache::save($cached_item, $visitCountYear);
+                }
             }
             
             if($visitCountYear){

@@ -75,9 +75,9 @@ class WelcomeBlockView extends AbstractView {
             $content .= '
             <div class="center">
                 <form method="post" action="logout.php" name="logoutform" onsubmit="return true;">
-                    <br>
-                    <a href="edituser.php" class="name2">' . I18N::translate('You are signed in as %s.', '<a href="edituser.php" class="name2">' . Auth::user()->getRealNameHtml() . '</a>') . '</a>
-                    <br><br>
+                    <br>' . 
+                    I18N::translate('You are signed in as %s.', '<a href="edituser.php" class="name2">' . Auth::user()->getRealNameHtml() . '</a>') .
+                    '<br><br>
                     <input type="submit" value="'.I18N::translate('sign out').'">
                     <br><br>
                 </form>
