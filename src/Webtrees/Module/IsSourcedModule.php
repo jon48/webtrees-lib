@@ -87,20 +87,20 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNamePrepend()
 	 */
-	public function hRecordNamePrepend(GedcomRecord $grec){ }
+	public function hRecordNamePrepend(GedcomRecord $grec, $size){ }
 	
 	/**
 	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNameAppend()
 	 */
-	public function hRecordNameAppend(GedcomRecord $grec){
+	public function hRecordNameAppend(GedcomRecord $grec, $size = 'small'){
 	    $html = '';
 	    if($grec instanceof \Fisharebest\Webtrees\Individual){
 	        $dindi = new Individual($grec);
-	        $html .= FunctionsPrint::formatIsSourcedIcon('R', $dindi->isSourced(), 'INDI', 1, 'small');
-	        $html .= FunctionsPrint::formatIsSourcedIcon('E', $dindi->isBirthSourced(), 'BIRT', 1, 'small');
+	        $html .= FunctionsPrint::formatIsSourcedIcon('R', $dindi->isSourced(), 'INDI', 1, $size);
+	        $html .= FunctionsPrint::formatIsSourcedIcon('E', $dindi->isBirthSourced(), 'BIRT', 1, $size);
 	        if($grec->isDead())
-	            $html .= FunctionsPrint::formatIsSourcedIcon('E', $dindi->isDeathSourced(), 'DEAT', 1, 'small');
+	            $html .= FunctionsPrint::formatIsSourcedIcon('E', $dindi->isDeathSourced(), 'DEAT', 1, $size);
 	    }
 	    return $html;
 	}

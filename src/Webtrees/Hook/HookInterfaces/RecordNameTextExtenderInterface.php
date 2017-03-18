@@ -21,15 +21,17 @@ interface RecordNameTextExtenderInterface {
 	 * Insert some content before the record name text.
 	 * 
 	 * @param GedcomRecord $grec Gedcom record
+	 * @param string $size Prepend size
 	 */
-	public function hRecordNamePrepend(GedcomRecord $grec);
+	public function hRecordNamePrepend(GedcomRecord $grec, $size);
 	
 	/**
 	 * Insert some content after the record name text.
 	 * 
 	 * @param GedcomRecord $grec Gedcom record
+	 * @param string $size Append size
 	 */
-	public function hRecordNameAppend(GedcomRecord $grec);
+	public function hRecordNameAppend(GedcomRecord $grec, $size);
 	
 }
 

@@ -185,12 +185,10 @@ class SosaListFamView extends AbstractView {
 			    if (is_null($husb)) {
 			        $husb = new Individual('H', '0 @H@ INDI', null, $family->getTree());
 			    }
-			    $dhusb = new \MyArtJaub\Webtrees\Individual($husb);
 			    $wife = $family->getWife();
 			    if (is_null($wife)) {
 			        $wife = new Individual('W', '0 @W@ INDI', null, $family->getTree());
 			    }
-			    $dwife = new \MyArtJaub\Webtrees\Individual($wife);
 			    
 			    $mdate=$family->getMarriageDate();
 			    
@@ -223,7 +221,12 @@ class SosaListFamView extends AbstractView {
         				<a <?php echo $title.' '.$class; ?> href="<?php echo $husb->getHtmlUrl(); ?>">
         					<?php echo \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($name['full']); ?>
         				</a>
-        				<?php echo $sex_image.FunctionsPrint::formatSosaNumbers($dhusb->getSosaNumbers(), 1, 'smaller'); ?>
+        				<?php echo $sex_image;
+        				echo implode('&nbsp;',
+        				    \MyArtJaub\Webtrees\Hook\HookProvider::getInstance()
+        				    ->get('hRecordNameAppend')
+        				    ->executeOnlyFor(array(Constants::MODULE_MAJ_SOSA_NAME),  $husb, 'smaller')); 
+        				?>
         				<br/>
             		<?php }
             		echo $husb->getPrimaryParentsNames('parents details1', 'none');
@@ -251,7 +254,12 @@ class SosaListFamView extends AbstractView {
         				<a <?= $title.' '.$class ?> href="<?= $wife->getHtmlUrl() ?>">
         					<?= \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($name['full']) ?>
         				</a>
-        				<?= $sex_image.FunctionsPrint::formatSosaNumbers($dwife->getSosaNumbers(), 1, 'smaller') ?>
+        				<?= $sex_image;
+        				echo implode('&nbsp;',
+        				    \MyArtJaub\Webtrees\Hook\HookProvider::getInstance()
+        				    ->get('hRecordNameAppend')
+        				    ->executeOnlyFor(array(Constants::MODULE_MAJ_SOSA_NAME),  $wife, 'smaller'));
+        				?>
         				<br/>
             		<?php }
             		echo $wife->getPrimaryParentsNames('parents details1', 'none');

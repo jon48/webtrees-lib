@@ -136,7 +136,11 @@ class SosaListMissingView extends SosaListView {
                 				<a <?= $title.' '.$class ?> href="<?= $person->getHtmlUrl() ?>">
                 					<?= \Fisharebest\Webtrees\Functions\FunctionsPrint::highlightSearchHits($name['full']) ?>
                 				</a>
-                				<?= $sex_image.FunctionsPrint::formatSosaNumbers($dperson->getSosaNumbers(), 1, 'smaller') ?>
+                				<?= $sex_image;
+                				echo implode('&nbsp;',
+                				    \MyArtJaub\Webtrees\Hook\HookProvider::getInstance()
+                				    ->get('hRecordNameAppend')
+                				    ->executeOnlyFor(array(Constants::MODULE_MAJ_SOSA_NAME),  $person, 'smaller'));  ?>
                 				<br/>
                     		<?php }
                     		echo $person->getPrimaryParentsNames('parents details1', 'none');

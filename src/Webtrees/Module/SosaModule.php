@@ -231,10 +231,10 @@ class SosaModule
      * {@inhericDoc}
      * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNameAppend()
      */
-    public function hRecordNameAppend(GedcomRecord $grec) {
+    public function hRecordNameAppend(GedcomRecord $grec, $size = 'small') {
         if($grec instanceof \Fisharebest\Webtrees\Individual){ // Only apply to individuals
             $dindi = new Individual($grec);
-            return FunctionsPrint::formatSosaNumbers($dindi->getSosaNumbers(), 1, 'small');
+            return FunctionsPrint::formatSosaNumbers($dindi->getSosaNumbers(), 1, $size);
         }
         return '';
     }
@@ -243,7 +243,7 @@ class SosaModule
      * {@inhericDoc}
      * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface::hRecordNamePrepend()
      */
-    public function hRecordNamePrepend(GedcomRecord $grec) {}
+    public function hRecordNamePrepend(GedcomRecord $grec, $size) {}
     
     
     

@@ -10,7 +10,8 @@
  */
 namespace MyArtJaub\Webtrees\Hook;
 
-use \Fisharebest\Webtrees as fw;
+use Fisharebest\Webtrees\Database;
+use Fisharebest\Webtrees\Module;
 
 /**
  * Class to manage Hooks (subscription and execution).
@@ -48,7 +49,7 @@ class Hook {
 	 */
 	public function subscribe($hsubscriber){
 		if(HookProvider::getInstance()->isModuleOperational()){
-			fw\Database::prepare(
+			Database::prepare(
 					"INSERT IGNORE INTO `##maj_hooks` (majh_hook_function, majh_hook_context, majh_module_name)".
 					" VALUES (?, ?, ?)"
 			)->execute(array($this->hook_function, $this->hook_context, $hsubscriber));
@@ -63,7 +64,7 @@ class Hook {
 	 */
 	public function setPriority($hsubscriber, $priority){
 		if(HookProvider::getInstance()->isModuleOperational()){
-			fw\Database::prepare(
+			Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_module_priority=?".
 			" WHERE majh_hook_function=?".
@@ -80,7 +81,7 @@ class Hook {
 	 */
 	public function enable($hsubscriber){
 		if(HookProvider::getInstance()->isModuleOperational()){
-		fw\Database::prepare(
+		Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_status='enabled'".
 			" WHERE majh_hook_function=?".
@@ -97,7 +98,7 @@ class Hook {
 	 */
 	public function disable($hsubscriber){
 		if(HookProvider::getInstance()->isModuleOperational()){
-		fw\Database::prepare(
+		Database::prepare(
 			"UPDATE `##maj_hooks`".
 			" SET majh_status='disabled'".
 			" WHERE majh_hook_function=?".
@@ -114,7 +115,7 @@ class Hook {
 	 */
 	public function remove($hsubscriber){
 		if(HookProvider::getInstance()->isModuleOperational()){
-		fw\Database::prepare(
+		Database::prepare(
 			"DELETE FROM `##maj_hooks`".
 			" WHERE majh_hook_function=?".
 			" AND majh_hook_context=?".
@@ -128,6 +129,26 @@ class Hook {
 	 * Methods for execution of the Hook
 	 *
 	 */
+	
+	/**
+	 * Return the resuls of the execution of the hook function for a defined list of modules, only for those enabled.
+	 * 
+	 * @param string[] $module_names List of Modules to execute
+	 * @return array Results of the hook executions
+	 */
+	public function executeOnlyFor(array $module_names) {
+	    $result = array();
+	    if(HookProvider::getInstance()->isModuleOperational()){
+	       $params = func_get_args();
+	       array_shift($params);
+    	    foreach ($module_names as $module_name) {
+    	        if($module = Module::getModuleByName($module_name)) {
+    	            $result[] = call_user_func_array(array($module, $this->hook_function), $params);
+    	        }
+    	    }
+	    }
+	    return $result;
+	}
 
 	/**
 	 * Return the results of the execution of the hook function for all subscribed and enabled modules, in the order defined by their priority.
@@ -145,16 +166,14 @@ class Hook {
 				$sqlparams = array($this->hook_function, $this->hook_context);
 				$sqlquery = " OR majh_hook_context=?";
 			}
-			$module_names=fw\Database::prepare(
+			$module_names=Database::prepare(
 					"SELECT majh_module_name AS module, majh_module_priority AS priority FROM `##maj_hooks`".
 					" WHERE majh_hook_function = ? AND (majh_hook_context='all'".$sqlquery.") AND majh_status='enabled'".
 					" ORDER BY majh_module_priority ASC, module ASC"
 			)->execute($sqlparams)->fetchAssoc();
 			asort($module_names);
-			foreach ($module_names as $module_name => $module_priority) {
-				$module = include WT_ROOT . WT_MODULES_DIR . $module_name . '/module.php';
-				$result[] = call_user_func_array(array($module, $this->hook_function), $params);
-			}
+			array_unshift($params, array_keys($module_names));
+			$result = call_user_func_array(array(&$this, 'executeOnlyFor'), $params);
 		}
 		return $result;
 	}
@@ -172,7 +191,7 @@ class Hook {
 				$sqlparams = array($this->hook_function, $this->hook_context);
 				$sqlquery = " OR majh_hook_context=?";
 			}
-			$module_names=fw\Database::prepare(
+			$module_names=Database::prepare(
 					"SELECT majh_module_name AS modules FROM `##maj_hooks`".
 					" WHERE majh_hook_function = ? AND (majh_hook_context='all'".$sqlquery.") AND majh_status='enabled'"
 			)->execute($sqlparams)->fetchOneColumn();
