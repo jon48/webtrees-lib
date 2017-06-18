@@ -21,13 +21,14 @@ use Fisharebest\Webtrees\Module;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Theme\AdministrationTheme;
+use MyArtJaub;
 use MyArtJaub\Webtrees\Controller\JsonController;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\ConfigurableTaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProviderInterface;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use MyArtJaub\Webtrees\Mvc\View\ViewBag;
 use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub;
 
 /**
  * Controller for Tasks
@@ -110,12 +111,11 @@ class TaskController extends MvcController
 	 * Task@edit
 	 */
 	public function edit() {
-		global $WT_TREE;
-        		
+	    $tree = Globals::getTree();
         $task_name = Filter::get('task');
         $task = $this->provider->getTask($task_name, false);
 		
-        Theme::theme(new AdministrationTheme)->init($WT_TREE);
+        Theme::theme(new AdministrationTheme)->init($tree);
         $controller = new PageController();        
         $controller
             ->restrictAccess(Auth::isAdmin() && $task)
@@ -138,9 +138,9 @@ class TaskController extends MvcController
         
         $data = new ViewBag();        
         $data->set('title', $controller->getPageTitle());
-		$data->set('admin_config_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $WT_TREE->getNameUrl());
+		$data->set('admin_config_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $tree->getNameUrl());
         $data->set('module_title', $this->module->getTitle());
-		$data->set('save_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=Task@save&ged=' . $WT_TREE->getNameUrl());
+		$data->set('save_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=Task@save&ged=' . $tree->getNameUrl());
 		$data->set('task', $task);
 		    
         ViewFactory::make('TaskEdit', $this, $controller, $data)->render();	

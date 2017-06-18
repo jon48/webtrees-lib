@@ -10,7 +10,6 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa\Views;
 
-use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\Functions\Functions;
 use Fisharebest\Webtrees\GedcomTag;

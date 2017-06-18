@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\Html;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Theme\AdministrationTheme;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use MyArtJaub\Webtrees\Mvc\View\ViewBag;
 use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
@@ -82,13 +83,11 @@ class AdminConfigController extends MvcController
     /**
      * AdminConfig@index
      */
-    public function index() {      
-        global $WT_TREE;
-        
+    public function index() {        
         $action = Filter::post('action');        
         if($action == 'update' && Filter::checkCsrf()) $this->update();
         
-        Theme::theme(new AdministrationTheme)->init($WT_TREE);        
+        Theme::theme(new AdministrationTheme)->init(Globals::getTree());        
         $ctrl = new PageController();
         $ctrl
             ->restrictAccess(Auth::isAdmin())

@@ -43,8 +43,8 @@ abstract class AbstractView {
      * @throws \Exception
      */
     public function render() {
-		global $controller;
-		
+        global $controller;        
+        
         if(!$this->ctrl) throw new \Exception('Controller not initialised');
         
 		$controller = $this->ctrl;

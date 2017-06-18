@@ -18,10 +18,12 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
 use MyArtJaub\Webtrees\Family;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
+
 /**
  * IsSourced Module
  */
@@ -134,10 +136,8 @@ implements ModuleSidebarInterface, HookSubscriberInterface, IndividualHeaderExte
 	 * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarContent()
 	 */
 	public function getSidebarContent() {
-	    global $controller;
-	    
 	    ob_start();
-	    $root = $controller->getSignificantIndividual();
+	    $root = Globals::getController()->getSignificantIndividual();
 	    if ($root) {
 	        $dindi = new Individual($root);
 	        	

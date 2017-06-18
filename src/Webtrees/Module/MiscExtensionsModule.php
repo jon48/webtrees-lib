@@ -19,11 +19,13 @@ use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\User;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
 use MyArtJaub\Webtrees\Individual;
+
 /**
  * MiscExtension Module
  */
@@ -115,12 +117,10 @@ implements HookSubscriberInterface, IndividualHeaderExtenderInterface, PageHeade
 	 * {@inheritDoc}
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageHeaderExtenderInterface::hPrintHeader()
 	 */
-	public function hPrintHeader() {	 
-	    global $WT_TREE;
-	    
+	public function hPrintHeader() {
 	    $html = '';
 	    if($this->getSetting('MAJ_ADD_HTML_HEADER', 0) == 1){
-	        if(Auth::accessLevel($WT_TREE) >= $this->getSetting('MAJ_SHOW_HTML_HEADER', Auth::PRIV_HIDE)  && !Filter::getBool('noheader')){
+	        if(Auth::accessLevel(Globals::getTree()) >= $this->getSetting('MAJ_SHOW_HTML_HEADER', Auth::PRIV_HIDE)  && !Filter::getBool('noheader')){
 	            $html .= $this->getSetting('MAJ_HTML_HEADER', '');
 	        }
 	    }	
@@ -132,8 +132,7 @@ implements HookSubscriberInterface, IndividualHeaderExtenderInterface, PageHeade
 	 * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\PageFooterExtenderInterface::hPrintFooter()
 	 */
 	public function hPrintFooter() {
-	    global $WT_TREE;
-	     
+	    $wt_tree = Globals::getTree();
 	    $html = '';
 	    if($this->getSetting('MAJ_DISPLAY_CNIL', 0) == 1){
 	        $html .= '<br/>';
@@ -142,12 +141,13 @@ implements HookSubscriberInterface, IndividualHeaderExtenderInterface, PageHeade
 	        if($cnil_ref != ''){
 	            $html .= I18N::translate('This site has been notified to the French National Commission for Data protection (CNIL) and registered under number %s. ', $cnil_ref);
 	        }
-	        $html .= I18N::translate('In accordance with the French Data protection Act (<em>Loi Informatique et Libertés</em>) of January 6th, 1978, you have the right to access, modify, rectify and delete personal information that pertains to you. To exercice this right, please contact %s, and provide your name, address and a proof of your identity.', Theme::theme()->contactLink(User::find($WT_TREE->getPreference('WEBMASTER_USER_ID'))));
+	        $html .= I18N::translate('In accordance with the French Data protection Act (<em>Loi Informatique et Libertés</em>) of January 6th, 1978, you have the right to access, modify, rectify and delete personal information that pertains to you. To exercice this right, please contact %s, and provide your name, address and a proof of your identity.',
+	            Theme::theme()->contactLink(User::find($wt_tree->getPreference('WEBMASTER_USER_ID'))));
 	        $html .= '</div>';
 	    }
 	    
 	    if($this->getSetting('MAJ_ADD_HTML_FOOTER', 0) == 1){
-	        if(Auth::accessLevel($WT_TREE) >= $this->getSetting('MAJ_SHOW_HTML_FOOTER', Auth::PRIV_HIDE)  && !Filter::getBool('nofooter')){
+	        if(Auth::accessLevel($wt_tree) >= $this->getSetting('MAJ_SHOW_HTML_FOOTER', Auth::PRIV_HIDE)  && !Filter::getBool('nofooter')){
 	            $html .= $this->getSetting('MAJ_HTML_FOOTER', '');
 	        }
 	    }

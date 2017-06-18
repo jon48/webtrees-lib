@@ -10,7 +10,7 @@
 
 namespace MyArtJaub\Webtrees;
 
-use \MyArtJaub\Webtrees as mw;
+use MyArtJaub\Webtrees\Globals;
 
 /**
  * Decorator class to extend native webtrees GedcomRecord class.
@@ -70,7 +70,7 @@ class GedcomRecord {
 			if (($fact->getDate() || $fact->getPlace()) && $fact->canShow()) {
 				switch ($style) {
 					case 10:
-						return '<i>'.$fact->getLabel().' '. mw\Functions\FunctionsPrint::formatFactDateShort($fact) .'&nbsp;'. mw\Functions\FunctionsPrint::formatFactPlaceShort($fact, '%1') .'</i>';
+					    return '<i>'.$fact->getLabel().' '. \MyArtJaub\Webtrees\Functions\FunctionsPrint::formatFactDateShort($fact) .'&nbsp;'. \MyArtJaub\Webtrees\Functions\FunctionsPrint::formatFactPlaceShort($fact, '%1') .'</i>';
 					default:
 						return $this->gedcomrecord->formatFirstMajorFact($facts, $style);
 				}
@@ -86,12 +86,11 @@ class GedcomRecord {
 	 * @return boolean
 	 */
 	public function canDisplayIsSourced($access_level = null){
-		global $global_facts;
-
 		if(!$this->gedcomrecord->canShow($access_level)) return false;
 		if($access_level === null )
 		    $access_level = \Fisharebest\Webtrees\Auth::accessLevel($this->gedcomrecord->getTree());
 
+		$global_facts = Globals::getGlobalFacts();
 		if (isset($global_facts['SOUR'])) {
 			return $global_facts['SOUR'] >= $access_level;
 		}

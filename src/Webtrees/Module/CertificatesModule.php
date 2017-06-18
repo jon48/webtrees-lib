@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
@@ -109,12 +110,11 @@ class CertificatesModule
      * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\FactSourceTextExtenderInterface::hFactSourcePrepend()
      */
     public function hFactSourcePrepend($srec) {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $html='';
         $sid=null;
         
-        if($this->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($WT_TREE)){
+        if($this->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($wt_tree)){
             if (!$srec || strlen($srec) == 0) return $html;
             	
             $certificate = null;
@@ -129,7 +129,7 @@ class CertificatesModule
                 $subrecords[$i] = trim($subrecords[$i]);
                 $tag = substr($subrecords[$i], 2, 4);
                 $text = substr($subrecords[$i], 7);
-                if($tag == '_ACT') $certificate= new Certificate($text, $WT_TREE, $this->getProvider());
+                if($tag == '_ACT') $certificate= new Certificate($text, $wt_tree, $this->getProvider());
             }
             	
             if($certificate && $certificate->canShow())
@@ -171,21 +171,19 @@ class CertificatesModule
      * {@inhericDoc}
      * @see \MyArtJaub\Webtrees\Hook\HookInterfaces\CustomSimpleTagManagerInterface::hHtmlSimpleTagEditor()
      */
-    public function hHtmlSimpleTagEditor($tag, $value = null, $element_id = '', $element_name = '', $context = null, $contextid = null) {
-        global $controller, $WT_TREE;
-        
+    public function hHtmlSimpleTagEditor($tag, $value = null, $element_id = '', $element_name = '', $context = null, $contextid = null) {        
         $html = '';
 		
 		switch($tag){
 			case '_ACT':
 				$element_id = Uuid::uuid4();
-				$controller
+				Globals::getController()
 					->addExternalJavascript(WT_AUTOCOMPLETE_JS_URL)
 					->addExternalJavascript(WT_STATIC_URL.WT_MODULES_DIR.$this->getName().'/js/autocomplete.js')
 					->addExternalJavascript(WT_STATIC_URL.WT_MODULES_DIR.$this->getName().'/js/updatecertificatevalues.js');
 				$certificate = null;
 				if($value){
-					$certificate = new Certificate($value, $WT_TREE, $this->getProvider());
+					$certificate = new Certificate($value, Globals::getTree(), $this->getProvider());
 				}
 				$tabCities = $this->getProvider()->getCitiesList();
 				$html .= '<select id="certifCity'.$element_id.'" class="_CITY">';
@@ -249,11 +247,9 @@ class CertificatesModule
      * @return \MyArtJaub\Webtrees\Module\Certificates\Model\CertificateProviderInterface
      */
     public function getProvider() {
-        global $WT_TREE;
-    
         if(!$this->provider) {
             $root_path = $this->getSetting('MAJ_CERT_ROOTDIR', 'certificates/');
-            $this->provider = new CertificateFileProvider($root_path, $WT_TREE);
+            $this->provider = new CertificateFileProvider($root_path, Globals::getTree());
         }
         return $this->provider;
     }

@@ -16,6 +16,7 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module;
 use MyArtJaub\Webtrees\Constants;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisProvider;
 
 /**
@@ -90,10 +91,8 @@ class GeoDispersionModule extends AbstractModule implements ModuleConfigInterfac
 	 * @return \MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisProvider
 	 */
     public function getProvider() {
-        global $WT_TREE;
-        
         if(!$this->provider) {
-            $this->provider = new GeoAnalysisProvider($WT_TREE);
+            $this->provider = new GeoAnalysisProvider(Globals::getTree());
         }
         return $this->provider;
     }

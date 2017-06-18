@@ -16,12 +16,13 @@ use Fisharebest\Webtrees\Database;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Menu;
+use Fisharebest\Webtrees\Module;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
-use Fisharebest\Webtrees\Module;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\IndividualHeaderExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookInterfaces\RecordNameTextExtenderInterface;
 use MyArtJaub\Webtrees\Hook\HookSubscriberInterface;
@@ -100,12 +101,11 @@ class SosaModule
      * @see \Fisharebest\Webtrees\Module\ModuleMenuInterface::getMenu()
      */
     public function getMenu() { 
-        global $WT_TREE, $controller;
-        
+        $wt_tree = Globals::getTree();
         $menu = null;
         if(ModuleManager::getInstance()->isOperational($this->getName())) {
             
-            $root_url = 'module.php?mod=' . $this->getName() . '&ged=' . $WT_TREE->getNameUrl() . '&';
+            $root_url = 'module.php?mod=' . $this->getName() . '&ged=' . $wt_tree->getNameUrl() . '&';
             $sosa_stat_menu = new Menu(I18N::translate('Sosa Statistics'), $root_url . 'mod_action=SosaStats', 'menu-maj-sosa-stats');
             
             $menu = clone $sosa_stat_menu;
@@ -123,7 +123,7 @@ class SosaModule
                 )
             {
                 if(count($ga_list) > 0) {
-                    $submenus[] = new Menu(I18N::translate('Geographical Dispersion'), 'module.php?mod=' . Constants::MODULE_MAJ_GEODISP_NAME . '&ged=' . $WT_TREE->getNameUrl() . '&mod_action=GeoAnalysis@listAll', 'menu-maj-sosa-geodispersion');
+                    $submenus[] = new Menu(I18N::translate('Geographical Dispersion'), 'module.php?mod=' . Constants::MODULE_MAJ_GEODISP_NAME . '&ged=' . $wt_tree->getNameUrl() . '&mod_action=GeoAnalysis@listAll', 'menu-maj-sosa-geodispersion');
                 }
             }
             
@@ -136,8 +136,9 @@ class SosaModule
             }
                         
             //-- recompute Sosa submenu
+            $controller = Globals::getController();
             if (!empty($controller) && $controller instanceof IndividualController 
-                && Auth::check() && $WT_TREE->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID')
+                && Auth::check() && $wt_tree->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID')
                 ) {
                 $controller
                     ->addInlineJavascript('
@@ -152,7 +153,7 @@ class SosaModule
 		                        open: function(event, ui) {
 			                        $("button.ui-dialog-titlebar-close").hide();
                                     $("#sosaloadingarea").empty().html("<i class=\"icon-loading-small\"></i>");
-			                        $("#sosaloadingarea").load("module.php?mod=' . $this->getName() . '&mod_action=SosaConfig@computePartial&ged='. $WT_TREE->getNameUrl() .'&userid='.Auth::user()->getUserId().'&pid=' . $controller->getSignificantIndividual()->getXref() . '", 
+			                        $("#sosaloadingarea").load("module.php?mod=' . $this->getName() . '&mod_action=SosaConfig@computePartial&ged='. $wt_tree->getNameUrl() .'&userid='.Auth::user()->getUserId().'&pid=' . $controller->getSignificantIndividual()->getXref() . '", 
 					                   function(){
 						                  $("button.ui-dialog-titlebar-close").show();
                                           setTimeout(function(){

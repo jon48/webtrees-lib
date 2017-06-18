@@ -10,15 +10,16 @@
  */
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
 
-use \Fisharebest\Webtrees\I18N;
 use \Fisharebest\Webtrees\Filter;
+use \Fisharebest\Webtrees\I18N;
 use \Fisharebest\Webtrees\Query\QueryName;
-use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
-use MyArtJaub\Webtrees\Mvc\View\ViewBag;
-use MyArtJaub\Webtrees\Module\PatronymicLineage\Model\LineageBuilder;
 use Fisharebest\Webtrees\Controller\PageController;
-use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use Fisharebest\Webtrees\Module\AbstractModule;
+use MyArtJaub\Webtrees\Globals;
+use MyArtJaub\Webtrees\Module\PatronymicLineage\Model\LineageBuilder;
+use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
+use MyArtJaub\Webtrees\Mvc\View\ViewBag;
+use MyArtJaub\Webtrees\Mvc\View\ViewFactory;
 
 /**
  * Controller for Lineage
@@ -60,9 +61,7 @@ class LineageController extends MvcController
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::__construct(AbstractModule $module)
      */
-    public function __construct(AbstractModule $module) {
-        global $WT_TREE;
-        
+    public function __construct(AbstractModule $module) {        
         parent::__construct($module);
         
         $this->surname     = Filter::get('surname');
@@ -84,7 +83,7 @@ class LineageController extends MvcController
                 $this->legend = Filter::escapeHtml($this->surname);
                 // The surname parameter is a root/canonical form.
                 // Display it as the actual surname
-                foreach (QueryName::surnames($WT_TREE, $this->surname, $this->alpha, false, false) as $details) {
+                foreach (QueryName::surnames(Globals::getTree(), $this->surname, $this->alpha, false, false) as $details) {
                     $this->legend = implode('/', array_keys($details));
                 }                
             }
@@ -130,19 +129,15 @@ class LineageController extends MvcController
      * Get list of surnames, starting with the specified initial
      * @return array
      */
-    protected function getSurnamesList() {
-        global $WT_TREE;
-        
-        return QueryName::surnames($WT_TREE, $this->surname, $this->alpha, false, false);
+    protected function getSurnamesList() {        
+        return QueryName::surnames(Globals::getTree(), $this->surname, $this->alpha, false, false);
     }
     
     /**
      * Get the lineages for the controller's specified surname
      */
-    protected function getLineages() {
-		global $WT_TREE;
-		
-		$builder = new LineageBuilder($this->surname, $WT_TREE);
+    protected function getLineages() {		
+        $builder = new LineageBuilder($this->surname, Globals::getTree());
 		$lineages = $builder->buildLineages();
 		
     	return $lineages;
@@ -156,14 +151,12 @@ class LineageController extends MvcController
      * Lineage@index
      */
     public function index() {
-        global $WT_TREE;
-        
         $controller = new PageController();
         $controller->setPageTitle(I18N::translate('Patronymic Lineages') . ' : ' . $this->legend);
         
         $view_bag = new ViewBag();
         $view_bag->set('title', $controller->getPageTitle());
-        $view_bag->set('tree', $WT_TREE);
+        $view_bag->set('tree', Globals::getTree());
         $view_bag->set('alpha', $this->alpha);
         $view_bag->set('surname', $this->surname);
         $view_bag->set('legend', $this->legend);

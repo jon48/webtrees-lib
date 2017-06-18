@@ -10,12 +10,13 @@
  */
 namespace MyArtJaub\Webtrees\Functions;
 
+use Fisharebest\Webtrees\Date;
 use Fisharebest\Webtrees\GedcomTag;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Individual;
 use MyArtJaub\Webtrees\Place;
-use Fisharebest\Webtrees\Date;
 
 
 /**
@@ -188,12 +189,10 @@ class FunctionsPrint {
 	 * @return string HTML code for short date
 	 */
 	public static function formatFactDateShort(\Fisharebest\Webtrees\Fact $fact, $anchor=false) {
-		global $SEARCH_SPIDER;
-
 		$html='';
 		$date = $fact->getDate();
 		if($date->isOK()){
-			$html.=' '.$date->Display($anchor && !$SEARCH_SPIDER, '%Y');
+			$html.=' '.$date->Display($anchor && !Globals::isSearchSpider(), '%Y');
 		}
 		else{
 			// 1 DEAT Y with no DATE => print YES

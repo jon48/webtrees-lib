@@ -24,6 +24,7 @@ use Fisharebest\Webtrees\Stats;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Functions\FunctionsPrint;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\ModuleManager;
 use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
@@ -59,11 +60,9 @@ class SosaListController extends MvcController
      * @see \MyArtJaub\Webtrees\Mvc\Controller\MvcController::__construct(AbstractModule $module)
      */
     public function __construct(AbstractModule $module) {
-        global $WT_TREE;
-        
         parent::__construct($module);
 
-        $this->sosa_provider = new SosaProvider($WT_TREE, Auth::user());
+        $this->sosa_provider = new SosaProvider(Globals::getTree(), Auth::user());
 
         $this->generation = Filter::getInteger('gen');
         
@@ -83,8 +82,7 @@ class SosaListController extends MvcController
      * SosaList@index
      */
     public function index() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $controller = new PageController();
         $controller
             ->setPageTitle(I18N::translate('Sosa Ancestors'));            
@@ -95,7 +93,7 @@ class SosaListController extends MvcController
             $this->view_bag->set('has_sosa', $this->generation > 0 && $this->sosa_provider->getSosaCountAtGeneration($this->generation) > 0);
             $this->view_bag->set('url_module', $this->module->getName());
             $this->view_bag->set('url_action', 'SosaList');
-            $this->view_bag->set('url_ged', $WT_TREE->getNameUrl()); 
+            $this->view_bag->set('url_ged', $wt_tree->getNameUrl()); 
             $this->view_bag->set('min_gen', 1);
             
             if($this->view_bag->get('has_sosa', false)) {            
@@ -108,7 +106,7 @@ class SosaListController extends MvcController
             			{
                             "mod" : "'.$this->module->getName().'",
                             "mod_action": "SosaList@sosalist",
-                            "ged" : "' . $WT_TREE->getNameUrl(). '",
+                            "ged" : "' . $wt_tree->getNameUrl(). '",
                             "type" : "indi",
                             "gen" : "'.$this->generation.'"
                         },
@@ -133,7 +131,7 @@ class SosaListController extends MvcController
                         {
                             "mod" : "'.$this->module->getName().'",
                             "mod_action": "SosaList@sosalist",
-                            "ged" : "' . $WT_TREE->getNameUrl(). '",
+                            "ged" : "' . $wt_tree->getNameUrl(). '",
                             "type" : "fam",
                             "gen" : "'.$this->generation.'"
                         },
@@ -164,8 +162,7 @@ class SosaListController extends MvcController
      * SosaList@missing
      */
     public function missing() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $controller = new PageController();
         $controller
         ->setPageTitle(I18N::translate('Missing Ancestors'));
@@ -175,7 +172,7 @@ class SosaListController extends MvcController
         if($this->view_bag->get('is_setup', false)) {
             $this->view_bag->set('url_module', $this->module->getName());
             $this->view_bag->set('url_action', 'SosaList@missing');
-            $this->view_bag->set('url_ged', $WT_TREE->getNameUrl());
+            $this->view_bag->set('url_ged', $wt_tree->getNameUrl());
             $this->view_bag->set('min_gen', 2);
             
             $missing_list = $this->sosa_provider->getMissingSosaListAtGeneration($this->generation);
@@ -251,7 +248,7 @@ class SosaListController extends MvcController
                         continue;
                     }
                     $sum_missing_different += !$missing_tab['has_father'] + !$missing_tab['has_mother'];
-                    $person = Individual::getInstance($missing_tab['indi'], $WT_TREE);
+                    $person = Individual::getInstance($missing_tab['indi'], $wt_tree);
                     if (!$person || !$person->canShowName()) {
                         unset($missing_list[$num]);
                         continue;
@@ -300,8 +297,7 @@ class SosaListController extends MvcController
      * @param AjaxController $controller
      */
     protected function renderSosaListIndi(AjaxController $controller) {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $listSosa = $this->sosa_provider->getSosaListAtGeneration($this->generation); 
         $this->view_bag->set('has_sosa', false);
         
@@ -379,10 +375,10 @@ class SosaListController extends MvcController
 				jQuery("#btn-toggle-statistics-'.$table_id.'").click();
            ');
             
-            $stats = new Stats($WT_TREE);         
+            $stats = new Stats($wt_tree);         
             
             // Bad data can cause "longest life" to be huge, blowing memory limits
-            $max_age = min($WT_TREE->getPreference('MAX_ALIVE_AGE'), $stats->LongestLifeAge()) + 1;
+            $max_age = min($wt_tree->getPreference('MAX_ALIVE_AGE'), $stats->LongestLifeAge()) + 1;
             // Inititialise chart data
             $deat_by_age = array();
             for ($age = 0; $age <= $max_age; $age++) {
@@ -398,9 +394,9 @@ class SosaListController extends MvcController
             $unique_indis = array(); // Don't double-count indis with multiple names.
             $nb_displayed = 0;
             
-            Individual::load($WT_TREE, $listSosa);
+            Individual::load($wt_tree, $listSosa);
             foreach($listSosa as $sosa => $pid) {
-                $person = Individual::getInstance($pid, $WT_TREE);
+                $person = Individual::getInstance($pid, $wt_tree);
                 if (!$person || !$person->canShowName()) {
                     unset($listSosa[$sosa]);
                     continue;
@@ -456,8 +452,7 @@ class SosaListController extends MvcController
      * @param AjaxController $controller
      */
     protected function renderFamSosaListIndi(AjaxController $controller) {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $listFamSosa = $this->sosa_provider->getFamilySosaListAtGeneration($this->generation);;
         $this->view_bag->set('has_sosa', false);
         
@@ -532,7 +527,7 @@ class SosaListController extends MvcController
 				jQuery("#btn-toggle-statistics-'.$table_id.'").click();
            ');
         
-            $stats = new Stats($WT_TREE);        
+            $stats = new Stats($wt_tree);        
             $max_age = max($stats->oldestMarriageMaleAge(), $stats->oldestMarriageFemaleAge()) + 1;
             
             //-- init chart data
@@ -548,7 +543,7 @@ class SosaListController extends MvcController
     		}
     		
             foreach($listFamSosa as $sosa => $fid) {
-                $sfamily = Family::getInstance($fid, $WT_TREE);
+                $sfamily = Family::getInstance($fid, $wt_tree);
                 if(!$sfamily || !$sfamily->canShow()) {
                     unset($listFamSosa[$sosa]);
                     continue;

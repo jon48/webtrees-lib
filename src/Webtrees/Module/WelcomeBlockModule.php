@@ -13,6 +13,7 @@ namespace MyArtJaub\Webtrees\Module;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockController;
 use MyArtJaub\Webtrees\Mvc\MvcException;
 
@@ -51,10 +52,8 @@ class WelcomeBlockModule extends AbstractModule
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
      */
 	public function getBlock($block_id, $template = true, $cfg = array()) {
-        global $controller, $WT_TREE;
-        
         $wb_controller = new WelcomeBlockController($this);           
-        return $wb_controller->index($controller, $WT_TREE, $block_id, $template);
+        return $wb_controller->index(Globals::getController(), Globals::getTree(), $block_id, $template);
     }
     
     /**

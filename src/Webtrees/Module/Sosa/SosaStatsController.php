@@ -15,6 +15,7 @@ use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\Sosa\Model\SosaProvider;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
 use MyArtJaub\Webtrees\Mvc\View\ViewBag;
@@ -36,11 +37,9 @@ class SosaStatsController extends MvcController
      * @param AbstractModule $module
      */
     public function __construct(AbstractModule $module) {
-        global $WT_TREE;
-        
         parent::__construct($module);
         
-        $this->sosa_provider = new SosaProvider($WT_TREE, Auth::user());
+        $this->sosa_provider = new SosaProvider(Globals::getTree(), Auth::user());
     }
     
     /**
@@ -51,8 +50,7 @@ class SosaStatsController extends MvcController
      * SosaStats@index
      */
     public function index() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $controller = new PageController();
         $controller
             ->setPageTitle(I18N::translate('Sosa Statistics'))
@@ -81,8 +79,8 @@ class SosaStatsController extends MvcController
             $view_bag->set('general_stats', $general_stats);
             
             $stats_gen = $this->sosa_provider->getStatisticsByGeneration();
-            $view_bag->set('missinganc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList@missing&ged='.$WT_TREE->getNameUrl().'&gen=');
-            $view_bag->set('sosaanc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList&ged='.$WT_TREE->getNameUrl().'&gen=');
+            $view_bag->set('missinganc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList@missing&ged='.$wt_tree->getNameUrl().'&gen=');
+            $view_bag->set('sosaanc_url', 'module.php?mod='.$this->module->getName().'&mod_action=SosaList&ged='.$wt_tree->getNameUrl().'&gen=');
             
             $gen_theoretical=1;
             $total_theoretical=0;

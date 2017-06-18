@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\Module\AbstractModule;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Controller\JsonController;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\ImageBuilder;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Model\CertificateProviderInterface;
@@ -56,21 +57,20 @@ class CertificateController extends MvcController
     /**
      * Certificate@index
      */
-    public function index() {
-        global $WT_TREE;
-        
+    public function index() {        
+        $tree = Globals::getTree();
         $controller = new PageController();
         $controller
         ->setPageTitle(I18N::translate('Certificate'))
         ->restrictAccess(
-            $this->module->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($WT_TREE)
+            $this->module->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($tree)
         );
         
         $cid = Filter::get('cid');
         
         $certificate = null;
         if(!empty($cid) && strlen($cid) > 22){
-            $certificate = Certificate::getInstance($cid, $WT_TREE, null, $this->provider);
+            $certificate = Certificate::getInstance($cid, $tree, null, $this->provider);
         }
         
         $data = new ViewBag();
@@ -87,7 +87,7 @@ class CertificateController extends MvcController
                 'url_certif_city', 
                 'module.php?mod=' . Constants::MODULE_MAJ_CERTIF_NAME . 
                     '&mod_action=Certificate@listAll' .
-                    '&ged=' . $WT_TREE->getNameUrl() .
+                    '&ged=' . $tree->getNameUrl() .
                     '&city=' . Functions::encryptToSafeBase64($certificate->getCity())
             );
             
@@ -119,12 +119,11 @@ class CertificateController extends MvcController
     /**
      * Certificate@image
      */
-    public function image() {      
-        global $WT_TREE;
-        
+    public function image() {
+        $tree = Globals::getTree();
         $cid   = Filter::get('cid');
         $certificate = null;
-        if(!empty($cid)) $certificate =  Certificate::getInstance($cid, $WT_TREE, null, $this->provider);
+        if(!empty($cid)) $certificate =  Certificate::getInstance($cid, $tree, null, $this->provider);
         
         $imageBuilder = new ImageBuilder($certificate);
         
@@ -133,7 +132,7 @@ class CertificateController extends MvcController
         }
         
         $imageBuilder
-            ->setShowWatermark(Auth::accessLevel($WT_TREE) >= $this->module->getSetting('MAJ_SHOW_NO_WATERMARK', Auth::PRIV_HIDE))
+            ->setShowWatermark(Auth::accessLevel($tree) >= $this->module->getSetting('MAJ_SHOW_NO_WATERMARK', Auth::PRIV_HIDE))
             ->setFontMaxSize($this->module->getSetting('MAJ_WM_FONT_MAXSIZE', 18))
             ->setFontColor($this->module->getSetting('MAJ_WM_FONT_COLOR', '#4D6DF3'))
         ;
@@ -146,13 +145,12 @@ class CertificateController extends MvcController
      * Certificate@listAll
      */
     public function listAll() {
-        global $WT_TREE;
-        
+        $tree = Globals::getTree();
         $controller = new PageController();
         $controller
             ->setPageTitle(I18N::translate('Certificates'))
             ->restrictAccess(
-                $this->module->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($WT_TREE)
+                $this->module->getSetting('MAJ_SHOW_CERT', Auth::PRIV_HIDE) >= Auth::accessLevel($tree)
             );
         
         $city = Filter::get('city');
@@ -166,7 +164,7 @@ class CertificateController extends MvcController
         $data->set('title', $controller->getPageTitle());
         $data->set('url_module', $this->module->getName());
         $data->set('url_action', 'Certificate@listAll');
-        $data->set('url_ged', $WT_TREE->getNameUrl());
+        $data->set('url_ged', $tree->getNameUrl());
         
         $data->set('cities', $this->provider->getCitiesList());
         $data->set('selected_city', $city);
@@ -216,15 +214,14 @@ class CertificateController extends MvcController
      * Certificate@autocomplete
      */
     public function autocomplete() {
-        global $WT_TREE;
-        
+        $tree = Globals::getTree();
         $controller = new JsonController();
         
         $city = Filter::get('city');
         $contains = Filter::get('term');        
 
         $controller
-            ->restrictAccess(Auth::isEditor($WT_TREE) && !empty($city) && !empty($contains))
+            ->restrictAccess(Auth::isEditor($tree) && !empty($city) && !empty($contains))
             ->pageHeader();
         
         $listCert = $this->provider->getCertificatesListBeginWith($city, $contains); 

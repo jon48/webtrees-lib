@@ -22,6 +22,7 @@ use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Theme\AdministrationTheme;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Controller\JsonController;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysis;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisProvider;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\OutlineMap;
@@ -59,17 +60,16 @@ class AdminConfigController extends MvcController
      * AdminConfig@index
      */
     public function index() {
-        global $WT_TREE;
-        
-        Theme::theme(new AdministrationTheme)->init($WT_TREE);
+        $wt_tree = Globals::getTree();
+        Theme::theme(new AdministrationTheme)->init($wt_tree);
         $controller = new PageController();
         $controller
-            ->restrictAccess(Auth::isManager($WT_TREE))
+            ->restrictAccess(Auth::isManager($wt_tree))
             ->setPageTitle($this->module->getTitle());
         
         $data = new ViewBag();
         $data->set('title', $controller->getPageTitle());
-        $data->set('tree', $WT_TREE);
+        $data->set('tree', $wt_tree);
         
         $data->set('root_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig');
                 
@@ -78,7 +78,7 @@ class AdminConfigController extends MvcController
         
         $other_trees = array();
         foreach (Tree::getAll() as $tree) {
-            if($tree->getTreeId() != $WT_TREE->getTreeId()) $other_trees[] = $tree;
+            if($tree->getTreeId() != $wt_tree->getTreeId()) $other_trees[] = $tree;
         }      
         $data->set('other_trees', $other_trees);
         
@@ -101,7 +101,7 @@ class AdminConfigController extends MvcController
                     processing: true,
                     serverSide : true,
 					ajax : {
-						url : "module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@jsonGeoAnalysisList&ged='. $WT_TREE->getNameUrl().'",
+						url : "module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@jsonGeoAnalysisList&ged='. $wt_tree->getNameUrl().'",
                         type : "POST"
 					},
                     columns: [
@@ -170,11 +170,10 @@ class AdminConfigController extends MvcController
      * AdminConfig@jsonGeoAnalysisList
      */
     public function jsonGeoAnalysisList() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $controller = new JsonController();
         $controller
-            ->restrictAccess(Auth::isManager($WT_TREE));
+            ->restrictAccess(Auth::isManager($wt_tree));
         
         // Generate an AJAX/JSON response for datatables to load a block of rows
         $search = Filter::postArray('search');
@@ -218,18 +217,18 @@ class AdminConfigController extends MvcController
                     </button>
                     <ul class="dropdown-menu" role="menu">
                        <li>
-                            <a href="#" onclick="return set_geoanalysis_status('. $ga->getId().', '.($ga->isEnabled() ? 'false' : 'true').', \''.Filter::escapeJs($WT_TREE->getName()).'\');">
+                            <a href="#" onclick="return set_geoanalysis_status('. $ga->getId().', '.($ga->isEnabled() ? 'false' : 'true').', \''.Filter::escapeJs($wt_tree->getName()).'\');">
                                 <i class="fa fa-fw '.($ga->isEnabled() ? 'fa-times' : 'fa-check').'"></i> ' . ($ga->isEnabled() ? I18N::translate('Disable') : I18N::translate('Enable')) . '
                             </a>
                        </li>
                         <li>
-                            <a href="module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@edit&ga_id='.$ga->getId().'&ged='.$WT_TREE->getName().'">
+                            <a href="module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@edit&ga_id='.$ga->getId().'&ged='.$wt_tree->getName().'">
                                 <i class="fa fa-fw fa-pencil"></i> ' . I18N::translate('Edit') . '
                             </a>
                        </li>
                        <li class="divider" />
                        <li>
-                            <a href="#" onclick="return delete_geoanalysis('. $ga->getId().', \''.Filter::escapeJs($WT_TREE->getName()).'\');">
+                            <a href="#" onclick="return delete_geoanalysis('. $ga->getId().', \''.Filter::escapeJs($wt_tree->getName()).'\');">
                                 <i class="fa fa-fw fa-trash-o"></i> ' . I18N::translate('Delete') . '
                             </a>
                        </li>
@@ -300,11 +299,10 @@ class AdminConfigController extends MvcController
      * AdminConfig@save
      */
     public function save() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $tmp_contrl = new PageController();
         $tmp_contrl->restrictAccess(
-            Auth::isManager($WT_TREE) 
+            Auth::isManager($wt_tree) 
             && Filter::checkCsrf()
          );
         
@@ -370,13 +368,13 @@ class AdminConfigController extends MvcController
 			}
         }
         
-        $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $WT_TREE->getNameUrl();
+        $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $wt_tree->getNameUrl();
         if(!$success) {			
             if($ga) {
-                $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@edit&ga_id='. $ga->getId() .'&ged=' . $WT_TREE->getNameUrl();
+                $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@edit&ga_id='. $ga->getId() .'&ged=' . $wt_tree->getNameUrl();
             }
             else {
-                $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@add&ged=' . $WT_TREE->getNameUrl();
+                $redirection_url = 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@add&ged=' . $wt_tree->getNameUrl();
             }
         }        
         header('Location: ' . WT_BASE_URL . $redirection_url);
@@ -389,12 +387,11 @@ class AdminConfigController extends MvcController
 	 * @param (GeoAnalysis!null) $ga GeoAnalysis to edit
 	 */
     protected function renderEdit(GeoAnalysis $ga = null) {
-        global $WT_TREE;
-        
-        Theme::theme(new AdministrationTheme)->init($WT_TREE);
+        $wt_tree = Globals::getTree();
+        Theme::theme(new AdministrationTheme)->init($wt_tree);
         $controller = new PageController();        
         $controller
-            ->restrictAccess(Auth::isManager($WT_TREE))
+            ->restrictAccess(Auth::isManager($wt_tree))
             ->addInlineJavascript('
                 function toggleMapOptions() {
                     if($("input:radio[name=\'use_map\']:checked").val() == 1) {
@@ -418,9 +415,9 @@ class AdminConfigController extends MvcController
         }
         
         $data->set('title', $controller->getPageTitle());
-        $data->set('admin_config_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $WT_TREE->getNameUrl());
+        $data->set('admin_config_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig&ged=' . $wt_tree->getNameUrl());
         $data->set('module_title', $this->module->getTitle());
-        $data->set('save_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@save&ged=' . $WT_TREE->getNameUrl());
+        $data->set('save_url', 'module.php?mod=' . $this->module->getName() . '&mod_action=AdminConfig@save&ged=' . $wt_tree->getNameUrl());
         $data->set('places_hierarchy', $this->provider->getPlacesHierarchy());
     
         $map_list = array_map(

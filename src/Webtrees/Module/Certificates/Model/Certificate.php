@@ -27,6 +27,7 @@ use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 
 /**
  * Class for managing certificates, extending a Media object.
@@ -270,8 +271,6 @@ class Certificate extends Media {
 	 * @see \Fisharebest\Webtrees\Media::displayImage()
 	 */
 	public function displayImage($which = 'main') {
-		global $controller;
-		
 		$js = '	if(isCertifColorboxActive == 0) { 
 					activatecertifcolorbox();
 					isCertifColorboxActive = 1;
@@ -279,6 +278,7 @@ class Certificate extends Media {
 		';
 		
 		$script = '';
+		$controller = Globals::getController();
 		if($controller && !($controller instanceof IndividualController)){
 			$controller->addInlineJavascript('$(document).ready(function() { '.$js.' });');
 		} else {

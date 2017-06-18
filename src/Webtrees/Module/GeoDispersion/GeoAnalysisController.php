@@ -22,6 +22,7 @@ use Fisharebest\Webtrees\Place;
 use MyArtJaub\Webtrees\Constants;
 use MyArtJaub\Webtrees\Controller\JsonController;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Map\GoogleMapsProvider;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysis;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisProvider;
@@ -125,9 +126,7 @@ class GeoAnalysisController extends MvcController
 	/**
 	 * GeoAnalysis@setStatus
 	 */
-    public function setStatus() {  
-        global $WT_TREE;
-        
+    public function setStatus() {
         $controller = new JsonController();
         
         $ga_id = Filter::getInteger('ga_id');
@@ -135,7 +134,7 @@ class GeoAnalysisController extends MvcController
         
         $controller->restrictAccess(
             true // Filter::checkCsrf()   -- Cannot use CSRF on a GET request (modules can only work with GET requests)
-            &&  Auth::isManager($WT_TREE) 
+            &&  Auth::isManager(Globals::getTree()) 
             && $ga !== null
         );
         
@@ -161,8 +160,6 @@ class GeoAnalysisController extends MvcController
      * GeoAnalysis@delete
      */
     public function delete() {
-        global $WT_TREE;
-    
         $controller = new JsonController();
     
         $ga_id = Filter::getInteger('ga_id');
@@ -170,7 +167,7 @@ class GeoAnalysisController extends MvcController
     
         $controller->restrictAccess(
             true // Filter::checkCsrf()   -- Cannot use CSRF on a GET request (modules can only work with GET requests)
-            &&  Auth::isManager($WT_TREE)
+            &&  Auth::isManager(Globals::getTree())
             && $ga
             );
             
@@ -194,13 +191,12 @@ class GeoAnalysisController extends MvcController
      * GeoAnalysis@dataTabs
      */
     public function dataTabs() {
-        global $WT_TREE;
-        
+        $wt_tree = Globals::getTree();
         $controller = new JsonController();
         
         $ga_id = Filter::getInteger('ga_id');
         $ga = $this->provider->getGeoAnalysis($ga_id);
-        $sosa_provider = new SosaProvider($WT_TREE, Auth::user());
+        $sosa_provider = new SosaProvider($wt_tree, Auth::user());
         
         $controller
             ->restrictAccess($ga && $sosa_provider->isSetup())
@@ -214,7 +210,7 @@ class GeoAnalysisController extends MvcController
         if($placesDispGeneral && $ga->getOptions() && $ga->getOptions()->isUsingFlags()) {
             $mapProvider = new GoogleMapsProvider();            
             foreach($placesDispGeneral['places'] as $place => $count) {
-                $flags[$place] = $mapProvider->getPlaceIcon(new Place($place, $WT_TREE));
+                $flags[$place] = $mapProvider->getPlaceIcon(new Place($place, $wt_tree));
             }
         }
         
@@ -232,9 +228,7 @@ class GeoAnalysisController extends MvcController
 	 * @param (null|array) $flags Array of flags
 	 * @return string HTML code for the general tab
 	 */
-    protected function htmlPlacesAnalysisGeneralTab(GeoAnalysis $ga, $placesGeneralResults, $flags= null) {
-        global $WT_TREE;
-        
+    protected function htmlPlacesAnalysisGeneralTab(GeoAnalysis $ga, $placesGeneralResults, $flags= null) {        
         if(!empty($placesGeneralResults)){
             $data = new ViewBag();
             
@@ -271,7 +265,7 @@ class GeoAnalysisController extends MvcController
                         $results_by_subdivs[$levelref]['count'] = $count_subd;   
                         $results_by_subdivs[$levelref]['transparency'] = Functions::safeDivision($count_subd, $max);
                         if($ga->getOptions()->isUsingFlags() && $flags) {
-                            $results_by_subdivs[$levelref]['place'] = new Place($location, $WT_TREE);
+                            $results_by_subdivs[$levelref]['place'] = new Place($location, Globals::getTree());
                             $results_by_subdivs[$levelref]['flag'] = $flags[$location];
                         }
                     }
@@ -305,9 +299,7 @@ class GeoAnalysisController extends MvcController
 	 * @param (null|array) $flags Array of flags
 	 * @return string HTML code for the generations tab
 	 */
-    protected function htmlPlacesAnalysisGenerationsTab(GeoAnalysis $ga, $placesGenerationsResults, $flags = null) {
-        global $WT_TREE;
-        
+    protected function htmlPlacesAnalysisGenerationsTab(GeoAnalysis $ga, $placesGenerationsResults, $flags = null) {        
         if(!empty($placesGenerationsResults) && $ga->getOptions()){
             $data = new ViewBag();
             
@@ -341,7 +333,7 @@ class GeoAnalysisController extends MvcController
                             $results_by_gen[$gen]['places'][$placename]['count'] = $count;
                             
                             if($ga->getOptions() && $ga->getOptions()->isUsingFlags() && ($flag = $flags[$placename]) != ''){
-                                $results_by_gen[$gen]['places'][$placename]['place'] = new Place($placename, $WT_TREE);
+                                $results_by_gen[$gen]['places'][$placename]['place'] = new Place($placename, Globals::getTree());
                                 $results_by_gen[$gen]['places'][$placename]['flag'] = $flag;
                             }
                         }

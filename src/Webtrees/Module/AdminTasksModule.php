@@ -15,8 +15,10 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProvider;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProviderInterface;
+
 /**
  * MiscExtensionsModule.php Module
  */
@@ -78,9 +80,7 @@ implements ModuleConfigInterface, ModuleBlockInterface
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
      */
     public function getBlock($block_id, $template = true, $cfg = array()) {
-        global $controller;
-        
-        $controller->addInlineJavascript('
+        Globals::getController()->addInlineJavascript('
 			$(document).ready(function(){
 				$.ajax({
 					url: "module.php",

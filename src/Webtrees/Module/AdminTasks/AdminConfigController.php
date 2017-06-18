@@ -22,6 +22,7 @@ use Fisharebest\Webtrees\Theme;
 use Fisharebest\Webtrees\Theme\AdministrationTheme;
 use MyArtJaub\Webtrees\Controller\JsonController;
 use MyArtJaub\Webtrees\Functions\Functions;
+use MyArtJaub\Webtrees\Globals;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\AbstractTask;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskProviderInterface;
 use MyArtJaub\Webtrees\Mvc\Controller\MvcController;
@@ -58,9 +59,9 @@ class AdminConfigController extends MvcController
      * AdminConfig@index
      */
     public function index() {
-        global $WT_TREE;
         
-        Theme::theme(new AdministrationTheme)->init($WT_TREE);
+        $tree = Globals::getTree();
+        Theme::theme(new AdministrationTheme)->init($tree);
         $controller = new PageController();
         $controller
             ->restrictAccess(Auth::isAdmin())
@@ -105,7 +106,7 @@ class AdminConfigController extends MvcController
                     processing: true,
                     serverSide : true,
 					ajax : {
-						url : "module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@jsonTasksList&ged='. $WT_TREE->getNameUrl().'",
+						url : "module.php?mod='.$this->module->getName().'&mod_action=AdminConfig@jsonTasksList&ged='. $tree->getNameUrl().'",
                         type : "POST"
 					},
                     columns: [
@@ -177,9 +178,7 @@ class AdminConfigController extends MvcController
     /**
      * AdminConfig@jsonTasksList
      */
-    public function jsonTasksList() {
-        global $WT_TREE;
-    
+    public function jsonTasksList() {    
         $controller = new JsonController();
         $controller
             ->restrictAccess(Auth::isAdmin());
