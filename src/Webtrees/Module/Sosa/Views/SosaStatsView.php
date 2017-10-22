@@ -11,6 +11,7 @@
 namespace MyArtJaub\Webtrees\Module\Sosa\Views;
 
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
 use MyArtJaub\Webtrees\Mvc\View\AbstractView;
 
 /**
@@ -130,6 +131,27 @@ class SosaStatsView extends AbstractView {
 			</table>
 			<div class="center"><em><?php echo I18N::translate('Hover the column headers to display some help on their meaning.'); ?></em></div>
 			
+			<?php  
+			$top10_multi_ancestors = $this->data->get('top10multiancestors');
+			if(count($top10_multi_ancestors) > 0) { ?>
+			<h3><?= I18N::translate('Most duplicated root Sosa ancestors'); ?></h3>
+			<div class="maj-table">
+			<?php foreach($top10_multi_ancestors as $count => $indis) { ?>
+			    <div class="maj-row">
+			    	<div class="label"><?= I18N::translate('%s times', I18N::number($count)); ?></div>
+			    	<div class="value"><?php 
+			    	echo implode(
+			    	    I18N::$list_separator, 
+			    	    array_map(function(Individual $indi) {
+			    	        return '<a href="'. $indi->getHtmlUrl(). '">'. $indi->getFullName() . '&nbsp;' . $indi->getSexImage() . '</a>';
+			    	    }, $indis)
+			    	);
+			    	?></div>
+				</div>
+			<?php } ?>
+			</div>
+			<?php } ?>
+			
 			<h3><?php echo I18N::translate('Known Sosa ancestors\' family dispersion'); ?></h3>
 			<div class="center">
 				<?php echo $this->data->get('chart_img_g2') ?: '' ; ?>
@@ -143,4 +165,3 @@ class SosaStatsView extends AbstractView {
     }
     
 }
- 

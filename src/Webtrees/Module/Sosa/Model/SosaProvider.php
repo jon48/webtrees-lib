@@ -612,6 +612,59 @@ class SosaProvider {
             ))->fetchAssoc() ?: array();
     }
     
+    /**
+     * Return an array of the most duplicated root Sosa ancestors.
+     * The number of ancestors to return is limited by the parameter $limit.
+     * If several individuals are tied when reaching the limit, none of them are returned,
+     * which means that there can be less individuals returned than requested.
+     * 
+     * Format: 
+     *  - key : root Sosa individual
+     *  - value: number of duplications of the ancestor (e.g. 3 if it appears 3 times)
+     * 
+     * @param number $limit Maximum number of individuals to return
+     * @return array 
+     */
+    public function getTopMultiSosaAncestorsNoTies($limit) {
+        if(!$this->is_setup) return array();
+        return Database::prepare(
+            'SELECT sosa_i_id, sosa_count FROM ('.
+            '   SELECT'.
+            '       top_sosa.sosa_i_id, top_sosa.sosa_count, top_sosa.sosa_min,'.
+            '       @keep := IF(@prev_count = 0 OR sosa_count = @prev_count, @keep, 1) AS keep,'.
+            '       @prev_count := top_sosa.sosa_count AS prev_count'.
+            '   FROM ('.
+            '       SELECT'.
+            '           sosa.majs_i_id sosa_i_id,'.
+            '           COUNT(sosa.majs_sosa) sosa_count,'.
+            '           MIN(sosa.majs_sosa) sosa_min'.
+            '       FROM ##maj_sosa AS sosa'.
+            '       LEFT JOIN ##maj_sosa AS sosa_fat ON sosa_fat.majs_sosa = 2 * sosa.majs_sosa'.   // Link to sosa's father
+            '           AND sosa.majs_gedcom_id = sosa_fat.majs_gedcom_id'.
+            '           AND sosa.majs_user_id = sosa_fat.majs_user_id'.
+            '       LEFT JOIN ##maj_sosa AS sosa_mot on sosa_mot.majs_sosa = (2 * sosa.majs_sosa + 1)'.  // Link to sosa's mother
+            '           AND sosa.majs_gedcom_id = sosa_fat.majs_gedcom_id'.
+            '           AND sosa.majs_user_id = sosa_fat.majs_user_id'.
+            '       WHERE sosa.majs_gedcom_id = :tree_id'.
+            '       AND sosa.majs_user_id = :user_id'.
+            '       AND sosa_fat.majs_sosa IS NULL'.    // We keep only root individuals, i.e. those with no father or mother
+            '       AND sosa_mot.majs_sosa IS NULL'. 
+            '       GROUP BY sosa.majs_i_id'.
+            '       HAVING COUNT(sosa.majs_sosa) > 1'.   // Limit to the duplicate sosas.
+            '       ORDER BY COUNT(sosa.majs_sosa) DESC'.
+            '       LIMIT ' . ($limit + 1) . // We want to select one more than required
+            '   ) AS top_sosa,'.
+            '   (SELECT @prev_count := 0, @keep := 0) x'.
+            '   ORDER BY top_sosa.sosa_count ASC'.
+            ' ) top_sosa_list'.
+            ' WHERE keep = 1'.
+            ' ORDER BY sosa_count DESC, sosa_min ASC'
+            )->execute(array(
+                'tree_id' => $this->tree->getTreeId(),
+                'user_id' => $this->user->getUserId()
+            ))->fetchAssoc() ?: array();
+    }
+    
                
 }
  

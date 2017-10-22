@@ -13,6 +13,7 @@ namespace MyArtJaub\Webtrees\Module\Sosa;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\PageController;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Globals;
@@ -123,7 +124,21 @@ class SosaStatsController extends MvcController
             
             $view_bag->set('generation_stats', $generation_stats);
             $view_bag->set('equivalent_gen', $gen_equiv);
-                        
+            
+            $top10multiancestors = $this->sosa_provider->getTopMultiSosaAncestorsNoTies(10);
+            $top10ancestors = array();
+            if($top10multiancestors !== null && count($top10multiancestors)) {
+                foreach($top10multiancestors as $pid => $count) {
+                    $indi = Individual::getInstance($pid, $wt_tree);
+                    if($indi !== null && $indi->canShowName()) {
+                        array_key_exists($count, $top10ancestors) ?
+                            $top10ancestors[$count][] = $indi:
+                            $top10ancestors[$count] = array($count => $indi);
+                    }
+                }
+            }
+            $view_bag->set('top10multiancestors', $top10ancestors);
+            
             $view_bag->set('chart_img_g2', $this->htmlAncestorDispersionG2());
             $view_bag->set('chart_img_g3', $this->htmlAncestorDispersionG3());
             
