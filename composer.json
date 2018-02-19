@@ -19,7 +19,7 @@
     "require": {
         "php": ">=5.4.0",
         "tedivm/stash": "0.14.*",
-        "ext-mcrypt": "*"
+        "paragonie/sodium_compat": "^1.6"
     },
     "require-dev": {
         "fisharebest/webtrees": "*",

@@ -17,12 +17,6 @@ use Fisharebest\Webtrees\Filter;
  * General functions.
  */
 class Functions {
-
-	/**
-	 * Size of the initialisation vector for encryption
-	 * @var integer $ENCRYPTION_IV_SIZE
-	 */
-	const ENCRYPTION_IV_SIZE = 16;
 	
 	/**
 	 * This array contains the cached short month names, based on the cal_info functions.
@@ -127,15 +121,19 @@ class Functions {
 		
 			# Trim the token
 		return substr($md5token, 0, $length);		
-	} 
+	}
 	
 	/**
-	 * Checks whether the installation meets the requirements for encryption/decryption.
+	 * Generate the key used by the encryption to safe base64 functions.
 	 * 
-	 * @return boolean
+	 * @return string Encryption key
 	 */
-	public static function isEncryptionCompatible() {
-	    return function_exists('mcrypt_encrypt') && function_exists('mcrypt_encrypt') && function_exists('mcrypt_decrypt');
+	protected static function getBase64EncryptionKey() {	    
+	    $key = 'STANDARDKEYIFNOSERVER';
+	    if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
+	        $key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
+	    
+	    return $key;
 	}
 	
 	/**	  
@@ -145,16 +143,13 @@ class Functions {
 	 * @param string $data Text to encrypt
 	 * @return string Encrypted and encoded text
 	 */
-	public static function encryptToSafeBase64($data){
-	    if(!self::isEncryptionCompatible())
-	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
-	    
-		$key = 'STANDARDKEYIFNOSERVER';
-		if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
-			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
-		$iv = mcrypt_create_iv(self::ENCRYPTION_IV_SIZE, MCRYPT_RAND);
-		$id = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key, $data, MCRYPT_MODE_CBC,$iv);
-		$encrypted = base64_encode($iv.$id);
+	public static function encryptToSafeBase64($data){		
+		$nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);	
+		$id = sodium_crypto_secretbox($data, $nonce, self::getBase64EncryptionKey());
+		$encrypted = base64_encode($nonce.$id);
+		
+		//sodium_memzero($data);   // Requires PHP 7.2
+		
 		// +, / and = are not URL-compatible
 		$encrypted = str_replace('+', '-', $encrypted);
 		$encrypted = str_replace('/', '_', $encrypted);
@@ -169,24 +164,28 @@ class Functions {
 	 * @return string Decrypted text
 	 */
 	public static function decryptFromSafeBase64($encrypted){
-	    if(!self::isEncryptionCompatible())
-	        throw new \Exception('MCrypt PHP extension is required to use encryption.');
-	    
-		$key = 'STANDARDKEYIFNOSERVER';
-		if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
-			$key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
 		$encrypted = str_replace('-', '+', $encrypted);
 		$encrypted = str_replace('_', '/', $encrypted);
 		$encrypted = str_replace('*', '=', $encrypted);
 		$encrypted = base64_decode($encrypted);
-		if(!$encrypted)
+		if($encrypted === false)
 			throw new \InvalidArgumentException('The encrypted value is not in correct base64 format.');
-		if(strlen($encrypted) < self::ENCRYPTION_IV_SIZE) 
-			throw new \InvalidArgumentException('The encrypted value does not contain enough characters for the key.');
-		$iv_dec = substr($encrypted, 0, self::ENCRYPTION_IV_SIZE);
-		$encrypted = substr($encrypted, self::ENCRYPTION_IV_SIZE);
-		$decrypted = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $encrypted, MCRYPT_MODE_CBC, $iv_dec);
-		return  preg_replace('~(?:\\000+)$~','',$decrypted);
+		
+		if (mb_strlen($encrypted, '8bit') < (SODIUM_CRYPTO_SECRETBOX_NONCEBYTES + SODIUM_CRYPTO_SECRETBOX_MACBYTES))
+		    throw new \InvalidArgumentException('The encrypted value does not contain enough characters for the key.');
+
+	    $nonce = mb_substr($encrypted, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, '8bit');
+	    $ciphertext = mb_substr($encrypted, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null, '8bit');
+        
+        $decrypted = sodium_crypto_secretbox_open($ciphertext, $nonce, self::getBase64EncryptionKey());
+		
+        if($decrypted === false) {
+            throw new \InvalidArgumentException('The message has been tampered with in transit.');
+        }
+        
+        //sodium_memzero($encrypted);   // Requires PHP 7.2
+        
+        return $decrypted;
 	}
 	
 	/**

@@ -69,7 +69,6 @@ class CertificatesModule
      * @see \MyArtJaub\Webtrees\Module\DependentInterface::validatePrerequisites()
      */
     public function validatePrerequisites() {
-        return Functions::isEncryptionCompatible();    
     }
     
     /**
