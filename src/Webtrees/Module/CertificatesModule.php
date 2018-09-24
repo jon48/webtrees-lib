@@ -32,7 +32,7 @@ use Rhumsaa\Uuid\Uuid;
  */
 class CertificatesModule 
     extends AbstractModule 
-    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtenderInterface, CustomSimpleTagManagerInterface, DependentInterface
+    implements HookSubscriberInterface, ModuleConfigInterface, ModuleMenuItemInterface, FactSourceTextExtenderInterface, CustomSimpleTagManagerInterface
 {
     /** @var string For custom modules - link for support, upgrades, etc. */
     const CUSTOM_WEBSITE = 'https://github.com/jon48/webtrees-lib';
@@ -62,13 +62,6 @@ class CertificatesModule
      */
     public function modAction($mod_action) {
         \MyArtJaub\Webtrees\Mvc\Dispatcher::getInstance()->handle($this, $mod_action);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\DependentInterface::validatePrerequisites()
-     */
-    public function validatePrerequisites() {
     }
     
     /**
