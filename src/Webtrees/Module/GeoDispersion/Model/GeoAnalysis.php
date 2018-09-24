@@ -200,12 +200,15 @@ class GeoAnalysis {
                     $levels = array_reverse(array_map('trim',explode(',', $place)));
                     if(count($levels)>= $this->analysis_level){                        
                         $toplevelvalues = array();
-                        if($this->hasMap() && $toplevelvalue = $this->options->getMap()->getTopLevelName()) {
+                        if($this->hasMap()
+                            && $this->options->getMap()->isLoaded()
+                            && $toplevelvalue = $this->options->getMap()->getTopLevelName()
+                        ) {
                             $toplevelvalues = array_map('trim',explode(',', strtolower($toplevelvalue)));
                         }
                         if(!$this->hasMap() 
                             || is_null($this->options->getMapLevel()) 
-                            || $this->options->getMap()->getTopLevelName() == '*' 
+                            || ( $this->options->getMap()->isLoaded() && $this->options->getMap()->getTopLevelName() == '*') 
                             || (
                                 $this->options->getMapLevel() <= $this->analysis_level 
                                 && $this->options->getMapLevel() > 0

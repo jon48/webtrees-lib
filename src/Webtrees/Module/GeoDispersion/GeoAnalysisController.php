@@ -246,33 +246,35 @@ class GeoAnalysisController extends MvcController
             if($ga->hasMap()) {
                 $max = $placesGeneralResults['max'];
                 $map = $ga->getOptions()->getMap();
-                $results_by_subdivs = $map->getSubdivisions();
-                $places_mappings = $map->getPlacesMappings();
-                foreach ($placesGeneralResults['places'] as $location => $count) {
-                    $levelvalues = array_reverse(array_map('trim',explode(',', $location)));
-                    $level_map = $ga->getAnalysisLevel() - $ga->getOptions()->getMapLevel();
-                    if($level_map >= 0 && $level_map < count($levelvalues)) {
-                        $levelref = $levelvalues[0] . '@' . $levelvalues[$level_map];
-                        if(!isset($results_by_subdivs[$levelref])) { $levelref = $levelvalues[0]; }
-                    }
-                    else {
-                        $levelref = $levelvalues[0];
-                    }
-                    if(isset($places_mappings[$levelref])) $levelref = $places_mappings[$levelref];
-                    if(isset($results_by_subdivs[$levelref])) {
-                        $count_subd = isset($results_by_subdivs[$levelref]['count']) ? $results_by_subdivs[$levelref]['count'] : 0;
-                        $count_subd  += $count;
-                        $results_by_subdivs[$levelref]['count'] = $count_subd;   
-                        $results_by_subdivs[$levelref]['transparency'] = Functions::safeDivision($count_subd, $max);
-                        if($ga->getOptions()->isUsingFlags() && $flags) {
-                            $results_by_subdivs[$levelref]['place'] = new Place($location, Globals::getTree());
-                            $results_by_subdivs[$levelref]['flag'] = $flags[$location];
+                if($map->isLoaded()) {
+                    $results_by_subdivs = $map->getSubdivisions();
+                    $places_mappings = $map->getPlacesMappings();
+                    foreach ($placesGeneralResults['places'] as $location => $count) {
+                        $levelvalues = array_reverse(array_map('trim',explode(',', $location)));
+                        $level_map = $ga->getAnalysisLevel() - $ga->getOptions()->getMapLevel();
+                        if($level_map >= 0 && $level_map < count($levelvalues)) {
+                            $levelref = $levelvalues[0] . '@' . $levelvalues[$level_map];
+                            if(!isset($results_by_subdivs[$levelref])) { $levelref = $levelvalues[0]; }
                         }
-                    }
-                }             
+                        else {
+                            $levelref = $levelvalues[0];
+                        }
+                        if(isset($places_mappings[$levelref])) $levelref = $places_mappings[$levelref];
+                        if(isset($results_by_subdivs[$levelref])) {
+                            $count_subd = isset($results_by_subdivs[$levelref]['count']) ? $results_by_subdivs[$levelref]['count'] : 0;
+                            $count_subd  += $count;
+                            $results_by_subdivs[$levelref]['count'] = $count_subd;   
+                            $results_by_subdivs[$levelref]['transparency'] = Functions::safeDivision($count_subd, $max);
+                            if($ga->getOptions()->isUsingFlags() && $flags) {
+                                $results_by_subdivs[$levelref]['place'] = new Place($location, Globals::getTree());
+                                $results_by_subdivs[$levelref]['flag'] = $flags[$location];
+                            }
+                        }
+                    }             
                 
-                $data->set('map', $ga->getOptions()->getMap());
-                $data->set('results_by_subdivisions', $results_by_subdivs);
+                    $data->set('map', $map);
+                    $data->set('results_by_subdivisions', $results_by_subdivs);
+                }
                 
                 $html = ViewFactory::make('GeoAnalysisTabGeneralMap', $this, new BaseController(), $data)->getHtmlPartial();
             }

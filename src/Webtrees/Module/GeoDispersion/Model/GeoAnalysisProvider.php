@@ -319,7 +319,7 @@ class GeoAnalysisProvider {
                 }
             }
         } else {
-            $sql = " ORDER BY majgd_descr ASC";
+            $sql .= ' ORDER BY majgd_descr ASC';
         }
         
         if ($limit) {

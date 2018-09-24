@@ -249,15 +249,20 @@ class AdminConfigController extends MvcController
 		    $datum[6] = '<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('None').'</span>';
 		    $datum[7] = '<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('None').'</span>';
 		    if($ga->hasMap()) {
-		        $datum[6] = $options->getMap()->getDescription();
-		        $datum[7] = '<span data-toggle="tooltip" title="' . $options->getMap()->getTopLevelName() . '" />';
-		        $top_level = $options->getMapLevel();
-		        if($place_hierarchy['type'] == 'header') {
-		            $datum[7] .= $place_hierarchy['hierarchy'][$top_level - 1];
-		        } else {
-		            $datum[7] .= $top_level . '(' . $place_hierarchy['hierarchy'][$top_level - 1] . ')';
+		        if($options->getMap()->isLoaded()) {
+    		        $datum[6] = $options->getMap()->getDescription();
+    		        $datum[7] = '<span data-toggle="tooltip" title="' . $options->getMap()->getTopLevelName() . '" />';
+    		        $top_level = $options->getMapLevel();
+    		        if($place_hierarchy['type'] == 'header') {
+    		            $datum[7] .= $place_hierarchy['hierarchy'][$top_level - 1];
+    		        } else {
+    		            $datum[7] .= $top_level . '(' . $place_hierarchy['hierarchy'][$top_level - 1] . ')';
+    		        }
+    		        $datum[7] .= '</span>';
 		        }
-		        $datum[7] .= '</span>';
+		        else {
+		            $datum[6] = I18N::translate('Error when loading map.');
+		        }
 		    }
 		    $datum[8] = $options->isUsingFlags() ? 
 				'<i class="fa fa-check"></i><span class="sr-only">'.I18N::translate('Yes').'</span>' : 

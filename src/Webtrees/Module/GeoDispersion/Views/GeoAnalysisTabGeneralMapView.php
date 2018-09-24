@@ -29,6 +29,13 @@ class GeoAnalysisTabGeneralMapView extends AbstractGeoAnalysisTabGeneralView {
         
         /** @var OutlineMap $map */
         $map = $this->data->get('map');
+        
+        if($map === null) {
+            return '<p class="warning">' .
+                I18N::translate('The map could not be loaded.') . 
+            '</p>';
+        }
+        
         $canvas = $map->getCanvas();
         $subdvisions_results = $this->data->get('results_by_subdivisions');
         

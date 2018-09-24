@@ -133,8 +133,21 @@ class OutlineMap {
                 $this->is_loaded = true;
                 return;
             }
-        }        
+        }
         throw new \Exception('The Outline Map could not be loaded from XML.');
+    }
+    
+    /**
+     * Get the status of the map loading from the XML file.
+     * 
+     * @return bool
+     */
+    public function isLoaded() {
+        try{
+            if(!$this->is_loaded) $this->load();
+        }
+        catch (\Exception $ex) { }
+        return $this->is_loaded;
     }
     
 	/**
@@ -142,7 +155,6 @@ class OutlineMap {
 	 * @return string
 	 */
     public function getFileName() {
-        if(!$this->is_loaded) $this->load();
         return $this->filename;
     }
     
@@ -190,6 +202,6 @@ class OutlineMap {
         if(!$this->is_loaded) $this->load();
         return $this->mappings;
     }
-                   
+    
 }
  
