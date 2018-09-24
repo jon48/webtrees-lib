@@ -153,7 +153,7 @@ class HealthCheckEmailTask extends AbstractTask implements ConfigurableTaskInter
 				$message .= $message_gedcom;
 								
 				//Errors
-				$sql = 'SELECT SQL_CACHE log_message, gedcom_id, COUNT(log_id) as nblogs, MAX(log_time) as lastoccurred'.
+				$sql = 'SELECT log_message, gedcom_id, COUNT(log_id) as nblogs, MAX(log_time) as lastoccurred'.
 							' FROM `##log`'.
 							' WHERE log_type = :log_type AND (gedcom_id = :gedcom_id OR ISNULL(gedcom_id))'.
 							' AND log_time >= DATE_ADD( NOW(), INTERVAL - :nb_days DAY)'.

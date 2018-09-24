@@ -80,7 +80,7 @@ class HookProvider implements HookProviderInterface {
 		    // This causes issue when classes are defined in this file.
 		    // Cannot use Module::getActiveModules as well, as this is private.
 		    $module_names = Database::prepare(
-		        'SELECT SQL_CACHE module_name FROM `##module`'
+		        'SELECT module_name FROM `##module`'
 		    )->fetchOneColumn();
 		    
 		    foreach($module_names as $module_name) {

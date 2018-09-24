@@ -97,7 +97,7 @@ class GeoAnalysisEditView extends AbstractView {
         				<?php echo I18N::translate('Map'); ?>
         			</label>
         			<div class="col-sm-9">
-        				<?php echo FunctionsEdit::selectEditControl('map_file', $this->data->get('map_list') , null, $is_new || ! $ga->hasMap() ? '' : base64_encode($ga->getOptions()->getMap()->getFileName()), 'class="form-control"'); ?>
+        				<?php echo FunctionsEdit::selectEditControl('map_file', $this->data->get('map_list') , null, ($is_new || ! $ga->hasMap()) ? '' : base64_encode($ga->getOptions()->getMap()->getFileName()), 'class="form-control"'); ?>
         				<p class="small text-muted">
         					<?php echo I18N::translate('Map outline to be used for the result display.'); ?>
         				</p>

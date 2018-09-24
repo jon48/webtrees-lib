@@ -414,7 +414,7 @@ class SosaProvider {
 	public function getTotalIndividuals() {
 	    if(!$this->is_setup) return 0;
 	    return Database::prepare(
-	        'SELECT SQL_CACHE COUNT(*) FROM `##individuals`' .
+	        'SELECT COUNT(*) FROM `##individuals`' .
 	        ' WHERE i_file = :tree_id')
 	        ->execute(array('tree_id' => $this->tree->getTreeId()))
 	        ->fetchOne() ?: 0;
@@ -428,7 +428,7 @@ class SosaProvider {
     public function getSosaCount(){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
+            'SELECT COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id')
             ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -445,7 +445,7 @@ class SosaProvider {
     public function getSosaCountAtGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
+            'SELECT COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen= :gen')
         ->execute(array(
@@ -464,7 +464,7 @@ class SosaProvider {
     public function getSosaCountUpToGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(majs_sosa) FROM `##maj_sosa`' .
+            'SELECT COUNT(majs_sosa) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen <= :gen')
         ->execute(array(
@@ -482,7 +482,7 @@ class SosaProvider {
     public function getDifferentSosaCount(){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
+            'SELECT COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id')
         ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
@@ -499,7 +499,7 @@ class SosaProvider {
     public function getDifferentSosaCountUpToGeneration($gen){
         if(!$this->is_setup) return 0;
         return Database::prepare(
-            'SELECT SQL_CACHE COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
+            'SELECT COUNT(DISTINCT majs_i_id) FROM `##maj_sosa`' .
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
             ' AND majs_gen <= :gen')
         ->execute(array(
