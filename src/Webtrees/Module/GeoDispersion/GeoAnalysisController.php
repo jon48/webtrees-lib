@@ -253,12 +253,13 @@ class GeoAnalysisController extends MvcController
                         $levelvalues = array_reverse(array_map('trim',explode(',', $location)));
                         $level_map = $ga->getAnalysisLevel() - $ga->getOptions()->getMapLevel();
                         if($level_map >= 0 && $level_map < count($levelvalues)) {
-                            $levelref = $levelvalues[0] . '@' . $levelvalues[$level_map];
+                            $levelref = I18N::strtolower($levelvalues[0] . '@' . $levelvalues[$level_map]);
                             if(!isset($results_by_subdivs[$levelref])) { $levelref = $levelvalues[0]; }
                         }
                         else {
                             $levelref = $levelvalues[0];
                         }
+                        $levelref = I18N::strtolower($levelref);
                         if(isset($places_mappings[$levelref])) $levelref = $places_mappings[$levelref];
                         if(isset($results_by_subdivs[$levelref])) {
                             $count_subd = isset($results_by_subdivs[$levelref]['count']) ? $results_by_subdivs[$levelref]['count'] : 0;

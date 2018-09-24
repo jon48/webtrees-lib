@@ -10,6 +10,7 @@
  */
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Model;
 
+use Fisharebest\Webtrees\I18N;
 use MyArtJaub\Webtrees\Constants;
 
 /**
@@ -116,8 +117,8 @@ class OutlineMap {
                 );
                 foreach($xml->subdivisions->children() as $subdivision){
                     $attributes = $subdivision->attributes();
-                    $key = trim($attributes['name']);
-                    if(isset($attributes['parent'])) $key .= '@'.trim($attributes['parent']);
+                    $key = I18N::strtolower(trim($attributes['name']));
+                    if(isset($attributes['parent'])) $key .= '@'. I18N::strtolower(trim($attributes['parent']));
                     $this->subdivisions[$key] = array(
                         'id' => trim($attributes['id']),
                         'displayname' => trim($attributes['name']),
@@ -127,7 +128,7 @@ class OutlineMap {
                 if(isset($xml->mappings)) {
                     foreach($xml->mappings->children() as $mappings){
                         $attributes = $mappings->attributes();
-                        $this->mappings[trim($attributes['name'])] = trim($attributes['mapto']);
+                        $this->mappings[I18N::strtolower(trim($attributes['name']))] = I18N::strtolower(trim($attributes['mapto']));
                     }
                 }
                 $this->is_loaded = true;
