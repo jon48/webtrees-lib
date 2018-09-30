@@ -8,6 +8,7 @@
 
 
 /.buildpath
+/build/
 
 # Utilities configuration files
 /phpunit.xml
