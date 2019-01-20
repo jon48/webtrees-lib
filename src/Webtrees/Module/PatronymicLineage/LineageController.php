@@ -152,7 +152,11 @@ class LineageController extends MvcController
      */
     public function index() {
         $controller = new PageController();
-        $controller->setPageTitle(I18N::translate('Patronymic Lineages') . ' : ' . $this->legend);
+        $controller->setPageTitle(
+            $this->show === 'none' ?
+            I18N::translate('Patronymic Lineages') :
+            I18N::translate('Patronymic Lineages') . ' : ' . $this->legend
+        );
         
         $view_bag = new ViewBag();
         $view_bag->set('title', $controller->getPageTitle());
