@@ -64,8 +64,8 @@ class LineageView extends AbstractView {
                 '</a></strong></p>';
             
             $lineages = $this->data->get('lineages', null);
-            $nb_lineages = count($lineages);
-            if(is_null($lineages) || $nb_lineages == 0) {
+            $nb_lineages = is_null($lineages) ? 0 : count($lineages);
+            if($nb_lineages == 0) {
             	echo '<p class="center"><span class="warning">',
             		I18N::translate('No individuals with surname %s has been found. Please try another name.',
             			'<span dir="auto">' . $this->data->get('legend') . '</span>'),
