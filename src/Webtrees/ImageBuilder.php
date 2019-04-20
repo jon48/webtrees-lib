@@ -58,6 +58,12 @@ class ImageBuilder {
      */
     protected $font_color;
     
+    /**
+     * Should the image be rendered as attachment (vs inline)     * 
+     * @var bool $as_attachment
+     */
+    protected $as_attachment;
+    
 	/**
 	* Contructor for ImageBuilder
 	*
@@ -70,6 +76,7 @@ class ImageBuilder {
 	    $this->show_watermark = true;
 	    $this->font_max_size = 18;
 	    $this->font_color = '#4D6DF3';
+	    $this->as_attachment = false;
 	}
 	
 	/**
@@ -131,6 +138,17 @@ class ImageBuilder {
 	 */
 	public function setFontColor($font_color) {
 	    if($font_color) $this->font_color = $font_color;
+	    return $this;
+	}
+	
+	/**
+	 * Set whether the image should be rendered as attachment
+	 * 
+	 * @param bool $is_attachement
+	 * @return ImageBuilder
+	 */
+	public function setAsAttachment($is_attachement) {
+	    if(is_bool($is_attachement)) $this->as_attachment = $is_attachement;
 	    return $this;
 	}
 	
@@ -204,8 +222,9 @@ class ImageBuilder {
 	    }	    
 
 	    // send headers for the image
+	    $disposition = $this->as_attachment ? 'attachment' : 'inline';
 	    header('Content-Type: ' . $mimetype);
-	    header('Content-Disposition: filename="' . addslashes(basename($this->media->getFilename())) . '"');
+	    header('Content-Disposition: ' . $disposition . '; filename="' . addslashes(basename($this->media->getFilename())) . '"');
 	     
 	    if ($usewatermark) {
 	        // generate the watermarked image

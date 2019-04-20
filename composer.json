@@ -1,36 +1,38 @@
 {
-    "name": "jon48/webtrees-lib",
-    "description": "Library to extend webtrees core capabilities",
-    "type": "library",
-    "keywords": [
-        "webtrees", "genealogy"   
-    ],
-    "homepage": "https://github.com/jon48/webtrees-lib",
-    "license" : "GPL-3.0-or-later",
-    "authors": [{
-        "name": "Jonathan Jaubart",
-        "email": "dev@jaubart.com",
-        "homepage": "http://www.jaubart.com",
-        "role": "Developer"
-    }],
-    "support": {
-        "issues": "http://bugs.jaubart.com"
-    },
-    "require": {
-        "php": ">=5.4.0",
-        "tedivm/stash": "0.14.*",
-        "paragonie/sodium_compat": "^1.6"
-    },
-    "require-dev": {
-        "fisharebest/webtrees": "*",
-        "mockery/mockery": "@stable",
-        "phpunit/phpunit": "4.8.*"
-    },
-    "autoload": {
-        "psr-4": {
-            "MyArtJaub\\": "src/",
-            "MyArtJaub\\Tests\\": "tests/"
-        }
-    }
+	"name" : "jon48/webtrees-lib",
+	"description" : "Library to extend webtrees core capabilities",
+	"type" : "library",
+	"keywords" : [
+		"webtrees",
+		"genealogy"
+	],
+	"homepage" : "https://github.com/jon48/webtrees-lib",
+	"license" : "GPL-3.0-or-later",
+	"authors" : [{
+			"name" : "Jonathan Jaubart",
+			"email" : "dev@jaubart.com",
+			"homepage" : "http://www.jaubart.com",
+			"role" : "Developer"
+		}
+	],
+	"support" : {
+		"issues" : "http://bugs.jaubart.com"
+	},
+	"require" : {
+		"php" : ">=5.4.0",
+		"ext-xml": "*",
+		"tedivm/stash" : "0.14.*",
+		"paragonie/sodium_compat" : "^1.6"
+	},
+	"require-dev" : {
+		"fisharebest/webtrees" : "~1.7",
+		"mockery/mockery" : "@stable",
+		"phpunit/phpunit" : "4.8.*"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"MyArtJaub\\" : "src/",
+			"MyArtJaub\\Tests\\" : "tests/"
+		}
+	}
 }
-        
