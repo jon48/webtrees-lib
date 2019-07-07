@@ -73,7 +73,7 @@ class SosaCalculator {
             $this->addNode($indi, 1);
             $this->flushTmpSosaTable(true);
             return true;
-        }     
+        }
         return false;
     }
     
@@ -99,14 +99,19 @@ class SosaCalculator {
      * @param int $sosa Individual's sosa
      */
     protected function addNode(Individual $indi, $sosa) {                
-        $birth_year = $indi->getEstimatedBirthDate()->gregorianYear();
-        $death_year = $indi->getEstimatedDeathDate()->gregorianYear();
+        $birth_year = $indi->getBirthDate()->gregorianYear();
+        $birth_year_est = $birth_year === 0 ? $indi->getEstimatedBirthDate()->gregorianYear() : $birth_year;
+        
+        $death_year = $indi->getDeathDate()->gregorianYear();
+        $death_year_est = $death_year === 0 ? $indi->getEstimatedDeathDate()->gregorianYear() : $death_year;
         
         $this->tmp_sosa_table[] = array(
-            'indi' => $indi->getXref(), 
-            'sosa' => $sosa, 
-            'birth_year' => $birth_year,
-            'death_year' => $death_year
+            'indi' => $indi->getXref(),
+            'sosa' => $sosa,
+            'birth_year' => $birth_year === 0 ? null : $birth_year,
+            'birth_year_est' => $birth_year_est === 0 ? null : $birth_year_est,
+            'death_year' => $death_year === 0 ? null : $death_year,
+            'death_year_est' => $death_year_est === 0 ? null : $death_year_est
         );
         
         $this->flushTmpSosaTable();

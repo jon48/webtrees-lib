@@ -189,7 +189,7 @@ class SosaProvider {
             $gen = Functions::getGeneration($row['sosa']);
             if($gen <= self::MAX_DB_GENERATIONS) {
                 $questionmarks_table[] = 
-                    '(:tree_id'.$i.', :user_id'.$i.', :sosa'.$i.', :indi_id'.$i.', :gen'.$i.', :byear'.$i.', :dyear'.$i.')';
+                    '(:tree_id'.$i.', :user_id'.$i.', :sosa'.$i.', :indi_id'.$i.', :gen'.$i.', :byear'.$i.', :byearest'.$i.', :dyear'.$i.', :dyearest'.$i.')';
                 $values_table = array_merge(
                     $values_table, 
                     array(
@@ -199,7 +199,9 @@ class SosaProvider {
                         'indi_id'.$i => $row['indi'], 
                         'gen'.$i => Functions::getGeneration($row['sosa']),
                         'byear'.$i => $row['birth_year'],
-                        'dyear'.$i => $row['death_year']
+                        'byearest'.$i => $row['birth_year_est'],
+                        'dyear'.$i => $row['death_year'],
+                        'dyearest'.$i => $row['death_year_est']
                     )
                 );
             }
@@ -207,7 +209,7 @@ class SosaProvider {
         }
         
         $sql = 'REPLACE INTO `##maj_sosa`' .
-            ' (majs_gedcom_id, majs_user_id, majs_sosa, majs_i_id, majs_gen, majs_birth_year, majs_death_year)' .
+            ' (majs_gedcom_id, majs_user_id, majs_sosa, majs_i_id, majs_gen, majs_birth_year, majs_birth_year_est, majs_death_year, majs_death_year_est)' .
             ' VALUES '. implode(',', $questionmarks_table);
         Database::prepare($sql)->execute($values_table);
     }
@@ -380,7 +382,9 @@ class SosaProvider {
      * 	- The number of Sosa up to generation
      *  - The number of distinct Sosa up to generation
      *  - The year of the first birth in generation
+     *  - The year of the first estimated birth in generation
      *  - The year of the last birth in generation
+     *  - The year of the last estimated birth in generation
      *  - The average year of birth in generation
      *
      * @return array Statistics array
@@ -397,7 +401,9 @@ class SosaProvider {
                         'sosaTotalCount'		=>	$this->getSosaCountUpToGeneration($gen),
                         'diffSosaTotalCount'	=>	$this->getDifferentSosaCountUpToGeneration($gen),
                         'firstBirth'			=>	$birthStats['first'],
+                        'firstEstimatedBirth'	=>	$birthStats['first_est'],
                         'lastBirth'				=>	$birthStats['last'],
+                        'lastEstimatedBirth'	=>	$birthStats['last_est'],
                         'avgBirth'				=>	$birthStats['avg']
                     );
                 }
@@ -513,25 +519,29 @@ class SosaProvider {
      * Get an array of birth statistics for a specific generation
      * Statistics are :
      * 	- first : First birth year in generation
+     *  - first_est: First estimated birth year in generation
      *  - last : Last birth year in generation
-     *  - avg : Average birth year
+     *  - last_est : Last estimated birth year in generation
+     *  - avg : Average birth year (based on non-estimated birth date)
      *
      * @param number $gen Generation
      * @return array Birth statistics array
      */
     public function getStatsBirthYearInGeneration($gen){
-        if(!$this->is_setup) return array('first' => 0, 'avg' => 0, 'last' => 0);
+        if(!$this->is_setup) return array('first' => 0, 'first_est' => 0, 'avg' => 0, 'last' => 0, 'last_est' => 0);
         return Database::prepare(
-            'SELECT MIN(majs_birth_year) AS first, AVG(majs_birth_year) AS avg, MAX(majs_birth_year) AS last'.
-            ' FROM `##maj_sosa`' .
+            'SELECT'.
+            ' MIN(majs_birth_year) AS first, MIN(majs_birth_year_est) AS first_est,'.
+            ' AVG(majs_birth_year) AS avg,'.
+            ' MAX(majs_birth_year) AS last, MAX(majs_birth_year_est) AS last_est'.
+            ' FROM `##maj_sosa`'.
             ' WHERE majs_gedcom_id=:tree_id AND majs_user_id=:user_id'.
-            ' AND majs_gen=:gen AND NOT majs_birth_year = :birth_year')
+            ' AND majs_gen=:gen')
             ->execute(array(
                 'tree_id' => $this->tree->getTreeId(), 
                 'user_id' => $this->user->getUserId(),
-                'gen' => $gen,
-                'birth_year' => 0))
-            ->fetchOneRow(\PDO::FETCH_ASSOC) ?: array('first' => 0, 'avg' => 0, 'last' => 0);
+                'gen' => $gen))
+            ->fetchOneRow(\PDO::FETCH_ASSOC) ?: array('first' => 0, 'first_est' => 0, 'avg' => 0, 'last' => 0, 'last_est' => 0);
     }
     
     /**

@@ -93,8 +93,8 @@ class SosaStatsController extends MvcController
             foreach($stats_gen as $gen => $tab){
                 $genY1= I18N::translate('-');
                 $genY2= I18N::translate('-');
-                if($tab['firstBirth']>0) $genY1=$tab['firstBirth'];
-                if($tab['lastBirth']>0) $genY2=$tab['lastBirth'];
+                if($tab['firstBirth']>0) $genY1=$tab['firstEstimatedBirth'];
+                if($tab['lastBirth']>0) $genY2=$tab['lastEstimatedBirth'];
                 $total_theoretical += $gen_theoretical;
                 $perc_sosa_count_theor = Functions::safeDivision($tab['sosaCount'], $gen_theoretical);
                 $gen_equiv += $perc_sosa_count_theor;
