@@ -10,12 +10,12 @@
  */
 namespace MyArtJaub\Webtrees\Module\Sosa\Model;
 
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Database;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
-use Fisharebest\Webtrees\Database;
 use MyArtJaub\Webtrees\Functions\Functions;
-use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Individual;
 
 /**
  * Provide Sosa data access
@@ -111,6 +111,24 @@ class SosaProvider {
      */
     public function isSetup() {
         return $this->is_setup;
+    }
+    
+    /**
+     * Return the reference tree
+     * 
+     *  @return Tree Reference tree
+     */
+    public function getTree() {
+        return $this->tree;
+    }
+    
+    /**
+     * Return the reference user
+     * 
+     * @return User
+     */
+    public function getUser() {
+        return $this->user;
     }
     
     /**
@@ -571,6 +589,77 @@ class SosaProvider {
             return -(($n*$sum_xy)-($sum_x*$sum_y))/($denom);
         }
         return null;
+    }
+    
+    /**
+     * Return an array of the mean generation depth and standard deviation for all Sosa ancestors at a given generation.
+     * Sosa 1 is of generation 1.
+     * 
+     * Mean generation depth and deviation are calculated based on the works of Marie-Héléne Cazes and Pierre Cazes,
+     * published in Population (French Edition), Vol. 51, No. 1 (Jan. - Feb., 1996), pp. 117-140
+     * http://kintip.net/index.php?option=com_jdownloads&task=download.send&id=9&catid=4&m=0
+     * 
+     * Format: 
+     *  - key : sosa number of the ancestor
+     *  - values: array
+     *      - root_ancestor_id : ID of the ancestor
+     *      - mean_gen_depth : Mean generation depth
+     *      - stddev_gen_depth : Standard deviation of generation depth
+     *  
+     * @param number $gen Sosa generation
+     * @return array
+     */
+    public function getGenerationDepthStatsAtGen($gen) {
+        if(!$this->is_setup) return array();
+        $gen_depth_stats_raw = Database::prepare(
+            'SELECT stats_by_gen.root_ancestor AS root_ancestor_sosa,'.
+            '   sosa_list.majs_i_id as root_ancestor_id,'.
+            '   1 + SUM( (majs_gen_norm) * ( 2 * full_root_count + semi_root_count) /  (2 * POWER(2, majs_gen_norm))) AS mean_gen_depth,'.
+            '   SQRT('. 
+            '       SUM(POWER(majs_gen_norm, 2) * ( 2 * full_root_count + semi_root_count) /  (2 * POWER(2, majs_gen_norm)))'.
+            '       - POWER( SUM( (majs_gen_norm) * ( 2 * full_root_count + semi_root_count) /  (2 * POWER(2, majs_gen_norm))), 2)'.
+            '   ) AS stddev_gen_depth'.
+            ' FROM('.
+            '   SELECT'.
+            '       sosa.majs_gedcom_id,'.
+            '       sosa.majs_user_id,'.
+            '       sosa.majs_gen - :gen AS majs_gen_norm,'.
+            '       FLOOR(((sosa.majs_sosa / POW(2, sosa.majs_gen -1 )) - 1) * POWER(2, :gen - 1)) + POWER(2, :gen - 1) AS root_ancestor,'.
+            '       SUM(case when sosa_fat.majs_i_id IS NULL AND sosa_mot.majs_i_id IS NULL THEN 1 ELSE 0 END) AS full_root_count,'.
+            '       SUM(case when sosa_fat.majs_i_id IS NULL AND sosa_mot.majs_i_id IS NULL THEN 0 ELSE 1 END) As semi_root_count'.
+            '   FROM `##maj_sosa` AS sosa'.
+            '   LEFT JOIN `##maj_sosa` AS sosa_fat ON sosa_fat.majs_sosa = 2 * sosa.majs_sosa'.
+            '       AND sosa_fat.majs_gedcom_id = sosa.majs_gedcom_id'.
+            '       AND sosa_fat.majs_user_id = sosa.majs_user_id'.
+            '   LEFT JOIN `##maj_sosa` AS sosa_mot ON sosa_mot.majs_sosa = 2 * sosa.majs_sosa + 1'.
+            '       AND sosa_mot.majs_gedcom_id = sosa.majs_gedcom_id'.
+            '       AND sosa_mot.majs_user_id = sosa.majs_user_id'.
+            '   WHERE sosa.majs_gedcom_id = :tree_id'.
+            '       AND sosa.majs_user_id = :user_id'.
+            '       AND sosa.majs_gen >=  :gen'.
+            '       AND (sosa_fat.majs_i_id IS NULL OR sosa_mot.majs_i_id IS NULL)'.
+            '   GROUP BY sosa.majs_gen, root_ancestor'.
+            ' ) AS stats_by_gen'.
+            ' INNER JOIN `##maj_sosa` sosa_list ON sosa_list.majs_gedcom_id = stats_by_gen.majs_gedcom_id'.
+            '   AND sosa_list.majs_user_id = stats_by_gen.majs_user_id'.
+            '   AND sosa_list.majs_sosa = stats_by_gen.root_ancestor'.
+            ' GROUP BY stats_by_gen.root_ancestor, sosa_list.majs_i_id'.
+            ' ORDER BY stats_by_gen.root_ancestor')
+        ->execute(array(
+            'tree_id' => $this->tree->getTreeId(),
+            'user_id' => $this->user->getUserId(),
+            'gen' => $gen
+        ))->fetchAll() ?: array();
+        
+        $gen_depth_stats = array();
+        foreach ($gen_depth_stats_raw as $gen_depth_stat) {
+            $gen_depth_stats[$gen_depth_stat->root_ancestor_sosa] = array(
+                'root_ancestor_id' => $gen_depth_stat->root_ancestor_id,
+                'mean_gen_depth' => $gen_depth_stat->mean_gen_depth,
+                'stddev_gen_depth' => $gen_depth_stat->stddev_gen_depth
+            );
+        }
+        return $gen_depth_stats;
     }
     
     /**

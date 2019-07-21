@@ -26,5 +26,9 @@ class Migration1 implements MigrationInterface {
 		    ' ADD COLUMN majs_birth_year_est SMALLINT NULL AFTER majs_birth_year,' .
 		    ' ADD COLUMN majs_death_year_est SMALLINT NULL AFTER majs_death_year'
 		);
+		
+		Database::exec(
+		    'DELETE FROM `##maj_sosa`'
+		);
 	}
 }

@@ -124,7 +124,27 @@ class SosaStatsView extends AbstractView {
 				<tfoot>
 					<tr class="maj-row">
 						<td class="label" colspan="13">
-							<?php echo I18N::translate('Generation-equivalent: %s generations', I18N::number($this->data->get('equivalent_gen'),2)); ?>
+							<?php 
+							echo I18N::translate(
+							         'Mean generation depth: %s',
+							         I18N::plural(
+							             I18N::translate('%s generation'),
+							             I18N::translate('%s generations'),
+							             $this->data->get('mean_gen_depth'),
+							             I18N::number($this->data->get('mean_gen_depth'),2)
+							         )
+							    ).
+								' &mdash; ' . 
+								I18N::translate(
+								    'Standard deviation: %s',
+								    I18N::plural(
+								        I18N::translate('%s generation'), 
+								        I18N::translate('%s generations'), 
+								        $this->data->get('stddev_gen_depth'), 
+								        I18N::number($this->data->get('stddev_gen_depth'),2)
+								    )
+								);
+							?>
 						</td>
 					</tr>
 				</tfoot>
@@ -155,8 +175,13 @@ class SosaStatsView extends AbstractView {
 			<h3><?php echo I18N::translate('Known Sosa ancestors\' family dispersion'); ?></h3>
 			<div class="center">
 				<?php echo $this->data->get('chart_img_g2') ?: '' ; ?>
-				<?php echo $this->data->get('chart_img_g3') ?: '' ; ?>				
+				<?php echo $this->data->get('chart_img_g3') ?: '' ; ?>
 				<!--  <canvas id="chart_ancestors_g2" width="300" height="300"></canvas>  -->
+			</div>
+			
+			<h3><?php echo I18N::translate('Mean generation depth by grandparents'); ?></h3>
+			<div class="center">
+				<?php echo $this->data->get('chart_img_gendepth3') ?: '' ; ?>
 			</div>
 			
 			<?php   } else { ?>

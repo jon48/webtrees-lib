@@ -12,6 +12,7 @@ namespace MyArtJaub\Webtrees\Module\Sosa;
 
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Controller\PageController;
+use Fisharebest\Webtrees\Filter;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -87,7 +88,6 @@ class SosaStatsController extends MvcController
             $total_theoretical=0;
             $prev_diff=0;
             $prev_known=0.5;
-            $gen_equiv=0;            
             $generation_stats = array();
             
             foreach($stats_gen as $gen => $tab){
@@ -97,7 +97,6 @@ class SosaStatsController extends MvcController
                 if($tab['lastBirth']>0) $genY2=$tab['lastEstimatedBirth'];
                 $total_theoretical += $gen_theoretical;
                 $perc_sosa_count_theor = Functions::safeDivision($tab['sosaCount'], $gen_theoretical);
-                $gen_equiv += $perc_sosa_count_theor;
                 $missing=2*$prev_known - $tab['sosaCount'];
                 $gen_diff=$tab['diffSosaTotalCount']-$prev_diff;
                 
@@ -123,30 +122,46 @@ class SosaStatsController extends MvcController
             }
             
             $view_bag->set('generation_stats', $generation_stats);
-            $view_bag->set('equivalent_gen', $gen_equiv);
             
-            $top10multiancestors = $this->sosa_provider->getTopMultiSosaAncestorsNoTies(10);
-            $top10ancestors = array();
-            if($top10multiancestors !== null && count($top10multiancestors)) {
-                foreach($top10multiancestors as $pid => $count) {
-                    $indi = Individual::getInstance($pid, $wt_tree);
-                    if($indi !== null && $indi->canShowName()) {
-                        array_key_exists($count, $top10ancestors) ?
-                            $top10ancestors[$count][] = $indi:
-                            $top10ancestors[$count] = array($count => $indi);
-                    }
-                }
-            }
-            $view_bag->set('top10multiancestors', $top10ancestors);
+            $gen_depth_stats = $this->sosa_provider->getGenerationDepthStatsAtGen(1);
+            $view_bag->set('mean_gen_depth', count($gen_depth_stats) > 0 ? $gen_depth_stats[1]['mean_gen_depth'] : 0);
+            $view_bag->set('stddev_gen_depth', count($gen_depth_stats) > 0 ? $gen_depth_stats[1]['stddev_gen_depth'] : 0);
+            
+            $view_bag->set('top10multiancestors', $this->getTop10Ancestors());
             
             $view_bag->set('chart_img_g2', $this->htmlAncestorDispersionG2());
             $view_bag->set('chart_img_g3', $this->htmlAncestorDispersionG3());
             
+            $view_bag->set('chart_img_gendepth3', $this->htmlAncestorGenDepthG3());
+            //$view_bag->set('mean_gen_depth_gen3_stats', $this->sosa_provider->getMeanGeneratuonDepthAndDeviationAtGen(3));
         }
         
         ViewFactory::make('SosaStats', $this, $controller, $view_bag)->render();   
     }
     
+    /**
+     * Return an array of the top 10 of ancestor appearing multiple times, grouped by the number of occurrences.
+     * The key is the number of appearance, and the value contains the list of Inidvidual
+     * 
+     * @return array Top 10 ancestors with count
+     */
+    private function getTop10Ancestors()
+    {
+        $top10multiancestors = $this->sosa_provider->getTopMultiSosaAncestorsNoTies(10);
+        $top10ancestors = array();
+        if($top10multiancestors !== null && count($top10multiancestors)) {
+            foreach($top10multiancestors as $pid => $count) {
+                $indi = Individual::getInstance($pid, $this->sosa_provider->getTree());
+                if($indi !== null && $indi->canShowName()) {
+                    array_key_exists($count, $top10ancestors) ?
+                        $top10ancestors[$count][] = $indi:
+                        $top10ancestors[$count] = array($count => $indi);
+                }
+            }
+        }
+        return $top10ancestors;
+    }
+        
     /**
      * Returns HTML code for a graph showing the dispersion of ancestors across father & mother
      * @return string HTML code
@@ -228,6 +243,42 @@ class SosaStatsController extends MvcController
             \Fisharebest\Webtrees\Functions\Functions::getRelationshipNameFromPath('motfat') . ' - ' . I18N::percentage(Functions::safeDivision($total_motfat, $total), 1) . '|' .
             \Fisharebest\Webtrees\Functions\Functions::getRelationshipNameFromPath('motmot') . ' - ' . I18N::percentage(Functions::safeDivision($total_motmot, $total), 1);
          return "<img src=\"https://chart.googleapis.com/chart?cht=p&chp=1.5708&amp;chd=e:{$chd}&amp;chs={$size}&amp;chco={$color_fatfat},{$color_fatmot},{$color_shared},{$color_motfat},{$color_motmot}&amp;chf=bg,s,ffffff00&amp;chl={$chl}\" alt=\"" . $chart_title . "\" title=\"" . $chart_title . "\" />";
+    }    
+    
+    /**
+     * Returns HTML code for a graph showing the grand-parents' mean generation depth and standard deviation
+     * @return string HTML code
+     */
+    private function htmlAncestorGenDepthG3() {
+        $ancestorsGenDepth3 = $this->sosa_provider->getGenerationDepthStatsAtGen(3);
+        if(count($ancestorsGenDepth3) == 0) return;
+        
+        $ancestors = array();
+        $chd_mean = array();
+        $chd_error_low = array();
+        $chd_error_high = array();
+        foreach($ancestorsGenDepth3 as $sosa => $genDepthStat) {
+            $ancestor = Individual::getInstance($genDepthStat['root_ancestor_id'], $this->sosa_provider->getTree());
+            if($ancestor !== null && $ancestor->canShowName()) {
+                $tmp = $ancestor->getAllNames();
+                $ancestors[] = Filter::escapeUrl($tmp[$ancestor->getPrimaryName()]['fullNN']);
+            }
+            else {
+                $ancestors[] = I18N::translate('Sosa %s', I18N::number($sosa));
+            }
+            $chd_mean[] = $genDepthStat['mean_gen_depth'];
+            $chd_error_low[] = $genDepthStat['mean_gen_depth'] - $genDepthStat['stddev_gen_depth'];
+            $chd_error_high[] = $genDepthStat['mean_gen_depth'] + $genDepthStat['stddev_gen_depth'];
+        }
+        
+        $maxChd = ceil(max($chd_error_high));
+        $chd = implode(',', $chd_mean) . '|' . implode(',', $chd_error_low) . '|' . implode(',', $chd_error_high);
+        $chxl = implode('|', array_reverse($ancestors));
+        $chbh = 30;
+        $chs = 4 * $chbh + 50;
+        $chxl_title = I18N::translate('Mean generation depth and standard deviation');
+        
+        return "<img src=\"https://chart.googleapis.com/chart?cht=bhs&chco=84beff&chs=600x{$chs}&chbh={$chbh}&chd=t1:{$chd}&chds=0,{$maxChd}&chxt=x,x,y&chxl=1:|{$chxl_title}|2:|{$chxl}&chxp=1,50&chxr=0,0,{$maxChd},1&chm=E,577292,1:2,,2\" />";
     }
 
     /**
