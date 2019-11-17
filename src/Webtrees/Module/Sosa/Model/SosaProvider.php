@@ -573,16 +573,15 @@ class SosaProvider {
             $this->getStatisticsByGeneration();
         }
         //Linear regression on x=generation and y=birthdate
-        $sum_xy = 0;
-        $sum_x=0;
-        $sum_y=0;
-        $sum_x2=0;
-        $n=count($this->statistics_tab);
+        $sum_xy = $sum_x = $sum_y= $sum_x2 = $n = 0;
         foreach($this->statistics_tab as $gen=>$stats){
-            $sum_xy+=$gen*$stats['avgBirth'];
-            $sum_x+=$gen;
-            $sum_y+=$stats['avgBirth'];
-            $sum_x2+=$gen*$gen;
+            if(!is_null($stats['avgBirth'])) {
+                $n++;
+                $sum_xy+=$gen*$stats['avgBirth'];
+                $sum_x+=$gen;
+                $sum_y+=$stats['avgBirth'];
+                $sum_x2+=$gen*$gen;
+            }
         }
         $denom=($n*$sum_x2)-($sum_x*$sum_x);
         if($denom!=0){

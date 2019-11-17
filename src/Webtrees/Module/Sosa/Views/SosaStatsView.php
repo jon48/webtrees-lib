@@ -56,7 +56,7 @@ class SosaStatsView extends AbstractView {
 					<div class="value"><?php echo I18N::percentage($general_stats['pedi_collapse'], 2); ?></div>
 				</div>
 				<div class="maj-row">
-					<div class="label"><?php echo I18N::translate('Mean generation time'); ?></div>
+					<div class="label"><?php echo I18N::translate('Generation mean duration'); ?></div>
 					<div class="value"><?php echo I18N::plural('%s year', '%s years', $general_stats['mean_gen_time'],  I18N::number($general_stats['mean_gen_time'], 1)); ?></div>
 				</div>
 			</div>

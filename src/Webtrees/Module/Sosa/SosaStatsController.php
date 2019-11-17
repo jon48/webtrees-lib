@@ -267,7 +267,7 @@ class SosaStatsController extends MvcController
                 $ancestors[] = I18N::translate('Sosa %s', I18N::number($sosa));
             }
             $chd_mean[] = $genDepthStat['mean_gen_depth'];
-            $chd_error_low[] = $genDepthStat['mean_gen_depth'] - $genDepthStat['stddev_gen_depth'];
+            $chd_error_low[] = max(0, $genDepthStat['mean_gen_depth'] - $genDepthStat['stddev_gen_depth']);
             $chd_error_high[] = $genDepthStat['mean_gen_depth'] + $genDepthStat['stddev_gen_depth'];
         }
         
@@ -275,7 +275,7 @@ class SosaStatsController extends MvcController
         $chd = implode(',', $chd_mean) . '|' . implode(',', $chd_error_low) . '|' . implode(',', $chd_error_high);
         $chxl = implode('|', array_reverse($ancestors));
         $chbh = 30;
-        $chs = 4 * $chbh + 50;
+        $chs = count($ancestors) * $chbh + 50;
         $chxl_title = I18N::translate('Mean generation depth and standard deviation');
         
         return "<img src=\"https://chart.googleapis.com/chart?cht=bhs&chco=84beff&chs=600x{$chs}&chbh={$chbh}&chd=t1:{$chd}&chds=0,{$maxChd}&chxt=x,x,y&chxl=1:|{$chxl_title}|2:|{$chxl}&chxp=1,50&chxr=0,0,{$maxChd},1&chm=E,577292,1:2,,2\" />";
