@@ -62,7 +62,7 @@ class AdminConfigView extends AbstractView {
 		
 		<p>
 		<?php $places_hierarchy = $this->data->get('places_hierarchy'); 
-		if($places_hierarchy) {
+		if($places_hierarchy && $places_hierarchy['type'] != 'none') {
 		    switch ($places_hierarchy['type']) {
 		        case 'header':
 		            echo I18N::translate('According to the GEDCOM header, the places within your file follows the structure: ');

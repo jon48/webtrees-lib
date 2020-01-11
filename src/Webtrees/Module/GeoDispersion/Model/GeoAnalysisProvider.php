@@ -11,10 +11,10 @@
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Model;
 
 use Fisharebest\Webtrees\Database;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\GedcomRecord;
-use MyArtJaub\Webtrees\Constants;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Tree;
+use MyArtJaub\Webtrees\Constants;
 
 /**
  * Provide geodispersion analysis data access
@@ -341,7 +341,7 @@ class GeoAnalysisProvider {
      * Returns the infered place hierarchy, determined from the Gedcom data.
      * Depending on the data, it can be based on the Gedcom Header description, or from a place example.
      * This is returned as an associative array:
-     *      - type:    describe the source of the data (<em>header<em> / <em>data</em>)
+     *      - type:    describe the source of the data (<em>header<em> / <em>data</em> / <em>none</em>)
      *      - hierarchy: an array of the place hierarchy (in reverse order of the gedcom)
      *      
      * @return array
@@ -351,9 +351,12 @@ class GeoAnalysisProvider {
             if($place_structure = $this->getPlacesHierarchyFromHeader()) {
                 $this->place_hierarchy = array('type' => 'header', 'hierarchy' => $place_structure);
             }
+            elseif ($place_structure = $this->getPlacesHierarchyFromData()){
+                $this->place_hierarchy = array('type' => 'data', 'hierarchy' => $place_structure);
+            }
             else {
-                $this->place_hierarchy = array('type' => 'data', 'hierarchy' => $this->getPlacesHierarchyFromData());
-            }            
+                $this->place_hierarchy = array('type' => 'none', 'hierarchy' => null);
+            }
         }
         return $this->place_hierarchy;        
     }
@@ -390,12 +393,12 @@ class GeoAnalysisProvider {
             ' FROM `##individuals`'.
             ' WHERE i_gedcom LIKE :gedcom AND i_file = :gedcom_id'.
             ' UNION ALL'.
-            'SELECT f_gedcom AS gedcom'.
+            ' SELECT f_gedcom AS gedcom'.
             ' FROM `##families`'.
             ' WHERE f_gedcom LIKE :gedcom AND f_file = :gedcom_id'
         )->execute(array(
-            'gedcom' => '%\n2 PLAC %',
-            'gedcom_id' => $this->tree->getTreeId()            
+            'gedcom' => '%2 PLAC %',
+            'gedcom_id' => $this->tree->getTreeId()
         ))->fetchOneColumn();
         foreach ($ged_data as $ged_datum) {
             $matches = null;
@@ -405,29 +408,29 @@ class GeoAnalysisProvider {
             }
         }
         
-        // Unique list of places
-        $places_list=array_keys($places_list);
+        // Get the places with higest numbers of levels
+        $places_with_high_level = array();
+        $max_level = 0;
         
-        //sort the array, limit to unique values, and count them
-        usort($places_list, array('I18N', 'strcasecmp'));
-        
-        //calculate maximum no. of levels to display
-        $has_found_good_example = false;
-        foreach($places_list as $place){
-            $levels = explode(",", $place);
+        foreach ($places_list as $place => $value) {
+            $levels = array_filter(array_map('trim', explode(",", $place)));
             $parts = count($levels);
-            if ($parts >= $nb_levels){
-                $nb_levels = $parts;
-                if(!$has_found_good_example){
-                    $random_place = $place;
-                    if(min(array_map('strlen', $levels)) > 0){
-                        $has_found_good_example = true;
-                    }
-                }
+            if($parts > $max_level) {
+                $max_level = $parts;
+                $places_with_high_level = array($place);
+            }
+            else if ($parts == $max_level) {
+                $places_with_high_level[] = $place;
             }
         }
         
-        return array_reverse(array_map('trim',explode(',', $random_place)));
+        // If empty array, then return null
+        if($max_level == 0) return null;
+                
+        // Else, return the first alphabetical element -- cannot return random to ensure always the same example if used
+        usort($places_with_high_level, array('Fisharebest\\Webtrees\\I18N', 'strcasecmp'));        
+        return array_reverse(array_map('trim',explode(',', $places_with_high_level[0])));
+        
     }
     
     /**

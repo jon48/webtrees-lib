@@ -242,8 +242,10 @@ class AdminConfigController extends MvcController
 		    $analysis_level = $ga->getAnalysisLevel();
 		    if($place_hierarchy['type'] == 'header') {
 		        $datum[4] = $place_hierarchy['hierarchy'][$analysis_level - 1];
+		    } elseif ($place_hierarchy['type'] == 'data') {
+		        $datum[4] = $analysis_level . ' (' . $place_hierarchy['hierarchy'][$analysis_level - 1] . ')';
 		    } else {
-		        $datum[4] = $analysis_level . '(' . $place_hierarchy['hierarchy'][$analysis_level - 1] . ')';
+		        $datum[4] = $analysis_level;
 		    }
 		    $datum[5] = $ga->getAnalysisLevel();
 		    $datum[6] = '<i class="fa fa-times"></i><span class="sr-only">'.I18N::translate('None').'</span>';
@@ -255,8 +257,10 @@ class AdminConfigController extends MvcController
     		        $top_level = $options->getMapLevel();
     		        if($place_hierarchy['type'] == 'header') {
     		            $datum[7] .= $place_hierarchy['hierarchy'][$top_level - 1];
+    		        } elseif ($place_hierarchy['type'] == 'data') {
+    		            $datum[7] .= $top_level . ' (' . $place_hierarchy['hierarchy'][$top_level - 1] . ')';
     		        } else {
-    		            $datum[7] .= $top_level . '(' . $place_hierarchy['hierarchy'][$top_level - 1] . ')';
+    		            $datum[7] .= $top_level;
     		        }
     		        $datum[7] .= '</span>';
 		        }

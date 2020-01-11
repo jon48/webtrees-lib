@@ -42,6 +42,10 @@ class GeoAnalysisEditView extends AbstractView {
 		
 		<h1><?php echo $this->data->get('title'); ?></h1>
 		
+		<?php if($places_hierarchy['type'] == 'none') { ?>		
+		<div class="warning"><?php echo I18N::translate('No place structure could be determined. Please make sure that at least a place exists.'); ?></div>		
+		<?php } else { ?>
+		
 		<form class="form-horizontal" name="newform" method="post" role="form" action="<?php echo $this->data->get('save_url'); ?>" autocomplete="off">
     		<?php echo Filter::getCsrf(); ?>
     		<?php if(!$is_new) { ?>
@@ -154,7 +158,7 @@ class GeoAnalysisEditView extends AbstractView {
     		</div>
     	</form>
 		
-		<?php        
+		<?php }
     }
     
 }
