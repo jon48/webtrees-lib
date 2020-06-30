@@ -20,14 +20,14 @@
 	},
 	"require" : {
 		"php" : ">=5.4.0",
-		"ext-xml": "*",
-		"tedivm/stash" : "0.14.*",
-		"paragonie/sodium_compat" : "^1.6"
+		"ext-xml" : "*",
+		"tedivm/stash" : "~0.14",
+		"paragonie/sodium_compat" : "~1.13"
 	},
 	"require-dev" : {
-		"fisharebest/webtrees" : "~1.7",
+		"fisharebest/webtrees" : "~2.0.5",
 		"mockery/mockery" : "@stable",
-		"phpunit/phpunit" : "4.8.*"
+		"phpunit/phpunit" : "@stable"
 	},
 	"autoload" : {
 		"psr-4" : {

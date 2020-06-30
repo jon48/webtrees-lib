@@ -18,7 +18,7 @@ Library to extend webtrees core capabilities
 ### License
 
 * **webtrees-lib: MyArtJaub library for webtrees**
-* Copyright (C) 2009 to 2016 Jonathan Jaubart.
+* Copyright (C) 2009 to 2020 Jonathan Jaubart.
 * Derived from **webtrees** - Copyright (C) 2010 to 2016  webtrees development team.
 * Derived from PhpGedView - Copyright (C) 2002 to 2010  PGV Development Team.
 
