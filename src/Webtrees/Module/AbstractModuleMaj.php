@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\Webtrees;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
+use Fisharebest\Webtrees\Module\ModuleThemeInterface;
 
 /**
  * MyArtJaub Module
@@ -87,6 +88,27 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
      * @param Map $router
      */
     public abstract function loadRoutes(Map $router) : void;
+    
+    /**
+     * Returns the URL of the module specific stylesheets.
+     * It will look for a CSS file matching the theme name (e.g. xenea.min.css),
+     * and fallback to default.min.css if none are found
+     * 
+     * @return string
+     */
+    public function moduleCssUrl() : string
+    {
+        /** @var ModuleThemeInterface $theme */
+        $theme = app(ModuleThemeInterface::class);
+        $css_file = $this->resourcesFolder() . 'css/' . $theme->name() . '.min.css';
+        
+        if(file_exists($css_file)) {
+            return $this->assetUrl('css/' . $theme->name() . '.min.css');
+        }
+        else {
+            return $this->assetUrl('css/default.min.css');
+        }
+    }
     
 }
  

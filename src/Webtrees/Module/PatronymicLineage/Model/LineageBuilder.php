@@ -5,34 +5,47 @@
  * @package MyArtJaub\Webtrees
  * @subpackage PatronymicLineage
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+declare(strict_types=1);
+
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Model;
 
-use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Factory;
+use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Services\IndividualListService;
+use Illuminate\Support\Collection;
+
 /**
  * Build the patronymic lineage for a surname 
  */
-class LineageBuilder {
-	
+class LineageBuilder 
+{
+    
+    /**
+     * @var string $surname Reference surname
+     */
+    private $surname;
+    
 	/**
-	 * @var Fisharebest\Webtrees\Tree $tree Reference tree
+	 * @var Tree $tree Reference tree
 	 */ 
-	protected $tree;
+	private $tree;
 	
 	/**
-	 * @var string $surname Reference surname
+	 * @var IndividualListService $indilist_service
 	 */
-	protected $surname;
+	private $indilist_service;
 	
 	/**
-	 * @var array $used_indis Individuals already processed
+	 * @var Collection $used_indis Individuals already processed
 	 */
-	protected $used_indis;
+	private $used_indis;
 	
 	/**
 	 * Constructor for Lineage Builder
@@ -40,10 +53,12 @@ class LineageBuilder {
 	 * @param string $surname Reference surname
 	 * @param Tree $tree Gedcom tree
 	 */
-	public function __construct($surname, Tree $tree) {
+	public function __construct($surname, Tree $tree, IndividualListService $indilist_service)
+	{
+	    $this->surname = $surname;
 		$this->tree = $tree;
-		$this->surname = $surname;
-		$this->used_indis = array();
+		$this->indilist_service = $indilist_service;
+		$this->used_indis = new Collection();
 	}
 	
 	/**
@@ -51,90 +66,80 @@ class LineageBuilder {
 	 * 
 	 * @return array List of root patronymic lineages
 	 */
-	public function buildLineages() {				
-		$indis = \Fisharebest\Webtrees\Query\QueryName::individuals($this->tree, $this->surname, null, null, false, false);
-		
+	public function buildLineages() : Collection
+	{
+	    $indis = $this->indilist_service->individuals($this->surname, '', '', false, false, I18N::locale());
+	    // Warning - the IndividualListService returns a clone of individuals objects. Cannot be used for object equality
 		if(count($indis) == 0) return null;
 		
-		$root_lineages = array();
+		$root_lineages = new Collection();
 		
 		foreach($indis as $indi) {
-			$pid = $indi->getXref();
-			if(!isset($this->used_indis[$pid])){
-				//Find the root of the lineage
-				/** @var Fisharebest\Webtrees\Individual $indiFirst  */
-				$indiFirst= $this->getLineageRootIndividual($indi);
-				if($indiFirst){
-					$this->used_indis[$indiFirst->getXref()] = true;
-					if($indiFirst->canShow()){
+		    /** @var Individual $indi */
+		    if(!$this->used_indis->get($indi->xref(), false)){
+				$indi_first = $this->getLineageRootIndividual($indi);
+				if($indi_first !== null){
+				    // The root lineage needs to be recreated from the Factory, to retrieve the proper object
+				    $indi_first = Factory::individual()->make($indi_first->xref(), $this->tree);
+				    $this->used_indis->put($indi_first->xref(), true);
+				    if($indi_first->canShow()){
 						//Check if the root individual has brothers and sisters, without parents
-						$indiChildFamily = $indiFirst->getPrimaryChildFamily();
-						if($indiChildFamily !== null){
+				        $indi_first_child_family = $indi_first->childFamilies()->first();
+				        if($indi_first_child_family !== null){
 							$root_node = new LineageRootNode(null); 
-							$root_node->addFamily($indiChildFamily);
+							$root_node->addFamily($indi_first_child_family);
 						}
 						else{
-							$root_node = new LineageRootNode($indiFirst);
+							$root_node = new LineageRootNode($indi_first);
 						}
 						$root_node = $this->buildLineage($root_node);		
-						if($root_node) $root_lineages[] = $root_node;
+						if($root_node !== null) $root_lineages->add($root_node);
 					}
 				}
 			}
 		}
 		
-		return $root_lineages;		
+		return $root_lineages->sort(function(LineageRootNode $a, LineageRootNode $b) {
+		    if($a->numberChildNodes() == $b->numberChildNodes()) return 0;
+		    return ($a->numberChildNodes() > $b->numberChildNodes()) ? -1 : 1;
+		});		
 	}
 	
 	/**
-	 * Retrieve the root individual, from any individual.
+	 * Retrieve the root individual, from any individual, by recursion.
 	 * The Root individual is the individual without a father, or without a mother holding the same name.
-	 * 
+	 *
 	 * @param Individual $indi
-	 * @return (Individual|null) Root individual
+	 * @return Individual|NULL Root individual
 	 */
-	protected function getLineageRootIndividual(Individual $indi) {
-		$is_first=false;
-		$dindi = new \MyArtJaub\Webtrees\Individual($indi);
-		$indi_surname=$dindi->getUnprotectedPrimarySurname();
-		$resIndi = $indi;
-		while(!$is_first){
-			//Get the individual parents family
-			$fam=$resIndi->getPrimaryChildFamily();
-			if($fam){
-				$husb=$fam->getHusband();
-				$wife=$fam->getWife();
-				//If the father exists, take him
-				if($husb){
-					$dhusb = new \MyArtJaub\Webtrees\Individual($husb);
-					$dhusb->isNewAddition() ? $is_first = true : $resIndi=$husb;
-				}
-				//If only a mother exists
-				else if($wife){
-					$dwife = new \MyArtJaub\Webtrees\Individual($wife);
-					$wife_surname=$dwife->getUnprotectedPrimarySurname();
-					//Check if the child is a natural child of the mother (based on the surname - Warning : surname must be identical)
-					if(!$dwife->isNewAddition() && I18N::strcasecmp($wife_surname, $indi_surname) == 0){
-						$resIndi=$wife;
-					}
-					else{
-						$is_first=true;
-					}
-				}
-				else{
-					$is_first=true;
-				}
-			}
-			else{
-				$is_first=true;
-			}
+	private function getLineageRootIndividual(Individual $indi) : ?Individual
+	{
+	    $child_families = $indi->childFamilies();
+	    if($this->used_indis->get($indi->xref(), false)) {
+	        return null;
+	    }
+	    
+		foreach($child_families as $child_family) {
+		    /** @var Family $child_family */
+		    $child_family->husband();
+		    if($husb = $child_family->husband()) {
+		        if($husb->isPendingAddition() && $husb->privatizeGedcom(Auth::PRIV_HIDE) == '') {
+		            return $indi;
+		        }
+		        return $this->getLineageRootIndividual($husb);
+		    }
+		    else if ($wife = $child_family->wife()){
+		        if(!($wife->isPendingAddition() && $wife->privatizeGedcom(Auth::PRIV_HIDE) == '')) {
+		            $indi_surname = $indi->getAllNames()[$indi->getPrimaryName()]['surname'];
+		            $wife_surname = $wife->getAllNames()[$wife->getPrimaryName()]['surname'];
+		            if($indi->canShowName() && $wife->canShowName() && I18N::strcasecmp($indi_surname, $wife_surname) == 0) {
+		                return $this->getLineageRootIndividual($wife);
+		            }
+		        }
+		        return $indi;
+		    }
 		}
-		if(isset($this->used_indis[$resIndi->getXref()])){
-			return null;
-		}
-		else{
-			return $resIndi;
-		}
+		return $indi;
 	}
 	
 	/**
@@ -144,96 +149,78 @@ class LineageBuilder {
 	 * @param LineageNode $node
 	 * @return LineageNode Computed lineage
 	 */
-	protected function buildLineage(LineageNode $node) {
-		if($node === null) return;
+	private function buildLineage(LineageNode $node) : LineageNode
+	{
+		$indi_surname = '';
 		
-		$indi_surname = null;
-		
-		$indi_node = $node->getIndividual();			
-		if($indi_node) {
-			if(count($node->getFamiliesNodes()) == 0) {
-				$indiSpouseFamilies = $indi_node->getSpouseFamilies();
-				foreach($indiSpouseFamilies as $indiSpouseFamily) {
-					$node->addFamily($indiSpouseFamily);
+		$indi_node = $node->individual();
+		if($indi_node !== null) {
+		    if($node->families()->count() == 0) {
+				foreach($indi_node->spouseFamilies() as $spouse_family) {
+				    $node->addFamily($spouse_family);
 				}
 			}
 			
-			$dindi_node = new \MyArtJaub\Webtrees\Individual($indi_node);
-			$indi_surname = $dindi_node->getUnprotectedPrimarySurname();
-			
-			//Get the estimated birth place and put it in the place table
-			$place=$dindi_node->getEstimatedBirthPlace(false);
-			if($place && strlen($place) > 0){
-				$place=trim($place);
-				$node->getRootNode()->addPlace(new Place($place, $this->tree));
-			}
+			$indi_surname = $indi_node->getAllNames()[$indi_node->getPrimaryName()]['surname'] ?? '';
+			$node->rootNode()->addPlace($indi_node->getBirthPlace());
 				
 			//Tag the individual as used
-			$this->used_indis[$indi_node->getXref()]=true;
+			$this->used_indis->put($indi_node->xref(), true);
 		}
 		
-		foreach($node->getFamiliesNodes() as $family) {
-			$spouse_surname = null;
-			if($indi_node && $spouse = $family->getSpouse($indi_node)) {
-				$dspouse = new \MyArtJaub\Webtrees\Individual($spouse);
-				$spouse_surname=$dspouse->getUnprotectedPrimarySurname();
+		foreach($node->families() as $family_node) {
+		    /** @var Family $spouse_family */
+		    $spouse_family = $family_node->family;
+			$spouse_surname = '';
+			if($indi_node !== null && ($spouse = $spouse_family->spouse($indi_node)) && $spouse->canShowName()) {
+			    $spouse_surname = $spouse->getAllNames()[$spouse->getPrimaryName()]['surname'] ?? '';
 			}
 			
-			$children = $family->getChildren();
-
-			$nbChildren=0;
-			$nbNatural=0;
+			$nb_children = $nb_natural = 0;
 			
-			foreach($children as $child){
-				$dchild = new \MyArtJaub\Webtrees\Individual($child);
-				$child_surname=$dchild->getUnprotectedPrimarySurname();
-				
-				if(!$dchild->isNewAddition()) {
-					$nbChildren++;
+			foreach($spouse_family->children() as $child){				
+			    if(!($child->isPendingAddition() && $child->privatizeGedcom(Auth::PRIV_HIDE) == '')) {
+			        $child_surname = $child->getAllNames()[$child->getPrimaryName()]['surname'] ?? '';
+			        
+					$nb_children++;
 					//If the root individual is the mother
-					if($indi_node && I18N::strcasecmp($indi_node->getSex(), 'F') == 0) {
+					if($indi_node !== null && $indi_node->sex() == 'F') {
 						//Print only lineages of children with the same surname as their mother (supposing they are natural children)
 						if(!$spouse || ($spouse_surname && I18N::strcasecmp($child_surname, $spouse_surname) != 0)){
 							if(I18N::strcasecmp($child_surname, $indi_surname) == 0){
-								$nbNatural++;
-								$node_child = new LineageNode($child, $node->getRootNode());							
+							    $nb_natural++;
+								$node_child = new LineageNode($child, $node->rootNode());							
 								$node_child = $this->buildLineage($node_child);
-								if($node_child) $node->addChild($family, $node_child);
+								if($node_child) $node->addChild($spouse_family, $node_child);
 							}
 						}
 					}
 					//If the root individual is the father
 					else {
+					    $nb_natural++;
 						//Print if the children does not bear the same name as his mother (and different from his father)
-						if( strlen($child_surname) == 0 || strlen($indi_surname) == 0 || strlen($spouse_surname) == 0 ||
+					    if(mb_strlen($child_surname) == 0 || mb_strlen($indi_surname) == 0 || mb_strlen($spouse_surname) == 0 ||
 							I18N::strcasecmp($child_surname, $indi_surname) == 0 ||
 							I18N::strcasecmp($child_surname, $spouse_surname) != 0 )
 						{
-							$nbNatural++;
-							$node_child = new LineageNode($child, $node->getRootNode());							
+							$node_child = new LineageNode($child, $node->rootNode());							
 							$node_child = $this->buildLineage($node_child);
-							if($node_child) $node->addChild($family, $node_child);
 						}
 						else {
-							$nbNatural++;
-							$node_child = new LineageNode($child, $node->getRootNode(), $child_surname);
-							if($node_child) $node->addChild($family, $node_child);
+							$node_child = new LineageNode($child, $node->rootNode(), $child_surname);
 						}
+						if($node_child) $node->addChild($spouse_family, $node_child);
 					}
 				}
 			}
-
-
+			
 			//Do not print other children
-			if(($nbChildren-$nbNatural)>0){
-				$node->addChild($family, null);
+			if(($nb_children - $nb_natural)>0){
+			    $node->addChild($spouse_family, null);
 			}
 		}
 		
 		return $node;
-		
 	}
-	
-	
 }
  

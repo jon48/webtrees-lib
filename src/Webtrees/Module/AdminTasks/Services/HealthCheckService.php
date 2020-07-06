@@ -56,10 +56,7 @@ class HealthCheckService
             ->fromSub($this->allGedcomRecords($tree), 'gedrecords')
             ->select('ged_type', new Expression('COUNT(ged_id) AS total'))
             ->groupBy('ged_type')
-            ->get()->keyBy('ged_type')
-            ->map(function($row) {
-                return $row->total;
-            });
+            ->pluck('total', 'ged_type');
     }
     
     /**
@@ -83,10 +80,7 @@ class HealthCheckService
             ->where('change.status', '', 'accepted')
             ->where('change.change_time', '>=', Carbon::now()->subDays($nb_days))
             ->groupBy('ged_type')
-            ->get()->keyBy('ged_type')
-            ->map(function($row) {
-                return $row->count;
-            });
+            ->pluck('total', 'ged_type');
     }
     
     /**

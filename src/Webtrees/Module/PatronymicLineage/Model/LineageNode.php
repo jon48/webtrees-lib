@@ -5,84 +5,94 @@
  * @package MyArtJaub\Webtrees
  * @subpackage PatronymicLineage
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+declare(strict_types=1);
+
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Model;
 
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Individual;
+use Illuminate\Support\Collection;
+
 /**
  * Node of the lineage tree, holding data about individuals forming it, and their descendency.
  */
-class LineageNode {
+class LineageNode
+{
 	
 	/**
-	 * @var SplObjectStorage $linked_fams Spouse families linked to the node
+	 * @var Collection $linked_fams Spouse families linked to the node
 	 */
-	protected $linked_fams;
+	private $linked_fams;
 	
 	/**
-	 * @var Fisharebest\Webtrees\Individual $node_indi Reference individual for the node
+	 * @var Individual $node_indi Reference individual for the node
 	 */
-	protected $node_indi;
+	private $node_indi;
 	
 	/**
 	 * @var LineageRootNode $root_node Root node of the lineage
 	 */
-	protected $root_node;
+	private $root_node;
 	
 	/**
 	 * @var string $alt_surname Linked surname, used to link to another lineage
 	 */
-	protected $alt_surname;
+	private $alt_surname;
 	
 	/**
 	 * Constructor for Lineage node
 	 * 
-	 * @param Fisharebest\Webtrees\Individual $node_indi Main individual
+	 * @param Individual $node_indi Main individual
 	 * @param LineageRootNode $root_node Node of the lineage root
 	 * @param null|string $alt_surname Follow-up surname
 	 */
-	public function __construct(Individual $node_indi = null, LineageRootNode $root_node = null, $alt_surname = null) {
+	public function __construct(?Individual $node_indi = null, LineageRootNode $root_node = null, $alt_surname = null)
+	{
 		$this->node_indi = $node_indi;
 		$this->root_node = $root_node;
 		$this->alt_surname = $alt_surname;
-		$this->linked_fams = new \SplObjectStorage();
+		$this->linked_fams = new Collection();
 	}
 	
 	/**
 	 * Add a spouse family to the node
 	 * 
-	 * @param Fisharebest\Webtrees\Family $fams
+	 * @param Family $fams
+	 * @return object
 	 */
-	public function addFamily(Family $fams) {
-		if($fams && !isset($this->linked_fams[$fams])) {
-			$this->linked_fams[$fams] = array();
-		}
+	public function addFamily(Family $fams) : object
+	{
+	    if(!$this->linked_fams->has($fams->xref())) {
+	        $this->linked_fams->put($fams->xref(), (object) [
+	            'family'   =>  $fams,
+	            'children' =>  new Collection()
+	        ]);
+	    }
+	    return $this->linked_fams->get($fams->xref());
 	}
 	
 	/**
 	 * Add a child LineageNode to the node
 	 * 
-	 * @param Fisharebest\Webtrees\Family $fams
+	 * @param Family $fams
 	 * @param LineageNode $child
 	 */
-	public function addChild(Family $fams, LineageNode $child = null) {
-		if($fams) {
-			$this->addFamily($fams);
-			$tmp = $this->linked_fams[$fams];
-			$tmp[] = $child;
-			$this->linked_fams[$fams] = $tmp;
-		}
+	public function addChild(Family $fams, LineageNode $child = null) : void
+	{
+	    $this->addFamily($fams)->children->push($child);
+	    $this->root_node->incrementChildNodes();
 	}
 	
 	/**
 	 * Returns the node individual
 	 * 
-	 * @return Fisharebest\Webtrees\Individual
+	 * @return Individual|NULL
 	 */
-	public function getIndividual() {
+	public function individual() : ?Individual
+	{
 		return $this->node_indi;
 	}
 	
@@ -91,16 +101,18 @@ class LineageNode {
 	 * 
 	 * @return LineageRootNode
 	 */
-	public function getRootNode() {
+	public function rootNode() : LineageRootNode
+	{
 		return $this->root_node;
 	}
 	
 	/**
 	 * Returns the spouse families linked to the node
 	 * 
-	 * @return Fisharebest\Webtrees\Family
+	 * @return Collection
 	 */
-	public function getFamiliesNodes() {
+	public function families() : Collection
+	{
 		return $this->linked_fams;
 	}
 	
@@ -109,7 +121,8 @@ class LineageNode {
 	 * 
 	 * @return string
 	 */
-	public function getFollowUpSurname() {
+	public function followUpSurname() : string
+	{
 		return $this->alt_surname;
 	}
 	
@@ -118,8 +131,9 @@ class LineageNode {
 	 * 
 	 * @return boolean
 	 */
-	public function hasFollowUpSurname() {
-		return !is_null($this->alt_surname) && strlen($this->alt_surname) > 0 ;
+	public function hasFollowUpSurname() : bool
+	{
+		return $this->alt_surname !== null && mb_strlen($this->alt_surname) > 0 ;
 	}
 	
 }

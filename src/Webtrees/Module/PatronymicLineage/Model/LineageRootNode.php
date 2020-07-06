@@ -5,30 +5,43 @@
  * @package MyArtJaub\Webtrees
  * @subpackage PatronymicLineage
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+declare(strict_types=1);
+
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Model;
 
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Place;
+use Illuminate\Support\Collection;
+
 /**
  * Derived class from the LineageNode, indicating a Root Lineage node
  */
-class LineageRootNode extends LineageNode {
+class LineageRootNode extends LineageNode
+{
 	
 	/**
-	 * @var array $places Places for the lineage node
+	 * @var Collection $places Places for the lineage node
 	 */
-	protected $places;
+	private $places;
+	
+	/**
+	 * @var int $nb_children Number of node childs
+	 */
+	private $nb_children;
 	
 	/**
 	 * Constructor for LineageRootNode
 	 * 
-	 * @param Fisharebest\Webtrees\Individual $node_indi
+	 * @param Individual|null $node_indi
 	 */
-	public function __construct($node_indi = null) {
+	public function __construct(?Individual $node_indi = null)
+	{
 		parent::__construct($node_indi, $this);
-		$this->places = array();
+		$this->places = new Collection();
+		$this->nb_children = 0;
 	}
 	
 	/**
@@ -36,26 +49,42 @@ class LineageRootNode extends LineageNode {
 	 * 
 	 * @param Place $place
 	 */
-	public function addPlace(Place $place) {
-		if(!is_null($place) && !$place->isEmpty()){
-			$place_name = $place->getFullName();
-			if(isset($this->places[$place_name])){
-				$this->places[$place_name]+=1;
-			}
-			else{
-				$this->places[$place_name] = 1;
-			}
-		}
+	public function addPlace(Place $place) : void
+	{
+	    $place_name = $place->gedcomName();
+	    if(mb_strlen($place_name) > 0) {
+	        $this->places->put($place_name, $this->places->get($place_name, 0) + 1);
+	    }
+	}
+	
+	/**
+	 * Returns the number of child nodes.
+	 * This number is more to be used as indication rather than an accurate one.
+	 * 
+	 * @return int
+	 */
+	public function numberChildNodes() : int
+	{
+	    return $this->nb_children;
+	}
+	
+	/**
+	 * Increments the number of child nodes by one
+	 * 
+	 */
+	public function incrementChildNodes() : void
+	{
+	    $this->nb_children++;
 	}
 	
 	/**
 	 * Returns the list of place for the lineage
 	 * 
-	 * @return array
+	 * @return Collection
 	 */
-	public function getPlaces() {
-		ksort($this->places);
-		return $this->places;
+	public function places() : Collection
+	{
+	    return $this->places;
 	}
 	
 }
