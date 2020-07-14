@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -27,17 +28,15 @@ use Psr\Http\Message\ServerRequestInterface;
 /**
  * Welcome Block Module.
  */
-class WelcomeBlockModule
-    extends AbstractModuleMaj
-    implements ModuleBlockInterface
+class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterface
 {
     use ModuleBlockTrait;
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
      */
-    public function title() : string 
+    public function title(): string
     {
         return /* I18N: Name of the “WelcomeBlock” module */ I18N::translate('MyArtJaub Welcome Block');
     }
@@ -46,8 +45,9 @@ class WelcomeBlockModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
      */
-    public function description() : string 
+    public function description(): string
     {
+        //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “WelcomeBlock” module */ I18N::translate('The MyArtJaub Welcome block welcomes the visitor to the site, allows a quick login to the site, and displays statistics on visits.');
     }
     
@@ -58,7 +58,9 @@ class WelcomeBlockModule
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router) {
-            $router->attach('', '/module-maj/welcomeblock/{block_id}', static function (Map $router) {                
+
+            $router->attach('', '/module-maj/welcomeblock/{block_id}', static function (Map $router) {
+                
                 $router->get(MatomoStats::class, '/matomostats', MatomoStats::class);
             });
         });
@@ -100,7 +102,7 @@ class WelcomeBlockModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::isTreeBlock()
      */
-    public function isTreeBlock() : bool
+    public function isTreeBlock(): bool
     {
         return true;
     }
@@ -109,7 +111,7 @@ class WelcomeBlockModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::editBlockConfiguration()
      */
-    public function editBlockConfiguration(Tree $tree, int $block_id) : string 
+    public function editBlockConfiguration(Tree $tree, int $block_id): string
     {
         return view($this->name() . '::config', $this->matomoSettings($block_id));
     }
@@ -118,21 +120,22 @@ class WelcomeBlockModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::saveBlockConfiguration()
      */
-    public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id) : void
+    public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
         $params = (array) $request->getParsedBody();
         
         $matomo_enabled = $params['matomo_enabled'] == 'yes';
         $this->setBlockSetting($block_id, 'matomo_enabled', $matomo_enabled ? 'yes' : 'no');
+        if (!$matomo_enabled) {
+            return;
+        }
         
-        if(!$matomo_enabled) return;
-        
-        if(filter_var($params['matomo_url'], FILTER_VALIDATE_URL) === false) {
+        if (filter_var($params['matomo_url'], FILTER_VALIDATE_URL) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo URL provided is not valid.'), 'danger');
             return;
         }
         
-        if(filter_var($params['matomo_siteid'], FILTER_VALIDATE_INT) === false) {
+        if (filter_var($params['matomo_siteid'], FILTER_VALIDATE_INT) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo Site ID provided is not valid.'), 'danger');
             return;
         }
@@ -147,22 +150,22 @@ class WelcomeBlockModule
     
     /**
      * Returns whether Matomo statistics is enabled for a specific MyArtJaub WelcomeBlock block
-     * 
+     *
      * @param int $block_id
      * @return bool
      */
-    public function isMatomoEnabled(int $block_id) : bool
+    public function isMatomoEnabled(int $block_id): bool
     {
         return $this->getBlockSetting($block_id, 'matomo_enabled', 'no') === 'yes';
     }
     
     /**
      * Returns settings for retrieving Matomo statistics for a specific MyArtJaub WelcomeBlock block
-     * 
+     *
      * @param int $block_id
-     * @return array
+     * @return array<string, mixed>
      */
-    public function matomoSettings(int $block_id) : array
+    public function matomoSettings(int $block_id): array
     {
         return [
             'matomo_enabled' => $this->isMatomoEnabled($block_id),
@@ -171,6 +174,4 @@ class WelcomeBlockModule
             'matomo_siteid'  => (int) $this->getBlockSetting($block_id, 'matomo_siteid', '0')
         ];
     }
-    
 }
- 

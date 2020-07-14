@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2012-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Tasks;
@@ -41,7 +43,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      * Name of the Tree preference to check if the task is enabled for that tree
      * @var string
      */
-    const TREE_PREFERENCE_NAME = 'MAJ_AT_HEALTHCHECK_ENABLED';
+    public const TREE_PREFERENCE_NAME = 'MAJ_AT_HEALTHCHECK_ENABLED';
     
     /**
      * @var AdminTasksModule $module
@@ -75,7 +77,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     
     /**
      * Constructor for HealthCheckTask
-     * 
+     *
      * @param ModuleService $module_service
      * @param HealthCheckService $healthcheck_service
      * @param EmailService $email_service
@@ -113,25 +115,28 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::defaultFrequency()
      */
-    public function defaultFrequency() : int
+    public function defaultFrequency(): int
     {
-        return 10080;  // = 1 week = 7 * 24 * 60 min
+        return 10080; // = 1 week = 7 * 24 * 60 min
     }
     
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::run()
-     */    
-    public function run(TaskSchedule $task_schedule) : bool
+     */
+    public function run(TaskSchedule $task_schedule): bool
     {
-        if($this->module === null) return false;
+        if ($this->module === null) {
+            return false;
+        }
         
         $res = true;
         
         // Compute the number of days to compute
         $interval_lastrun = $task_schedule->lastRunTime()->diffAsCarbonInterval(Carbon::now());
+        //@phpcs:ignore Generic.Files.LineLength.TooLong
         $interval = $interval_lastrun->greaterThan($task_schedule->frequency()) ? $interval_lastrun : $task_schedule->frequency();
-        $nb_days = $interval->ceilDay()->totalDays;
+        $nb_days = (int) $interval->ceilDay()->totalDays;
         
         $view_params_site = [
             'nb_days'               =>  $nb_days,
@@ -143,12 +148,17 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
             'unverified'            =>  $this->user_service->unverified(),
         ];
         
-        foreach($this->tree_service->all() as $tree) {
-            /** @var Tree $tree */
+        foreach ($this->tree_service->all() as $tree) {
+        /** @var Tree $tree */
             
-            if($tree->getPreference(self::TREE_PREFERENCE_NAME) !== '1') continue;
+            if ($tree->getPreference(self::TREE_PREFERENCE_NAME) !== '1') {
+                continue;
+            }
             
             $webmaster = $this->user_service->find((int) $tree->getPreference('WEBMASTER_USER_ID'));
+            if ($webmaster === null) {
+                continue;
+            }
             I18N::init($webmaster->getPreference('language'));
             
             $error_logs = $this->healthcheck_service->errorLogs($tree, $nb_days);
@@ -166,7 +176,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
                 new TreeUser($tree),
                 $webmaster,
                 new NoReplyUser(),
-                I18N::translate('Health Check Report').' - '.I18N::translate('Tree %s', $tree->name()),
+                I18N::translate('Health Check Report') . ' - ' . I18N::translate('Tree %s', $tree->name()),
                 view($this->module->name() . '::tasks/healthcheck/email-healthcheck-text', $view_params),
                 view($this->module->name() . '::tasks/healthcheck/email-healthcheck-html', $view_params)
             );
@@ -190,24 +200,27 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\ConfigurableTaskInterface::updateConfig()
      */
-    public function updateConfig(ServerRequestInterface $request, TaskSchedule $task_schedule) : bool 
+    public function updateConfig(ServerRequestInterface $request, TaskSchedule $task_schedule): bool
     {
         try {
-            $params = $request->getParsedBody();
+            $params = (array) $request->getParsedBody();
             
-            foreach($this->tree_service->all() as $tree) {
-                if(Auth::isManager($tree)) {
+            foreach ($this->tree_service->all() as $tree) {
+                if (Auth::isManager($tree)) {
                     $tree_enabled = (bool) ($params['HEALTHCHECK_ENABLED_' . $tree->id()] ?? false);
                     $tree->setPreference(self::TREE_PREFERENCE_NAME, $tree_enabled ? '1' : '0');
                 }
             }
             return true;
-        }
-        catch (Exception $ex) {
-            Log::addErrorLog(sprintf('Error while updating the Task schedule "%s". Exception: %s', $task_schedule->id(), $ex->getMessage()));
+        } catch (Exception $ex) {
+            Log::addErrorLog(
+                sprintf(
+                    'Error while updating the Task schedule "%s". Exception: %s',
+                    $task_schedule->id(),
+                    $ex->getMessage()
+                )
+            );
         }
         return false;
     }
-
 }
- 

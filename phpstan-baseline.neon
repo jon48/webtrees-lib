@@ -1,0 +1,27 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\ConfigurableTaskInterface\\|MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\TaskInterface\\:\\:updateConfig\\(\\)\\.$#"
+			count: 1
+			path: src/Webtrees/Module/AdminTasks/Http/RequestHandlers/TaskEditAction.php
+
+		-
+			message: "#^Call to an undefined method MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\ConfigurableTaskInterface\\|MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\TaskInterface\\:\\:name\\(\\)\\.$#"
+			count: 2
+			path: src/Webtrees/Module/AdminTasks/Http/RequestHandlers/TaskEditAction.php
+
+		-
+			message: "#^Call to an undefined method MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\ConfigurableTaskInterface\\|MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\TaskInterface\\:\\:name\\(\\)\\.$#"
+			count: 1
+			path: src/Webtrees/Module/AdminTasks/Http/RequestHandlers/TaskEditPage.php
+
+		-
+			message: "#^Call to an undefined method MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\ConfigurableTaskInterface\\|MyArtJaub\\\\Webtrees\\\\Module\\\\AdminTasks\\\\Model\\\\TaskInterface\\:\\:configView\\(\\)\\.$#"
+			count: 1
+			path: src/Webtrees/Module/AdminTasks/Http/RequestHandlers/TaskEditPage.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$children\\.$#"
+			count: 1
+			path: src/Webtrees/Module/PatronymicLineage/Model/LineageNode.php
+

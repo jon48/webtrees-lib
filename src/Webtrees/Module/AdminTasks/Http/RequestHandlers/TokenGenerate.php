@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,11 +9,14 @@
  * @copyright Copyright (c) 2012-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
@@ -32,7 +36,7 @@ class TokenGenerate implements RequestHandlerInterface
     
     /**
      * Constructor for TokenGenerate request handler
-     * 
+     *
      * @param ModuleService $module_service
      */
     public function __construct(ModuleService $module_service)
@@ -46,13 +50,14 @@ class TokenGenerate implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        assert($this->module !== null);
+        if ($this->module === null) {
+            throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
+        }
         
         $token = Functions::generateRandomToken();
         $this->module->setPreference('MAJ_AT_FORCE_EXEC_TOKEN', $token);
-        Log::addConfigurationLog($this->module->title().' : New token generated.');
+        Log::addConfigurationLog($this->module->title() . ' : New token generated.');
         
         return response(['token' => $token]);
     }
-    
 }

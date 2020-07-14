@@ -39,5 +39,11 @@
 			"MyArtJaub\\" : "src/",
 			"MyArtJaub\\Tests\\" : "tests/"
 		}
-	}
+	},
+    "scripts": {
+        "webtrees-lib:phpcs" : "phpcs -s",
+        "webtrees-lib:phpcbf" : "phpcbf",
+        "webtrees-lib:phpstan" : "phpstan analyze",
+        "webtrees-lib:sonar" : "sonar-scanner"
+    }
 }

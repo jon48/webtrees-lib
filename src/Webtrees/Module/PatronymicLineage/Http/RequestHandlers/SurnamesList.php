@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers;
@@ -26,10 +28,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Request handler for displaying list of surnames
  */
-class SurnamesList implements RequestHandlerInterface 
+class SurnamesList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
-    
+
     /**
      * @var PatronymicLineageModule $module
      */
@@ -42,14 +44,12 @@ class SurnamesList implements RequestHandlerInterface
     
     /**
      * Constructor for SurnamesList Request Handler
-     * 
+     *
      * @param ModuleService $module_service
      * @param IndividualListService $indilist_service
      */
-    public function __construct(
-        ModuleService $module_service,
-        IndividualListService $indilist_service
-    ) {
+    public function __construct(ModuleService $module_service, IndividualListService $indilist_service)
+    {
         $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
         $this->indilist_service = $indilist_service;
     }
@@ -60,28 +60,29 @@ class SurnamesList implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if($this->module === null)
+        if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
+        }
         
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
         
         $initial = $request->getAttribute('alpha');
         $initials_list = collect($this->indilist_service->surnameAlpha(false, false, I18N::locale()))
-            ->reject(function($count, $initial) {
+            ->reject(function ($count, $initial) {
+
                 return $initial === '@' || $initial === ',';
             });
+            
         $show_all = $request->getQueryParams()['show_all'] ?? 'no';
         
-        if($show_all === 'yes') {
+        if ($show_all === 'yes') {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . I18N::translate('All');
             $surnames = $this->indilist_service->surnames('', '', false, false, I18N::locale());
-        }
-        else if ($initial !== null && mb_strlen($initial) == 1) {
+        } elseif ($initial !== null && mb_strlen($initial) == 1) {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . $initial;
             $surnames = $this->indilist_service->surnames('', $initial, false, false, I18N::locale());
-        }
-        else {
+        } else {
             $title =  I18N::translate('Patronymic Lineages');
             $surnames = [];
         }
@@ -96,5 +97,4 @@ class SurnamesList implements RequestHandlerInterface
             'surnames'      =>  $surnames
         ]);
     }
-
 }

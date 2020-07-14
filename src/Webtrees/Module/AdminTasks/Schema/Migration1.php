@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Schema;
@@ -27,12 +29,13 @@ class Migration1 implements MigrationInterface
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
      */
-    public function upgrade() : void 
+    public function upgrade(): void
     {
         // Clean up previous admin tasks table if it exists
         DB::schema()->dropIfExists('maj_admintasks');
         
         DB::schema()->create('maj_admintasks', static function (Blueprint $table): void {
+
             $table->increments('majat_id');
             $table->string('majat_task_id', 32)->unique()->nullable(false);
             $table->enum('majat_status', ['enabled', 'disabled'])->nullable(false)->default('disabled');

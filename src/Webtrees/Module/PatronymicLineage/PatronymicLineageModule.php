@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2009-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
@@ -29,18 +31,16 @@ use Psr\Http\Message\ServerRequestInterface;
  * Patronymic Lineage Module.
  * Display lineages of people with the same surname.
  */
-class PatronymicLineageModule
-    extends AbstractModuleMaj
-    implements ModuleListInterface, ModuleGlobalInterface
+class PatronymicLineageModule extends AbstractModuleMaj implements ModuleListInterface, ModuleGlobalInterface
 {
     use ModuleListTrait;
     use ModuleGlobalTrait;
-    
-    /**
+
+     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
      */
-    public function title() : string
+    public function title(): string
     {
         return /* I18N: Name of the “Patronymic lineage” module */ I18N::translate('Patronymic Lineages');
     }
@@ -49,8 +49,9 @@ class PatronymicLineageModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
      */
-    public function description() : string
+    public function description(): string
     {
+        //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “Patronymic lineage” module */ I18N::translate('Display lineages of people holding the same surname.');
     }
     
@@ -58,11 +59,14 @@ class PatronymicLineageModule
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
      */
-    public function loadRoutes(Map $router) : void
+    public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router) {
+
             $router->attach('', '/module-maj/lineages', static function (Map $router) {
+
                 $router->attach('', '/Page', static function (Map $router) {
+
                     $router->get(SurnamesList::class, '/{tree}/list{/alpha}', SurnamesList::class);
                     $router->get(LineagesPage::class, '/{tree}/lineage/{surname}', LineagesPage::class);
                 });
@@ -74,16 +78,16 @@ class PatronymicLineageModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listUrl()
      */
-    public function listUrl(Tree $tree, array $parameters = []) : string
+    public function listUrl(Tree $tree, array $parameters = []): string
     {
         $surname = $parameters['surname'] ?? '';
         
         $xref = app(ServerRequestInterface::class)->getAttribute('xref', '');
-        if($xref !== '' && $individual = Factory::individual()->make($xref, $tree)) {
+        if ($xref !== '' && $individual = Factory::individual()->make($xref, $tree)) {
             $surname = $individual->getAllNames()[$individual->getPrimaryName()]['surname'];
         }
         
-        if($surname !== '') {
+        if ($surname !== '') {
             return route(LineagesPage::class, [
                 'tree'      =>  $tree->name(),
                 'surname'   =>  $surname
@@ -98,7 +102,7 @@ class PatronymicLineageModule
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listMenuClass()
      */
-    public function listMenuClass() : string
+    public function listMenuClass(): string
     {
         return 'menu-maj-patrolineage';
     }
@@ -111,6 +115,4 @@ class PatronymicLineageModule
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
-
 }
- 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
@@ -40,46 +42,53 @@ class TaskStatusAction implements RequestHandlerInterface
     
     /**
      * Constructor for TaskStatusAction Request Handler
-     * 
+     *
      * @param ModuleService $module_service
      * @param TaskScheduleService $taskschedules_service
      */
-    function __construct(
-        ModuleService $module_service,
-        TaskScheduleService $taskschedules_service
-        ) {
-            $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
-            $this->taskschedules_service = $taskschedules_service;
+    public function __construct(ModuleService $module_service, TaskScheduleService $taskschedules_service)
+    {
+        $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
+        $this->taskschedules_service = $taskschedules_service;
     }
     
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
         
         $admin_config_route = route(AdminConfigPage::class);
         
-        if($task_schedule === null) {
-            FlashMessages::addMessage(I18N::translate('The task shedule with ID “%s” does not exist.', e($task_sched_id)), 'danger');
+        if ($task_schedule === null) {
+            FlashMessages::addMessage(
+                I18N::translate('The task shedule with ID “%d” does not exist.', I18N::number($task_sched_id)),
+                'danger'
+            );
             return redirect($admin_config_route);
         }
         
         ((bool) $request->getAttribute('enable', false)) ? $task_schedule->enable() : $task_schedule->disable();
         
-        if($this->taskschedules_service->update($task_schedule) > 0) {
-            FlashMessages::addMessage(I18N::translate('The scheduled task has been successfully updated', 'success'));
-            Log::addConfigurationLog('Module '.$this->module->title().' : Task Schedule “'. $task_schedule->id() .'” has been updated.');
+        if ($this->taskschedules_service->update($task_schedule) > 0) {
+            FlashMessages::addMessage(
+                I18N::translate('The scheduled task has been successfully updated'),
+                'success'
+            );
+            //phpcs:ignore Generic.Files.LineLength.TooLong
+            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” has been updated.');
+        } else {
+            FlashMessages::addMessage(
+                I18N::translate('An error occured while updating the scheduled task'),
+                'danger'
+            );
+            //phpcs:ignore Generic.Files.LineLength.TooLong
+            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” could not be updated. See error log.');
         }
-        else {
-            FlashMessages::addMessage(I18N::translate('An error occured while updating the scheduled task'), 'danger');
-            Log::addConfigurationLog('Module '.$this->module->title().' : Task Schedule “'. $task_schedule->id() .'” could not be updated. See error log.');
-        }
+        
         return redirect($admin_config_route);
     }
-    
 }
-

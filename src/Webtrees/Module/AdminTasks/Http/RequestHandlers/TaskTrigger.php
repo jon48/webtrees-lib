@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2012-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
@@ -36,16 +38,14 @@ class TaskTrigger implements RequestHandlerInterface
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
-
+    
     /**
      * Constructor for TaskTrigger request handler
      * @param ModuleService $module_service
      * @param TaskScheduleService $taskschedules_service
      */
-    public function __construct(
-        ModuleService $module_service,
-        TaskScheduleService $taskschedules_service
-    ) {
+    public function __construct(ModuleService $module_service, TaskScheduleService $taskschedules_service)
+    {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
     }
@@ -54,24 +54,23 @@ class TaskTrigger implements RequestHandlerInterface
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if($this->module === null)
+        if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
+        }
         
         $task_id = $request->getAttribute('task');
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         $force_token = $request->getQueryParams()['force'] ?? '';
         $force = $token == $force_token;
         
-        $tasks = $this->taskschedules_service->findTasksToRun($force, $task_id);
+        $task_schedules = $this->taskschedules_service->findTasksToRun($force, $task_id);
         
-        foreach($tasks as $task) {
-            /** @var TaskInterface $task */
-            $this->taskschedules_service->run($task, $force);
+        foreach ($task_schedules as $task_schedule) {
+            $this->taskschedules_service->run($task_schedule, $force);
         }
         
         return response();
     }
 }
-

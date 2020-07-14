@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -8,6 +9,7 @@
  * @copyright Copyright (c) 2012-2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
@@ -46,32 +48,34 @@ class TasksList implements RequestHandlerInterface
     
     /**
      * Constructor for TasksList Request Handler
-     * 
+     *
      * @param ModuleService $module_service
      * @param TaskScheduleService $taskschedules_service
      * @param DatatablesService $datatables_service
      */
-    function __construct(
+    public function __construct(
         ModuleService $module_service,
         TaskScheduleService $taskschedules_service,
         DatatablesService $datatables_service
     ) {
-            $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
-            $this->taskschedules_service = $taskschedules_service;
-            $this->datatables_service = $datatables_service;
+        $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
+        $this->taskschedules_service = $taskschedules_service;
+        $this->datatables_service = $datatables_service;
     }
     
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
      */
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        if($this->module === null)
+        if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
+        }
         
         $task_schedules = $this->taskschedules_service->all(true, true)
             ->map(function (TaskSchedule $value) {
+
                 $row = $value->toArray();
                 $task = $this->taskschedules_service->findTask($row['task_id']);
                 $row['task_name'] = $task !== null ? $task->name() : I18N::translate('Task not found');
@@ -82,7 +86,8 @@ class TasksList implements RequestHandlerInterface
         $sort_columns   = ['task_name', 'enabled', 'last_run'];
         $module_name = $this->module->name();
         
-        $callback = function (array $row) use ($module_name) : array {
+        $callback = function (array $row) use ($module_name): array {
+
             $row['frequency']->setLocale(I18N::locale()->code());
             
             $task_options_params = [
@@ -90,7 +95,7 @@ class TasksList implements RequestHandlerInterface
                 'task_sched_enabled' => $row['enabled'],
                 'task_edit_route' => route(TaskEditPage::class, ['task' => $row['id']]),
                 'task_status_route' => route(TaskStatusAction::class, [
-                    'task' => $row['id'], 
+                    'task' => $row['id'],
                     'enable' => $row['enabled'] ? 0 : 1
                 ])
             ];
@@ -113,14 +118,23 @@ class TasksList implements RequestHandlerInterface
                 view($module_name . '::components/yes-no-icons', ['yes' => $row['last_result']]),
                 '<span dir="auto">' . e($row['frequency']->cascade()->forHumans()) . '</span>',
                 $row['nb_occurrences'] > 0 ? I18N::number($row['nb_occurrences']) : I18N::translate('Unlimited'),
-                view($module_name . '::components/yes-no-icons', ['yes' => $row['is_running'], 'text_yes' => I18N::translate('Running'), 'text_no' => I18N::translate('Not running')]),
+                view($module_name . '::components/yes-no-icons', [
+                    'yes' => $row['is_running'],
+                    'text_yes' => I18N::translate('Running'),
+                    'text_no' => I18N::translate('Not running')
+                ]),
                 view($module_name . '::admin/tasks-table-run', $task_run_params)
             ];
             
             return $datum;
         };
         
-        return $this->datatables_service->handleCollection($request, $task_schedules, $search_columns, $sort_columns, $callback);
+        return $this->datatables_service->handleCollection(
+            $request,
+            $task_schedules,
+            $search_columns,
+            $sort_columns,
+            $callback
+        );
     }
 }
-

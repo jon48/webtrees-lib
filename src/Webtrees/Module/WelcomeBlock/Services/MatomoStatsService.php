@@ -32,12 +32,12 @@ class MatomoStatsService
     /**
      * Returns the number of visits for the current year (up to the day before).
      * That statistic is cached for the day, to avoid unecessary calls to Matomo API.
-     * 
+     *
      * @param WelcomeBlockModule $module
      * @param int $block_id
      * @return int|NULL
      */
-    public function visitsThisYear(WelcomeBlockModule $module, int $block_id) : ?int
+    public function visitsThisYear(WelcomeBlockModule $module, int $block_id): ?int
     {
         /** @var Cache $cache */
         $cache = app('cache.files');
@@ -45,11 +45,14 @@ class MatomoStatsService
         
         return $cache->remember(
             $module->name() . '-matomovisits-yearly-' . $block_id,
-            function () use ($module, $block_id) : ?int {
+            function () use ($module, $block_id): ?int {
                 $visits_year = $this->visits($module, $block_id, 'year');
+                if ($visits_year === null) {
+                    return null;
+                }
                 $visits_today = $this->visits($module, $block_id, 'day');
                 
-                return $visits_year-$visits_today;
+                return $visits_year - $visits_today;
             },
             Carbon::now()->addDay()->startOfDay()->diffInSeconds(Carbon::now()) // Valid until midnight
         );
@@ -57,16 +60,16 @@ class MatomoStatsService
     
     /**
      * Returns the number of visits for the current day.
-     * 
+     *
      * @param WelcomeBlockModule $module
      * @param int $block_id
      * @return int|NULL
      */
-    public function visitsToday(WelcomeBlockModule $module, int $block_id) : ?int
+    public function visitsToday(WelcomeBlockModule $module, int $block_id): ?int
     {
         return app('cache.array')->remember(
             $module->name() . '-matomovisits-daily-' . $block_id,
-            function () use ($module, $block_id) : ?int {
+            function () use ($module, $block_id): ?int {
                 return $this->visits($module, $block_id, 'day');
             }
         );
@@ -74,17 +77,18 @@ class MatomoStatsService
     
     /**
      * Invoke the Matomo API to retrieve the number of visits over a period.
-     * 
+     *
      * @param WelcomeBlockModule $module
      * @param int $block_id
      * @param string $period
      * @return int|NULL
      */
-    protected function visits(WelcomeBlockModule $module, int $block_id, string $period) : ?int
+    protected function visits(WelcomeBlockModule $module, int $block_id, string $period): ?int
     {
         $settings = $module->matomoSettings($block_id);
         
-        if($settings['matomo_enabled'] === true
+        if (
+            $settings['matomo_enabled'] === true
             && mb_strlen($settings['matomo_url']) > 0
             && mb_strlen($settings['matomo_token']) > 0
             && $settings['matomo_siteid'] > 0
@@ -101,19 +105,21 @@ class MatomoStatsService
                         'idSite'    =>  $settings['matomo_siteid'],
                         'period'    =>  $period,
                         'date'      =>  'today',
-                        'token_auth'=>  $settings['matomo_token'],
+                        'token_auth' =>  $settings['matomo_token'],
                         'format'    =>  'json'
                     ]
                 ]);
                 
-                if($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
+                if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
                     $result = json_decode((string) $response->getBody(), true)['value'] ?? null;
-                    if($result !== null) return (int)$result;
+                    if ($result !== null) {
+                        return (int)$result;
+                    }
                 }
-            } catch (RequestException $ex) {}
+            } catch (RequestException $ex) {
+            }
         }
         
         return null;
     }
 }
-
