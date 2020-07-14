@@ -28,12 +28,18 @@ use Psr\Http\Server\RequestHandlerInterface;
 class TaskTrigger implements RequestHandlerInterface
 {
     /**
+     * @var AdminTasksModule $module
+     */
+    private $module;
+    
+    /**
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
 
     /**
      * Constructor for TaskTrigger request handler
+     * @param ModuleService $module_service
      * @param TaskScheduleService $taskschedules_service
      */
     public function __construct(

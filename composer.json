@@ -18,14 +18,19 @@
 	"support" : {
 		"issues" : "http://bugs.jaubart.com"
 	},
+	"config" : {
+		"platform" : {
+			"php" : "7.1.8"
+		},
+		"sort-packages" : true,
+		"process-timeout" : 3600
+	},
 	"require" : {
-		"php" : ">=5.4.0",
-		"ext-xml" : "*",
-		"tedivm/stash" : "~0.14",
-		"paragonie/sodium_compat" : "~1.13"
+		"ext-xml": "*",
+		"fisharebest/webtrees": "~2.0.6",
+		"paragonie/sodium_compat": "~1.13"
 	},
 	"require-dev" : {
-		"fisharebest/webtrees" : "~2.0.5",
 		"mockery/mockery" : "@stable",
 		"phpunit/phpunit" : "@stable"
 	},
