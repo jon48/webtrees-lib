@@ -12,8 +12,9 @@
 
 declare(strict_types=1);
 
-namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
+namespace MyArtJaub\Webtrees\Module\AdminTasks\Contracts;
 
+use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**

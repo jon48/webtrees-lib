@@ -18,7 +18,6 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

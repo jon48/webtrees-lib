@@ -12,7 +12,9 @@
 
 declare(strict_types=1);
 
-namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
+namespace MyArtJaub\Webtrees\Module\AdminTasks\Contracts;
+
+use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 
 /**
  * Interface for task to be run on a shedule

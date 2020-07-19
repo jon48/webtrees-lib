@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
+namespace MyArtJaub\Webtrees\Module\AdminTasks\Contracts;
 
 /**
  * Inferface for modules exposing tasks to be run on a schedule
@@ -24,7 +24,7 @@ interface ModuleTasksProviderInterface
      * List tasks provided by the module as an associative array.
      * They keys are used as task IDs for storage and reference.
      *
-     * @return array List of tasks
+     * @return array<string, string> List of tasks
      */
     public function listTasks(): array;
 }

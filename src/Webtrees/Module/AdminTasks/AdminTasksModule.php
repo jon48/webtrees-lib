@@ -25,6 +25,7 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
 use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\AdminConfigPage;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskEditAction;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskEditPage;
@@ -32,7 +33,6 @@ use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskStatusAction;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskTrigger;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TasksList;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TokenGenerate;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Tasks\HealthCheckEmailTask;
 
 /**
@@ -153,7 +153,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
     
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\ModuleTasksProviderInterface::listTasks()
+     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface::listTasks()
      */
     public function listTasks(): array
     {
