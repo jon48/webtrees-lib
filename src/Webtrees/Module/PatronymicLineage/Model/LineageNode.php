@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Model;
 use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Individual;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * Node of the lineage tree, holding data about individuals forming it, and their descendency.
@@ -63,7 +64,7 @@ class LineageNode
      * Add a spouse family to the node
      *
      * @param Family $fams
-     * @return object
+     * @return stdClass
      */
     public function addFamily(Family $fams): object
     {

@@ -90,7 +90,7 @@ class LineagesPage implements RequestHandlerInterface
             'show_all'      =>  'no',
             'surname'       =>  $surname,
             'lineages'      =>  $lineages,
-            'nb_lineages'   =>  $lineages->count()
+            'nb_lineages'   =>  $lineages !== null ? $lineages->count() : 0
         ]);
     }
 }

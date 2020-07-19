@@ -157,7 +157,7 @@ class TaskEditAction implements RequestHandlerInterface
             return true;
         }
         
-        /** @var TaskInterface|ConfigurableTaskInterface $task */
+        /** @var TaskInterface&ConfigurableTaskInterface $task */
         if (!$task->updateConfig($request, $task_schedule)) {
             FlashMessages::addMessage(
                 I18N::translate(
