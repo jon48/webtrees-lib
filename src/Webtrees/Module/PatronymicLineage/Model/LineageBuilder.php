@@ -20,7 +20,7 @@ use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Services\IndividualListService;
+use Fisharebest\Webtrees\Module\IndividualListModule;
 use Illuminate\Support\Collection;
 
 /**
@@ -40,9 +40,9 @@ class LineageBuilder
     private $tree;
    
     /**
-     * @var IndividualListService $indilist_service
+     * @var IndividualListModule $indilist_module
      */
-    private $indilist_service;
+    private $indilist_module;
     
     /**
      * @var Collection $used_indis Individuals already processed
@@ -55,11 +55,11 @@ class LineageBuilder
      * @param string $surname Reference surname
      * @param Tree $tree Gedcom tree
      */
-    public function __construct($surname, Tree $tree, IndividualListService $indilist_service)
+    public function __construct($surname, Tree $tree, IndividualListModule $indilist_module)
     {
         $this->surname = $surname;
         $this->tree = $tree;
-        $this->indilist_service = $indilist_service;
+        $this->indilist_module = $indilist_module;
         $this->used_indis = new Collection();
     }
   
@@ -70,8 +70,12 @@ class LineageBuilder
      */
     public function buildLineages(): ?Collection
     {
-        $indis = $this->indilist_service->individuals($this->surname, '', '', false, false, I18N::locale());
-        //Warning - the IndividualListService returns a clone of individuals objects. Cannot be used for object equality
+        if ($this->indilist_module === null) {
+            return null;
+        }
+        
+        $indis = $this->indilist_module->individuals($this->tree, $this->surname, '', '', false, false, I18N::locale());
+        //Warning - the IndividualListModule returns a clone of individuals objects. Cannot be used for object equality
         if (count($indis) == 0) {
             return null;
         }

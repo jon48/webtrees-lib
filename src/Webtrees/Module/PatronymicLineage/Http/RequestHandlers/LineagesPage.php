@@ -18,7 +18,7 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
-use Fisharebest\Webtrees\Services\IndividualListService;
+use Fisharebest\Webtrees\Module\IndividualListModule;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\PatronymicLineageModule;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Model\LineageBuilder;
@@ -39,20 +39,19 @@ class LineagesPage implements RequestHandlerInterface
     private $module;
     
     /**
-     * @var IndividualListService $indilist_service
+     * @var IndividualListModule $indilist_module
      */
-    private $indilist_service;
+    private $indilist_module;
     
     /**
      * Constructor for LineagesPage Request handler
      *
      * @param ModuleService $module_service
-     * @param IndividualListService $indilist_service
      */
-    public function __construct(ModuleService $module_service, IndividualListService $indilist_service)
+    public function __construct(ModuleService $module_service)
     {
-            $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
-        $this->indilist_service = $indilist_service;
+        $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
+        $this->indilist_module = $module_service->findByInterface(IndividualListModule::class)->first();
     }
     
     /**
@@ -65,13 +64,17 @@ class LineagesPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
         
+        if ($this->indilist_module === null) {
+            throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
+        }
+        
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
         
         $surname = $request->getAttribute('surname');
         
         $initial = mb_substr($surname, 0, 1);
-        $initials_list = collect($this->indilist_service->surnameAlpha(false, false, I18N::locale()))
+        $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
             ->reject(function ($count, $initial) {
 
                 return $initial === '@' || $initial === ',';

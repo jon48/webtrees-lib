@@ -1,4 +1,3 @@
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/41e26058-ff3c-4836-82c0-bd59ec7f8ecb/mini.png)](https://insight.sensiolabs.com/projects/41e26058-ff3c-4836-82c0-bd59ec7f8ecb)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jon48/webtrees-lib/?branch=master)
 [![Code Climate](https://codeclimate.com/github/jon48/webtrees-lib/badges/gpa.svg)](https://codeclimate.com/github/jon48/webtrees-lib)
 

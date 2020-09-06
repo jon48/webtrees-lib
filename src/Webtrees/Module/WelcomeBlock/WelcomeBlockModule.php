@@ -68,6 +68,15 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     
     /**
      * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
+     */
+    public function customModuleVersion(): string
+    {
+        return '2.0.6-v.1';
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
      */
     public function getBlock(Tree $tree, int $block_id, string $context, array $config = []): string

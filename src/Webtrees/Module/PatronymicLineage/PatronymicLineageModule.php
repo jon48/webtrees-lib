@@ -76,6 +76,15 @@ class PatronymicLineageModule extends AbstractModuleMaj implements ModuleListInt
     
     /**
      * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
+     */
+    public function customModuleVersion(): string
+    {
+        return '2.0.7-v.1';
+    }
+    
+    /**
+     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listUrl()
      */
     public function listUrl(Tree $tree, array $parameters = []): string
