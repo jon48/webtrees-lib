@@ -37,13 +37,13 @@ class Migration1 implements MigrationInterface
         DB::schema()->create('maj_admintasks', static function (Blueprint $table): void {
 
             $table->increments('majat_id');
-            $table->string('majat_task_id', 32)->unique()->nullable(false);
-            $table->enum('majat_status', ['enabled', 'disabled'])->nullable(false)->default('disabled');
-            $table->dateTime('majat_last_run')->nullable(false)->default(Carbon::createFromTimestampUTC(0));
-            $table->boolean('majat_last_result')->nullable(false)->default(true);
-            $table->integer('majat_frequency')->nullable(false)->default(10080);
-            $table->smallInteger('majat_nb_occur')->nullable(false)->default(0);
-            $table->boolean('majat_running')->nullable(false)->default(false);
+            $table->string('majat_task_id', 32)->unique();
+            $table->enum('majat_status', ['enabled', 'disabled'])->default('disabled');
+            $table->dateTime('majat_last_run')->default(Carbon::createFromTimestampUTC(0));
+            $table->boolean('majat_last_result')->default(true);
+            $table->integer('majat_frequency')->default(10080);
+            $table->smallInteger('majat_nb_occur')->default(0);
+            $table->boolean('majat_running')->default(false);
         });
     }
 }

@@ -240,19 +240,6 @@ class Functions {
 		}		
 		return self::$calendarShortMonths[$calendarId];
 	}
-	
-	/**
-	 * Returns the generation associated with a Sosa number
-	 *
-	 * @param int $sosa Sosa number
-	 * @return number
-	 */
-	public static function getGeneration($sosa){
-		return(int)log($sosa, 2)+1;
-	}
-	
-	
-
 
 	/**
 	 * Returns whether the image type is supported by the system, and if so, return the standardised type

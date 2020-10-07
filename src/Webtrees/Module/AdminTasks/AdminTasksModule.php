@@ -73,7 +73,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
     
     /**
      * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
+     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::boot()
      */
     public function boot(): void
     {
