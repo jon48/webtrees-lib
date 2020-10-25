@@ -38,12 +38,12 @@ class TaskEditAction implements RequestHandlerInterface
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
-    
+
     /**
      * Constructor for TaskEditAction Request Handler
      *
@@ -55,7 +55,7 @@ class TaskEditAction implements RequestHandlerInterface
             $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -64,9 +64,9 @@ class TaskEditAction implements RequestHandlerInterface
     {
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
-        
+
         $admin_config_route = route(AdminConfigPage::class);
-        
+
         if ($task_schedule === null) {
             FlashMessages::addMessage(
                 I18N::translate('The task shedule with ID “%d” does not exist.', I18N::number($task_sched_id)),
@@ -74,10 +74,10 @@ class TaskEditAction implements RequestHandlerInterface
             );
             return redirect($admin_config_route);
         }
-        
+
         $success = $this->updateGeneralSettings($task_schedule, $request);
         $success = $success && $this->updateSpecificSettings($task_schedule, $request);
-        
+
         if ($success) {
             FlashMessages::addMessage(
                 I18N::translate('The scheduled task has been successfully updated'),
@@ -86,10 +86,10 @@ class TaskEditAction implements RequestHandlerInterface
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” has been updated.');
         }
-        
+
         return redirect($admin_config_route);
     }
-    
+
     /**
      * Update general settings for the task, based on the request parameters
      *
@@ -100,17 +100,17 @@ class TaskEditAction implements RequestHandlerInterface
     private function updateGeneralSettings(TaskSchedule $task_schedule, ServerRequestInterface $request): bool
     {
         $params = (array) $request->getParsedBody();
-        
+
         $frequency = (int) $params['frequency'];
         if ($frequency > 0) {
             $task_schedule->setFrequency(CarbonInterval::minutes($frequency));
         } else {
             FlashMessages::addMessage(I18N::translate('The frequency is not in a valid format'), 'danger');
         }
-        
+
         $is_limited = (bool) $params['is_limited'];
         $nb_occur = (int) $params['nb_occur'];
-        
+
         if ($is_limited) {
             if ($nb_occur > 0) {
                 $task_schedule->setRemainingOccurences($nb_occur);
@@ -123,7 +123,7 @@ class TaskEditAction implements RequestHandlerInterface
         } else {
             $task_schedule->setRemainingOccurences(0);
         }
-        
+
         try {
             $this->taskschedules_service->update($task_schedule);
             return true;
@@ -136,13 +136,13 @@ class TaskEditAction implements RequestHandlerInterface
                 )
             );
         }
-        
+
         FlashMessages::addMessage(I18N::translate('An error occured while updating the scheduled task'), 'danger');
         //@phpcs:ignore Generic.Files.LineLength.TooLong
         Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” could not be updated. See error log.');
         return false;
     }
-    
+
     /**
      * Update general settings for the task, based on the request parameters
      *
@@ -156,7 +156,7 @@ class TaskEditAction implements RequestHandlerInterface
         if ($task === null || !($task instanceof ConfigurableTaskInterface)) {
             return true;
         }
-        
+
         /** @var TaskInterface&ConfigurableTaskInterface $task */
         if (!$task->updateConfig($request, $task_schedule)) {
             FlashMessages::addMessage(
@@ -169,7 +169,7 @@ class TaskEditAction implements RequestHandlerInterface
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : AdminTask “' . $task->name() . '” specific settings could not be updated. See error log.');
         }
-        
+
         return true;
     }
 }

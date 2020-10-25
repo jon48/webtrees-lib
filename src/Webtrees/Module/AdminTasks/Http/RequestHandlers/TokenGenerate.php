@@ -33,7 +33,7 @@ class TokenGenerate implements RequestHandlerInterface
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * Constructor for TokenGenerate request handler
      *
@@ -43,7 +43,7 @@ class TokenGenerate implements RequestHandlerInterface
     {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -53,11 +53,11 @@ class TokenGenerate implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         $token = Functions::generateRandomToken();
         $this->module->setPreference('MAJ_AT_FORCE_EXEC_TOKEN', $token);
         Log::addConfigurationLog($this->module->title() . ' : New token generated.');
-        
+
         return response(['token' => $token]);
     }
 }

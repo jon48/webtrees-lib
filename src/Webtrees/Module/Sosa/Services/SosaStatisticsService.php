@@ -14,11 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 
@@ -61,7 +62,7 @@ class SosaStatisticsService
     public function rootIndividual() : ?Individual
     {
         $root_indi_id = $this->tree->getUserPreference($this->user, 'MAJ_SOSA_ROOT_ID');
-        return Factory::individual()->make($root_indi_id, $this->tree);
+        return Registry::individualFactory()->make($root_indi_id, $this->tree);
     }
     
     /**
@@ -193,7 +194,7 @@ class SosaStatisticsService
             ->where('majs_user_id', '=', $this->user->id());
         
         return DB::table('maj_sosa')
-            ->joinSub($list_gen, 'list_gen', function($join) {
+            ->joinSub($list_gen, 'list_gen', function(JoinClause $join) : void {
                 $join->on('maj_sosa.majs_gen', '<=', 'list_gen.majs_gen')
                 ->where('majs_gedcom_id', '=', $this->tree->id())
                 ->where('majs_user_id', '=', $this->user->id());
@@ -231,12 +232,12 @@ class SosaStatisticsService
             ->selectRaw('FLOOR(((' . $table_prefix .'sosa.majs_sosa / POW(2, ' . $table_prefix .'sosa.majs_gen -1 )) - 1) * POWER(2, ? - 1)) + POWER(2, ? - 1) AS root_ancestor', [$gen, $gen])
             ->selectRaw('SUM(CASE WHEN ' . $table_prefix .'sosa_fat.majs_i_id IS NULL AND ' . $table_prefix .'sosa_mot.majs_i_id IS NULL THEN 1 ELSE 0 END) AS full_root_count')
             ->selectRaw('SUM(CASE WHEN ' . $table_prefix .'sosa_fat.majs_i_id IS NULL AND ' . $table_prefix .'sosa_mot.majs_i_id IS NULL THEN 0 ELSE 1 END) As semi_root_count')
-            ->leftJoin('maj_sosa AS sosa_fat', function(JoinClause $join) use ($table_prefix) {    // Link to sosa's father
+            ->leftJoin('maj_sosa AS sosa_fat', function(JoinClause $join) use ($table_prefix) : void {    // Link to sosa's father
                 $join->whereRaw($table_prefix . 'sosa_fat.majs_sosa = 2 * ' . $table_prefix . 'sosa.majs_sosa')
                 ->where('sosa_fat.majs_gedcom_id', '=', $this->tree->id())
                 ->where('sosa_fat.majs_user_id', '=', $this->user->id());
             })
-            ->leftJoin('maj_sosa AS sosa_mot', function(JoinClause $join) use ($table_prefix) {    // Link to sosa's mother
+            ->leftJoin('maj_sosa AS sosa_mot', function(JoinClause $join) use ($table_prefix) : void {    // Link to sosa's mother
                 $join->whereRaw($table_prefix . 'sosa_mot.majs_sosa = 2 * ' . $table_prefix . 'sosa.majs_sosa + 1')
                 ->where('sosa_mot.majs_gedcom_id', '=', $this->tree->id())
                 ->where('sosa_mot.majs_user_id', '=', $this->user->id());
@@ -244,7 +245,7 @@ class SosaStatisticsService
             ->where('sosa.majs_gedcom_id', '=', $this->tree->id())
             ->where('sosa.majs_user_id', '=', $this->user->id())
             ->where('sosa.majs_gen', '>=', $gen)
-            ->where(function($query) {
+            ->where(function(Builder $query) : void {
                 $query->whereNull('sosa_fat.majs_i_id')
                     ->orWhereNull('sosa_mot.majs_i_id');
             })
@@ -257,7 +258,7 @@ class SosaStatisticsService
                 '   SUM(POWER(majs_gen_norm, 2) * ( 2 * full_root_count + semi_root_count) /  (2 * POWER(2, majs_gen_norm)))'.
                 '   - POWER( SUM( (majs_gen_norm) * ( 2 * full_root_count + semi_root_count) /  (2 * POWER(2, majs_gen_norm))), 2)'.
                 ' ) AS stddev_gen_depth')
-            ->joinSub($missing_ancestors_by_gen, 'stats_by_gen', function(JoinClause $join) {
+            ->joinSub($missing_ancestors_by_gen, 'stats_by_gen', function(JoinClause $join) : void {
                 $join->on('sosa_list.majs_sosa', '=', 'stats_by_gen.root_ancestor')
                     ->where('sosa_list.majs_gedcom_id', '=', $this->tree->id())
                     ->where('sosa_list.majs_user_id', '=', $this->user->id());
@@ -287,12 +288,12 @@ class SosaStatisticsService
         $multiple_ancestors = DB::table('maj_sosa AS sosa')
             ->select('sosa.majs_i_id AS sosa_i_id')
             ->selectRaw('COUNT('. $table_prefix .'sosa.majs_sosa) AS sosa_count')
-            ->leftJoin('maj_sosa AS sosa_fat', function(JoinClause $join) use ($table_prefix) {    // Link to sosa's father
+            ->leftJoin('maj_sosa AS sosa_fat', function(JoinClause $join) use ($table_prefix) : void {    // Link to sosa's father
                 $join->whereRaw($table_prefix . 'sosa_fat.majs_sosa = 2 * ' . $table_prefix . 'sosa.majs_sosa')
                     ->where('sosa_fat.majs_gedcom_id', '=', $this->tree->id())
                     ->where('sosa_fat.majs_user_id', '=', $this->user->id());
             })
-            ->leftJoin('maj_sosa AS sosa_mot', function(JoinClause $join) use ($table_prefix) {    // Link to sosa's mother
+            ->leftJoin('maj_sosa AS sosa_mot', function(JoinClause $join) use ($table_prefix) : void {    // Link to sosa's mother
                 $join->whereRaw($table_prefix . 'sosa_mot.majs_sosa = 2 * ' . $table_prefix . 'sosa.majs_sosa + 1')
                 ->where('sosa_mot.majs_gedcom_id', '=', $this->tree->id())
                 ->where('sosa_mot.majs_user_id', '=', $this->user->id());

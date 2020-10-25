@@ -24,27 +24,27 @@ use stdClass;
  */
 class LineageNode
 {
-  
+
     /**
      * @var Collection $linked_fams Spouse families linked to the node
      */
     private $linked_fams;
-  
+
     /**
      * @var ?Individual $node_indi Reference individual for the node
      */
     private $node_indi;
-   
+
     /**
      * @var LineageRootNode $root_node Root node of the lineage
      */
     private $root_node;
-   
+
     /**
      * @var ?string $alt_surname Linked surname, used to link to another lineage
      */
     private $alt_surname;
- 
+
     /**
      * Constructor for Lineage node
      *
@@ -59,7 +59,7 @@ class LineageNode
         $this->alt_surname = $alt_surname;
         $this->linked_fams = new Collection();
     }
-  
+
     /**
      * Add a spouse family to the node
      *
@@ -76,7 +76,7 @@ class LineageNode
         }
         return $this->linked_fams->get($fams->xref());
     }
-    
+
     /**
      * Add a child LineageNode to the node
      *
@@ -88,7 +88,7 @@ class LineageNode
         $this->addFamily($fams)->children->push($child);
         $this->root_node->incrementChildNodes();
     }
-   
+
     /**
      * Returns the node individual
      *
@@ -98,7 +98,7 @@ class LineageNode
     {
         return $this->node_indi;
     }
-   
+
     /**
      * Returns the lineage root node individual
      *
@@ -108,7 +108,7 @@ class LineageNode
     {
         return $this->root_node;
     }
-    
+
     /**
      * Returns the spouse families linked to the node
      *
@@ -118,7 +118,7 @@ class LineageNode
     {
         return $this->linked_fams;
     }
-  
+
     /**
      * Returns the follow-up surname
      *
@@ -128,7 +128,7 @@ class LineageNode
     {
         return $this->alt_surname ?? '';
     }
-    
+
     /**
      * Indicates whether the node has a follow up surname
      *

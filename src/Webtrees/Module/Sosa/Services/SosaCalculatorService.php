@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
 
@@ -77,7 +77,7 @@ class SosaCalculatorService
     public function computeAll(): bool
     {
         $root_id = $this->tree->getUserPreference($this->user, 'MAJ_SOSA_ROOT_ID');
-        if($indi = Factory::individual()->make($root_id, $this->tree)) {
+        if($indi = Registry::individualFactory()->make($root_id, $this->tree)) {
             $this->sosa_records_service->deleteAll($this->tree, $this->user);
             $this->addNode($indi, 1);
             $this->flushTmpSosaTable(true);
@@ -97,7 +97,7 @@ class SosaCalculatorService
         $current_sosas = $this->sosa_records_service->getSosaNumbers($indi);
         foreach(array_keys($current_sosas) as $sosa) {
             $this->sosa_records_service->deleteAncestorsFrom($this->tree, $this->user, $sosa);
-            $this->addNote($indi, $sosa);
+            $this->addNode($indi, $sosa);
         }
         $this->flushTmpSosaTable(true);
         return true;
@@ -128,7 +128,7 @@ class SosaCalculatorService
         
         $this->flushTmpSosaTable();
         
-        if($fam = $indi->childFamilies()->first()) {
+        if(($fam = $indi->childFamilies()->first()) !== null) {
             /** @var \Fisharebest\Webtrees\Family $fam */
             if($husb = $fam->husband()) $this->addNode($husb, 2 * $sosa);
             if($wife = $fam->wife()) $this->addNode($wife, 2 * $sosa + 1);

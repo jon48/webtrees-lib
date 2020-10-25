@@ -22,7 +22,7 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 interface ConfigurableTaskInterface
 {
-    
+
     /**
      * Returns the HTML code to display the specific task configuration.
      *
@@ -30,7 +30,7 @@ interface ConfigurableTaskInterface
      * @return string HTML code
      */
     public function configView(ServerRequestInterface $request): string;
- 
+
     /**
      * Update the specific configuration of the task.
      *

@@ -44,37 +44,37 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      * @var string
      */
     public const TREE_PREFERENCE_NAME = 'MAJ_AT_HEALTHCHECK_ENABLED';
-    
+
     /**
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * @var HealthCheckService $healthcheck_service;
      */
     private $healthcheck_service;
-    
+
     /**
      * @var EmailService $email_service;
      */
     private $email_service;
-    
+
     /**
      * @var UserService $user_service
      */
     private $user_service;
-    
+
     /**
      * @var TreeService $tree_service
      */
     private $tree_service;
-    
+
     /**
      * @var UpgradeService $upgrade_service
      */
     private $upgrade_service;
-    
+
     /**
      * Constructor for HealthCheckTask
      *
@@ -100,8 +100,8 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         $this->tree_service = $tree_service;
         $this->upgrade_service = $upgrade_service;
     }
-    
-    
+
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::name()
@@ -110,7 +110,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     {
         return I18N::translate('Healthcheck Email');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::defaultFrequency()
@@ -119,7 +119,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     {
         return 10080; // = 1 week = 7 * 24 * 60 min
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::run()
@@ -129,15 +129,15 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         if ($this->module === null) {
             return false;
         }
-        
+
         $res = true;
-        
+
         // Compute the number of days to compute
         $interval_lastrun = $task_schedule->lastRunTime()->diffAsCarbonInterval(Carbon::now());
         //@phpcs:ignore Generic.Files.LineLength.TooLong
         $interval = $interval_lastrun->greaterThan($task_schedule->frequency()) ? $interval_lastrun : $task_schedule->frequency();
         $nb_days = (int) $interval->ceilDay()->totalDays;
-        
+
         $view_params_site = [
             'nb_days'               =>  $nb_days,
             'upgrade_available'     =>  $this->upgrade_service->isUpgradeAvailable(),
@@ -147,23 +147,23 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
             'unapproved'            =>  $this->user_service->unapproved(),
             'unverified'            =>  $this->user_service->unverified(),
         ];
-        
+
         foreach ($this->tree_service->all() as $tree) {
         /** @var Tree $tree */
-            
+
             if ($tree->getPreference(self::TREE_PREFERENCE_NAME) !== '1') {
                 continue;
             }
-            
+
             $webmaster = $this->user_service->find((int) $tree->getPreference('WEBMASTER_USER_ID'));
             if ($webmaster === null) {
                 continue;
             }
             I18N::init($webmaster->getPreference('language'));
-            
+
             $error_logs = $this->healthcheck_service->errorLogs($tree, $nb_days);
             $nb_errors = $error_logs->sum('nblogs');
-            
+
             $view_params = array_merge($view_params_site, [
                 'tree'              =>  $tree,
                 'total_by_type'     =>  $this->healthcheck_service->countByRecordType($tree),
@@ -171,7 +171,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
                 'error_logs'        =>  $error_logs,
                 'nb_errors'         =>  $nb_errors
             ]);
-            
+
             $res = $res && $this->email_service->send(
                 new TreeUser($tree),
                 $webmaster,
@@ -181,7 +181,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
                 view($this->module->name() . '::tasks/healthcheck/email-healthcheck-html', $view_params)
             );
         }
-        
+
         return $res;
     }
 
@@ -195,7 +195,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
             'all_trees'     =>  $this->tree_service->all()
         ]);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\ConfigurableTaskInterface::updateConfig()
@@ -204,7 +204,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     {
         try {
             $params = (array) $request->getParsedBody();
-            
+
             foreach ($this->tree_service->all() as $tree) {
                 if (Auth::isManager($tree)) {
                     $tree_enabled = (bool) ($params['HEALTHCHECK_ENABLED_' . $tree->id()] ?? false);

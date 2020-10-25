@@ -46,7 +46,7 @@ class HealthCheckService
             ->unionAll(DB::table('other')
                 ->select(DB::raw('LOWER(o_type) AS ged_type'), 'o_id AS ged_id')->where('o_file', '=', $tree->id()));
     }
-    
+
     /**
      * Returns the count of gedcom records by type in a Tree, as a keyed Collection.
      *
@@ -65,7 +65,7 @@ class HealthCheckService
             ->groupBy('ged_type')
             ->pluck('total', 'ged_type');
     }
-    
+
     /**
      * Returns the count of gedcom records changes by type in a Tree across a number of days, as a keyed Collection.
      *
@@ -79,7 +79,7 @@ class HealthCheckService
     public function changesByRecordType(Tree $tree, int $nb_days): Collection
     {
         return DB::table('change')
-            ->joinSub($this->allGedcomRecords($tree), 'gedrecords', function (JoinClause $join) use ($tree) {
+            ->joinSub($this->allGedcomRecords($tree), 'gedrecords', function (JoinClause $join) use ($tree): void {
 
                 $join->on('change.xref', '=', 'gedrecords.ged_id')
                     ->where('change.gedcom_id', '=', $tree->id());
@@ -90,7 +90,7 @@ class HealthCheckService
             ->groupBy('ged_type')
             ->pluck('total', 'ged_type');
     }
-    
+
     /**
      * Return the error logs associated with a tree across a number of days, grouped by error message, as a Collection.
      *
@@ -115,7 +115,7 @@ class HealthCheckService
                 new Expression('MAX(log_time) AS lastoccurred')
             )
             ->where('log_type', '=', 'error')
-            ->where(function (Builder $query) use ($tree) {
+            ->where(function (Builder $query) use ($tree): void {
                 $query->where('gedcom_id', '=', $tree->id())
                     ->orWhereNull('gedcom_id');
             })

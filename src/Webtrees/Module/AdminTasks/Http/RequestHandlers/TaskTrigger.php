@@ -32,12 +32,12 @@ class TaskTrigger implements RequestHandlerInterface
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
-    
+
     /**
      * Constructor for TaskTrigger request handler
      * @param ModuleService $module_service
@@ -58,18 +58,18 @@ class TaskTrigger implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         $task_id = $request->getAttribute('task');
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         $force_token = $request->getQueryParams()['force'] ?? '';
         $force = $token == $force_token;
-        
+
         $task_schedules = $this->taskschedules_service->findTasksToRun($force, $task_id);
-        
+
         foreach ($task_schedules as $task_schedule) {
             $this->taskschedules_service->run($task_schedule, $force);
         }
-        
+
         return response();
     }
 }

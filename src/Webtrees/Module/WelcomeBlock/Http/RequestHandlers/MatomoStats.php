@@ -28,12 +28,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 class MatomoStats implements RequestHandlerInterface
 {
     use ViewResponseTrait;
-    
+
     /**
      * @var WelcomeBlockModule
      */
     private $module;
-    
+
     /**
      * @var MatomoStatsService $matomo_service
      */
@@ -59,15 +59,15 @@ class MatomoStats implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/ajax';
-        
+
         $block_id = filter_var($request->getAttribute('block_id'), FILTER_VALIDATE_INT);
         $nb_visits_year = $nb_visits_today = null;
-        
+
         if ($block_id !== false && $this->module->isMatomoEnabled($block_id)) {
-            $nb_visits_today = $this->matomo_service->visitsToday($this->module, (int) $block_id);
-            $nb_visits_year = $this->matomo_service->visitsThisYear($this->module, (int) $block_id) + $nb_visits_today;
+            $nb_visits_today = (int) $this->matomo_service->visitsToday($this->module, $block_id);
+            $nb_visits_year = (int) $this->matomo_service->visitsThisYear($this->module, $block_id) + $nb_visits_today;
         }
-        
+
         return $this->viewResponse($this->module->name() . '::matomo-stats', [
             'visits_year'   =>  $nb_visits_year,
             'visits_today'  =>  $nb_visits_today

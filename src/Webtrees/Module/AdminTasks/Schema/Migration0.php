@@ -21,7 +21,7 @@ use Fisharebest\Webtrees\Schema\MigrationInterface;
  */
 class Migration0 implements MigrationInterface
 {
-    
+
     /**
      * {@inheritDoc}
      * @see MigrationInterface::upgrade()

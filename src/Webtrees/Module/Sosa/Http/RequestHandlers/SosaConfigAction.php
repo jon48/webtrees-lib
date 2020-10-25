@@ -16,9 +16,9 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Services\UserService;
 use Psr\Http\Message\ResponseInterface;
@@ -63,7 +63,7 @@ class SosaConfigAction implements RequestHandlerInterface
         
         if(Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
-            if($user !== null && $root_indi = Factory::individual()->make($root_id, $tree)) {
+            if($user !== null && $root_indi = Registry::individualFactory()->make($root_id, $tree)) {
                 $tree->setUserPreference($user, 'MAJ_SOSA_ROOT_ID', $root_indi->xref());
                 FlashMessages::addMessage(I18N::translate('The root individual has been updated.'));
                 return redirect(route(SosaConfig::class, [

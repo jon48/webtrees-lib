@@ -24,55 +24,55 @@ use Fisharebest\Webtrees\Carbon;
  */
 class TaskSchedule
 {
-    
+
     /**
      * Task Schedule ID
      * @var int $id
      */
     private $id;
-    
+
     /**
      * Task schedule status
      * @var bool $enabled
      */
     private $enabled;
-    
+
     /**
      * ID of the task attached to schedule
      * @var string $task_id
      */
     private $task_id;
-    
+
     /**
      * Last updated date
      * @var Carbon $last_run
      */
     private $last_run;
-    
+
     /**
      * Last run result
      * @var bool $last_result
      */
     private $last_result;
-    
+
     /**
      * Task run frequency
      * @var CarbonInterval $frequency
      */
     private $frequency;
-    
+
     /**
      * Task remaining runs
      * @var int $nb_occurrences
      */
     private $nb_occurrences;
-    
+
     /**
      * Current running status of the task
      * @var bool $is_running
      */
     private $is_running;
-    
+
     /**
      * Constructor for TaskSchedule
      *
@@ -104,7 +104,7 @@ class TaskSchedule
         $this->nb_occurrences = $nb_occurrences;
         $this->is_running = $is_running;
     }
-    
+
     /**
      * Get the schedule ID.
      *
@@ -114,7 +114,7 @@ class TaskSchedule
     {
         return $this->id;
     }
-    
+
     /**
      * Get the task ID.
      *
@@ -124,7 +124,7 @@ class TaskSchedule
     {
         return $this->task_id;
     }
-    
+
     /**
      * Returns whether the schedule is enabled
      *
@@ -134,7 +134,7 @@ class TaskSchedule
     {
         return $this->enabled;
     }
-    
+
     /**
      * Enable the schedule
      *
@@ -145,7 +145,7 @@ class TaskSchedule
         $this->enabled = true;
         return $this;
     }
-    
+
     /**
      * Disable the schedule
      *
@@ -156,7 +156,7 @@ class TaskSchedule
         $this->enabled = false;
         return $this;
     }
-    
+
     /**
      * Get the frequency of the schedule
      *
@@ -166,7 +166,7 @@ class TaskSchedule
     {
         return $this->frequency;
     }
-    
+
     /**
      * Set the frequency of the schedule
      *
@@ -178,7 +178,7 @@ class TaskSchedule
         $this->frequency = $frequency;
         return $this;
     }
-    
+
     /**
      * Get the date/time of the last successful run.
      *
@@ -188,7 +188,7 @@ class TaskSchedule
     {
         return $this->last_run;
     }
-    
+
     /**
      * Set the last successful run date/time
      *
@@ -200,7 +200,7 @@ class TaskSchedule
         $this->last_run = $last_run;
         return $this;
     }
-    
+
     /**
      * Returns whether the last run was successful
      *
@@ -222,7 +222,7 @@ class TaskSchedule
         $this->last_result = $last_result;
         return $this;
     }
-    
+
     /**
      * Get the number of remaining of occurrences of task runs.
      * Returns 0 if the tasks must be run indefinitely.
@@ -233,7 +233,7 @@ class TaskSchedule
     {
         return $this->nb_occurrences;
     }
-    
+
     /**
      * Decrements the number of remaining occurences by 1.
      * The task will be disabled when the number reaches 0.
@@ -250,7 +250,7 @@ class TaskSchedule
         }
         return $this;
     }
-    
+
     /**
      * Set the number of remaining occurences of task runs.
      *
@@ -262,7 +262,7 @@ class TaskSchedule
         $this->nb_occurrences = $nb_occurrences;
         return $this;
     }
-    
+
     /**
      * Returns whether the task is running
      * @return bool
@@ -271,7 +271,7 @@ class TaskSchedule
     {
         return $this->is_running;
     }
-    
+
     /**
      * Informs the schedule that the task is going to run
      *
@@ -282,7 +282,7 @@ class TaskSchedule
         $this->is_running = true;
         return $this;
     }
-    
+
     /**
      * Informs the schedule that the task has stopped running.
      * @return self
@@ -292,7 +292,7 @@ class TaskSchedule
         $this->is_running = false;
         return $this;
     }
-    
+
     /**
      * Returns the schedule details as an associate array
      *

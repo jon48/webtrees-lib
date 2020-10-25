@@ -24,7 +24,7 @@ use Fisharebest\Webtrees\Carbon;
  */
 class Migration1 implements MigrationInterface
 {
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
@@ -33,7 +33,7 @@ class Migration1 implements MigrationInterface
     {
         // Clean up previous admin tasks table if it exists
         DB::schema()->dropIfExists('maj_admintasks');
-        
+
         DB::schema()->create('maj_admintasks', static function (Blueprint $table): void {
 
             $table->increments('majat_id');

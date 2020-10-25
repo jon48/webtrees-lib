@@ -36,12 +36,12 @@ class SurnamesList implements RequestHandlerInterface
      * @var PatronymicLineageModule $module
      */
     private $module;
-    
+
     /**
      * @var IndividualListModule $indilist_module
      */
     private $indilist_module;
-    
+
     /**
      * Constructor for SurnamesList Request Handler
      *
@@ -52,7 +52,7 @@ class SurnamesList implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
         $this->indilist_module = $module_service->findByInterface(IndividualListModule::class)->first();
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -62,23 +62,23 @@ class SurnamesList implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         if ($this->indilist_module === null) {
             throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
         }
-        
+
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
-        
+
         $initial = $request->getAttribute('alpha');
         $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
-            ->reject(function ($count, $initial) {
+            ->reject(function ($count, $initial): bool {
 
                 return $initial === '@' || $initial === ',';
             });
-            
+
         $show_all = $request->getQueryParams()['show_all'] ?? 'no';
-        
+
         if ($show_all === 'yes') {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . I18N::translate('All');
             $surnames = $this->indilist_module->surnames($tree, '', '', false, false, I18N::locale());
@@ -89,7 +89,7 @@ class SurnamesList implements RequestHandlerInterface
             $title =  I18N::translate('Patronymic Lineages');
             $surnames = [];
         }
-        
+
         return $this->viewResponse($this->module->name() . '::surnames-page', [
             'title'         =>  $title,
             'module'        =>  $this->module,

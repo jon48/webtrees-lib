@@ -36,13 +36,13 @@ class AdminConfigPage implements RequestHandlerInterface
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      *
      * @var UserService $user_service
      */
     private $user_service;
-    
+
     /**
      * Constructor for Admin Config request handler
      *
@@ -62,17 +62,17 @@ class AdminConfigPage implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/administration';
-        
+
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         if ($token === '') {
             $token = Functions::generateRandomToken();
             $this->module->setPreference('PAT_FORCE_EXEC_TOKEN', $token);
         }
-        
+
         return $this->viewResponse($this->module->name() . '::admin/config', [
             'title'             =>  $this->module->title(),
             'trigger_token'     =>  $token,

@@ -16,8 +16,8 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
-use Fisharebest\Webtrees\Factory;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Services\UserService;
@@ -65,7 +65,7 @@ class SosaComputeAction implements RequestHandlerInterface
             /** @var SosaCalculatorService $sosa_calc_service */
             $sosa_calc_service = app()->makeWith(SosaCalculatorService::class, [ 'tree' => $tree, 'user' => $user]);
             
-            if($partial_from !== null && $sosa_from = Factory::individual()->make($partial_from, $tree)) {
+            if($partial_from !== null && $sosa_from = Registry::individualFactory()->make($partial_from, $tree)) {
                 $res = $sosa_calc_service->computeFromIndividual($sosa_from);
             } else {
                 $res = $sosa_calc_service->computeAll();

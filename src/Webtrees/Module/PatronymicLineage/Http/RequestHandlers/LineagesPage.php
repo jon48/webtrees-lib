@@ -37,12 +37,12 @@ class LineagesPage implements RequestHandlerInterface
      * @var PatronymicLineageModule $module
      */
     private $module;
-    
+
     /**
      * @var IndividualListModule $indilist_module
      */
     private $indilist_module;
-    
+
     /**
      * Constructor for LineagesPage Request handler
      *
@@ -53,7 +53,7 @@ class LineagesPage implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
         $this->indilist_module = $module_service->findByInterface(IndividualListModule::class)->first();
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -63,27 +63,27 @@ class LineagesPage implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         if ($this->indilist_module === null) {
             throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
         }
-        
+
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
-        
+
         $surname = $request->getAttribute('surname');
-        
+
         $initial = mb_substr($surname, 0, 1);
         $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
-            ->reject(function ($count, $initial) {
+            ->reject(function ($count, $initial): bool {
 
                 return $initial === '@' || $initial === ',';
             });
-            
+
         $title = I18N::translate('Patronymic Lineages') . ' — ' . $surname;
-        
+
         $lineages = app()->make(LineageBuilder::class, ['surname' => $surname])->buildLineages();
-        
+
         return $this->viewResponse($this->module->name() . '::lineages-page', [
             'title'         =>  $title,
             'module'        =>  $this->module,

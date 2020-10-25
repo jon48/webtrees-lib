@@ -40,7 +40,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         return /* I18N: Name of the “WelcomeBlock” module */ I18N::translate('MyArtJaub Welcome Block');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
@@ -50,22 +50,22 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “WelcomeBlock” module */ I18N::translate('The MyArtJaub Welcome block welcomes the visitor to the site, allows a quick login to the site, and displays statistics on visits.');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
-        $router->attach('', '', static function (Map $router) {
+        $router->attach('', '', static function (Map $router): void {
 
-            $router->attach('', '/module-maj/welcomeblock/{block_id}', static function (Map $router) {
-                
+            $router->attach('', '/module-maj/welcomeblock/{block_id}', static function (Map $router): void {
+
                 $router->get(MatomoStats::class, '/matomostats', MatomoStats::class);
             });
         });
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
@@ -74,7 +74,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         return '2.0.6-v.1';
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
@@ -83,17 +83,17 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         $fab_welcome_block_view = app(\Fisharebest\Webtrees\Module\WelcomeBlockModule::class)
             ->getBlock($tree, $block_id, ModuleBlockInterface::CONTEXT_EMBED);
-        
+
         $fab_login_block_view = app(\Fisharebest\Webtrees\Module\LoginBlockModule::class)
             ->getBlock($tree, $block_id, ModuleBlockInterface::CONTEXT_EMBED);
-        
+
         $content = view($this->name() . '::block-embed', [
             'block_id'                  =>  $block_id,
             'fab_welcome_block_view'    =>  $fab_welcome_block_view,
             'fab_login_block_view'      =>  $fab_login_block_view,
             'matomo_enabled'            =>  $this->isMatomoEnabled($block_id)
         ]);
-        
+
         if ($context !== self::CONTEXT_EMBED) {
             return view('modules/block-template', [
                 'block'      => Str::kebab($this->name()),
@@ -103,10 +103,10 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
                 'content'    => $content,
             ]);
         }
-        
+
         return $content;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::isTreeBlock()
@@ -115,7 +115,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         return true;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::editBlockConfiguration()
@@ -124,7 +124,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         return view($this->name() . '::config', $this->matomoSettings($block_id));
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::saveBlockConfiguration()
@@ -132,31 +132,31 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
         $params = (array) $request->getParsedBody();
-        
+
         $matomo_enabled = $params['matomo_enabled'] == 'yes';
         $this->setBlockSetting($block_id, 'matomo_enabled', $matomo_enabled ? 'yes' : 'no');
         if (!$matomo_enabled) {
             return;
         }
-        
+
         if (filter_var($params['matomo_url'], FILTER_VALIDATE_URL) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo URL provided is not valid.'), 'danger');
             return;
         }
-        
+
         if (filter_var($params['matomo_siteid'], FILTER_VALIDATE_INT) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo Site ID provided is not valid.'), 'danger');
             return;
         }
-        
+
         $this
             ->setBlockSetting($block_id, 'matomo_url', trim($params['matomo_url']))
             ->setBlockSetting($block_id, 'matomo_token', trim($params['matomo_token']))
             ->setBlockSetting($block_id, 'matomo_siteid', $params['matomo_siteid']);
-        
+
         app('cache.files')->forget($this->name() . '-matomovisits-yearly-' . $block_id);
     }
-    
+
     /**
      * Returns whether Matomo statistics is enabled for a specific MyArtJaub WelcomeBlock block
      *
@@ -167,7 +167,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
     {
         return $this->getBlockSetting($block_id, 'matomo_enabled', 'no') === 'yes';
     }
-    
+
     /**
      * Returns settings for retrieving Matomo statistics for a specific MyArtJaub WelcomeBlock block
      *

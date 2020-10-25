@@ -61,7 +61,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
     {
         return I18N::translate('Administration Tasks');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
@@ -70,7 +70,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
     {
         return I18N::translate('Manage and run nearly-scheduled administration tasks.');
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::boot()
@@ -84,18 +84,18 @@ class AdminTasksModule extends AbstractModuleMaj implements
             self::SCHEMA_TARGET_VERSION
         );
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
-        $router->attach('', '', static function (Map $router) {
+        $router->attach('', '', static function (Map $router): void {
 
-            $router->attach('', '/module-maj/admintasks', static function (Map $router) {
+            $router->attach('', '/module-maj/admintasks', static function (Map $router): void {
 
-                $router->attach('', '/admin', static function (Map $router) {
+                $router->attach('', '/admin', static function (Map $router): void {
 
                     $router->extras([
                         'middleware' => [
@@ -103,8 +103,8 @@ class AdminTasksModule extends AbstractModuleMaj implements
                         ],
                     ]);
                     $router->get(AdminConfigPage::class, '/config', AdminConfigPage::class);
-                    
-                    $router->attach('', '/tasks', static function (Map $router) {
+
+                    $router->attach('', '/tasks', static function (Map $router): void {
 
                         $router->get(TasksList::class, '', TasksList::class);
                         $router->get(TaskEditPage::class, '/{task}', TaskEditPage::class);
@@ -112,16 +112,16 @@ class AdminTasksModule extends AbstractModuleMaj implements
                         $router->get(TaskStatusAction::class, '/{task}/status/{enable}', TaskStatusAction::class);
                     });
                 });
-                
+
                 $router->get(TaskTrigger::class, '/trigger{/task}', TaskTrigger::class)
                     ->allows(RequestMethodInterface::METHOD_POST);
-                
+
                 $router->post(TokenGenerate::class, '/token', TokenGenerate::class)
                     ->extras(['middleware' => [AuthAdministrator::class]]);
             });
         });
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleLatestVersion()
@@ -130,7 +130,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
     {
         return '2.0.5-v.1';
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
@@ -139,18 +139,16 @@ class AdminTasksModule extends AbstractModuleMaj implements
     {
         return route(AdminConfigPage::class);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::bodyContent()
      */
     public function bodyContent(): string
     {
-        $parameters['url'] = route(TaskTrigger::class);
-        
-        return view($this->name() . '::snippet', $parameters);
+        return view($this->name() . '::snippet', [ 'url' => route(TaskTrigger::class) ]);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface::listTasks()

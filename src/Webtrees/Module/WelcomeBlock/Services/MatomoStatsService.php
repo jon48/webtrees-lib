@@ -21,6 +21,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\RequestException;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
+use Fisharebest\Webtrees\Registry;
 
 /**
  * Service for retrieving Matomo statistics
@@ -28,7 +29,7 @@ use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
  */
 class MatomoStatsService
 {
-    
+
     /**
      * Returns the number of visits for the current year (up to the day before).
      * That statistic is cached for the day, to avoid unecessary calls to Matomo API.
@@ -39,10 +40,8 @@ class MatomoStatsService
      */
     public function visitsThisYear(WelcomeBlockModule $module, int $block_id): ?int
     {
-        /** @var Cache $cache */
-        $cache = app('cache.files');
-        assert($cache instanceof Cache);
-        
+        $cache = Registry::cache()->file();
+
         return $cache->remember(
             $module->name() . '-matomovisits-yearly-' . $block_id,
             function () use ($module, $block_id): ?int {
@@ -50,14 +49,14 @@ class MatomoStatsService
                 if ($visits_year === null) {
                     return null;
                 }
-                $visits_today = $this->visits($module, $block_id, 'day');
-                
+                $visits_today = (int) $this->visits($module, $block_id, 'day');
+
                 return $visits_year - $visits_today;
             },
             Carbon::now()->addDay()->startOfDay()->diffInSeconds(Carbon::now()) // Valid until midnight
         );
     }
-    
+
     /**
      * Returns the number of visits for the current day.
      *
@@ -74,7 +73,7 @@ class MatomoStatsService
             }
         );
     }
-    
+
     /**
      * Invoke the Matomo API to retrieve the number of visits over a period.
      *
@@ -86,7 +85,7 @@ class MatomoStatsService
     protected function visits(WelcomeBlockModule $module, int $block_id, string $period): ?int
     {
         $settings = $module->matomoSettings($block_id);
-        
+
         if (
             $settings['matomo_enabled'] === true
             && mb_strlen($settings['matomo_url']) > 0
@@ -97,7 +96,7 @@ class MatomoStatsService
                 $http_client = new Client([
                     RequestOptions::TIMEOUT => 30
                 ]);
-                
+
                 $response = $http_client->get($settings['matomo_url'], [
                     'query' =>  [
                         'module'    =>  'API',
@@ -109,7 +108,7 @@ class MatomoStatsService
                         'format'    =>  'json'
                     ]
                 ]);
-                
+
                 if ($response->getStatusCode() === StatusCodeInterface::STATUS_OK) {
                     $result = json_decode((string) $response->getBody(), true)['value'] ?? null;
                     if ($result !== null) {
@@ -119,7 +118,7 @@ class MatomoStatsService
             } catch (RequestException $ex) {
             }
         }
-        
+
         return null;
     }
 }

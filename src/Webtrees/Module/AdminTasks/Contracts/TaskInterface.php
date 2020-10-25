@@ -27,14 +27,14 @@ interface TaskInterface
      * @return string
      */
     public function name(): string;
-    
+
     /**
      * Return the default frequency for the execution of the task, in minutes.
      *
      * @return int Frequency for the execution of the task
      */
     public function defaultFrequency(): int;
-    
+
     /**
      * Run the task's actions, and return whether the execution has been successful.
      *

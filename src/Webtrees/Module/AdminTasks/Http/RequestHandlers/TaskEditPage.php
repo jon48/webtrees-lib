@@ -37,12 +37,12 @@ class TaskEditPage implements RequestHandlerInterface
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
-    
+
     /**
      * Constructor for TaskEditPage Request Handler
      *
@@ -54,7 +54,7 @@ class TaskEditPage implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -62,27 +62,27 @@ class TaskEditPage implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/administration';
-        
+
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        
+
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
-        
+
         if ($task_schedule === null) {
             throw new HttpNotFoundException(I18N::translate('The Task schedule could not be found.'));
         }
-        
+
         $task = $this->taskschedules_service->findTask($task_schedule->taskId());
-        
+
         if ($task === null) {
             throw new HttpNotFoundException(I18N::translate('The Task schedule could not be found.'));
         }
-        
+
         /** @var TaskInterface&ConfigurableTaskInterface $task */
         $has_task_config = $task instanceof ConfigurableTaskInterface;
-        
+
         return $this->viewResponse($this->module->name() . '::admin/tasks-edit', [
             'module'            =>  $this->module,
             'title'             =>  I18N::translate('Edit the administrative task') . ' - ' . $task->name(),

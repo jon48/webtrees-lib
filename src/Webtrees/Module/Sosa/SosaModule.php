@@ -83,9 +83,9 @@ class SosaModule extends AbstractModuleMaj implements ModuleMenuInterface, Modul
      */
     public function loadRoutes(Map $router): void
     {
-        $router->attach('', '', static function(Map $router) {
-            $router->attach('', '/module-maj/sosa', static function(Map $router) {
-                $router->attach('', '/list', static function (Map $router) {
+        $router->attach('', '', static function(Map $router) : void {
+            $router->attach('', '/module-maj/sosa', static function(Map $router) : void {
+                $router->attach('', '/list', static function (Map $router) : void {
                     
                     $router->get(AncestorsList::class, '/ancestors/{tree}/{/gen}', AncestorsList::class);
                     $router->get(MissingAncestorsList::class, '/missing/{tree}/{/gen}', MissingAncestorsList::class);
@@ -93,7 +93,7 @@ class SosaModule extends AbstractModuleMaj implements ModuleMenuInterface, Modul
                 
                 $router->get(SosaStatistics::class, '/statistics/{tree}', SosaStatistics::class);
                 
-                $router->attach('', '/config/{tree}', static function (Map $router) {
+                $router->attach('', '/config/{tree}', static function (Map $router) : void {
                     
                     $router->get(SosaConfig::class, '', SosaConfig::class);
                     $router->post(SosaConfigAction::class, '', SosaConfigAction::class);

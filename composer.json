@@ -27,12 +27,15 @@
 	},
 	"require" : {
 		"ext-xml": "*",
-		"fisharebest/webtrees": "~2.0.6",
+		"fisharebest/webtrees": "~2.0.10",
 		"paragonie/sodium_compat": "~1.13"
 	},
 	"require-dev" : {
-		"mockery/mockery" : "@stable",
-		"phpunit/phpunit" : "@stable"
+		"mockery/mockery": "@stable",
+		"phpstan/phpstan-deprecation-rules": "^0.12.5",
+		"phpstan/phpstan-phpunit": "^0.12.16",
+		"phpstan/phpstan-strict-rules": "^0.12.5",
+		"phpunit/phpunit": "@stable"
 	},
 	"autoload" : {
 		"psr-4" : {

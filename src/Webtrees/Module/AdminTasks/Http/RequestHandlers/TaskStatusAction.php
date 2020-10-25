@@ -29,17 +29,17 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class TaskStatusAction implements RequestHandlerInterface
 {
-    
+
     /**
      * @var AdminTasksModule $module
      */
     private $module;
-    
+
     /**
      * @var TaskScheduleService $taskschedules_service
      */
     private $taskschedules_service;
-    
+
     /**
      * Constructor for TaskStatusAction Request Handler
      *
@@ -51,7 +51,7 @@ class TaskStatusAction implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -60,9 +60,9 @@ class TaskStatusAction implements RequestHandlerInterface
     {
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
-        
+
         $admin_config_route = route(AdminConfigPage::class);
-        
+
         if ($task_schedule === null) {
             FlashMessages::addMessage(
                 I18N::translate('The task shedule with ID “%d” does not exist.', I18N::number($task_sched_id)),
@@ -70,9 +70,9 @@ class TaskStatusAction implements RequestHandlerInterface
             );
             return redirect($admin_config_route);
         }
-        
+
         ((bool) $request->getAttribute('enable', false)) ? $task_schedule->enable() : $task_schedule->disable();
-        
+
         if ($this->taskschedules_service->update($task_schedule) > 0) {
             FlashMessages::addMessage(
                 I18N::translate('The scheduled task has been successfully updated'),
@@ -88,7 +88,7 @@ class TaskStatusAction implements RequestHandlerInterface
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” could not be updated. See error log.');
         }
-        
+
         return redirect($admin_config_route);
     }
 }

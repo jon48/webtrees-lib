@@ -23,17 +23,17 @@ use Illuminate\Support\Collection;
  */
 class LineageRootNode extends LineageNode
 {
-    
+
     /**
      * @var Collection $places Places for the lineage node
      */
     private $places;
-   
+
     /**
      * @var int $nb_children Number of node childs
      */
     private $nb_children;
-  
+
     /**
      * Constructor for LineageRootNode
      *
@@ -45,7 +45,7 @@ class LineageRootNode extends LineageNode
         $this->places = new Collection();
         $this->nb_children = 0;
     }
-   
+
     /**
      * Adds a place to the list of lineage's place
      *
@@ -58,7 +58,7 @@ class LineageRootNode extends LineageNode
             $this->places->put($place_name, $this->places->get($place_name, 0) + 1);
         }
     }
-    
+
     /**
      * Returns the number of child nodes.
      * This number is more to be used as indication rather than an accurate one.
@@ -69,7 +69,7 @@ class LineageRootNode extends LineageNode
     {
         return $this->nb_children;
     }
-   
+
     /**
      * Increments the number of child nodes by one
      *
@@ -78,7 +78,7 @@ class LineageRootNode extends LineageNode
     {
         $this->nb_children++;
     }
-   
+
     /**
      * Returns the list of place for the lineage
      *

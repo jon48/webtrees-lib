@@ -39,12 +39,12 @@ class TaskScheduleService
      * @var integer
      */
     public const TASK_TIME_OUT = 600;
-    
+
     /**
      * @var Collection $available_tasks
      */
     private $available_tasks;
-    
+
     /**
      * Returns all Tasks schedules in database.
      * Stored records can be synchronised with the tasks actually available to the system.
@@ -59,7 +59,7 @@ class TaskScheduleService
         ->select()
         ->get()
         ->map(self::rowMapper());
-        
+
         if ($sync_available) {
             $available_tasks = clone $this->available();
             foreach ($tasks_schedules as $task_schedule) {
@@ -70,18 +70,18 @@ class TaskScheduleService
                     $this->delete($task_schedule);
                 }
             }
-            
+
             foreach ($available_tasks as $task_name => $task) {
                 /** @var TaskInterface $task */
                 $this->insertTask($task_name, $task->defaultFrequency());
             }
-            
+
             return $this->all(false, $include_disabled);
         }
-        
+
         return $tasks_schedules;
     }
-    
+
     /**
      * Returns tasks exposed through modules implementing ModuleTasksProviderInterface.
      *
@@ -91,7 +91,7 @@ class TaskScheduleService
     {
         if ($this->available_tasks === null) {
             $tasks_providers = app(ModuleService::class)->findByInterface(ModuleTasksProviderInterface::class);
-            
+
             $this->available_tasks = new Collection();
             foreach ($tasks_providers as $task_provider) {
                 $this->available_tasks = $this->available_tasks->merge($task_provider->listTasks());
@@ -99,7 +99,7 @@ class TaskScheduleService
         }
         return $this->available_tasks;
     }
-    
+
     /**
      * Find a task schedule by its ID.
      *
@@ -115,7 +115,7 @@ class TaskScheduleService
             ->map(self::rowMapper())
             ->first();
     }
-    
+
     /**
      * Add a new task schedule with the specified task ID, and frequency if defined.
      * Uses default for other settings.
@@ -130,11 +130,11 @@ class TaskScheduleService
         if ($frequency > 0) {
             $values['majat_frequency'] = $frequency;
         }
-        
+
         return DB::table('maj_admintasks')
             ->insert($values);
     }
-    
+
     /**
      * Update a task schedule.
      * Returns the number of tasks schedules updated.
@@ -155,7 +155,7 @@ class TaskScheduleService
                 'majat_running'     =>  $task_schedule->isRunning()
             ]);
     }
-    
+
     /**
      * Delete a task schedule.
      *
@@ -168,7 +168,7 @@ class TaskScheduleService
             ->where('majat_id', '=', $task_schedule->id())
             ->delete();
     }
-    
+
     /**
      * Find a task by its name
      *
@@ -182,7 +182,7 @@ class TaskScheduleService
         }
         return null;
     }
-    
+
     /**
      * Retrieve all tasks that are candidates to be run.
      *
@@ -195,27 +195,27 @@ class TaskScheduleService
         $query = DB::table('maj_admintasks')
             ->select()
             ->where('majat_status', '=', 'enabled')
-            ->where(function (Builder $query) {
+            ->where(function (Builder $query): void {
 
                 $query->where('majat_running', '=', 0)
                 ->orWhere('majat_last_run', '<=', Carbon::now()->subSeconds(self::TASK_TIME_OUT));
             });
-            
+
         if (!$force) {
-            $query->where(function (Builder $query) {
+            $query->where(function (Builder $query): void {
 
                 $query->where('majat_running', '=', 0)
                     ->orWhereRaw('DATE_ADD(majat_last_run, INTERVAL majat_frequency MINUTE) <= NOW()');
             });
         }
-        
+
         if ($task_id !== null) {
             $query->where('majat_task_id', '=', $task_id);
         }
-        
+
         return $query->get()->map(self::rowMapper());
     }
-    
+
     /**
      * Run the task associated with the schedule.
      * The task will run if either forced to, or its next scheduled run time has been exceeded.
@@ -234,28 +234,29 @@ class TaskScheduleService
             ->get()
             ->map(self::rowMapper())
             ->first();
-        
+
         if (
             !$task_schedule->isRunning() &&
-            ($force || $task_schedule->lastRunTime()->add($task_schedule->frequency())->lessThan(Carbon::now())) &&
-            $task_schedule->setLastResult(false) &&  // @phpstan-ignore-line  Used as setter, not as a condition
-            $task = $this->findTask($task_schedule->taskId())
+            ($force || $task_schedule->lastRunTime()->add($task_schedule->frequency())->lessThan(Carbon::now()))
         ) {
-            $task_schedule->startRunning();
-            $this->update($task_schedule);
-            
-            try {
-                $task_schedule->setLastResult($task->run($task_schedule));
-            } catch (Exception $ex) {
+            $task_schedule->setLastResult(false);
+
+            $task = $this->findTask($task_schedule->taskId());
+            if ($task !== null) {
+                $task_schedule->startRunning();
+                $this->update($task_schedule);
+
+                try {
+                    $task_schedule->setLastResult($task->run($task_schedule));
+                } catch (Exception $ex) {
+                }
+
+                if ($task_schedule->wasLastRunSuccess()) {
+                    $task_schedule->setLastRunTime(Carbon::now());
+                    $task_schedule->decrementRemainingOccurences();
+                }
+                $task_schedule->stopRunning();
             }
-            
-            if ($task_schedule->wasLastRunSuccess()) {
-                $task_schedule->setLastRunTime(Carbon::now());
-                $task_schedule->decrementRemainingOccurences();
-            }
-            $task_schedule->stopRunning();
-            $this->update($task_schedule);
-        } else {
             $this->update($task_schedule);
         }
     }
