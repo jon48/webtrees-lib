@@ -89,7 +89,7 @@ class TaskEditPage implements RequestHandlerInterface
             'task_schedule'     =>  $task_schedule,
             'task'              =>  $task,
             'has_task_config'   =>  $has_task_config,
-            'task_config_view'  =>  $has_task_config ? '' : $task->configView($request)
+            'task_config_view'  =>  $has_task_config ? $task->configView($request) : ''
         ]);
     }
 }
