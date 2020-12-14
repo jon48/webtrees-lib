@@ -6,8 +6,10 @@ parameters:
    paths:
       - src/Webtrees/Module/AdminTasks
       - src/Webtrees/Module/PatronymicLineage
+      - src/Webtrees/Module/Sosa
       - src/Webtrees/Module/WelcomeBlock
    ignoreErrors:
       - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'
+      - '#^Call to an undefined method Illuminate\\Support\\Fluent::.*\(\)\.$#'
       - '#^Call to an undefined static method Illuminate\\Database\\Capsule\\Manager::.*\(\)\.$#'
    checkMissingIterableValueType: false

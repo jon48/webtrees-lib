@@ -5,6 +5,7 @@
     <!-- <file>src</file> -->
     <file>src/Webtrees/Module/AdminTasks</file>
     <file>src/Webtrees/Module/PatronymicLineage</file>
+    <file>src/Webtrees/Module/Sosa</file>
     <file>src/Webtrees/Module/WelcomeBlock</file>
 
     <arg name="extensions" value="php"/>

@@ -27,7 +27,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 /**
  * Request handler for updating the Sosa de-cujus
- *
  */
 class SosaConfigAction implements RequestHandlerInterface
 {
@@ -35,35 +34,35 @@ class SosaConfigAction implements RequestHandlerInterface
      * @var UserService $user_service
      */
     private $user_service;
-    
+
     /**
      * Constructor for SosaConfigAction Request Handler
-     * 
+     *
      * @param UserService $user_service
      */
     public function __construct(UserService $user_service)
     {
         $this->user_service = $user_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        assert($this->user_service instanceof UserService);
-        
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
-        
+
         $params = $request->getParsedBody();
+        assert(is_array($params));
+
         $user_id = (int) $params['sosa-userid'];
         $root_id = $params['sosa-rootid'] ?? '';
-        
-        if(Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
+
+        if (Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
-            if($user !== null && $root_indi = Registry::individualFactory()->make($root_id, $tree)) {
+            if ($user !== null && ($root_indi = Registry::individualFactory()->make($root_id, $tree)) !== null) {
                 $tree->setUserPreference($user, 'MAJ_SOSA_ROOT_ID', $root_indi->xref());
                 FlashMessages::addMessage(I18N::translate('The root individual has been updated.'));
                 return redirect(route(SosaConfig::class, [
@@ -73,7 +72,7 @@ class SosaConfigAction implements RequestHandlerInterface
                 ]));
             }
         }
-        
+
         FlashMessages::addMessage(I18N::translate('The root individual could not be updated.'), 'danger');
         return redirect(route(SosaConfig::class, ['tree' => $tree->name()]));
     }

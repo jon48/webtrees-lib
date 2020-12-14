@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 
+use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaCalculatorService;
 use Psr\Http\Message\ResponseInterface;
@@ -27,8 +27,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Request handler for updating the Sosa de-cujus
- *
+ * Request handler for computing the Sosa ancestors
  */
 class SosaComputeAction implements RequestHandlerInterface
 {
@@ -36,17 +35,17 @@ class SosaComputeAction implements RequestHandlerInterface
      * @var UserService $user_service
      */
     private $user_service;
-    
+
     /**
      * Constructor for SosaConfigAction Request Handler
-     * 
+     *
      * @param UserService $user_service
      */
     public function __construct(UserService $user_service)
     {
         $this->user_service = $user_service;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Psr\Http\Server\RequestHandlerInterface::handle()
@@ -55,25 +54,38 @@ class SosaComputeAction implements RequestHandlerInterface
     {
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
-        
-        $user_id = (int) ($request->getParsedBody()['user_id'] ?? 0);
-        $partial_from = $request->getParsedBody()['partial_from'] ?? null;
-        
-        if(($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {
+
+        $params = $request->getParsedBody();
+        assert(is_array($params));
+
+        $user_id = (int) ($params['user_id'] ?? Auth::id() ?? 0);
+        $partial_from = $params['partial_from'] ?? null;
+
+        if (($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
-            
+
             /** @var SosaCalculatorService $sosa_calc_service */
             $sosa_calc_service = app()->makeWith(SosaCalculatorService::class, [ 'tree' => $tree, 'user' => $user]);
-            
-            if($partial_from !== null && $sosa_from = Registry::individualFactory()->make($partial_from, $tree)) {
+
+            if (
+                $partial_from !== null &&
+                ($sosa_from = Registry::individualFactory()->make($partial_from, $tree)) !== null
+            ) {
                 $res = $sosa_calc_service->computeFromIndividual($sosa_from);
             } else {
                 $res = $sosa_calc_service->computeAll();
             }
-            
-            return $res ? response('', 200) : response(I18N::translate('An error occurred during Sosa computation.'), 500);
-            
+
+            return $res ?
+                response('', 200) :
+                response(
+                    I18N::translate('An error occurred while computing Sosa ancestors.'),
+                    StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR
+                );
         }
-        throw new HttpAccessDeniedException(I18N::translate("You do not have permission to modify the user"));
+        return response(
+            I18N::translate('You do not have permission to modify the user.'),
+            StatusCodeInterface::STATUS_FORBIDDEN
+        );
     }
 }

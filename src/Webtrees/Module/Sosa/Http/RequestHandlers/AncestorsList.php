@@ -22,14 +22,16 @@ use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
+use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
+use MyArtJaub\Webtrees\Module\Sosa\Services\SosaStatisticsService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Request handler for configuring the Sosa de-cujus
+ * Request handler for listing Sosa ancestors. Only handle the main page, with generation selection.
  */
-class SosaConfig implements RequestHandlerInterface
+class AncestorsList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
@@ -39,13 +41,22 @@ class SosaConfig implements RequestHandlerInterface
     private $module;
 
     /**
-     * Constructor for SosaConfig Request Handler
+     * @var SosaRecordsService $sosa_record_service
+     */
+    private $sosa_record_service;
+
+    /**
+     * Constructor for AncestorsList Request Handler
      *
      * @param ModuleService $module_service
+     * @param SosaRecordsService $sosa_record_service
      */
-    public function __construct(ModuleService $module_service)
-    {
+    public function __construct(
+        ModuleService $module_service,
+        SosaRecordsService $sosa_record_service
+    ) {
         $this->module = $module_service->findByInterface(SosaModule::class)->first();
+        $this->sosa_record_service = $sosa_record_service;
     }
 
     /**
@@ -61,29 +72,20 @@ class SosaConfig implements RequestHandlerInterface
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
 
-        $users_root = array();
-        if (Auth::check()) {
-            /** @var \Fisharebest\Webtrees\User $user */
-            $user = Auth::user();
-            $users_root[] = ['user' => $user, 'root_id' => $tree->getUserPreference($user, 'MAJ_SOSA_ROOT_ID')];
+        $user = Auth::check() ? $request->getAttribute('user') : new DefaultUser();
 
-            if (Auth::isManager($tree)) {
-                $default_user = new DefaultUser();
-                $users_root[] = [
-                    'user' => $default_user,
-                    'root_id' => $tree->getUserPreference($default_user, 'MAJ_SOSA_ROOT_ID')
-                ];
-            }
-        }
+        /** @var SosaStatisticsService $sosa_stats_service */
+        $sosa_stats_service = app()->makeWith(SosaStatisticsService::class, ['tree' => $tree, 'user' => $user]);
 
-        return $this->viewResponse($this->module->name() . '::config-page', [
+        $current_gen = (int) ($request->getAttribute('gen') ?? $request->getQueryParams()['gen'] ?? 0);
+
+        return $this->viewResponse($this->module->name() . '::list-ancestors-page', [
             'module_name'       =>  $this->module->name(),
-            'title'             =>  I18N::translate('Sosa Configuration'),
+            'title'             =>  I18N::translate('Sosa Ancestors'),
             'tree'              =>  $tree,
-            'user_id'           =>  $request->getAttribute('user'),
-            'selected_user_id'  =>  (int) ($request->getQueryParams()['user_id'] ?? 0),
-            'immediate_compute' =>  ($request->getQueryParams()['compute'] ?? '') == 'yes',
-            'users_root'        =>  $users_root
+            'root_indi'         =>  $sosa_stats_service->rootIndividual(),
+            'max_gen'           =>  $sosa_stats_service->maxGeneration(),
+            'current_gen'       =>  $current_gen
         ]);
     }
 }

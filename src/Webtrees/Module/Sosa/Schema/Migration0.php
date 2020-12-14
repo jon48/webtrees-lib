@@ -21,13 +21,13 @@ use Fisharebest\Webtrees\Schema\MigrationInterface;
  */
 class Migration0 implements MigrationInterface
 {
-    
+
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
      */
-	public function upgrade(): void
-	{
-	    // These migrations have been merged into migration 2.
-	}
+    public function upgrade(): void
+    {
+        // These migrations have been merged into migration 2.
+    }
 }
