@@ -80,8 +80,8 @@ class TaskEditPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The Task schedule could not be found.'));
         }
 
-        /** @var TaskInterface&ConfigurableTaskInterface $task */
         $has_task_config = $task instanceof ConfigurableTaskInterface;
+        /** @var TaskInterface&ConfigurableTaskInterface $task */
 
         return $this->viewResponse($this->module->name() . '::admin/tasks-edit', [
             'module'            =>  $this->module,

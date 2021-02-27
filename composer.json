@@ -27,7 +27,7 @@
 	},
 	"require" : {
 		"ext-xml": "*",
-		"fisharebest/webtrees": "~2.0.10",
+		"fisharebest/webtrees": "~2.0.11",
 		"paragonie/sodium_compat": "~1.13"
 	},
 	"require-dev" : {

@@ -18,13 +18,14 @@ use Aura\Router\Map;
 use Fig\Http\Message\RequestMethodInterface;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Http\Middleware\AuthAdministrator;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
-use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\AdminConfigPage;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskEditAction;
@@ -39,12 +40,15 @@ use MyArtJaub\Webtrees\Module\AdminTasks\Tasks\HealthCheckEmailTask;
  * MyArtJaub AdminTask Module
  * Allow for tasks to be run on a (nearly-)regular schedule
  */
-class AdminTasksModule extends AbstractModuleMaj implements
-    ModuleCustomInterface,
+class AdminTasksModule extends AbstractModule implements
+    ModuleMyArtJaubInterface,
     ModuleConfigInterface,
     ModuleGlobalInterface,
     ModuleTasksProviderInterface
 {
+    use ModuleMyArtJaubTrait {
+        boot as traitBoot;
+    }
     use ModuleConfigTrait;
     use ModuleGlobalTrait;
 
@@ -73,11 +77,11 @@ class AdminTasksModule extends AbstractModuleMaj implements
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::boot()
+     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
      */
     public function boot(): void
     {
-        parent::boot();
+        $this->traitBoot();
         app(MigrationService::class)->updateSchema(
             self::SCHEMA_MIGRATION_PREFIX,
             self::SCHEMA_SETTING_NAME,
@@ -87,7 +91,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
@@ -128,7 +132,7 @@ class AdminTasksModule extends AbstractModuleMaj implements
      */
     public function customModuleVersion(): string
     {
-        return '2.0.5-v.1';
+        return '2.0.11-v.1';
     }
 
     /**

@@ -18,11 +18,13 @@ use Aura\Router\Map;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\LineagesPage;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\SurnamesList;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,8 +33,12 @@ use Psr\Http\Message\ServerRequestInterface;
  * Patronymic Lineage Module.
  * Display lineages of people with the same surname.
  */
-class PatronymicLineageModule extends AbstractModuleMaj implements ModuleListInterface, ModuleGlobalInterface
+class PatronymicLineageModule extends AbstractModule implements
+    ModuleMyArtJaubInterface,
+    ModuleListInterface,
+    ModuleGlobalInterface
 {
+    use ModuleMyArtJaubTrait;
     use ModuleListTrait;
     use ModuleGlobalTrait;
 
@@ -57,7 +63,7 @@ class PatronymicLineageModule extends AbstractModuleMaj implements ModuleListInt
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
@@ -80,7 +86,7 @@ class PatronymicLineageModule extends AbstractModuleMaj implements ModuleListInt
      */
     public function customModuleVersion(): string
     {
-        return '2.0.7-v.1';
+        return '2.0.11-v.1';
     }
 
     /**

@@ -11,25 +11,21 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module;
 
-use Aura\Router\Map;
 use Aura\Router\RouterContainer;
 use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\View;
 use Fisharebest\Webtrees\Webtrees;
-use Fisharebest\Webtrees\Module\AbstractModule;
-use Fisharebest\Webtrees\Module\ModuleCustomInterface;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
 use Fisharebest\Webtrees\Module\ModuleThemeInterface;
 
 /**
  * MyArtJaub Module
  */
-abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomInterface
+trait ModuleMyArtJaubTrait
 {    
     use ModuleCustomTrait;
     
     /**
-     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
      */
     public function boot() : void
@@ -40,7 +36,6 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
     }
     
     /**
-     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\AbstractModule::resourcesFolder()
      */
     public function resourcesFolder(): string
@@ -49,7 +44,6 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
     }
     
     /**
-     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleAuthorName()
      */
     public function customModuleAuthorName() : string
@@ -58,7 +52,6 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
     }
     
     /**
-     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleSupportUrl()
      */
     public function customModuleSupportUrl() : string
@@ -67,7 +60,6 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
     }
     
     /**
-     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customTranslations()
      */
     public function customTranslations(string $language) : array
@@ -83,18 +75,7 @@ abstract class AbstractModuleMaj extends AbstractModule implements ModuleCustomI
     }
     
     /**
-     * Add module routes to webtrees route loader
-     * 
-     * @param Map $router
-     */
-    public abstract function loadRoutes(Map $router) : void;
-    
-    /**
-     * Returns the URL of the module specific stylesheets.
-     * It will look for a CSS file matching the theme name (e.g. xenea.min.css),
-     * and fallback to default.min.css if none are found
-     * 
-     * @return string
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::moduleCssUrl
      */
     public function moduleCssUrl() : string
     {

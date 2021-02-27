@@ -21,12 +21,14 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Menu;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Http\RequestHandlers\IndividualPage;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsList;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListFamily;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListIndividual;
@@ -42,8 +44,11 @@ use Psr\Http\Message\ServerRequestInterface;
  * MyArtJaub Sosa Module
  * Identify and produce statistics about Sosa ancestors
  */
-class SosaModule extends AbstractModuleMaj implements ModuleGlobalInterface, ModuleMenuInterface
+class SosaModule extends AbstractModule implements ModuleMyArtJaubInterface, ModuleGlobalInterface, ModuleMenuInterface
 {
+    use ModuleMyArtJaubTrait {
+        boot as traitBoot;
+    }
     use ModuleGlobalTrait;
     use ModuleMenuTrait;
 
@@ -74,11 +79,11 @@ class SosaModule extends AbstractModuleMaj implements ModuleGlobalInterface, Mod
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::boot()
+     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
      */
     public function boot(): void
     {
-        parent::boot();
+        $this->traitBoot();
         app(MigrationService::class)->updateSchema(
             self::SCHEMA_MIGRATION_PREFIX,
             self::SCHEMA_SETTING_NAME,
@@ -88,7 +93,7 @@ class SosaModule extends AbstractModuleMaj implements ModuleGlobalInterface, Mod
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
@@ -123,7 +128,7 @@ class SosaModule extends AbstractModuleMaj implements ModuleGlobalInterface, Mod
      */
     public function customModuleVersion(): string
     {
-        return '2.0.7-v.1';
+        return '2.0.11-v.1';
     }
 
     /**

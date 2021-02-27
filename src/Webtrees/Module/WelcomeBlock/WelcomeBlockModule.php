@@ -18,18 +18,21 @@ use Aura\Router\Map;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
 use Fisharebest\Webtrees\Module\ModuleBlockTrait;
 use Illuminate\Support\Str;
-use MyArtJaub\Webtrees\Module\AbstractModuleMaj;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
+use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\Http\RequestHandlers\MatomoStats;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Welcome Block Module.
  */
-class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterface
+class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterface, ModuleBlockInterface
 {
+    use ModuleMyArtJaubTrait;
     use ModuleBlockTrait;
 
     /**
@@ -53,7 +56,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AbstractModuleMaj::loadRoutes()
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
     public function loadRoutes(Map $router): void
     {
@@ -72,7 +75,7 @@ class WelcomeBlockModule extends AbstractModuleMaj implements ModuleBlockInterfa
      */
     public function customModuleVersion(): string
     {
-        return '2.0.6-v.1';
+        return '2.0.11-v.1';
     }
 
     /**
