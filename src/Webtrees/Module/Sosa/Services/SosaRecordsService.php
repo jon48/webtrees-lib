@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 
+use Brick\Math\BigInteger;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
@@ -28,10 +29,23 @@ use Illuminate\Support\Collection;
 class SosaRecordsService
 {
     /**
-     * Maximum number of generation the database is able to hold.
-     * @var int MAX_DB_GENERATIONS
+     * @var int $max_system_generations
      */
-    public const MAX_DB_GENERATIONS = 64;
+    private $max_system_generations;
+
+    /**
+     * Maximum number of generation the system is able to hold.
+     * This is based on the size of the bigint SQL type (2^63) and the maximum PHP integer type
+     *
+     * @return int
+     */
+    public function maxSystemGenerations(): int
+    {
+        if ($this->max_system_generations === null) {
+            $this->max_system_generations = min(63, $this->generation(PHP_INT_MAX));
+        }
+        return $this->max_system_generations;
+    }
 
     /**
      * Calculate the generation of a sosa
@@ -42,7 +56,7 @@ class SosaRecordsService
      */
     public function generation(int $sosa): int
     {
-        return (int) log($sosa, 2) + 1;
+        return BigInteger::of($sosa)->getBitLength();
     }
 
     /**
@@ -206,7 +220,7 @@ class SosaRecordsService
         $bindings_placeholders = $bindings_values = [];
         foreach ($sosa_records as $i => $row) {
             $gen = $this->generation($row['sosa']);
-            if ($gen <=  self::MAX_DB_GENERATIONS) {
+            if ($gen <=  $this->maxSystemGenerations()) {
                 if ($mass_update) {
                     $bindings_placeholders[] = '(:tree_id' . $i . ', :user_id' . $i . ', :sosa' . $i . ',' .
                         ' :indi_id' . $i . ', :gen' . $i . ',' .

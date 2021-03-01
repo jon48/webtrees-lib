@@ -22,6 +22,7 @@ use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
+use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -65,16 +66,29 @@ class SosaConfig implements RequestHandlerInterface
         if (Auth::check()) {
             /** @var \Fisharebest\Webtrees\User $user */
             $user = Auth::user();
-            $users_root[] = ['user' => $user, 'root_id' => $tree->getUserPreference($user, 'MAJ_SOSA_ROOT_ID')];
+            $users_root[] = [
+                'user'      => $user,
+                'root_id'   => $tree->getUserPreference($user, 'MAJ_SOSA_ROOT_ID'),
+                'max_gen'   => $tree->getUserPreference($user, 'MAJ_SOSA_MAX_GEN')
+            ];
 
             if (Auth::isManager($tree)) {
                 $default_user = new DefaultUser();
                 $users_root[] = [
                     'user' => $default_user,
-                    'root_id' => $tree->getUserPreference($default_user, 'MAJ_SOSA_ROOT_ID')
+                    'root_id' => $tree->getUserPreference($default_user, 'MAJ_SOSA_ROOT_ID'),
+                    'max_gen'   => $tree->getUserPreference($default_user, 'MAJ_SOSA_MAX_GEN')
                 ];
             }
         }
+
+        // Use the system max generations if not set
+        $max_gen_system = app(SosaRecordsService::class)->maxSystemGenerations();
+        foreach ($users_root as $key => $user_root) {
+            $users_root[$key]['max_gen'] = is_numeric($user_root['max_gen']) ?
+                (int) $user_root['max_gen'] :
+                $max_gen_system;
+        };
 
         return $this->viewResponse($this->module->name() . '::config-page', [
             'module_name'       =>  $this->module->name(),

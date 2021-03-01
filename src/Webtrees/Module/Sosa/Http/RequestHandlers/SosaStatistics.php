@@ -14,6 +14,8 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 
+use Brick\Math\BigInteger;
+use Brick\Math\RoundingMode;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
@@ -99,10 +101,12 @@ class SosaStatistics implements RequestHandlerInterface
         $individual_count = $sosa_stats_service->totalIndividuals();
 
         return [
-            'sosa_count'            =>  $ancestors_count,
-            'distinct_count'        =>  $ancestors_distinct_count,
-            'sosa_rate'             =>  $this->safeDivision($ancestors_distinct_count, $individual_count),
-            'pedi_collapse'         =>  1 - $this->safeDivision($ancestors_distinct_count, $ancestors_count),
+            'sosa_count'    =>  $ancestors_count,
+            'distinct_count'    =>  $ancestors_distinct_count,
+            'sosa_rate' =>  $this->safeDivision(
+                BigInteger::of($ancestors_distinct_count),
+                BigInteger::of($individual_count)
+            ),
             'mean_gen_time'         =>  $sosa_stats_service->meanGenerationTime()
         ];
     }
@@ -127,27 +131,32 @@ class SosaStatistics implements RequestHandlerInterface
             $generation_stats[$gen] = array(
                 'gen_min_birth' => $stats_gen['firstBirth'] ?? (int) $stats_gen['firstEstimatedBirth'],
                 'gen_max_birth' => $stats_gen['lastBirth'] ?? (int) $stats_gen['lastEstimatedBirth'],
-                'theoretical' => pow(2, $gen - 1),
+                'theoretical' => BigInteger::of(2)->power($gen - 1)->toInt(),
                 'known' => (int) $stats_gen['sosaCount'],
-                'perc_known' => $this->safeDivision((int) $stats_gen['sosaCount'], pow(2, $gen - 1)),
+                'perc_known' => $this->safeDivision(
+                    BigInteger::of((int) $stats_gen['sosaCount']),
+                    BigInteger::of(2)->power($gen - 1)
+                ),
                 'missing' => $gen > 1 ?
                     2 * (int) $stats_by_gen[$gen - 1]['sosaCount'] - (int) $stats_gen['sosaCount'] :
                     0,
                 'perc_missing' => $gen > 1 ?
                     1 - $this->safeDivision(
-                        (int) $stats_gen['sosaCount'],
-                        2 * (int) $stats_by_gen[$gen - 1]['sosaCount']
+                        BigInteger::of((int) $stats_gen['sosaCount']),
+                        BigInteger::of(2 * (int) $stats_by_gen[$gen - 1]['sosaCount'])
                     ) :
                     0,
                 'total_known' => (int) $stats_gen['sosaTotalCount'],
-                'perc_total_known' => $this->safeDivision((int) $stats_gen['sosaTotalCount'], pow(2, $gen) - 1),
+                'perc_total_known' => $this->safeDivision(
+                    BigInteger::of((int) $stats_gen['sosaTotalCount']),
+                    BigInteger::of(2)->power($gen)->minus(1)
+                ),
                 'different' => $gen_diff,
-                'perc_different' => $this->safeDivision($gen_diff, (int) $stats_gen['sosaCount']),
-                'total_different' => (int) $stats_gen['diffSosaTotalCount'],
-                'pedi_collapse' => 1 - $this->safeDivision(
-                    (int) $stats_gen['diffSosaTotalCount'],
-                    (int) $stats_gen['sosaTotalCount']
-                )
+                'perc_different' => $this->safeDivision(
+                    BigInteger::of($gen_diff),
+                    BigInteger::of((int) $stats_gen['sosaCount'])
+                ),
+                'total_different' => (int) $stats_gen['diffSosaTotalCount']
             );
         }
 
@@ -157,13 +166,14 @@ class SosaStatistics implements RequestHandlerInterface
     /**
      * Return the result of a division, and a default value if denominator is 0
      *
-     * @param int $p Numerator
-     * @param int $q Denominator
+     * @param BigInteger $p Numerator
+     * @param BigInteger $q Denominator
+     * @param int $scale Rounding scale
      * @param float $default Value if denominator is 0
      * @return float
      */
-    private function safeDivision(int $p, int $q, float $default = 0): float
+    private function safeDivision(BigInteger $p, BigInteger $q, int $scale = 10, float $default = 0): float
     {
-        return $q == 0 ? $default : $p / $q;
+        return $q->isZero() ? $default : $p->toBigDecimal()->dividedBy($q, $scale, RoundingMode::HALF_DOWN)->toFloat();
     }
 }

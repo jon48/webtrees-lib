@@ -33,6 +33,7 @@ use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsList;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListFamily;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListIndividual;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\MissingAncestorsList;
+use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\PedigreeCollapseData;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaComputeAction;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaComputeModal;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaConfig;
@@ -103,15 +104,19 @@ class SosaModule extends AbstractModule implements ModuleMyArtJaubInterface, Mod
 
                 $router->attach('', '/list', static function (Map $router): void {
 
-
                     $router->get(AncestorsList::class, '/ancestors/{tree}{/gen}', AncestorsList::class);
                     $router->get(AncestorsListIndividual::class, '/ancestors/{tree}/{gen}/tab/individuals', AncestorsListIndividual::class);    //phpcs:ignore Generic.Files.LineLength.TooLong
                     $router->get(AncestorsListFamily::class, '/ancestors/{tree}/{gen}/tab/families', AncestorsListFamily::class);   //phpcs:ignore Generic.Files.LineLength.TooLong
                     $router->get(MissingAncestorsList::class, '/missing/{tree}{/gen}', MissingAncestorsList::class);
                 });
-                $router->get(SosaStatistics::class, '/statistics/{tree}', SosaStatistics::class);
-                $router->attach('', '/config/{tree}', static function (Map $router): void {
 
+                $router->attach('', '/statistics/{tree}', static function (Map $router): void {
+
+                    $router->get(SosaStatistics::class, '', SosaStatistics::class);
+                    $router->get(PedigreeCollapseData::class, '/pedigreecollapse', PedigreeCollapseData::class);
+                });
+
+                $router->attach('', '/config/{tree}', static function (Map $router): void {
 
                     $router->get(SosaConfig::class, '', SosaConfig::class);
                     $router->post(SosaConfigAction::class, '', SosaConfigAction::class);

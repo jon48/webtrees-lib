@@ -54,6 +54,12 @@ class SosaCalculatorService
     private $tmp_sosa_table;
 
     /**
+     * Maximum number of generations to calculate
+     * @var int $max_generations
+     */
+    private $max_generations;
+
+    /**
      * Constructor for the Sosa Calculator
      *
      * @param SosaRecordsService $sosa_records_service
@@ -66,6 +72,10 @@ class SosaCalculatorService
         $this->tree = $tree;
         $this->user = $user;
         $this->tmp_sosa_table = array();
+        $max_gen_setting = $tree->getUserPreference($user, 'MAJ_SOSA_MAX_GEN');
+        $this->max_generations = is_numeric($max_gen_setting) ?
+            (int) $max_gen_setting :
+            $this->sosa_records_service->maxSystemGenerations();
     }
 
     /**
@@ -127,7 +137,10 @@ class SosaCalculatorService
 
         $this->flushTmpSosaTable();
 
-        if (($fam = $indi->childFamilies()->first()) !== null) {
+        if (
+            ($fam = $indi->childFamilies()->first()) !== null
+            && $this->sosa_records_service->generation($sosa) < $this->max_generations
+        ) {
             /** @var \Fisharebest\Webtrees\Family $fam */
             if (($husb = $fam->husband()) !== null) {
                 $this->addNode($husb, 2 * $sosa);
@@ -145,10 +158,7 @@ class SosaCalculatorService
      */
     private function flushTmpSosaTable($force = false): void
     {
-        if (
-            count($this->tmp_sosa_table) > 0 &&
-            ($force ||  count($this->tmp_sosa_table) >= self::TMP_SOSA_TABLE_LIMIT)
-        ) {
+        if ($force || count($this->tmp_sosa_table) >= self::TMP_SOSA_TABLE_LIMIT) {
             $this->sosa_records_service->insertOrUpdate($this->tree, $this->user, $this->tmp_sosa_table);
             $this->tmp_sosa_table = array();
         }
