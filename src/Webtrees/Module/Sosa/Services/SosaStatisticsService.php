@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Contracts\UserInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -31,7 +31,7 @@ class SosaStatisticsService
 
     /**
      * Reference user
-     * @var User $user
+     * @var UserInterface $user
      */
     private $user;
 
@@ -45,9 +45,9 @@ class SosaStatisticsService
      * Constructor for Sosa Statistics Service
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function __construct(Tree $tree, User $user)
+    public function __construct(Tree $tree, UserInterface $user)
     {
         $this->tree = $tree;
         $this->user = $user;

@@ -17,8 +17,11 @@ namespace MyArtJaub\Webtrees\Module\Sosa;
 use Aura\Router\Map;
 use Aura\Router\Route;
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Menu;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Http\RequestHandlers\IndividualPage;
 use Fisharebest\Webtrees\Module\AbstractModule;
@@ -26,6 +29,8 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleMenuInterface;
 use Fisharebest\Webtrees\Module\ModuleMenuTrait;
+use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
+use Fisharebest\Webtrees\Module\ModuleSidebarTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
@@ -39,19 +44,25 @@ use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaComputeModal;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaConfig;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaConfigAction;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\SosaStatistics;
+use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * MyArtJaub Sosa Module
  * Identify and produce statistics about Sosa ancestors
  */
-class SosaModule extends AbstractModule implements ModuleMyArtJaubInterface, ModuleGlobalInterface, ModuleMenuInterface
+class SosaModule extends AbstractModule implements
+    ModuleMyArtJaubInterface,
+    ModuleGlobalInterface,
+    ModuleMenuInterface,
+    ModuleSidebarInterface
 {
     use ModuleMyArtJaubTrait {
         boot as traitBoot;
     }
     use ModuleGlobalTrait;
     use ModuleMenuTrait;
+    use ModuleSidebarTrait;
 
 // How to update the database schema for this module
 
@@ -216,5 +227,71 @@ class SosaModule extends AbstractModule implements ModuleMyArtJaubInterface, Mod
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::bodyContent()
+     */
+    public function bodyContent(): string
+    {
+        return '<script src="' . $this->assetUrl('js/sosa.min.js') . '"></script>';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::sidebarTitle()
+     */
+    public function sidebarTitle(): string
+    {
+        $request = app(ServerRequestInterface::class);
+        $xref = $request->getAttribute('xref');
+        $tree = $request->getAttribute('tree');
+        $user = Auth::check() ? Auth::user() : new DefaultUser();
+
+        $individual = Registry::individualFactory()->make($xref, $tree);
+
+        return view($this->name() . '::sidebar/title', [
+            'module_name'   =>  $this->name(),
+            'sosa_numbers'  =>  app(SosaRecordsService::class)->sosaNumbers($tree, $user, $individual)
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarContent()
+     */
+    public function getSidebarContent(Individual $individual): string
+    {
+        $sosa_root_xref = $individual->tree()->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID');
+        $sosa_root = Registry::individualFactory()->make($sosa_root_xref, $individual->tree());
+        $user = Auth::check() ? Auth::user() : new DefaultUser();
+
+        return view($this->name() . '::sidebar/content', [
+            'sosa_ancestor' =>  $individual,
+            'sosa_root'     =>  $sosa_root,
+            'sosa_numbers'  =>  app(SosaRecordsService::class)->sosaNumbers($individual->tree(), $user, $individual)
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::hasSidebarContent()
+     */
+    public function hasSidebarContent(Individual $individual): bool
+    {
+        $user = Auth::check() ? Auth::user() : new DefaultUser();
+
+        return app(SosaRecordsService::class)
+            ->sosaNumbers($individual->tree(), $user, $individual)->count() > 0;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::defaultSidebarOrder()
+     */
+    public function defaultSidebarOrder(): int
+    {
+        return 1;
     }
 }

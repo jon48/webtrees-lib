@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Contracts\UserInterface;
 
 /**
  * Service for Sosa ancestors calculations
@@ -37,7 +37,7 @@ class SosaCalculatorService
 
     /**
      * Reference user
-     * @var User $user
+     * @var UserInterface $user
      */
     private $user;
 
@@ -64,9 +64,9 @@ class SosaCalculatorService
      *
      * @param SosaRecordsService $sosa_records_service
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function __construct(SosaRecordsService $sosa_records_service, Tree $tree, User $user)
+    public function __construct(SosaRecordsService $sosa_records_service, Tree $tree, UserInterface $user)
     {
         $this->sosa_records_service = $sosa_records_service;
         $this->tree = $tree;
@@ -103,7 +103,7 @@ class SosaCalculatorService
      */
     public function computeFromIndividual(Individual $indi): bool
     {
-        $current_sosas = $this->sosa_records_service->getSosaNumbers($this->tree, $this->user, $indi);
+        $current_sosas = $this->sosa_records_service->sosaNumbers($this->tree, $this->user, $indi);
         foreach ($current_sosas->keys() as $sosa) {
             $this->sosa_records_service->deleteAncestorsFrom($this->tree, $this->user, $sosa);
             $this->addNode($indi, $sosa);

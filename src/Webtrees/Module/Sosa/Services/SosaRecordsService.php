@@ -15,9 +15,11 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Sosa\Services;
 
 use Brick\Math\BigInteger;
+use Brick\Math\RoundingMode;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Contracts\UserInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
@@ -60,33 +62,54 @@ class SosaRecordsService
     }
 
     /**
+     * Calculate the descendant sosa of the given sosa, at the given generation.
+     * For instance, the descendant of the Sosa 14 at generation 2 is Sosa 3 (mother).
+     *
+     * @param int $sosa
+     * @param int $gen
+     * @return int
+     */
+    public function sosaDescendantOf(int $sosa, int $gen): int
+    {
+        $gen_sosa = $this->generation($sosa);
+        return $gen_sosa <= $gen ? $sosa : BigInteger::of($sosa)
+            ->dividedBy(BigInteger::of(2)->power($this->generation($sosa) - $gen), RoundingMode::DOWN)
+            ->toInt();
+    }
+
+    /**
      * Returns all Sosa numbers associated to an Individual
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param Individual $indi
      * @return Collection
      */
-    public function getSosaNumbers(Tree $tree, User $user, Individual $indi): Collection
+    public function sosaNumbers(Tree $tree, UserInterface $user, Individual $indi): Collection
     {
-        return DB::table('maj_sosa')
-            ->select(['majs_sosa', 'majs_gen'])
-            ->where('majs_gedcom_id', '=', $tree->id())
-            ->where('majs_user_id', '=', $user->id())
-            ->where('majs_i_id', '=', $indi->xref())
-            ->orderBy('majs_sosa')
-            ->get()->pluck('majs_gen', 'majs_sosa');
+        return Registry::cache()->array()->remember(
+            'sosanumbers-' . $indi->xref() . '@' . $tree->id() . '-' . $user->id(),
+            function () use ($tree, $user, $indi): Collection {
+                return DB::table('maj_sosa')
+                    ->select(['majs_sosa', 'majs_gen'])
+                    ->where('majs_gedcom_id', '=', $tree->id())
+                    ->where('majs_user_id', '=', $user->id())
+                    ->where('majs_i_id', '=', $indi->xref())
+                    ->orderBy('majs_sosa')
+                    ->get()->pluck('majs_gen', 'majs_sosa');
+            }
+        );
     }
 
     /**
      * Return a list of the Sosa ancestors at a given generation
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param int $gen
      * @return Collection
      */
-    public function listAncestorsAtGeneration(Tree $tree, User $user, int $gen): Collection
+    public function listAncestorsAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
         return DB::table('maj_sosa')
             ->select(['majs_sosa', 'majs_i_id'])
@@ -101,11 +124,11 @@ class SosaRecordsService
      * Return a list of the Sosa families at a given generation
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param int $gen
      * @return Collection
      */
-    public function listAncestorFamiliesAtGeneration(Tree $tree, User $user, int $gen): Collection
+    public function listAncestorFamiliesAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
         $table_prefix = DB::connection()->getTablePrefix();
         return DB::table('families')
@@ -135,11 +158,11 @@ class SosaRecordsService
      * It includes the reference of either parent if it is known.
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param int $gen
      * @return Collection
      */
-    public function listMissingAncestorsAtGeneration(Tree $tree, User $user, int $gen): Collection
+    public function listMissingAncestorsAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
         if ($gen == 1) {
             return collect();
@@ -177,9 +200,9 @@ class SosaRecordsService
      * Remove all Sosa entries related to the gedcom file and user
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      */
-    public function deleteAll(Tree $tree, User $user): void
+    public function deleteAll(Tree $tree, UserInterface $user): void
     {
         DB::table('maj_sosa')
             ->where('majs_gedcom_id', '=', $tree->id())
@@ -190,10 +213,10 @@ class SosaRecordsService
     /**
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param int $sosa
      */
-    public function deleteAncestorsFrom(Tree $tree, User $user, int $sosa): void
+    public function deleteAncestorsFrom(Tree $tree, UserInterface $user, int $sosa): void
     {
         DB::table('maj_sosa')
             ->where('majs_gedcom_id', '=', $tree->id())
@@ -210,10 +233,10 @@ class SosaRecordsService
      * Insert (or update if already existing) a list of Sosa individuals
      *
      * @param Tree $tree
-     * @param User $user
+     * @param UserInterface $user
      * @param array $sosa_records
      */
-    public function insertOrUpdate(Tree $tree, User $user, array $sosa_records): void
+    public function insertOrUpdate(Tree $tree, UserInterface $user, array $sosa_records): void
     {
         $mass_update = DB::connection()->getDriverName() === 'mysql';
 
