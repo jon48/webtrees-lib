@@ -30,7 +30,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class SosaComputeModal implements RequestHandlerInterface
 {
     /**
-     * @var SosaModule $module
+     * @var SosaModule|null $module
      */
     private $module;
 

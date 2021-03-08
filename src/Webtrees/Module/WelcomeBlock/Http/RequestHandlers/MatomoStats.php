@@ -30,7 +30,7 @@ class MatomoStats implements RequestHandlerInterface
     use ViewResponseTrait;
 
     /**
-     * @var WelcomeBlockModule
+     * @var WelcomeBlockModule|null $module
      */
     private $module;
 
@@ -59,6 +59,12 @@ class MatomoStats implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/ajax';
+
+        if ($this->module === null) {
+            return $this->viewResponse('errors/unhandled-exception', [
+                'error' => 'The attached module could not be found.'
+            ]);
+        }
 
         $block_id = filter_var($request->getAttribute('block_id'), FILTER_VALIDATE_INT);
         $nb_visits_year = $nb_visits_today = null;

@@ -34,7 +34,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class PedigreeCollapseData implements RequestHandlerInterface
 {
     /**
-     * @var SosaModule $module
+     * @var SosaModule|null $module
      */
     private $module;
 

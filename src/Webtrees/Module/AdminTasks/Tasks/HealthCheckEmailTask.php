@@ -46,7 +46,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     public const TREE_PREFERENCE_NAME = 'MAJ_AT_HEALTHCHECK_ENABLED';
 
     /**
-     * @var AdminTasksModule $module
+     * @var AdminTasksModule|null $module
      */
     private $module;
 
@@ -191,7 +191,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      */
     public function configView(ServerRequestInterface $request): string
     {
-        return view($this->module->name() . '::tasks/healthcheck/config', [
+        return $this->module === null ? '' : view($this->module->name() . '::tasks/healthcheck/config', [
             'all_trees'     =>  $this->tree_service->all()
         ]);
     }

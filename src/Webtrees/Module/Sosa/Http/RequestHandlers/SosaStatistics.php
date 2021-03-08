@@ -39,7 +39,7 @@ class SosaStatistics implements RequestHandlerInterface
     use ViewResponseTrait;
 
     /**
-     * @var SosaModule $module
+     * @var SosaModule|null $module
      */
     private $module;
 

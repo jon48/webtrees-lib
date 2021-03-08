@@ -41,7 +41,7 @@ class TaskScheduleService
     public const TASK_TIME_OUT = 600;
 
     /**
-     * @var Collection $available_tasks
+     * @var Collection|null $available_tasks
      */
     private $available_tasks;
 

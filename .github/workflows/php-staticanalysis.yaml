@@ -1,0 +1,50 @@
+name: Static analysis PHP
+
+on: [push, pull_request]
+
+jobs:
+
+  phpstan:
+    runs-on: ubuntu-latest
+    name: phpstan
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4
+          extensions: gd,intl,mbstring,sqlite,zip
+          coverage: disable
+
+      - run: composer global require phpstan/phpstan phpstan/extension-installer phpstan/phpstan-deprecation-rules phpstan/phpstan-strict-rules phpstan/phpstan-phpunit
+
+      - run: composer install --no-progress --no-suggest --ignore-platform-reqs
+
+      - run: ~/.composer/vendor/bin/phpstan analyze --no-progress
+
+  psalm:
+    runs-on: ubuntu-latest
+    name: psalm
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4
+          extensions: gd,intl,mbstring,sqlite,zip
+          coverage: disable
+
+      - run: composer global require vimeo/psalm
+     
+      - run: composer install --no-progress --ignore-platform-reqs
+     
+      - run: ~/.composer/vendor/bin/psalm
+      
+      - run: ~/.composer/vendor/bin/psalm --taint-analysis
+      

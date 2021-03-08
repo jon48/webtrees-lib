@@ -35,7 +35,7 @@ use Exception;
 class TaskEditAction implements RequestHandlerInterface
 {
     /**
-     * @var AdminTasksModule $module
+     * @var AdminTasksModule|null $module
      */
     private $module;
 
@@ -52,7 +52,7 @@ class TaskEditAction implements RequestHandlerInterface
      */
     public function __construct(ModuleService $module_service, TaskScheduleService $taskschedules_service)
     {
-            $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
+        $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
     }
 
@@ -62,10 +62,18 @@ class TaskEditAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $admin_config_route = route(AdminConfigPage::class);
+
+        if ($this->module === null) {
+            FlashMessages::addMessage(
+                I18N::translate('The attached module could not be found.'),
+                'danger'
+            );
+            return redirect($admin_config_route);
+        }
+
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
-
-        $admin_config_route = route(AdminConfigPage::class);
 
         if ($task_schedule === null) {
             FlashMessages::addMessage(
@@ -99,6 +107,10 @@ class TaskEditAction implements RequestHandlerInterface
      */
     private function updateGeneralSettings(TaskSchedule $task_schedule, ServerRequestInterface $request): bool
     {
+        if ($this->module === null) {
+            return false;
+        }
+
         $params = (array) $request->getParsedBody();
 
         $frequency = (int) $params['frequency'];
@@ -152,6 +164,10 @@ class TaskEditAction implements RequestHandlerInterface
      */
     private function updateSpecificSettings(TaskSchedule $task_schedule, ServerRequestInterface $request): bool
     {
+        if ($this->module === null) {
+            return false;
+        }
+
         $task = $this->taskschedules_service->findTask($task_schedule->taskId());
         if ($task === null || !($task instanceof ConfigurableTaskInterface)) {
             return true;

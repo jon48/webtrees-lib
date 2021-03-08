@@ -22,6 +22,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * Service for retrieving Sosa statistics
@@ -484,7 +485,7 @@ class SosaStatisticsService
 
         if ($multiple_ancestors->count() > $limit) {
             $last_count = $multiple_ancestors->last()->sosa_count;
-            $multiple_ancestors = $multiple_ancestors->reject(function ($element) use ($last_count): bool {
+            $multiple_ancestors = $multiple_ancestors->reject(function (stdClass $element) use ($last_count): bool {
                 return $element->sosa_count ==  $last_count;
             });
         }

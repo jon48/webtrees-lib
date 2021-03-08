@@ -31,7 +31,7 @@ use Illuminate\Support\Collection;
 class SosaRecordsService
 {
     /**
-     * @var int $max_system_generations
+     * @var int|null $max_system_generations
      */
     private $max_system_generations;
 

@@ -32,7 +32,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 class TasksList implements RequestHandlerInterface
 {
     /**
-     * @var AdminTasksModule $module
+     * @var AdminTasksModule|null $module
      */
     private $module;
 
@@ -84,9 +84,11 @@ class TasksList implements RequestHandlerInterface
 
         $search_columns = ['task_name'];
         $sort_columns   = ['task_name', 'enabled', 'last_run'];
-        $module_name = $this->module->name();
 
-        $callback = function (array $row) use ($module_name): array {
+        $callback = function (array $row): array {
+            if ($this->module === null) {
+                return [];
+            }
 
             $row['frequency']->setLocale(I18N::locale()->code());
 
@@ -108,6 +110,7 @@ class TasksList implements RequestHandlerInterface
                 ])
             ];
 
+            $module_name = $this->module->name();
             $datum = [
                 view($module_name . '::admin/tasks-table-options', $task_options_params),
                 view($module_name . '::components/yes-no-icons', ['yes' => $row['enabled']]),

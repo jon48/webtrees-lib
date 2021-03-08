@@ -61,6 +61,8 @@ trait ModuleMyArtJaubTrait
     
     /**
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customTranslations()
+     * 
+     * @return array<string, string>
      */
     public function customTranslations(string $language) : array
     {
@@ -71,7 +73,7 @@ trait ModuleMyArtJaubTrait
             return $translation->asArray();
         } catch (\Exception $e) { }
         
-        return array();
+        return [];
     }
     
     /**

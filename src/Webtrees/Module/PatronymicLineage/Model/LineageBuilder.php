@@ -40,7 +40,7 @@ class LineageBuilder
     private $tree;
 
     /**
-     * @var IndividualListModule $indilist_module
+     * @var IndividualListModule|null $indilist_module
      */
     private $indilist_module;
 
@@ -206,6 +206,7 @@ class LineageBuilder
                     if ($indi_node !== null && $indi_node->sex() == 'F') { //If the root individual is the mother
                         //Print only lineages of children with the same surname as their mother
                         //(supposing they are natural children)
+                        /** @psalm-suppress RedundantCondition */
                         if (
                             $spouse === null ||
                             ($spouse_surname !== '' && I18N::strcasecmp($child_surname, $spouse_surname) != 0)

@@ -33,12 +33,12 @@ class SurnamesList implements RequestHandlerInterface
     use ViewResponseTrait;
 
     /**
-     * @var PatronymicLineageModule $module
+     * @var PatronymicLineageModule|null $module
      */
     private $module;
 
     /**
-     * @var IndividualListModule $indilist_module
+     * @var IndividualListModule|null $indilist_module
      */
     private $indilist_module;
 
@@ -72,7 +72,7 @@ class SurnamesList implements RequestHandlerInterface
 
         $initial = $request->getAttribute('alpha');
         $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
-            ->reject(function ($count, $initial): bool {
+            ->reject(function (int $count, string $initial): bool {
 
                 return $initial === '@' || $initial === ',';
             });

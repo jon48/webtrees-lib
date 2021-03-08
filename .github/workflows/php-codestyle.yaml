@@ -5,7 +5,7 @@ on: [push, pull_request]
 jobs:
   run:
     runs-on: ubuntu-latest
-    name: PHP/PHTML
+    name: phpcs PHP/PHTML
 
     steps:
       - uses: actions/checkout@v1

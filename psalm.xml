@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<psalm
+    errorLevel="1"
+    resolveFromConfigFile="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+	reportMixedIssues="false"
+>
+    <projectFiles>
+        <directory name="src/Webtrees/Module/AdminTasks" />
+        <directory name="src/Webtrees/Module/PatronymicLineage" />
+        <directory name="src/Webtrees/Module/Sosa" />
+        <directory name="src/Webtrees/Module/WelcomeBlock" />
+		<ignoreFiles>
+			<directory name="vendor" />
+		  </ignoreFiles>
+    </projectFiles>
+	
+	<fileExtensions>
+		<extension name=".php" />
+		<extension name=".phtml" />
+	</fileExtensions>
+	
+	<issueHandlers>
+	   <TooManyTemplateParams errorLevel="info" />
+       <InvalidArgument>
+           <errorLevel type="suppress">
+               <referencedFunction name="Illuminate\Database\Query\Builder::groupBy" />
+           </errorLevel>
+       </InvalidArgument>
+       <TooManyArguments>
+           <errorLevel type="suppress">
+               <referencedFunction name="Illuminate\Database\Query\Builder::select" />
+           </errorLevel>
+       </TooManyArguments>
+	</issueHandlers>
+</psalm>

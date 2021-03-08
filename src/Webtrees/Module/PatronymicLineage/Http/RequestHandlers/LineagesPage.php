@@ -34,12 +34,12 @@ class LineagesPage implements RequestHandlerInterface
     use ViewResponseTrait;
 
     /**
-     * @var PatronymicLineageModule $module
+     * @var PatronymicLineageModule|null $module
      */
     private $module;
 
     /**
-     * @var IndividualListModule $indilist_module
+     * @var IndividualListModule|null $indilist_module
      */
     private $indilist_module;
 
@@ -75,7 +75,7 @@ class LineagesPage implements RequestHandlerInterface
 
         $initial = mb_substr($surname, 0, 1);
         $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
-            ->reject(function ($count, $initial): bool {
+            ->reject(function (int $count, string $initial): bool {
 
                 return $initial === '@' || $initial === ',';
             });

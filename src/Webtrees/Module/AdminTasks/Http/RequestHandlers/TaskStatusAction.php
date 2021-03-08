@@ -31,7 +31,7 @@ class TaskStatusAction implements RequestHandlerInterface
 {
 
     /**
-     * @var AdminTasksModule $module
+     * @var AdminTasksModule|null $module
      */
     private $module;
 
@@ -58,6 +58,16 @@ class TaskStatusAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $admin_config_route = route(AdminConfigPage::class);
+
+        if ($this->module === null) {
+            FlashMessages::addMessage(
+                I18N::translate('The attached module could not be found.'),
+                'danger'
+            );
+            return redirect($admin_config_route);
+        }
+
         $task_sched_id = (int) $request->getAttribute('task');
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
 

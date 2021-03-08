@@ -34,7 +34,7 @@ class TaskEditPage implements RequestHandlerInterface
     use ViewResponseTrait;
 
     /**
-     * @var AdminTasksModule $module
+     * @var AdminTasksModule|null $module
      */
     private $module;
 

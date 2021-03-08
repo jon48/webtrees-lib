@@ -1,6 +1,6 @@
 
-/docs/*
-/tmp/*
+/docs/
+/tmp/
 /vendor/
 
 /.project
