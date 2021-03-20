@@ -18,7 +18,6 @@ use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Services\ModuleService;
-use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

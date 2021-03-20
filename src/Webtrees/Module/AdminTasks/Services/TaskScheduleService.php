@@ -16,6 +16,8 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Services;
 
 use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\Carbon;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
@@ -24,7 +26,7 @@ use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use Closure;
-use Exception;
+use Throwable;
 use stdClass;
 
 /**
@@ -246,9 +248,15 @@ class TaskScheduleService
                 $task_schedule->startRunning();
                 $this->update($task_schedule);
 
+                $first_error = $task_schedule->wasLastRunSuccess();
                 try {
                     $task_schedule->setLastResult($task->run($task_schedule));
-                } catch (Exception $ex) {
+                } catch (Throwable $ex) {
+                    if ($first_error) { // Only record the first error, as this could fill the log.
+                        Log::addErrorLog(I18N::translate('Error while running task %s:', $task->name()) . ' ' .
+                            '[' . get_class($ex) . '] ' . $ex->getMessage() . ' ' . $ex->getFile() . ':'
+                            . $ex->getLine() . PHP_EOL . $ex->getTraceAsString());
+                    }
                 }
 
                 if ($task_schedule->wasLastRunSuccess()) {

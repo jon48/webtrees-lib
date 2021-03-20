@@ -38,21 +38,13 @@ class AdminConfigPage implements RequestHandlerInterface
     private $module;
 
     /**
-     *
-     * @var UserService $user_service
-     */
-    private $user_service;
-
-    /**
      * Constructor for Admin Config request handler
      *
      * @param ModuleService $module_service
-     * @param UserService $user_service
      */
-    public function __construct(ModuleService $module_service, UserService $user_service)
+    public function __construct(ModuleService $module_service)
     {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
-        $this->user_service = $user_service;
     }
 
     /**

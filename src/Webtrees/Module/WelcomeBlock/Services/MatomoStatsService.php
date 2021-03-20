@@ -15,13 +15,12 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\WelcomeBlock\Services;
 
 use Fig\Http\Message\StatusCodeInterface;
-use Fisharebest\Webtrees\Cache;
 use Fisharebest\Webtrees\Carbon;
+use Fisharebest\Webtrees\Registry;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\RequestException;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
-use Fisharebest\Webtrees\Registry;
 
 /**
  * Service for retrieving Matomo statistics
@@ -66,7 +65,7 @@ class MatomoStatsService
      */
     public function visitsToday(WelcomeBlockModule $module, int $block_id): ?int
     {
-        return app('cache.array')->remember(
+        return Registry::cache()->array()->remember(
             $module->name() . '-matomovisits-daily-' . $block_id,
             function () use ($module, $block_id): ?int {
                 return $this->visits($module, $block_id, 'day');
