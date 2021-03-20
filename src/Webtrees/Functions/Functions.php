@@ -122,72 +122,7 @@ class Functions {
 			# Trim the token
 		return substr($md5token, 0, $length);		
 	}
-	
-	/**
-	 * Generate the key used by the encryption to safe base64 functions.
-	 * 
-	 * @return string Encryption key
-	 */
-	protected static function getBase64EncryptionKey() {	    
-	    $key = 'STANDARDKEYIFNOSERVER';
-	    if(!empty(Filter::server('SERVER_NAME')) && !empty(Filter::server('SERVER_SOFTWARE')))
-	        $key = md5(Filter::server('SERVER_NAME').Filter::server('SERVER_SOFTWARE'));
-	    
-	    return $key;
-	}
-	
-	/**	  
-	 * Encrypt a text, and encode it to base64 compatible with URL use
-	 * 	(no +, no /, no =)
-	 *
-	 * @param string $data Text to encrypt
-	 * @return string Encrypted and encoded text
-	 */
-	public static function encryptToSafeBase64($data){		
-		$nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);	
-		$id = sodium_crypto_secretbox($data, $nonce, self::getBase64EncryptionKey());
-		$encrypted = base64_encode($nonce.$id);
-		
-		//sodium_memzero($data);   // Requires PHP 7.2
-		
-		// +, / and = are not URL-compatible
-		$encrypted = str_replace('+', '-', $encrypted);
-		$encrypted = str_replace('/', '_', $encrypted);
-		$encrypted = str_replace('=', '*', $encrypted);
-		return $encrypted;
-	}
-	
-	/**
-	 * Decode and encrypt a text from base64 compatible with URL use
-	 *
-	 * @param string $encrypted Text to decrypt
-	 * @return string Decrypted text
-	 */
-	public static function decryptFromSafeBase64($encrypted){
-		$encrypted = str_replace('-', '+', $encrypted);
-		$encrypted = str_replace('_', '/', $encrypted);
-		$encrypted = str_replace('*', '=', $encrypted);
-		$encrypted = base64_decode($encrypted);
-		if($encrypted === false)
-			throw new \InvalidArgumentException('The encrypted value is not in correct base64 format.');
-		
-		if (mb_strlen($encrypted, '8bit') < (SODIUM_CRYPTO_SECRETBOX_NONCEBYTES + SODIUM_CRYPTO_SECRETBOX_MACBYTES))
-		    throw new \InvalidArgumentException('The encrypted value does not contain enough characters for the key.');
 
-	    $nonce = mb_substr($encrypted, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, '8bit');
-	    $ciphertext = mb_substr($encrypted, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES, null, '8bit');
-        
-        $decrypted = sodium_crypto_secretbox_open($ciphertext, $nonce, self::getBase64EncryptionKey());
-		
-        if($decrypted === false) {
-            throw new \InvalidArgumentException('The message has been tampered with in transit.');
-        }
-        
-        //sodium_memzero($encrypted);   // Requires PHP 7.2
-        
-        return $decrypted;
-	}
-	
 	/**
 	 * Encode a string from the file system encoding to UTF-8 (if necessary)
 	 *
@@ -224,21 +159,6 @@ class Functions {
 	public static function isValidPath($filename, $acceptfolder = FALSE) {		
 		if(strpbrk($filename, $acceptfolder ? '?%*:|"<>' : '\\/?%*:|"<>') === FALSE) return true;
 		return false;
-	}
-	
-	/**
-	 * Return short names for the months of the specific calendar.
-	 * 
-	 * @see \cal_info()
-	 * @param integer $calendarId Calendar ID (according to PHP cal_info)
-	 * @return array Array of month short names
-	 */
-	public static function getCalendarShortMonths($calendarId = 0) {
-		if(!isset(self::$calendarShortMonths[$calendarId])) {
-			$calendar_info = cal_info($calendarId);
-			self::$calendarShortMonths[$calendarId] = $calendar_info['abbrevmonths'];
-		}		
-		return self::$calendarShortMonths[$calendarId];
 	}
 
 	/**

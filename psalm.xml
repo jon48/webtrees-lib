@@ -8,7 +8,9 @@
 	reportMixedIssues="false"
 >
     <projectFiles>
+        <directory name="src/Webtrees/Http" />
         <directory name="src/Webtrees/Module/AdminTasks" />
+        <directory name="src/Webtrees/Module/Certificates" />
         <directory name="src/Webtrees/Module/PatronymicLineage" />
         <directory name="src/Webtrees/Module/Sosa" />
         <directory name="src/Webtrees/Module/WelcomeBlock" />
