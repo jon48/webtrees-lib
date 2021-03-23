@@ -26,14 +26,6 @@ class Individual extends GedcomRecord {
 	/** @var string|null Individual's primary surname, without any privacy applied to it */
 	protected $unprotected_prim_surname = null;
 	
-	/** @var array|null List of Sosa numbers linked to this individual (based on the tree root individual)  */	
-	protected $sosa = null;
-	
-	/** @var bool|null Indicates whether the birth event is sourced */
-	protected $is_birth_sourced = null;
-	
-	/** @var bool|null Indicates whether the death event is sourced */
-	protected $is_death_sourced = null;
 		
 	/**
 	 * Extend \Fisharebest\Webtrees\Individual getInstance, in order to retrieve directly a  object 
@@ -137,53 +129,6 @@ class Individual extends GedcomRecord {
 	
 	    return null;
 	}
-	
-	/**
-	 * Return whether an individual is a Sosa or not
-	 *
-	 * @return boolean Is the individual a Sosa ancestor
-	 */
-	public function isSosa(){
-	    return count($this->getSosaNumbers()) > 0;
-	}
-	
-	/**
-	 * Get the list of Sosa numbers for this individual
-	 * This list is cached.
-	 *
-	 * @uses \MyArtJaub\Webtrees\Functions\ModuleManager
-	 * @return array List of Sosa numbers
-	 */
-	public function getSosaNumbers(){
-	    if($this->sosa === null) {
-	        $provider = new SosaProvider($this->gedcomrecord->getTree());
-	        $this->sosa = $provider->getSosaNumbers($this->gedcomrecord);	        
-	    }
-	    return $this->sosa;
-	}
-		
-	/** 
-	 * Check if this individual's birth is sourced
-	 *
-	 * @return int Level of sources
-	 * */
-	public function isBirthSourced(){
-		if($this->is_birth_sourced !== null) return $this->is_birth_sourced;
-		$this->is_birth_sourced = $this->isFactSourced(WT_EVENTS_BIRT);
-		return $this->is_birth_sourced;
-	}
-	
-	/**
-	* Check if this individual's death is sourced
-	*
-	* @return int Level of sources
-	* */
-	public function isDeathSourced(){
-		if($this->is_death_sourced !== null) return $this->is_death_sourced;
-		$this->is_death_sourced = $this->isFactSourced(WT_EVENTS_DEAT);
-		return $this->is_death_sourced;
-	}
-	
 }
 
 ?>

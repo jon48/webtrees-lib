@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module;
 
+use Aura\Router\Map;
 use Aura\Router\RouterContainer;
 use Fisharebest\Localization\Translation;
 use Fisharebest\Webtrees\View;
@@ -75,6 +76,11 @@ trait ModuleMyArtJaubTrait
         
         return [];
     }
+    
+    /**
+     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes
+     */
+    public function loadRoutes(Map $router): void { }
     
     /**
      * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::moduleCssUrl

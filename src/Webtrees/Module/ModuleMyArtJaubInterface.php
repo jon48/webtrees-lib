@@ -27,7 +27,8 @@ interface ModuleMyArtJaubInterface extends ModuleCustomInterface
      * @param Map $router
      */
     public function loadRoutes(Map $router): void;
-/**
+
+    /**
      * Returns the URL of the module specific stylesheets.
      * It will look for a CSS file matching the theme name (e.g. xenea.min.css),
      * and fallback to default.min.css if none are found

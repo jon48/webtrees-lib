@@ -22,9 +22,6 @@ class GedcomRecord {
 	/** @var \Fisharebest\Webtrees\GedcomRecord Underlying base GedcomRecord */
 	protected $gedcomrecord;
 
-	/** @var bool Is the GedcomRecord sourced (cache) */ 
-	protected $_issourced=null;
-
 	/**
 	 * Contructor for the decorator
 	 *
@@ -78,76 +75,6 @@ class GedcomRecord {
 		}
 		return '';
 	}
-
-	/**
-	 * Check if the IsSourced information can be displayed
-	 *
-	 * @param int $access_level
-	 * @return boolean
-	 */
-	public function canDisplayIsSourced($access_level = null){
-		if(!$this->gedcomrecord->canShow($access_level)) return false;
-		if($access_level === null )
-		    $access_level = \Fisharebest\Webtrees\Auth::accessLevel($this->gedcomrecord->getTree());
-
-		$global_facts = Globals::getGlobalFacts();
-		if (isset($global_facts['SOUR'])) {
-			return $global_facts['SOUR'] >= $access_level;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check if a gedcom record is sourced
-	 * Values:
-	 * 		- -1, if the record has no sources attached
-	 * 		- 1, if the record has a source attached
-	 * 		- 2, if the record has a source, and a certificate supporting it
-	 *
-	 * @return int Level of sources
-	 */
-	public function isSourced(){
-		if($this->_issourced !== null) return $this->_issourced;
-		$this->_issourced=-1;
-		$sourcesfacts = $this->gedcomrecord->getFacts('SOUR');
-		foreach($sourcesfacts as $sourcefact){
-			$this->_issourced=max($this->_issourced, 1);
-			if($sourcefact->getAttribute('_ACT')){
-				$this->_issourced=max($this->_issourced, 2);
-			}
-		}
-		return $this->_issourced;
-	}
-
-	/**
-	 * Check is an event associated to this record is sourced
-	 *
-	 * @param string $eventslist
-	 * @return int Level of sources
-	 */
-	public function isFactSourced($eventslist){
-	    if(empty($eventslist)) return 0;
-		$isSourced=0;
-		$facts = $this->gedcomrecord->getFacts($eventslist);
-		foreach($facts as $fact){
-			if($isSourced < Fact::MAX_IS_SOURCED_LEVEL){
-				$dfact = new Fact($fact);
-				$tmpIsSourced = $dfact->isSourced();
-				if($tmpIsSourced != 0) {
-					if($isSourced==0) {
-						$isSourced =  $tmpIsSourced;
-					}
-					else{
-						$isSourced = max($isSourced, $tmpIsSourced);
-					}
-				}
-			}
-		}
-		return $isSourced;
-	}
-
-
 }
 
 

@@ -40,17 +40,6 @@ class Family extends GedcomRecord {
 	}
 	
 	/**
-	* Check if this family's marriages are sourced
-	*
-	* @return int Level of sources
-	* */
-	function isMarriageSourced(){
-		if($this->is_marriage_sourced !== null) return $this->is_marriage_sourced;
-		$this->is_marriage_sourced = $this->isFactSourced(WT_EVENTS_MARR.'|MARC');
-		return $this->is_marriage_sourced;
-	}
-	
-	/**
 	 * Find the spouse of a person, using the Xref comparison.
 	 *
 	 * @param Individual $person
