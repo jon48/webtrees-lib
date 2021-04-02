@@ -77,7 +77,7 @@ class AncestorsList implements RequestHandlerInterface
         /** @var SosaStatisticsService $sosa_stats_service */
         $sosa_stats_service = app()->makeWith(SosaStatisticsService::class, ['tree' => $tree, 'user' => $user]);
 
-        $current_gen = (int) ($request->getAttribute('gen') ?? $request->getQueryParams()['gen'] ?? 0);
+        $current_gen = (int) ($request->getQueryParams()['gen'] ?? $request->getAttribute('gen') ?? 0);
 
         return $this->viewResponse($this->module->name() . '::list-ancestors-page', [
             'module_name'       =>  $this->module->name(),

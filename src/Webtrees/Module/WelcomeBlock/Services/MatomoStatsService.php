@@ -39,9 +39,7 @@ class MatomoStatsService
      */
     public function visitsThisYear(WelcomeBlockModule $module, int $block_id): ?int
     {
-        $cache = Registry::cache()->file();
-
-        return $cache->remember(
+        return Registry::cache()->file()->remember(
             $module->name() . '-matomovisits-yearly-' . $block_id,
             function () use ($module, $block_id): ?int {
                 $visits_year = $this->visits($module, $block_id, 'year');

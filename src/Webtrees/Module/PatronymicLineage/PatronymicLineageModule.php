@@ -18,7 +18,7 @@ use Aura\Router\Map;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Module\AbstractModule;
+use Fisharebest\Webtrees\Module\IndividualListModule;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
@@ -33,7 +33,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * Patronymic Lineage Module.
  * Display lineages of people with the same surname.
  */
-class PatronymicLineageModule extends AbstractModule implements
+class PatronymicLineageModule extends IndividualListModule implements
     ModuleMyArtJaubInterface,
     ModuleListInterface,
     ModuleGlobalInterface

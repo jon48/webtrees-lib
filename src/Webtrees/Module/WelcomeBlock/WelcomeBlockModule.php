@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\WelcomeBlock;
 use Aura\Router\Map;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
@@ -157,7 +158,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
             ->setBlockSetting($block_id, 'matomo_token', trim($params['matomo_token']))
             ->setBlockSetting($block_id, 'matomo_siteid', $params['matomo_siteid']);
 
-        app('cache.files')->forget($this->name() . '-matomovisits-yearly-' . $block_id);
+        Registry::cache()->file()->forget($this->name() . '-matomovisits-yearly-' . $block_id);
     }
 
     /**

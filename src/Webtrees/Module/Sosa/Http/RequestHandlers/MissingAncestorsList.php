@@ -80,7 +80,7 @@ class MissingAncestorsList implements RequestHandlerInterface
         /** @var SosaStatisticsService $sosa_stats_service */
         $sosa_stats_service = app()->makeWith(SosaStatisticsService::class, ['tree' => $tree, 'user' => $user]);
 
-        $current_gen = (int) ($request->getAttribute('gen') ?? $request->getQueryParams()['gen'] ?? 0);
+        $current_gen = (int) ($request->getQueryParams()['gen'] ?? $request->getAttribute('gen') ?? 0);
 
         $list_missing = $this->sosa_record_service->listMissingAncestorsAtGeneration($tree, $user, $current_gen);
         $nb_missing_diff = $list_missing->sum(function (stdClass $value): int {

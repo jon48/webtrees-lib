@@ -83,7 +83,7 @@ class CertificatesList implements RequestHandlerInterface
             return [$this->url_obfuscator_service->obfuscate($item), $item];
         }, $this->certif_filesystem->cities($tree));
 
-        $city = $request->getAttribute('cityobf') ?? $request->getQueryParams()['cityobf'] ?? '';
+        $city = $request->getQueryParams()['cityobf'] ?? $request->getAttribute('cityobf') ?? '';
 
         if ($city !== '' && $this->url_obfuscator_service->tryDeobfuscate($city)) {
             $title = I18N::translate('Certificates for %s', $city);

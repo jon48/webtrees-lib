@@ -50,10 +50,10 @@ class SosaComputeModal implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {
-            return response(
-                I18N::translate('The attached module could not be found.'),
-                StatusCodeInterface::STATUS_NOT_FOUND
-            );
+            return response(view('modals/error', [
+                'title' => I18N::translate('Error'),
+                'error' => I18N::translate('The attached module could not be found.')
+            ]));
         }
 
         $tree = $request->getAttribute('tree');

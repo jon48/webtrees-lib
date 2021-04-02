@@ -78,7 +78,7 @@ class AncestorsListFamily implements RequestHandlerInterface
 
         $user = Auth::check() ? $request->getAttribute('user') : new DefaultUser();
 
-        $current_gen = (int) ($request->getAttribute('gen') ?? $request->getQueryParams()['gen'] ?? 0);
+        $current_gen = (int) ($request->getAttribute('gen') ?? 0);
 
         if ($current_gen <= 0) {
             return response('Invalid generation', StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY);

@@ -14,6 +14,9 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\WelcomeBlock\Http\RequestHandlers;
 
+use Fig\Http\Message\StatusCodeInterface;
+use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
@@ -21,6 +24,7 @@ use MyArtJaub\Webtrees\Module\WelcomeBlock\Services\MatomoStatsService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 
 /**
  * Request handler for retrieving Matomo statistics
@@ -63,15 +67,23 @@ class MatomoStats implements RequestHandlerInterface
         if ($this->module === null) {
             return $this->viewResponse('errors/unhandled-exception', [
                 'error' => 'The attached module could not be found.'
-            ]);
+            ], StatusCodeInterface::STATUS_NOT_FOUND);
         }
 
         $block_id = filter_var($request->getAttribute('block_id'), FILTER_VALIDATE_INT);
         $nb_visits_year = $nb_visits_today = null;
 
-        if ($block_id !== false && $this->module->isMatomoEnabled($block_id)) {
-            $nb_visits_today = (int) $this->matomo_service->visitsToday($this->module, $block_id);
-            $nb_visits_year = (int) $this->matomo_service->visitsThisYear($this->module, $block_id) + $nb_visits_today;
+        try {
+            if ($block_id !== false && $this->module->isMatomoEnabled($block_id)) {
+                $nb_visits_today = $this->matomo_service->visitsToday($this->module, $block_id) ?? 0;
+                $nb_visits_year = ($this->matomo_service->visitsThisYear($this->module, $block_id) ?? 0)
+                    + $nb_visits_today;
+            }
+        } catch (Throwable $ex) {
+            return $this->viewResponse('errors/unhandled-exception', [
+                'error' => I18N::translate('Error while retrieving Matomo statistics: ') .
+                    (Auth::isAdmin() ? $ex->getMessage() : I18N::translate('Log in as admin for error details'))
+            ], StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
         }
 
         return $this->viewResponse($this->module->name() . '::matomo-stats', [

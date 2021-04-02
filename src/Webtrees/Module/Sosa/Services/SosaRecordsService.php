@@ -241,9 +241,11 @@ class SosaRecordsService
         $mass_update = DB::connection()->getDriverName() === 'mysql';
 
         $bindings_placeholders = $bindings_values = [];
+        $has_records = false;
         foreach ($sosa_records as $i => $row) {
             $gen = $this->generation($row['sosa']);
             if ($gen <=  $this->maxSystemGenerations()) {
+                $has_records = true;
                 if ($mass_update) {
                     $bindings_placeholders[] = '(:tree_id' . $i . ', :user_id' . $i . ', :sosa' . $i . ',' .
                         ' :indi_id' . $i . ', :gen' . $i . ',' .
@@ -278,7 +280,7 @@ class SosaRecordsService
             }
         }
 
-        if ($mass_update) {
+        if ($has_records && $mass_update) {
             DB::connection()->statement(
                 'INSERT INTO `' . DB::connection()->getTablePrefix() . 'maj_sosa`' .
                 ' (majs_gedcom_id, majs_user_id, majs_sosa,' .
