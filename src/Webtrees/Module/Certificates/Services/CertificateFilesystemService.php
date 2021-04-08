@@ -54,6 +54,17 @@ class CertificateFilesystemService
     }
 
     /**
+     * Set the filesystem containing certificates for a tree.
+     *
+     * @param Tree $tree
+     * @param FilesystemOperator $filesystem
+     */
+    public function setFilesystem(Tree $tree, FilesystemOperator $filesystem): void
+    {
+        $this->filesystem[$tree->id()] = $filesystem;
+    }
+
+    /**
      * Create the Certificate object defined by a path on the filesystem.
      *
      * @param Tree $tree

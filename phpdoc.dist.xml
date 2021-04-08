@@ -1,24 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<phpdoc>
-<title><![CDATA[webtrees-lib: MyArtJaub library for webtrees]]></title>
-  <parser>
-  	<default-package-name>MyArtJaub\Webtrees</default-package-name>
-    <target>docs/phpdoc/parser</target>
-  </parser>
-  <transformer>
-    <target>docs/phpdoc/output</target>
-  </transformer>
-  <transformations>
-  	<template name="clean" />
-  </transformations>
-  <files>
-    <directory>src</directory>
-  </files>
-  <logging>
-    <level>warn</level>
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor
+        configVersion="3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://www.phpdoc.org"
+        xsi:noNamespaceSchemaLocation="https://docs.phpdoc.org/latest/phpdoc.xsd"
+>
     <paths>
-        <default>docs/phpdoc/logs/{DATE}.log</default>
-        <errors>docs/phpdoc/logs/{DATE}.errors.log</errors>
+        <output>docs/api</output>
+        <cache>docs/cache</cache>
     </paths>
-	</logging>
-</phpdoc>
+    <version number="latest">
+        <folder>latest</folder>
+        <api>
+            <source dsn=".">
+                <path>src</path>
+            </source>
+            <default-package-name>MyArtJaub\Webtrees</default-package-name>
+            <visibility>public</visibility>
+        </api>
+    </version>
+</phpdocumentor>

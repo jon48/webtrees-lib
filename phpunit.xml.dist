@@ -1,23 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         backupStaticAttributes="false"
-         bootstrap="phpunit.php"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
-         syntaxCheck="false"
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" 
+    bootstrap="vendor/autoload.php" 
+    colors="true" 
+    forceCoversAnnotation="true"
 >
-    <testsuites>
-        <testsuite name="webtrees-lib Test Suite">
-            <directory suffix="Test.php">./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-    	<whitelist>
-        	<directory suffix=".php">./src</directory>
-    	</whitelist>
-	</filter>
+  <coverage>
+    <include>
+      <!-- <directory suffix=".php">src</directory> -->
+      <directory suffix=".php">src/Webtrees/Http</directory>
+      <directory suffix=".php">src/Webtrees/Module/AdminTasks</directory>
+      <directory suffix=".php">src/Webtrees/Module/Certificates</directory>
+      <directory suffix=".php">src/Webtrees/Module/IsSourced</directory>
+      <directory suffix=".php">src/Webtrees/Module/PatronymicLineage</directory>
+      <directory suffix=".php">src/Webtrees/Module/Sosa</directory>
+      <directory suffix=".php">src/Webtrees/Module/WelcomeBlock</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="webtrees-lib Unit tests">
+      <directory>tests/unit</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

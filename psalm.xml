@@ -15,6 +15,7 @@
         <directory name="src/Webtrees/Module/PatronymicLineage" />
         <directory name="src/Webtrees/Module/Sosa" />
         <directory name="src/Webtrees/Module/WelcomeBlock" />
+        <directory name="tests" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		  </ignoreFiles>
@@ -37,5 +38,10 @@
                <referencedFunction name="Illuminate\Database\Query\Builder::select" />
            </errorLevel>
        </TooManyArguments>
+       <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <directory name="tests" />
+            </errorLevel>
+       </PropertyNotSetInConstructor>
 	</issueHandlers>
 </psalm>

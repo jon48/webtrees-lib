@@ -44,7 +44,7 @@
 		"psr/http-server-handler": "~1.0"
 	},
 	"require-dev" : {
-		"mockery/mockery": "@stable",
+		"league/flysystem-memory": "^2.0",
 		"phpstan/phpstan-deprecation-rules": "^0.12.5",
 		"phpstan/phpstan-phpunit": "^0.12.16",
 		"phpstan/phpstan-strict-rules": "^0.12.5",
@@ -56,13 +56,20 @@
 	"autoload" : {
 		"psr-4" : {
 			"MyArtJaub\\" : "src/",
-			"MyArtJaub\\Tests\\" : "tests/"
+			"MyArtJaub\\Tests\\Unit\\" : "tests/unit"
 		}
 	},
+    "autoload-dev": {
+        "files" : [
+            "vendor/fisharebest/webtrees/tests/TestCase.php"
+        ]
+    },
     "scripts": {
         "webtrees-lib:phpcs" : "phpcs -s",
         "webtrees-lib:phpcbf" : "phpcbf",
         "webtrees-lib:phpstan" : "phpstan analyze",
-        "webtrees-lib:sonar" : "sonar-scanner"
+        "webtrees-lib:sonar" : "sonar-scanner",
+        "webtrees-lib:test": "phpunit",
+        "webtrees-lib:coverage": "phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage"
     }
 }

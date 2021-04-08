@@ -10,6 +10,7 @@
     <file>src/Webtrees/Module/PatronymicLineage</file>
     <file>src/Webtrees/Module/Sosa</file>
     <file>src/Webtrees/Module/WelcomeBlock</file>
+    <file>tests</file>
 
     <arg name="extensions" value="php"/>
     <arg name="colors"/>

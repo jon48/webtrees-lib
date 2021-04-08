@@ -41,9 +41,11 @@ class UrlObfuscatorService
             $request = app(ServerRequestInterface::class);
             $server_name = $request->getServerParams()['SERVER_NAME'] ?? '';
             $server_software = $request->getServerParams()['SERVER_SOFTWARE'] ?? '';
-            $this->encryption_key = $server_name !== '' && $server_software !== '' ?
-                md5($server_name . $server_software) :
-                'STANDARDKEYIFNOSERVER';
+            $this->encryption_key = str_pad(md5(
+                $server_name !== '' && $server_software !== '' ?
+                $server_name . $server_software :
+                'STANDARDKEYIFNOSERVER'
+            ), SODIUM_CRYPTO_SECRETBOX_KEYBYTES, "1234567890ABCDEF");
         }
         return $this->encryption_key;
     }
@@ -65,6 +67,16 @@ class UrlObfuscatorService
         if ($key === '') {
             $key = $this->encryptionKey();
         }
+
+        if (strlen($nonce) !== SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            throw new InvalidArgumentException('The nonce needs to be SODIUM_CRYPTO_SECRETBOX_NONCEBYTES long');
+        }
+
+        if (strlen($key) !== SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
+            throw new InvalidArgumentException('The key needs to be SODIUM_CRYPTO_SECRETBOX_KEYBYTES long');
+        }
+
+        \Fisharebest\Webtrees\DebugBar::addMessage($key);
         $encryted = sodium_crypto_secretbox($cleartext, $nonce, $key);
         return strtr(base64_encode($nonce . $encryted), '+/=', '._-');
     }
@@ -82,6 +94,10 @@ class UrlObfuscatorService
         $obfuscated = strtr($obfuscated, '._-', '+/=');
         if ($key === '') {
             $key = $this->encryptionKey();
+        }
+
+        if (strlen($key) !== SODIUM_CRYPTO_SECRETBOX_KEYBYTES) {
+            throw new InvalidArgumentException('The key needs to be SODIUM_CRYPTO_SECRETBOX_KEYBYTES long');
         }
 
         $encrypted = base64_decode($obfuscated, true);

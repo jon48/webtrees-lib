@@ -49,17 +49,24 @@ class AuthTreePreference implements MiddlewareInterface
         $permission_preference = $route->extras['permission_preference'] ?? '';
         $permission_level = $permission_preference === '' ? '' : $tree->getPreference($permission_preference);
 
-        // Logged in with the correct role?
-        if (is_numeric($permission_level) && Auth::accessLevel($tree, $user) <= (int) $permission_level) {
-            return $handler->handle($request);
+        // Permissions are configured
+        if (is_numeric($permission_level)) {
+            // Logged in with the correct role?
+            if (Auth::accessLevel($tree, $user) <= (int) $permission_level) {
+                    return $handler->handle($request);
+            }
+
+            // Logged in, but without the correct role?
+            if ($user instanceof User) {
+                throw new HttpAccessDeniedException();
+            }
         }
 
-        // Logged in, but without the correct role?
-        if ($user instanceof User || $request->getMethod() === RequestMethodInterface::METHOD_POST) {
+        // Permissions no configured, or not logged in
+        if ($request->getMethod() === RequestMethodInterface::METHOD_POST) {
             throw new HttpAccessDeniedException();
         }
 
-        // Not logged in.
         return redirect(route(LoginPage::class, ['tree' => $tree->name(), 'url' => $request->getUri()]));
     }
 }

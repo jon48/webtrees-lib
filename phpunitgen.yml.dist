@@ -1,0 +1,7 @@
+overwriteFiles: false
+implementations:
+   PhpUnitGen\Core\Contracts\Generators\TestGenerator: PhpUnitGen\Core\Generators\Tests\DelegateTestGenerator
+   PhpUnitGen\Core\Contracts\Generators\MockGenerator: PhpUnitGen\Core\Generators\Mocks\PhpUnitMockGenerator
+baseNamespace: MyArtJaub
+baseTestNamespace: MyArtJaub\Tests
+testCase: Fisharebest\Webtrees\TestCase

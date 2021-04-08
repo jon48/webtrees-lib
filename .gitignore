@@ -3,6 +3,9 @@
 /tmp/
 /vendor/
 
+/tests/*.xml
+/tests/coverage
+
 /.project
 /.settings
 
@@ -26,4 +29,5 @@
 /phpunit.xml
 /phpdoc.xml
 /pdepend.xml
+/.phpunit.result.cache
 
