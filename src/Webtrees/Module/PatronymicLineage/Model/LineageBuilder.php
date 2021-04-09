@@ -147,7 +147,7 @@ class LineageBuilder
                     if (
                         $indi->canShowName()
                         && $wife->canShowName()
-                        && I18N::strcasecmp($indi_surname, $wife_surname) == 0
+                        && I18N::comparator()($indi_surname, $wife_surname) == 0
                     ) {
                             return $this->getLineageRootIndividual($wife);
                     }
@@ -209,9 +209,9 @@ class LineageBuilder
                         /** @psalm-suppress RedundantCondition */
                         if (
                             $spouse === null ||
-                            ($spouse_surname !== '' && I18N::strcasecmp($child_surname, $spouse_surname) != 0)
+                            ($spouse_surname !== '' && I18N::comparator()($child_surname, $spouse_surname) != 0)
                         ) {
-                            if (I18N::strcasecmp($child_surname, $indi_surname) == 0) {
+                            if (I18N::comparator()($child_surname, $indi_surname) == 0) {
                                 $nb_natural++;
                                 $node_child = new LineageNode($child, $node->rootNode());
                                 $node_child = $this->buildLineage($node_child);
@@ -225,8 +225,8 @@ class LineageBuilder
                         if (
                             mb_strlen($child_surname) == 0 ||
                             mb_strlen($indi_surname) == 0 || mb_strlen($spouse_surname) == 0 ||
-                            I18N::strcasecmp($child_surname, $indi_surname) == 0 ||
-                            I18N::strcasecmp($child_surname, $spouse_surname) != 0
+                            I18N::comparator()($child_surname, $indi_surname) == 0 ||
+                            I18N::comparator()($child_surname, $spouse_surname) != 0
                         ) {
                             $node_child = new LineageNode($child, $node->rootNode());
                             $node_child = $this->buildLineage($node_child);

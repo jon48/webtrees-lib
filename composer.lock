@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30ccfb564c61b3f1b2792a04f07c0375",
+    "content-hash": "832e8b07e593c007c9d02e0b71188dc7",
     "packages": [
         {
             "name": "aura/router",
@@ -670,16 +670,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "62c3b73c581c834885acf6e120b412b76acc495a"
+                "reference": "c81f18a3efb941d8c4d2e025f6183b5c6d697307"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/62c3b73c581c834885acf6e120b412b76acc495a",
-                "reference": "62c3b73c581c834885acf6e120b412b76acc495a",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/c81f18a3efb941d8c4d2e025f6183b5c6d697307",
+                "reference": "c81f18a3efb941d8c4d2e025f6183b5c6d697307",
                 "shasum": ""
             },
             "require": {
@@ -726,7 +726,7 @@
             ],
             "support": {
                 "issues": "https://github.com/egulias/EmailValidator/issues",
-                "source": "https://github.com/egulias/EmailValidator/tree/3.1.0"
+                "source": "https://github.com/egulias/EmailValidator/tree/3.1.1"
             },
             "funding": [
                 {
@@ -734,7 +734,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-03-07T14:33:28+00:00"
+            "time": "2021-04-01T18:37:14+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1081,12 +1081,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fisharebest/webtrees.git",
-                "reference": "20338eabf6c1f105d034780ba567dc8a16349754"
+                "reference": "6cf9a81d849949c77ca101d32cdf71a7e14ac69d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fisharebest/webtrees/zipball/20338eabf6c1f105d034780ba567dc8a16349754",
-                "reference": "20338eabf6c1f105d034780ba567dc8a16349754",
+                "url": "https://api.github.com/repos/fisharebest/webtrees/zipball/6cf9a81d849949c77ca101d32cdf71a7e14ac69d",
+                "reference": "6cf9a81d849949c77ca101d32cdf71a7e14ac69d",
                 "shasum": ""
             },
             "require": {
@@ -1103,25 +1103,25 @@
                 "ext-simplexml": "*",
                 "ext-xml": "*",
                 "ext-zip": "*",
-                "ezyang/htmlpurifier": "~4.12",
+                "ezyang/htmlpurifier": "~4.13",
                 "fig/http-message-util": "^1.1",
                 "fisharebest/algorithm": "~1.5",
                 "fisharebest/ext-calendar": "~2.5",
                 "fisharebest/flysystem-chroot-adapter": "~2.0",
                 "fisharebest/localization": "~1.15",
-                "guzzlehttp/guzzle": "~7.1",
-                "illuminate/container": "~8.20",
-                "illuminate/database": "~8.20",
-                "illuminate/support": "~8.20",
+                "guzzlehttp/guzzle": "~7.3",
+                "illuminate/container": "~8.36",
+                "illuminate/database": "~8.36",
+                "illuminate/support": "~8.36",
                 "intervention/image": "^2.5",
                 "io-developer/php-whois": "~4.0",
-                "league/commonmark": "~1.4",
+                "league/commonmark": "~1.5",
                 "league/flysystem": "~2.0",
                 "league/flysystem-ziparchive": "~2.0",
                 "middlewares/client-ip": "~2.0",
-                "mlocati/ip-lib": "~1.9",
-                "nesbot/carbon": "~2.35",
-                "nyholm/psr7": "~1.3",
+                "mlocati/ip-lib": "~1.14",
+                "nesbot/carbon": "~2.46",
+                "nyholm/psr7": "~1.4",
                 "nyholm/psr7-server": "~1.0",
                 "oscarotero/middleland": "~1.0",
                 "psr/cache": "~1.0",
@@ -1132,9 +1132,9 @@
                 "swiftmailer/swiftmailer": "~6.2",
                 "symfony/cache": "~5.2",
                 "symfony/expression-language": "~5.2",
-                "symfony/polyfill-mbstring": "~1.17",
-                "symfony/polyfill-php80": "^1.17",
-                "tecnickcom/tcpdf": "dev-main"
+                "symfony/polyfill-mbstring": "~1.22",
+                "symfony/polyfill-php80": "^1.22",
+                "tecnickcom/tcpdf": "^6.4.1"
             },
             "require-dev": {
                 "composer/composer": "~2.0",
@@ -1177,7 +1177,7 @@
                 "issues": "https://github.com/fisharebest/webtrees/issues",
                 "source": "https://github.com/fisharebest/webtrees/tree/main"
             },
-            "time": "2021-03-15T18:19:10+00:00"
+            "time": "2021-04-09T06:51:44+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1885,16 +1885,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.5.7",
+            "version": "1.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "11df9b36fd4f1d2b727a73bf14931d81373b9a54"
+                "reference": "08fa59b8e4e34ea8a773d55139ae9ac0e0aecbaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/11df9b36fd4f1d2b727a73bf14931d81373b9a54",
-                "reference": "11df9b36fd4f1d2b727a73bf14931d81373b9a54",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/08fa59b8e4e34ea8a773d55139ae9ac0e0aecbaf",
+                "reference": "08fa59b8e4e34ea8a773d55139ae9ac0e0aecbaf",
                 "shasum": ""
             },
             "require": {
@@ -1982,7 +1982,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-31T13:49:32+00:00"
+            "time": "2021-03-28T18:51:39+00:00"
         },
         {
             "name": "league/flysystem",
@@ -2722,6 +2722,10 @@
                 "secret-key cryptography",
                 "side-channel resistant"
             ],
+            "support": {
+                "issues": "https://github.com/paragonie/sodium_compat/issues",
+                "source": "https://github.com/paragonie/sodium_compat/tree/v1.14.0"
+            },
             "time": "2020-12-03T16:26:19+00:00"
         },
         {
@@ -3540,16 +3544,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v5.2.4",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "d15fb2576cdbe2c40d7c851e62f85b0faff3dd3d"
+                "reference": "093d69bb10c959553c8beb828b8d4ea250a247dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/d15fb2576cdbe2c40d7c851e62f85b0faff3dd3d",
-                "reference": "d15fb2576cdbe2c40d7c851e62f85b0faff3dd3d",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/093d69bb10c959553c8beb828b8d4ea250a247dd",
+                "reference": "093d69bb10c959553c8beb828b8d4ea250a247dd",
                 "shasum": ""
             },
             "require": {
@@ -3615,7 +3619,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.2.4"
+                "source": "https://github.com/symfony/cache/tree/v5.2.6"
             },
             "funding": [
                 {
@@ -3631,7 +3635,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-02-25T23:54:56+00:00"
+            "time": "2021-03-16T09:10:13+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -4766,16 +4770,16 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.2.5",
+            "version": "v5.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "0947ab1e3aabd22a6bef393874b2555d2bb976da"
+                "reference": "2cc7f45d96db9adfcf89adf4401d9dfed509f4e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/0947ab1e3aabd22a6bef393874b2555d2bb976da",
-                "reference": "0947ab1e3aabd22a6bef393874b2555d2bb976da",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/2cc7f45d96db9adfcf89adf4401d9dfed509f4e1",
+                "reference": "2cc7f45d96db9adfcf89adf4401d9dfed509f4e1",
                 "shasum": ""
             },
             "require": {
@@ -4839,7 +4843,7 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/translation/tree/v5.2.5"
+                "source": "https://github.com/symfony/translation/tree/v5.2.6"
             },
             "funding": [
                 {
@@ -4855,7 +4859,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-06T07:59:01+00:00"
+            "time": "2021-03-23T19:33:48+00:00"
         },
         {
             "name": "symfony/translation-contracts",
@@ -5010,22 +5014,21 @@
         },
         {
             "name": "tecnickcom/tcpdf",
-            "version": "dev-main",
+            "version": "6.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "456b794f1fae9aee5c151a1ee515aae2aaa619a3"
+                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/456b794f1fae9aee5c151a1ee515aae2aaa619a3",
-                "reference": "456b794f1fae9aee5c151a1ee515aae2aaa619a3",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/5ba838befdb37ef06a16d9f716f35eb03cb1b329",
+                "reference": "5ba838befdb37ef06a16d9f716f35eb03cb1b329",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "classmap": [
@@ -5071,7 +5074,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/main"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.4.1"
             },
             "funding": [
                 {
@@ -5079,7 +5082,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2020-12-09T07:15:50+00:00"
+            "time": "2021-03-27T16:00:33+00:00"
         },
         {
             "name": "true/punycode",
@@ -5777,16 +5780,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.81",
+            "version": "0.12.83",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "0dd5b0ebeff568f7000022ea5f04aa86ad3124b8"
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0dd5b0ebeff568f7000022ea5f04aa86ad3124b8",
-                "reference": "0dd5b0ebeff568f7000022ea5f04aa86ad3124b8",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4a967cec6efb46b500dd6d768657336a3ffe699f",
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f",
                 "shasum": ""
             },
             "require": {
@@ -5817,7 +5820,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.81"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.83"
             },
             "funding": [
                 {
@@ -5833,7 +5836,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-08T22:03:02+00:00"
+            "time": "2021-04-03T15:35:45+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -5880,6 +5883,10 @@
                 "MIT"
             ],
             "description": "PHPStan rules for detecting usage of deprecated classes, methods, properties, constants and traits.",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-deprecation-rules/issues",
+                "source": "https://github.com/phpstan/phpstan-deprecation-rules/tree/0.12.6"
+            },
             "time": "2020-12-13T10:20:54+00:00"
         },
         {
@@ -5982,6 +5989,10 @@
                 "MIT"
             ],
             "description": "Extra strict and opinionated rules for PHPStan",
+            "support": {
+                "issues": "https://github.com/phpstan/phpstan-strict-rules/issues",
+                "source": "https://github.com/phpstan/phpstan-strict-rules/tree/0.12.9"
+            },
             "time": "2021-01-13T08:50:28+00:00"
         },
         {
@@ -7479,12 +7490,12 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "stability-flags": {
         "fisharebest/webtrees": 20,
         "phpunit/phpunit": 0
     },
-    "prefer-stable": true,
+    "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "ext-xml": "*"
