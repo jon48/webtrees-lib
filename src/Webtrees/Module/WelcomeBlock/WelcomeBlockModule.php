@@ -76,7 +76,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
      */
     public function customModuleVersion(): string
     {
-        return '2.0.11-v.1';
+        return '2.0.11-v.2';
     }
 
     /**
@@ -95,7 +95,8 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
             'block_id'                  =>  $block_id,
             'fab_welcome_block_view'    =>  $fab_welcome_block_view,
             'fab_login_block_view'      =>  $fab_login_block_view,
-            'matomo_enabled'            =>  $this->isMatomoEnabled($block_id)
+            'matomo_enabled'            =>  $this->isMatomoEnabled($block_id),
+            'js_script_url'             =>  $this->assetUrl('js/welcomeblock.min.js')
         ]);
 
         if ($context !== self::CONTEXT_EMBED) {

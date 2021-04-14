@@ -32,7 +32,7 @@ use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\HealthCheckService;
 use Psr\Http\Message\ServerRequestInterface;
-use Exception;
+use Throwable;
 
 /**
  * Task to send an email summarising the healthcheck of the site
@@ -212,7 +212,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
                 }
             }
             return true;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             Log::addErrorLog(
                 sprintf(
                     'Error while updating the Task schedule "%s". Exception: %s',

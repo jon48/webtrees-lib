@@ -64,9 +64,7 @@ class SosaModule extends AbstractModule implements
     use ModuleMenuTrait;
     use ModuleSidebarTrait;
 
-// How to update the database schema for this module
-
-
+    // How to update the database schema for this module
     private const SCHEMA_TARGET_VERSION   = 3;
     private const SCHEMA_SETTING_NAME     = 'MAJ_SOSA_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';

@@ -70,7 +70,8 @@ class AdminConfigPage implements RequestHandlerInterface
             'trigger_token'     =>  $token,
             'trigger_route'     =>  route(TaskTrigger::class, ['task' => '__TASKNAME__', 'force' => '__TOKEN__']),
             'new_token_route'   =>  route(TokenGenerate::class),
-            'tasks_data_route'  =>  route(TasksList::class)
+            'tasks_data_route'  =>  route(TasksList::class),
+            'js_script_url'     =>  $this->module->assetUrl('js/admintasks.min.js')
         ]);
     }
 }

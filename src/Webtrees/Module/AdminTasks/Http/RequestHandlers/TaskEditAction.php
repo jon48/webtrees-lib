@@ -27,7 +27,7 @@ use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
+use Throwable;
 
 /**
  * Request handler for updating task schedules
@@ -139,7 +139,7 @@ class TaskEditAction implements RequestHandlerInterface
         try {
             $this->taskschedules_service->update($task_schedule);
             return true;
-        } catch (Exception $ex) {
+        } catch (Throwable $ex) {
             Log::addErrorLog(
                 sprintf(
                     'Error while updating the Task Schedule "%s". Exception: %s',
