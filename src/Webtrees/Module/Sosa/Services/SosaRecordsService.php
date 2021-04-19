@@ -102,6 +102,23 @@ class SosaRecordsService
     }
 
     /**
+     * Return a list of the Sosa ancestors across all generation
+     *
+     * @param Tree $tree
+     * @param UserInterface $user
+     * @return Collection
+     */
+    public function listAncestors(Tree $tree, UserInterface $user): Collection
+    {
+        return DB::table('maj_sosa')
+            ->select(['majs_sosa', 'majs_i_id'])
+            ->where('majs_gedcom_id', '=', $tree->id())
+            ->where('majs_user_id', '=', $user->id())
+            ->orderBy('majs_sosa')
+            ->get();
+    }
+
+    /**
      * Return a list of the Sosa ancestors at a given generation
      *
      * @param Tree $tree

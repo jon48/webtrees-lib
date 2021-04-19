@@ -8,9 +8,12 @@
   <coverage>
     <include>
       <!-- <directory suffix=".php">src</directory> -->
+      <directory suffix=".php">src/Webtrees/Common</directory>
+      <directory suffix=".php">src/Webtrees/Contracts</directory>
       <directory suffix=".php">src/Webtrees/Http</directory>
       <directory suffix=".php">src/Webtrees/Module/AdminTasks</directory>
       <directory suffix=".php">src/Webtrees/Module/Certificates</directory>
+      <directory suffix=".php">src/Webtrees/Module/GeoDispersion</directory>
       <directory suffix=".php">src/Webtrees/Module/IsSourced</directory>
       <directory suffix=".php">src/Webtrees/Module/PatronymicLineage</directory>
       <directory suffix=".php">src/Webtrees/Module/Sosa</directory>

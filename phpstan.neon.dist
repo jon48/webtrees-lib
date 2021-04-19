@@ -4,9 +4,12 @@ includes:
 parameters:
    level: max
    paths:
+      - src/Webtrees/Common
+      - src/Webtrees/Contracts
       - src/Webtrees/Http
       - src/Webtrees/Module/AdminTasks
       - src/Webtrees/Module/Certificates
+      - src/Webtrees/Module/GeoDispersion
       - src/Webtrees/Module/IsSourced
       - src/Webtrees/Module/PatronymicLineage
       - src/Webtrees/Module/Sosa

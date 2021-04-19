@@ -6,6 +6,7 @@
     <file>src/Webtrees/Http</file>
     <file>src/Webtrees/Module/AdminTasks</file>
     <file>src/Webtrees/Module/Certificates</file>
+    <file>src/Webtrees/Module/GeoDispersion</file>
     <file>src/Webtrees/Module/IsSourced</file>
     <file>src/Webtrees/Module/PatronymicLineage</file>
     <file>src/Webtrees/Module/Sosa</file>

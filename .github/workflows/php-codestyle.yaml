@@ -1,6 +1,10 @@
 name: Code style PHP
 
-on: [push, pull_request]
+on:
+   push:
+      branches-ignore:
+         - '**-dev'
+   pull_request:
 
 jobs:
   run:

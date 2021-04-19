@@ -8,9 +8,12 @@
 	reportMixedIssues="false"
 >
     <projectFiles>
+        <directory name="src/Webtrees/Common" />
+        <directory name="src/Webtrees/Contracts" />
         <directory name="src/Webtrees/Http" />
         <directory name="src/Webtrees/Module/AdminTasks" />
         <directory name="src/Webtrees/Module/Certificates" />
+        <directory name="src/Webtrees/Module/GeoDispersion" />
         <directory name="src/Webtrees/Module/IsSourced" />
         <directory name="src/Webtrees/Module/PatronymicLineage" />
         <directory name="src/Webtrees/Module/Sosa" />

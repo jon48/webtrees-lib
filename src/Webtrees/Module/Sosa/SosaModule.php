@@ -32,8 +32,10 @@ use Fisharebest\Webtrees\Module\ModuleMenuTrait;
 use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
 use Fisharebest\Webtrees\Module\ModuleSidebarTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
+use MyArtJaub\Webtrees\Contracts\GeoDispersion\ModuleGeoAnalysisProviderInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
+use MyArtJaub\Webtrees\Module\Sosa\GeoAnalyses\SosaByGenerationGeoAnalysis;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsList;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListFamily;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListIndividual;
@@ -55,7 +57,8 @@ class SosaModule extends AbstractModule implements
     ModuleMyArtJaubInterface,
     ModuleGlobalInterface,
     ModuleMenuInterface,
-    ModuleSidebarInterface
+    ModuleSidebarInterface,
+    ModuleGeoAnalysisProviderInterface
 {
     use ModuleMyArtJaubTrait {
         boot as traitBoot;
@@ -291,5 +294,16 @@ class SosaModule extends AbstractModule implements
     public function defaultSidebarOrder(): int
     {
         return 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\ModuleGeoAnalysisProviderInterface::listGeoAnalyses()
+     */
+    public function listGeoAnalyses(): array
+    {
+        return [
+            SosaByGenerationGeoAnalysis::class
+        ];
     }
 }
