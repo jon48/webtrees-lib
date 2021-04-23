@@ -98,6 +98,7 @@ class AdminTasksModule extends AbstractModule implements
         $router->attach('', '', static function (Map $router): void {
 
             $router->attach('', '/module-maj/admintasks', static function (Map $router): void {
+                $router->tokens(['task' => '\d+', 'enable' => '[01]']);
 
                 $router->attach('', '/admin', static function (Map $router): void {
 

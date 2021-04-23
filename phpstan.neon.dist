@@ -17,5 +17,6 @@ parameters:
       - tests
    ignoreErrors:
       - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'
+      - '#^Call to an undefined method Aura\\Router\\Map::tokens\(\)\.$#'
       - '#^Call to an undefined static method Illuminate\\Database\\Capsule\\Manager::.*\(\)\.$#'
    checkMissingIterableValueType: false

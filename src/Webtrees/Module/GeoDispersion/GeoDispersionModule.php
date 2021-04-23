@@ -113,6 +113,7 @@ class GeoDispersionModule extends AbstractModule implements
                 $router->get(GeoAnalysisViewsList::class, '/list/{tree}', GeoAnalysisViewsList::class);
 
                 $router->attach('', '/analysisview/{tree}/{view_id}', static function (Map $router): void {
+                    $router->tokens(['view_id' => '\d+']);
                     $router->get(GeoAnalysisViewPage::class, '', GeoAnalysisViewPage::class);
                     $router->get(GeoAnalysisViewTabs::class, '/tabs', GeoAnalysisViewTabs::class);
                 });

@@ -115,7 +115,7 @@ class SosaModule extends AbstractModule implements
             $router->attach('', '/module-maj/sosa', static function (Map $router): void {
 
                 $router->attach('', '/list', static function (Map $router): void {
-
+                    $router->tokens(['gen' => '\d+']);
                     $router->get(AncestorsList::class, '/ancestors/{tree}{/gen}', AncestorsList::class);
                     $router->get(AncestorsListIndividual::class, '/ancestors/{tree}/{gen}/tab/individuals', AncestorsListIndividual::class);    //phpcs:ignore Generic.Files.LineLength.TooLong
                     $router->get(AncestorsListFamily::class, '/ancestors/{tree}/{gen}/tab/families', AncestorsListFamily::class);   //phpcs:ignore Generic.Files.LineLength.TooLong

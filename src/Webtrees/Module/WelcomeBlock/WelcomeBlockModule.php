@@ -64,7 +64,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
         $router->attach('', '', static function (Map $router): void {
 
             $router->attach('', '/module-maj/welcomeblock/{block_id}', static function (Map $router): void {
-
+                $router->tokens(['block_id' => '\d+']);
                 $router->get(MatomoStats::class, '/matomostats', MatomoStats::class);
             });
         });
