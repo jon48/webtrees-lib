@@ -13,7 +13,10 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Common\GeoDispersion\Config;
 
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Module\ModuleInterface;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use JsonSerializable;
 
 /**
@@ -58,6 +61,23 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
         return [];
     }
 
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::configContent()
+     */
+    public function configContent(ModuleInterface $module, Tree $tree): string
+    {
+        return '';
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
+     */
+    public function withConfigUpdate(ServerRequestInterface $request): self
+    {
+        return $this;
+    }
 
 
 }

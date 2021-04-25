@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Services;
 
 use Fisharebest\Webtrees\GedcomRecord;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -48,5 +49,41 @@ class GeoAnalysisDataService
             ->map(Registry::familyFactory()->mapper($tree))
             ->filter(GedcomRecord::accessFilter())
             ->all();
+    }
+
+    /**
+     * Returns an example of the place hierarchy, from a place within the GEDCOM file, looking for the deepest
+     * hierarchy found. The part order is reversed compared to the normal GEDCOM structure (largest first).
+     *
+     * {@internal The places are taken only from the individuals and families records.}
+     *
+     * @param Tree $tree
+     * @return array
+     */
+    public function placeHierarchyExample(Tree $tree): array
+    {
+        $query_individuals = DB::table('individuals')
+            ->select(['i_gedcom AS g_gedcom'])
+            ->where('i_file', '=', $tree->id())
+            ->where('i_gedcom', 'like', '%2 PLAC %');
+
+        $query_families = DB::table('families')
+            ->select(['f_gedcom AS g_gedcom'])
+            ->where('f_file', '=', $tree->id())
+            ->where('f_gedcom', 'like', '%2 PLAC %');
+
+        return $query_individuals->unionAll($query_families)
+            ->get()->pluck('g_gedcom')
+            ->flatMap(static function (string $gedcom): array {
+                preg_match_all('/\n2 PLAC (.+)/', $gedcom, $matches);
+                return $matches[1] ?? [];
+            })
+            ->sort(I18N::comparator())->reverse()
+            ->mapWithKeys(static function (string $place): array {
+                $place_array = array_reverse(array_filter(array_map('trim', explode(",", $place))));
+                return [ count($place_array) => $place_array ];
+            })
+            ->sortKeys()
+            ->last();
     }
 }

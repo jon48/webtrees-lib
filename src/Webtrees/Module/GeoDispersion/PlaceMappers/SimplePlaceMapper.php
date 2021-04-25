@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers;
 
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Place;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
 
@@ -24,6 +25,15 @@ use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
 class SimplePlaceMapper implements PlaceMapperInterface
 {
     use PlaceMapperTrait;
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::title()
+     */
+    public function title(): string
+    {
+        return I18N::translate('Mapping on place name');
+    }
 
     /**
      * {@inheritDoc}

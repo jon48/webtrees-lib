@@ -1,0 +1,133 @@
+<?php
+
+/**
+ * webtrees-lib: MyArtJaub library for webtrees
+ *
+ * @package MyArtJaub\Webtrees
+ * @subpackage GeoDispersion
+ * @author Jonathan Jaubart <dev@jaubart.com>
+ * @copyright Copyright (c) 2009-2021, Jonathan Jaubart
+ * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
+ */
+
+declare(strict_types=1);
+
+namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
+
+use Fisharebest\Webtrees\FlashMessages;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Services\ModuleService;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use MyArtJaub\Webtrees\Common\GeoDispersion\Config\MapViewConfig;
+use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
+use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisMapAdapter;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapAdapterDataService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapDefinitionsService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+/**
+ * Request handler for adding a new geographical analysis map adapter.
+ */
+class MapAdapterAddAction implements RequestHandlerInterface
+{
+    private ?GeoDispersionModule $module;
+    private GeoAnalysisViewDataService $geoview_data_service;
+    private MapAdapterDataService $mapadapter_data_service;
+    private MapDefinitionsService $map_definition_service;
+
+    /**
+     * Constructor for MapAdapterAddAction Request Handler
+     *
+     * @param ModuleService $module_service
+     * @param GeoAnalysisViewDataService $geoview_data_service
+     * @param MapAdapterDataService $mapadapter_data_service
+     * @param MapDefinitionsService $map_definition_service
+     */
+    public function __construct(
+        ModuleService $module_service,
+        GeoAnalysisViewDataService $geoview_data_service,
+        MapAdapterDataService $mapadapter_data_service,
+        MapDefinitionsService $map_definition_service
+    ) {
+        $this->module = $module_service->findByInterface(GeoDispersionModule::class)->first();
+        $this->geoview_data_service = $geoview_data_service;
+        $this->mapadapter_data_service = $mapadapter_data_service;
+        $this->map_definition_service = $map_definition_service;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
+     */
+    public function handle(ServerRequestInterface $request): ResponseInterface
+    {
+        $tree = $request->getAttribute('tree');
+        assert($tree instanceof Tree);
+
+        if ($this->module === null) {
+            FlashMessages::addMessage(
+                I18N::translate('The attached module could not be found.'),
+                'danger'
+            );
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+        }
+
+        $view_id = (int) $request->getAttribute('view_id');
+        $view = $this->geoview_data_service->find($tree, $view_id);
+
+        $params = (array) $request->getParsedBody();
+
+        $map = $this->map_definition_service->find($params['map_adapter_map'] ?? '');
+        $mapping_property   = $params['map_adapter_property_selected'] ?? '';
+
+        $mapper = null;
+        try {
+            $mapper = app($params['map_adapter_mapper'] ?? '');
+        } catch (BindingResolutionException $ex) {
+        }
+
+        if ($view === null || $map === null || $mapper === null || !($mapper instanceof PlaceMapperInterface)) {
+            FlashMessages::addMessage(
+                I18N::translate('The parameters for the map configuration are not valid.'),
+                'danger'
+            );
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+        }
+
+        $new_adapter_id = $this->mapadapter_data_service->insertGetId(
+            new GeoAnalysisMapAdapter(
+                0,
+                $view_id,
+                $map,
+                $mapper,
+                new MapViewConfig($mapping_property, $mapper->config()->withConfigUpdate($request))
+            )
+        );
+        if ($new_adapter_id > 0) {
+            FlashMessages::addMessage(
+                I18N::translate('The map configuration has been successfully added.'),
+                'success'
+            );
+            //phpcs:ignore Generic.Files.LineLength.TooLong
+            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Map Adapter “' . $new_adapter_id . '” has been added.');
+        } else {
+            FlashMessages::addMessage(
+                I18N::translate('An error occured while adding a new map configuration.'),
+                'danger'
+            );
+            //phpcs:ignore Generic.Files.LineLength.TooLong
+            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Map Adapter could not be added. See error log.');
+        }
+
+        return redirect(route(GeoAnalysisViewEditPage::class, [
+            'tree' => $tree->name(),
+            'view_id' => $view_id
+        ]));
+    }
+}

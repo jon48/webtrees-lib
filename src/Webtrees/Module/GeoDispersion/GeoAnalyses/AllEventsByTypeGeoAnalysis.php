@@ -44,7 +44,7 @@ class AllEventsByTypeGeoAnalysis implements GeoAnalysisInterface
      */
     public function title(): string
     {
-        return I18N::translate('All events places');
+        return I18N::translate('All events places by event type');
     }
 
     /**

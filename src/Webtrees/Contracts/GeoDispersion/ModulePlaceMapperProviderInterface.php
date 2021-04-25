@@ -22,7 +22,7 @@ interface ModulePlaceMapperProviderInterface
     /**
      * List place mappers provided by the module as an array.
      *
-     * @return string[] List of tasks
+     * @return string[] List of place mappers
      */
     public function listPlaceMappers(): array;
 }

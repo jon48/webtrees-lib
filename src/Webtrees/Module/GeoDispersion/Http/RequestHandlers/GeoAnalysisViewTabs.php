@@ -25,7 +25,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * Request handler for tabs displaying a geographical dispersion analysis view
+ * Request handler for tabs displaying a geographical dispersion analysis view.
  *
  */
 class GeoAnalysisViewTabs implements RequestHandlerInterface
@@ -78,12 +78,7 @@ class GeoAnalysisViewTabs implements RequestHandlerInterface
         ];
         $response = [
             'global'    =>  view('layouts/ajax', [
-                'content' =>    $view->globalTabContent(
-                    $this->module,
-                    $results->global(),
-                    $this->geoviewdata_service,
-                    $params
-                )
+                'content' =>    $view->globalTabContent($this->module, $results->global(), $params)
             ]),
             'detailed'  => view('layouts/ajax', [
                 'content' =>    $view->detailedTabContent($this->module, $results->sortedDetailed(), $params)

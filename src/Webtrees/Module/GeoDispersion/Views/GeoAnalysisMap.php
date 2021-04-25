@@ -18,8 +18,11 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use MyArtJaub\Webtrees\Common\GeoDispersion\Config\MapColorsConfig;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResult;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapAdapterDataService;
+use Psr\Http\Message\ServerRequestInterface;
+use Spatie\Color\Hex;
 use Spatie\Color\Rgb;
+use Spatie\Color\Exceptions\InvalidColorValue;
 
 /**
  * A geographical dispersion analysis view displaying on a map for its global result.
@@ -28,26 +31,67 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
 {
     private ?MapColorsConfig $colors_config = null;
 
+    public function type(): string
+    {
+        return I18N::translateContext('GEODISPERSION', 'Map');
+    }
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::icon()
      */
     public function icon(ModuleInterface $module): string
     {
-        return view($module->name() . '::icons/view-map');
+        return view($module->name() . '::icons/view-map', ['type' => $this->type()]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalSettingsContent()
+     */
+    public function globalSettingsContent(ModuleInterface $module): string
+    {
+        return view($module->name() . '::admin/view-edit-map', [
+            'module_name'   =>  $module->name(),
+            'view'          =>  $this,
+            'colors'        =>  $this->colors(),
+            'map_adapters'  =>  app(MapAdapterDataService::class)->allForView($this)
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::withGlobalSettingsUpdate()
+     */
+    public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
+    {
+        $params = (array) $request->getParsedBody();
+
+        $default_color  = $params['view_map_color_default'] ?? '';
+        $stroke_color   = $params['view_map_color_stroke'] ?? '';
+        $maxvalue_color  = $params['view_map_color_maxvalue'] ?? '';
+        $hover_color  = $params['view_map_color_hover'] ?? '';
+
+        try {
+            return $this->withColors(new MapColorsConfig(
+                Hex::fromString($default_color),
+                Hex::fromString($stroke_color),
+                Hex::fromString($maxvalue_color),
+                Hex::fromString($hover_color)
+            ));
+        } catch (InvalidColorValue $ex) {
+        }
+
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalTabContent()
      */
-    public function globalTabContent(
-        ModuleInterface $module,
-        GeoAnalysisResult $result,
-        GeoAnalysisViewDataService $geoview_data_service,
-        array $params
-    ): string {
-        $map_adapters = $geoview_data_service->mapAdapters($this);
+    public function globalTabContent(ModuleInterface $module, GeoAnalysisResult $result, array $params): string
+    {
+        $map_adapters = app(MapAdapterDataService::class)->allForView($this);
 
         $adapter_result = null;
         foreach ($map_adapters as $map_adapter) {
@@ -97,14 +141,15 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
     }
 
     /**
-     * Set the color scheme configuration for the map view
+     * Returns a map view with a new color scheme configuration
      *
      * @param MapColorsConfig $config
      * @return self
      */
-    public function setColors(?MapColorsConfig $config): self
+    public function withColors(?MapColorsConfig $config): self
     {
-        $this->colors_config = $config;
-        return $this;
+        $new = clone $this;
+        $new->colors_config = $config;
+        return $new;
     }
 }

@@ -19,7 +19,7 @@ use Fisharebest\Webtrees\Module\ModuleInterface;
 use Illuminate\Support\Collection;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResult;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Abstract class for Geographical dispersion analysis Views
@@ -68,6 +68,35 @@ abstract class AbstractGeoAnalysisView
     }
 
     /**
+     * Create a copy of the view with new properties.
+     *
+     * @param bool $enabled
+     * @param string $description
+     * @param GeoAnalysisInterface $geoanalysis
+     * @param int $depth
+     * @param int $detailed_top_places
+     * @param bool $use_flags
+     * @return self
+     */
+    public function with(
+        bool $enabled,
+        string $description,
+        GeoAnalysisInterface $geoanalysis,
+        int $depth,
+        int $detailed_top_places = 0,
+        bool $use_flags = false
+    ): self {
+        $new = clone $this;
+        $new->enabled = $enabled;
+        $new->description = $description;
+        $new->geoanalysis = $geoanalysis;
+        $new->depth = $depth;
+        $new->detailed_top_places = $detailed_top_places;
+        $new->use_flags = $use_flags;
+        return $new;
+    }
+
+    /**
      * Get the view ID
      *
      * @return int
@@ -78,6 +107,13 @@ abstract class AbstractGeoAnalysisView
     }
 
     /**
+     * Get the view type for display
+     *
+     * @return string
+     */
+    abstract public function type(): string;
+
+    /**
      * Get the icon for the view type
      *
      * @param ModuleInterface $module
@@ -86,18 +122,32 @@ abstract class AbstractGeoAnalysisView
     abstract public function icon(ModuleInterface $module): string;
 
     /**
+     * Return the content of the global settings section of the config page
+     *
+     * @param ModuleInterface $module
+     * @return string
+     */
+    abstract public function globalSettingsContent(ModuleInterface $module): string;
+
+    /**
+     * Return a view with global settings updated according to the view rules
+     *
+     * @param ServerRequestInterface $request
+     * @return self
+     */
+    abstract public function withGlobalSettingsUpdate(ServerRequestInterface $request): self;
+
+    /**
      * Returns the content of the view global tab
      *
      * @param ModuleInterface $module
      * @param GeoAnalysisResult $result
-     * @param GeoAnalysisViewDataService $geoview_data_service
      * @param array $params
      * @return string
      */
     abstract public function globalTabContent(
         ModuleInterface $module,
         GeoAnalysisResult $result,
-        GeoAnalysisViewDataService $geoview_data_service,
         array $params
     ): string;
 

@@ -18,6 +18,7 @@ use Brick\Geo\BoundingBox;
 use Brick\Geo\Point;
 use Brick\Geo\Engine\GeometryEngineRegistry;
 use Brick\Geo\Engine\PDOEngine;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\PlaceLocation;
 use Fisharebest\Webtrees\Registry;
@@ -38,6 +39,15 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
     use PlaceMapperTrait;
 
     private ?string $cache_key = null;
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::title()
+     */
+    public function title(): string
+    {
+        return I18N::translate('Mapping on place coordinates');
+    }
 
     /**
      * {@inheritDoc}

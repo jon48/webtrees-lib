@@ -23,7 +23,7 @@ interface ModuleGeoAnalysisProviderInterface
     /**
      * List geographical analyses provided by the module as an array.
      *
-     * @return string[] List of tasks
+     * @return string[] List of geographical analyses
      */
     public function listGeoAnalyses(): array;
 }

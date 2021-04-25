@@ -24,6 +24,14 @@ class MapColorsConfig implements JsonSerializable
 {
     private Color $default, $stroke, $max_value, $hover;
     
+    /**
+     * Constructor for MapColorsConfig
+     * 
+     * @param Color $default
+     * @param Color $stroke
+     * @param Color $max_value
+     * @param Color $hover
+     */
     public function __construct(
         Color $default,
         Color $stroke,
@@ -36,31 +44,60 @@ class MapColorsConfig implements JsonSerializable
         $this->hover = $hover;
     }
     
-    function defaultColor(): Color
+    /**
+     * Get the default color for the features
+     * 
+     * @return Color
+     */
+    public function defaultColor(): Color
     {
         return $this->default;
     }
     
-    function strokeColor(): Color
+    /**
+     * Get the color for the features' strokes
+     * 
+     * @return Color
+     */
+    public function strokeColor(): Color
     {
         return $this->stroke;
     }
     
-    function minValueColor(): Color
+    /**
+     * Get the color for the features with the lowest count 
+     * 
+     * @return Color
+     */
+    public function minValueColor(): Color
     {
         return new Rgb(255, 255, 255);
     }
     
-    function maxValueColor(): Color
+    /**
+     * Get the color for the features with the highest count 
+     * 
+     * @return Color
+     */
+    public function maxValueColor(): Color
     {
         return $this->max_value;
     }
     
-    function hoverColor(): Color
+    /**
+     * Get the color for feature hovering
+     * 
+     * @return Color
+     */
+    public function hoverColor(): Color
     {
         return $this->hover;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see JsonSerializable::jsonSerialize()
+     */
     public function jsonSerialize()
     {
         return [

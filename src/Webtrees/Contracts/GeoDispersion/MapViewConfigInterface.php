@@ -31,4 +31,13 @@ interface MapViewConfigInterface
      * @return PlaceMapperConfigInterface
      */
     function mapperConfig(): PlaceMapperConfigInterface;
+    
+    /**
+     * Get a MapViewConfigInterface object with the new properties
+     * 
+     * @param string $mapping_property
+     * @param PlaceMapperConfigInterface $mapper_config
+     * @return self
+     */
+    function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self;
 }

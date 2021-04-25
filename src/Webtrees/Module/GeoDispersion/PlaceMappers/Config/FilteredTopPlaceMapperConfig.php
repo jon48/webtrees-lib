@@ -15,8 +15,12 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers\Config;
 
 use Fisharebest\Webtrees\Place;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Services\TreeService;
+use Illuminate\Support\Collection;
 use MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig;
+use Psr\Http\Message\ServerRequestInterface;
 use RuntimeException;
 
 /**
@@ -37,17 +41,28 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
     }
 
     /**
+     * Get the configured Top Places to filter on
+     *
+     * @return Collection<Place>
+     */
+    public function topPlaces(): Collection
+    {
+        return collect($this->get('topPlaces', []))
+            ->filter(
+                /** @psalm-suppress MissingClosureParamType */
+                fn($item): bool => $item instanceof Place
+            );
+    }
+
+    /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::jsonSerializeConfig()
      */
     public function jsonSerializeConfig()
     {
         return [
-            'topPlaces' => collect($this->get('topPlaces', []))
-                ->filter(
-                    /** @psalm-suppress MissingClosureParamType */
-                    fn($item): bool => $item instanceof Place
-                )->map(fn(Place $place): array => [ $place->tree()->id(), $place->gedcomName() ])
+            'topPlaces' => $this->topPlaces()
+                ->map(fn(Place $place): array => [ $place->tree()->id(), $place->gedcomName() ])
                 ->toArray()
         ];
     }
@@ -77,6 +92,45 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
                     ->filter()
                     ->toArray()
                 ]);
+        }
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::configContent()
+     */
+    public function configContent(ModuleInterface $module, Tree $tree): string
+    {
+        return view($module->name() . '::mappers/filtered-top-config', [
+            'tree'          =>  $tree,
+            'top_places'    =>  $this->topPlaces()
+        ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::withConfigUpdate()
+     */
+    public function withConfigUpdate(ServerRequestInterface $request): self
+    {
+        $tree = $request->getAttribute('tree');
+        if (!($tree instanceof Tree)) {
+            return $this;
+        }
+
+        $params = (array) $request->getParsedBody();
+
+        $top_places = $params['mapper_filt_top_places'] ?? [];
+        if (is_array($top_places)) {
+            $config = ['topPlaces' => []];
+            foreach ($top_places as $top_place_id) {
+                $place = Place::find((int) $top_place_id, $tree);
+                if (mb_strlen($place->gedcomName()) > 0) {
+                    $config['topPlaces'][] = $place;
+                }
+            }
+            $this->setConfig($config);
         }
         return $this;
     }

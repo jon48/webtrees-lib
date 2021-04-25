@@ -49,7 +49,7 @@ class SosaByGenerationGeoAnalysis implements GeoAnalysisInterface
      */
     public function title(): string
     {
-        return I18N::translate('Sosa ancestors places');
+        return I18N::translate('Sosa ancestors places by generation');
     }
 
     /**

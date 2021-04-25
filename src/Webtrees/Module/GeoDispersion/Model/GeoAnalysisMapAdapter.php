@@ -30,6 +30,7 @@ use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
 class GeoAnalysisMapAdapter
 {
     private int $id;
+    private int $view_id;
     private MapDefinitionInterface $map;
     private PlaceMapperInterface $place_mapper;
     private MapViewConfigInterface $config;
@@ -44,17 +45,39 @@ class GeoAnalysisMapAdapter
      */
     public function __construct(
         int $id,
+        int $view_id,
         MapDefinitionInterface $map,
         PlaceMapperInterface $mapper,
         MapViewConfigInterface $config
     ) {
         $this->id = $id;
+        $this->view_id = $view_id;
         $this->map = $map;
         $this->place_mapper = $mapper;
         $this->config = $config;
         $this->place_mapper->setConfig($this->config->mapperConfig());
         $this->place_mapper->setData('map', $map);
         $this->place_mapper->boot();
+    }
+
+    /**
+     * Create a copy of the GeoAnalysisMapAdapter with new properties.
+     *
+     * @param MapDefinitionInterface $map
+     * @param PlaceMapperInterface $mapper
+     * @param string $mapping_property
+     * @return self
+     */
+    public function with(
+        MapDefinitionInterface $map,
+        PlaceMapperInterface $mapper,
+        string $mapping_property
+    ): self {
+        $new = clone $this;
+        $new->map = $map;
+        $new->place_mapper = $mapper;
+        $new->config = $this->config->with($mapping_property, $mapper->config());
+        return $new;
     }
 
     /**
@@ -65,6 +88,16 @@ class GeoAnalysisMapAdapter
     public function id(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Get the ID of the associated GeoAnalysisView
+     *
+     * @return int
+     */
+    public function geoAnalysisViewId(): int
+    {
+        return $this->view_id;
     }
 
     /**

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\GeoDispersion;
 
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Module\ModuleInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use JsonSerializable;
 
 /**
@@ -44,4 +47,21 @@ interface PlaceMapperConfigInterface extends JsonSerializable
      * @return mixed|null
      */
     function get(string $key, $default = null);
+    
+    /**
+     * Return the content of the mapper configuration section of the config page 
+     * 
+     * @param ModuleInterface $module
+     * @param Tree $tree
+     * @return string
+     */
+    function configContent(ModuleInterface $module, Tree $tree): string;
+    
+    /**
+     * Return a PlaceMapperConfigInterface object updated according to its mapper configuration rules 
+     * 
+     * @param ServerRequestInterface $request
+     * @return self
+     */
+    function withConfigUpdate(ServerRequestInterface $request): self;
 }

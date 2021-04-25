@@ -19,9 +19,9 @@
         <directory name="src/Webtrees/Module/Sosa" />
         <directory name="src/Webtrees/Module/WelcomeBlock" />
         <directory name="tests" />
-		<ignoreFiles>
-			<directory name="vendor" />
-		  </ignoreFiles>
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
     </projectFiles>
 	
 	<fileExtensions>

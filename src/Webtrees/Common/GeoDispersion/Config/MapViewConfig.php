@@ -43,7 +43,7 @@ class MapViewConfig implements MapViewConfigInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapMappingProperty()
      */
-    function mapMappingProperty(): string
+    public function mapMappingProperty(): string
     {
         return $this->map_mapping_property;
     }
@@ -52,8 +52,21 @@ class MapViewConfig implements MapViewConfigInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapperConfig()
      */
-    function mapperConfig(): PlaceMapperConfigInterface
+    public function mapperConfig(): PlaceMapperConfigInterface
     {
         return $this->mapper_config;
     }
+    
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::with()
+     */
+    public function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self
+    {
+        $new = clone $this;
+        $new->map_mapping_property = $mapping_property;
+        $new->mapper_config = $mapper_config;
+        return $new;
+    }
+
 }

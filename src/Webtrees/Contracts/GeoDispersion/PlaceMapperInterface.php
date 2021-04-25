@@ -20,7 +20,14 @@ use Fisharebest\Webtrees\Place;
  * Places mappers provide a mapping between a Place and its representation in a GeoJson map
  */
 interface PlaceMapperInterface
-{   
+{
+    /**
+     * Get the Place mapper title
+     * 
+     * @return string
+     */
+    function title(): string;
+    
     /**
      * Boot the Place mapper
      */
