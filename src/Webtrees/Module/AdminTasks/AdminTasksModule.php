@@ -24,9 +24,9 @@ use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
+use MyArtJaub\Webtrees\Contracts\Tasks\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\AdminConfigPage;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskEditAction;
 use MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers\TaskEditPage;
@@ -98,7 +98,7 @@ class AdminTasksModule extends AbstractModule implements
         $router->attach('', '', static function (Map $router): void {
 
             $router->attach('', '/module-maj/admintasks', static function (Map $router): void {
-                $router->tokens(['task' => '\d+', 'enable' => '[01]']);
+                $router->tokens(['enable' => '[01]']);
 
                 $router->attach('', '/admin', static function (Map $router): void {
 
@@ -133,7 +133,7 @@ class AdminTasksModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.0.11-v.2';
+        return '2.1.0-v.1';
     }
 
     /**
@@ -156,7 +156,7 @@ class AdminTasksModule extends AbstractModule implements
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface::listTasks()
+     * @see ModuleTasksProviderInterface::listTasks()
      */
     public function listTasks(): array
     {

@@ -29,16 +29,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class TaskStatusAction implements RequestHandlerInterface
 {
-
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var TaskScheduleService $taskschedules_service
-     */
-    private $taskschedules_service;
+    private ?AdminTasksModule $module;
+    private TaskScheduleService $taskschedules_service;
 
     /**
      * Constructor for TaskStatusAction Request Handler
@@ -75,7 +67,7 @@ class TaskStatusAction implements RequestHandlerInterface
 
         if ($task_schedule === null) {
             FlashMessages::addMessage(
-                I18N::translate('The task shedule with ID “%d” does not exist.', I18N::number($task_sched_id)),
+                I18N::translate('The task shedule with ID “%s” does not exist.', I18N::number($task_sched_id)),
                 'danger'
             );
             return redirect($admin_config_route);
@@ -85,14 +77,14 @@ class TaskStatusAction implements RequestHandlerInterface
 
         if ($this->taskschedules_service->update($task_schedule) > 0) {
             FlashMessages::addMessage(
-                I18N::translate('The scheduled task has been successfully updated'),
+                I18N::translate('The scheduled task has been successfully updated.'),
                 'success'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” has been updated.');
         } else {
             FlashMessages::addMessage(
-                I18N::translate('An error occured while updating the scheduled task'),
+                I18N::translate('An error occured while updating the scheduled task.'),
                 'danger'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong

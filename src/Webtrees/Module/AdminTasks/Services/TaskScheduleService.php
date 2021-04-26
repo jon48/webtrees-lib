@@ -18,13 +18,14 @@ use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\Carbon;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Collection;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ModuleTasksProviderInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
+use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
+use MyArtJaub\Webtrees\Contracts\Tasks\ModuleTasksProviderInterface;
+use MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface;
 use Closure;
 use Throwable;
 use stdClass;
@@ -42,10 +43,17 @@ class TaskScheduleService
      */
     public const TASK_TIME_OUT = 600;
 
+    private ModuleService $module_service;
+
     /**
-     * @var Collection|null $available_tasks
+     * Constructor for TaskScheduleService
+     *
+     * @param ModuleService $module_service
      */
-    private $available_tasks;
+    public function __construct(ModuleService $module_service)
+    {
+        $this->module_service = $module_service;
+    }
 
     /**
      * Returns all Tasks schedules in database.
@@ -53,7 +61,7 @@ class TaskScheduleService
      *
      * @param bool $sync_available Should tasks synchronised with available ones
      * @param bool $include_disabled Should disabled tasks be returned
-     * @return Collection Collection of TaskSchedule
+     * @return Collection<TaskSchedule> Collection of TaskSchedule
      */
     public function all(bool $sync_available = false, bool $include_disabled = true): Collection
     {
@@ -87,19 +95,15 @@ class TaskScheduleService
     /**
      * Returns tasks exposed through modules implementing ModuleTasksProviderInterface.
      *
-     * @return Collection
+     * @return Collection<array<string, string>>
      */
     public function available(): Collection
     {
-        if ($this->available_tasks === null) {
-            $tasks_providers = app(ModuleService::class)->findByInterface(ModuleTasksProviderInterface::class);
-
-            $this->available_tasks = new Collection();
-            foreach ($tasks_providers as $task_provider) {
-                $this->available_tasks = $this->available_tasks->merge($task_provider->listTasks());
-            }
-        }
-        return $this->available_tasks;
+        return Registry::cache()->array()->remember('maj-available-admintasks', function () {
+            return $this->module_service
+                ->findByInterface(ModuleTasksProviderInterface::class)
+                ->flatMap(fn(ModuleTasksProviderInterface $module) => $module->listTasks());
+        });
     }
 
     /**
@@ -190,7 +194,7 @@ class TaskScheduleService
      *
      * @param bool $force Should the run be forced
      * @param string $task_id Specific task ID to be run
-     * @return Collection
+     * @return Collection<TaskSchedule>
      */
     public function findTasksToRun(bool $force, string $task_id = null): Collection
     {
@@ -228,7 +232,6 @@ class TaskScheduleService
      */
     public function run(TaskSchedule $task_schedule, $force = false): void
     {
-        /** @var TaskSchedule $task_schedule */
         $task_schedule = DB::table('maj_admintasks')
             ->select()
             ->where('majat_id', '=', $task_schedule->id())
@@ -272,7 +275,7 @@ class TaskScheduleService
     /**
      * Mapper to return a TaskSchedule object from an object.
      *
-     * @return Closure
+     * @return Closure(stdClass $row): TaskSchedule
      */
     public static function rowMapper(): Closure
     {

@@ -18,7 +18,6 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
-use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
 use Psr\Http\Message\ResponseInterface;
@@ -32,10 +31,7 @@ class AdminConfigPage implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
+    private ?AdminTasksModule $module;
 
     /**
      * Constructor for Admin Config request handler

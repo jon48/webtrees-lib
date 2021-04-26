@@ -105,19 +105,13 @@ class CertificatesModule extends AbstractModule implements
 
                 $router->attach('', '/admin', static function (Map $router): void {
 
-                    $router->get(AdminTreesPage::class, '/trees', AdminTreesPage::class)
-                        ->extras(['middleware' => [ AuthAdministrator::class ]]);
-
-                    $router->attach('', '/config/{tree}', static function (Map $router): void {
-
-                        $router->extras([
+                    $router->get(AdminConfigPage::class, '/config{/tree}', AdminConfigPage::class);
+                    $router->post(AdminConfigAction::class, '/config/{tree}', AdminConfigAction::class)
+                        ->extras([
                             'middleware' => [
                                 AuthManager::class,
                             ],
                         ]);
-                        $router->get(AdminConfigPage::class, '', AdminConfigPage::class);
-                        $router->post(AdminConfigAction::class, '', AdminConfigAction::class);
-                    });
                 });
 
                 $router->get(CertificatesList::class, '/list/{tree}{/cityobf}', CertificatesList::class)
@@ -155,7 +149,7 @@ class CertificatesModule extends AbstractModule implements
      */
     public function getConfigLink(): string
     {
-        return route(AdminTreesPage::class);
+        return route(AdminConfigPage::class);
     }
 
     /**

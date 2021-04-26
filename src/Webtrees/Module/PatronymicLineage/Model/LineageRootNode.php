@@ -25,7 +25,7 @@ class LineageRootNode extends LineageNode
 {
 
     /**
-     * @var Collection $places Places for the lineage node
+     * @var Collection<string, int> $places Places for the lineage node
      */
     private $places;
 
@@ -82,7 +82,7 @@ class LineageRootNode extends LineageNode
     /**
      * Returns the list of place for the lineage
      *
-     * @return Collection
+     * @return Collection<string, int>
      */
     public function places(): Collection
     {

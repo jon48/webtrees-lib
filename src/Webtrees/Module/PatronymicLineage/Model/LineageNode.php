@@ -112,7 +112,7 @@ class LineageNode
     /**
      * Returns the spouse families linked to the node
      *
-     * @return Collection
+     * @return Collection<string, \stdClass>
      */
     public function families(): Collection
     {

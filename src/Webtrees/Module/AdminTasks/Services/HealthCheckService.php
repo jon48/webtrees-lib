@@ -55,7 +55,7 @@ class HealthCheckService
      *      - Value: count of records
      *
      * @param Tree $tree
-     * @return Collection
+     * @return Collection<string, int>
      */
     public function countByRecordType(Tree $tree): Collection
     {
@@ -74,7 +74,7 @@ class HealthCheckService
      *      - Value: count of changes
      *
      * @param Tree $tree
-     * @return Collection
+     * @return Collection<string, int>
      */
     public function changesByRecordType(Tree $tree, int $nb_days): Collection
     {
@@ -103,7 +103,7 @@ class HealthCheckService
      *
      * @param Tree $tree
      * @param int $nb_days
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function errorLogs(Tree $tree, int $nb_days): Collection
     {

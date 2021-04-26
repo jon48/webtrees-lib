@@ -19,10 +19,9 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Services\ModuleService;
+use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
+use MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ConfigurableTaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,15 +33,8 @@ use Throwable;
  */
 class TaskEditAction implements RequestHandlerInterface
 {
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var TaskScheduleService $taskschedules_service
-     */
-    private $taskschedules_service;
+    private ?AdminTasksModule $module;
+    private TaskScheduleService $taskschedules_service;
 
     /**
      * Constructor for TaskEditAction Request Handler
@@ -77,7 +69,7 @@ class TaskEditAction implements RequestHandlerInterface
 
         if ($task_schedule === null) {
             FlashMessages::addMessage(
-                I18N::translate('The task shedule with ID “%d” does not exist.', I18N::number($task_sched_id)),
+                I18N::translate('The task shedule with ID “%s” does not exist.', I18N::number($task_sched_id)),
                 'danger'
             );
             return redirect($admin_config_route);
@@ -88,7 +80,7 @@ class TaskEditAction implements RequestHandlerInterface
 
         if ($success) {
             FlashMessages::addMessage(
-                I18N::translate('The scheduled task has been successfully updated'),
+                I18N::translate('The scheduled task has been successfully updated.'),
                 'success'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
@@ -117,7 +109,7 @@ class TaskEditAction implements RequestHandlerInterface
         if ($frequency > 0) {
             $task_schedule->setFrequency(CarbonInterval::minutes($frequency));
         } else {
-            FlashMessages::addMessage(I18N::translate('The frequency is not in a valid format'), 'danger');
+            FlashMessages::addMessage(I18N::translate('The frequency is not in a valid format.'), 'danger');
         }
 
         $is_limited = (bool) $params['is_limited'];
@@ -128,7 +120,7 @@ class TaskEditAction implements RequestHandlerInterface
                 $task_schedule->setRemainingOccurences($nb_occur);
             } else {
                 FlashMessages::addMessage(
-                    I18N::translate('The number of remaining occurences is not in a valid format'),
+                    I18N::translate('The number of remaining occurences is not in a valid format.'),
                     'danger'
                 );
             }
@@ -149,7 +141,7 @@ class TaskEditAction implements RequestHandlerInterface
             );
         }
 
-        FlashMessages::addMessage(I18N::translate('An error occured while updating the scheduled task'), 'danger');
+        FlashMessages::addMessage(I18N::translate('An error occured while updating the scheduled task.'), 'danger');
         //@phpcs:ignore Generic.Files.LineLength.TooLong
         Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” could not be updated. See error log.');
         return false;
@@ -173,11 +165,11 @@ class TaskEditAction implements RequestHandlerInterface
             return true;
         }
 
-        /** @var TaskInterface&ConfigurableTaskInterface $task */
+        /** @var \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface&\MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface $task */
         if (!$task->updateConfig($request, $task_schedule)) {
             FlashMessages::addMessage(
                 I18N::translate(
-                    'An error occured while updating the specific settings of administrative task “%s”',
+                    'An error occured while updating the specific settings of administrative task “%s”.',
                     $task->name()
                 ),
                 'danger'

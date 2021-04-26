@@ -83,7 +83,7 @@ class SosaRecordsService
      * @param Tree $tree
      * @param UserInterface $user
      * @param Individual $indi
-     * @return Collection
+     * @return Collection<int, int>
      */
     public function sosaNumbers(Tree $tree, UserInterface $user, Individual $indi): Collection
     {
@@ -106,7 +106,7 @@ class SosaRecordsService
      *
      * @param Tree $tree
      * @param UserInterface $user
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function listAncestors(Tree $tree, UserInterface $user): Collection
     {
@@ -124,7 +124,7 @@ class SosaRecordsService
      * @param Tree $tree
      * @param UserInterface $user
      * @param int $gen
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function listAncestorsAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
@@ -143,7 +143,7 @@ class SosaRecordsService
      * @param Tree $tree
      * @param UserInterface $user
      * @param int $gen
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function listAncestorFamiliesAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
@@ -177,7 +177,7 @@ class SosaRecordsService
      * @param Tree $tree
      * @param UserInterface $user
      * @param int $gen
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function listMissingAncestorsAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {

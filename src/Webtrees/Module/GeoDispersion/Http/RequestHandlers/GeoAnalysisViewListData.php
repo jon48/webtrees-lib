@@ -70,7 +70,7 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
         $module_name = $this->module->name();
         return response(['data' => $this->geoview_data_service->all($tree, true)
             ->map(fn(AbstractGeoAnalysisView $view) => [
-                "edit" => view($module_name . '::admin/view-table-options', [
+                'edit' => view($module_name . '::admin/view-table-options', [
                     'view_id' => $view->id(),
                     'view_enabled' => $view->isEnabled(),
                     'view_edit_route' => route(GeoAnalysisViewEditPage::class, [
@@ -87,20 +87,20 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
                         'enable' => $view->isEnabled() ? 0 : 1
                     ]),
                 ]),
-                "enabled" =>  [
+                'enabled' =>  [
                     'display' => view($module_name . '::components/yes-no-icons', ['yes' => $view->isEnabled()]),
                     'raw' => $view->isEnabled() ? 0 : 1
                 ],
-                "type" =>  $view->icon($module),
-                "description" => [
+                'type' =>  $view->icon($module),
+                'description' => [
                     'display' => '<span dir="auto">' . e($view->description()) . '</span>',
                     'raw' => e($view->description())
                 ],
-                "analysis" => [
+                'analysis' => [
                     'display' => '<span dir="auto">' . e($view->analysis()->title()) . '</span>',
                     'raw' => e($view->analysis()->title())
                 ],
-                "place_depth" => [
+                'place_depth' => [
                     'display' => I18N::number($view->placesDepth()),
                     'raw' => $view->placesDepth()
                 ]

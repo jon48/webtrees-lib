@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace MyArtJaub\Webtrees\Module\AdminTasks\Contracts;
+namespace MyArtJaub\Webtrees\Contracts\Tasks;
 
 /**
  * Inferface for modules exposing tasks to be run on a schedule

@@ -18,8 +18,8 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\DatatablesService;
 use Fisharebest\Webtrees\Services\ModuleService;
+use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,36 +31,21 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class TasksList implements RequestHandlerInterface
 {
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var TaskScheduleService $taskschedules_service
-     */
-    private $taskschedules_service;
-
-    /**
-     * @var DatatablesService $datatables_service
-     */
-    private $datatables_service;
+    private ?AdminTasksModule $module;
+    private TaskScheduleService $taskschedules_service;
 
     /**
      * Constructor for TasksList Request Handler
      *
      * @param ModuleService $module_service
      * @param TaskScheduleService $taskschedules_service
-     * @param DatatablesService $datatables_service
      */
     public function __construct(
         ModuleService $module_service,
-        TaskScheduleService $taskschedules_service,
-        DatatablesService $datatables_service
+        TaskScheduleService $taskschedules_service
     ) {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
         $this->taskschedules_service = $taskschedules_service;
-        $this->datatables_service = $datatables_service;
     }
 
     /**
@@ -73,71 +58,63 @@ class TasksList implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $task_schedules = $this->taskschedules_service->all(true, true)
-            ->map(function (TaskSchedule $value): array {
+        $module = $this->module;
+        $module_name = $this->module->name();
+        return response(['data' => $this->taskschedules_service->all(true, true)
+            ->map(function (TaskSchedule $schedule) use ($module, $module_name): array {
+                $task = $this->taskschedules_service->findTask($schedule->taskId());
+                $task_name = $task !== null ? $task->name() : I18N::translate('Task not found');
 
-                $row = $value->toArray();
-                $task = $this->taskschedules_service->findTask($row['task_id']);
-                $row['task_name'] = $task !== null ? $task->name() : I18N::translate('Task not found');
-                return $row;
-            });
-
-        $search_columns = ['task_name'];
-        $sort_columns   = ['task_name', 'enabled', 'last_run'];
-
-        $callback = function (array $row): array {
-            if ($this->module === null) {
-                return [];
-            }
-
-            $row['frequency']->setLocale(I18N::locale()->code());
-
-            $task_options_params = [
-                'task_sched_id' => $row['id'],
-                'task_sched_enabled' => $row['enabled'],
-                'task_edit_route' => route(TaskEditPage::class, ['task' => $row['id']]),
-                'task_status_route' => route(TaskStatusAction::class, [
-                    'task' => $row['id'],
-                    'enable' => $row['enabled'] ? 0 : 1
-                ])
-            ];
-
-            $task_run_params = [
-                'task_sched_id' => $row['id'],
-                'run_route' => route(TaskTrigger::class, [
-                    'task'  =>  $row['task_id'],
-                    'force' =>  $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN')
-                ])
-            ];
-
-            $module_name = $this->module->name();
-            $datum = [
-                view($module_name . '::admin/tasks-table-options', $task_options_params),
-                view($module_name . '::components/yes-no-icons', ['yes' => $row['enabled']]),
-                '<span dir="auto">' . e($row['task_name']) . '</span>',
-                $row['last_run']->unix() === 0 ?
-                view('components/datetime', ['timestamp' => $row['last_run']]) :
-                view('components/datetime-diff', ['timestamp' => $row['last_run']]),
-                view($module_name . '::components/yes-no-icons', ['yes' => $row['last_result']]),
-                '<span dir="auto">' . e($row['frequency']->cascade()->forHumans()) . '</span>',
-                $row['nb_occurrences'] > 0 ? I18N::number($row['nb_occurrences']) : I18N::translate('Unlimited'),
-                view($module_name . '::components/yes-no-icons', [
-                    'yes' => $row['is_running'],
-                    'text_yes' => I18N::translate('Running'),
-                    'text_no' => I18N::translate('Not running')
-                ]),
-                view($module_name . '::admin/tasks-table-run', $task_run_params)
-            ];
-
-            return $datum;
-        };
-
-        return $this->datatables_service->handleCollection(
-            $request,
-            $task_schedules,
-            $search_columns,
-            $sort_columns,
-            $callback
-        );
+                return [
+                    'edit' =>   view($module_name . '::admin/tasks-table-options', [
+                        'task_sched_id' => $schedule->id(),
+                        'task_sched_enabled' => $schedule->isEnabled(),
+                        'task_edit_route' => route(TaskEditPage::class, ['task' => $schedule->id()]),
+                        'task_status_route' => route(TaskStatusAction::class, [
+                            'task' => $schedule->id(),
+                            'enable' => $schedule->isEnabled() ? 0 : 1
+                        ])
+                    ]),
+                    'status'    =>  [
+                        'display'   =>  view($module_name . '::components/yes-no-icons', [
+                            'yes' => $schedule->isEnabled()
+                        ]),
+                        'raw'       =>  $schedule->isEnabled() ? 1 : 0
+                    ],
+                    'task_name' =>  [
+                        'display'   =>  '<span dir="auto">' . e($task_name) . '</span>',
+                        'raw'       =>  $task_name
+                    ],
+                    'last_run'  =>  [
+                        'display'   =>  $schedule->lastRunTime()->unix() === 0 ?
+                            view('components/datetime', ['timestamp' => $schedule->lastRunTime()]) :
+                            view('components/datetime-diff', ['timestamp' => $schedule->lastRunTime()]),
+                        'raw'       =>  $schedule->lastRunTime()->unix()
+                    ],
+                    'last_result'   =>  [
+                        'display'   => view($module_name . '::components/yes-no-icons', [
+                            'yes' => $schedule->wasLastRunSuccess()
+                        ]),
+                        'raw'       =>  $schedule->wasLastRunSuccess() ? 1 : 0
+                    ],
+                    'frequency' =>  '<span dir="auto">' . e($schedule->frequency()->cascade()->forHumans()) . '</span>',
+                    'nb_occurrences'    =>  $schedule->remainingOccurences() > 0 ?
+                        I18N::number($schedule->remainingOccurences()) :
+                        I18N::translate('Unlimited'),
+                    'running'   =>  view($module_name . '::components/yes-no-icons', [
+                        'yes' => $schedule->isRunning(),
+                        'text_yes' => I18N::translate('Running'),
+                        'text_no' => I18N::translate('Not running')
+                    ]),
+                    'run'       =>  view($module_name . '::admin/tasks-table-run', [
+                        'task_sched_id' => $schedule->id(),
+                        'run_route' => route(TaskTrigger::class, [
+                            'task'  =>  $schedule->taskId(),
+                            'force' =>  $module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN')
+                        ])
+                    ])
+                ];
+            })
+        ]);
     }
 }

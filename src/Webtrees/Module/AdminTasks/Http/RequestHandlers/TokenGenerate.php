@@ -29,10 +29,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class TokenGenerate implements RequestHandlerInterface
 {
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
+    private ?AdminTasksModule $module;
 
     /**
      * Constructor for TokenGenerate request handler

@@ -18,9 +18,8 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
+use MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ConfigurableTaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -33,15 +32,8 @@ class TaskEditPage implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var TaskScheduleService $taskschedules_service
-     */
-    private $taskschedules_service;
+    private ?AdminTasksModule $module;
+    private TaskScheduleService $taskschedules_service;
 
     /**
      * Constructor for TaskEditPage Request Handler
@@ -81,7 +73,7 @@ class TaskEditPage implements RequestHandlerInterface
         }
 
         $has_task_config = $task instanceof ConfigurableTaskInterface;
-        /** @var TaskInterface&ConfigurableTaskInterface $task */
+        /** @var \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface&\MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface $task */
 
         return $this->viewResponse($this->module->name() . '::admin/tasks-edit', [
             'module'            =>  $this->module,

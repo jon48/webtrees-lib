@@ -191,7 +191,7 @@ class SosaStatisticsService
     /**
      * Returns the basic statistics data by generation.
      *
-     * @return Collection
+     * @return Collection<int, \stdClass>
      */
     private function statisticsByGenerationBasicData(): Collection
     {
@@ -212,7 +212,7 @@ class SosaStatisticsService
     /**
      * Returns the cumulative statistics data by generation
      *
-     * @return Collection
+     * @return Collection<int, \stdClass>
      */
     private function statisticsByGenerationCumulativeData(): Collection
     {
@@ -393,7 +393,7 @@ class SosaStatisticsService
      *      - stddev_gen_depth : Standard deviation of generation depth
      *
      * @param int $gen Sosa generation
-     * @return Collection
+     * @return Collection<int, \stdClass>
      */
     public function generationDepthStatsAtGeneration(int $gen): Collection
     {
@@ -453,7 +453,7 @@ class SosaStatisticsService
      *      - sosa_count: number of duplications of the ancestor (e.g. 3 if it appears 3 times)
      *
      * @param int $limit
-     * @return Collection
+     * @return Collection<\stdClass>
      */
     public function topMultipleAncestorsWithNoTies(int $limit): Collection
     {
@@ -511,7 +511,7 @@ class SosaStatisticsService
      *            )
      *
      * @param int $gen
-     * @return Collection
+     * @return Collection<int, int>
      */
     public function ancestorsDispersionForGeneration(int $gen): Collection
     {

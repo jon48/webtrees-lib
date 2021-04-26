@@ -26,10 +26,10 @@ use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Services\UpgradeService;
 use Fisharebest\Webtrees\Services\UserService;
+use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
+use MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface;
+use MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\ConfigurableTaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Contracts\TaskInterface;
-use MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\HealthCheckService;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -45,35 +45,12 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
      */
     public const TREE_PREFERENCE_NAME = 'MAJ_AT_HEALTHCHECK_ENABLED';
 
-    /**
-     * @var AdminTasksModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var HealthCheckService $healthcheck_service;
-     */
-    private $healthcheck_service;
-
-    /**
-     * @var EmailService $email_service;
-     */
-    private $email_service;
-
-    /**
-     * @var UserService $user_service
-     */
-    private $user_service;
-
-    /**
-     * @var TreeService $tree_service
-     */
-    private $tree_service;
-
-    /**
-     * @var UpgradeService $upgrade_service
-     */
-    private $upgrade_service;
+    private ?AdminTasksModule $module;
+    private HealthCheckService $healthcheck_service;
+    private EmailService $email_service;
+    private UserService $user_service;
+    private TreeService $tree_service;
+    private UpgradeService $upgrade_service;
 
     /**
      * Constructor for HealthCheckTask
@@ -104,7 +81,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::name()
+     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::name()
      */
     public function name(): string
     {
@@ -113,7 +90,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::defaultFrequency()
+     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::defaultFrequency()
      */
     public function defaultFrequency(): int
     {
@@ -122,7 +99,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\TaskInterface::run()
+     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::run()
      */
     public function run(TaskSchedule $task_schedule): bool
     {
@@ -187,7 +164,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\ConfigurableTaskInterface::configView()
+     * @see \MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface::configView()
      */
     public function configView(ServerRequestInterface $request): string
     {
@@ -198,7 +175,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
 
     /**
      * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\AdminTasks\Model\ConfigurableTaskInterface::updateConfig()
+     * @see \MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface::updateConfig()
      */
     public function updateConfig(ServerRequestInterface $request, TaskSchedule $task_schedule): bool
     {

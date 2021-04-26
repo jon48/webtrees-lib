@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace MyArtJaub\Webtrees\Module\AdminTasks\Model;
+namespace MyArtJaub\Webtrees\Common\Tasks;
 
 use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\Carbon;

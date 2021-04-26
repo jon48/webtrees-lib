@@ -66,7 +66,7 @@ class LineageBuilder
     /**
      * Build all patronymic lineages for the reference surname.
      *
-     * @return Collection|NULL List of root patronymic lineages
+     * @return Collection<LineageRootNode>|NULL List of root patronymic lineages
      */
     public function buildLineages(): ?Collection
     {

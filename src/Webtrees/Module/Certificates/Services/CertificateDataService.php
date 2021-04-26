@@ -36,7 +36,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection
+     * @return Collection<\Fisharebest\Webtrees\Individual>
      */
     public function linkedIndividuals(Certificate $certificate): Collection
     {
@@ -57,7 +57,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection
+     * @return Collection<\Fisharebest\Webtrees\Family>
      */
     public function linkedFamilies(Certificate $certificate): Collection
     {
@@ -78,7 +78,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection
+     * @return Collection<\Fisharebest\Webtrees\Media>
      */
     public function linkedMedias(Certificate $certificate): Collection
     {
@@ -99,7 +99,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection
+     * @return Collection<\Fisharebest\Webtrees\Note>
      */
     public function linkedNotes(Certificate $certificate): Collection
     {
