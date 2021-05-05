@@ -76,7 +76,7 @@ abstract class AbstractGeoAnalysisView
      * @param int $depth
      * @param int $detailed_top_places
      * @param bool $use_flags
-     * @return self
+     * @return static
      */
     public function with(
         bool $enabled,
@@ -133,7 +133,7 @@ abstract class AbstractGeoAnalysisView
      * Return a view with global settings updated according to the view rules
      *
      * @param ServerRequestInterface $request
-     * @return self
+     * @return static
      */
     abstract public function withGlobalSettingsUpdate(ServerRequestInterface $request): self;
 

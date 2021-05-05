@@ -112,7 +112,7 @@ class GeoAnalysisResult
     /**
      * Take a copy of the current analysis result
      * 
-     * @return self
+     * @return static
      */
     public function copy() : self
     {
@@ -129,7 +129,7 @@ class GeoAnalysisResult
      * The current object is modified, not the second one.
      * 
      * @param GeoAnalysisResult $other
-     * @return self
+     * @return $this
      */
     public function merge(GeoAnalysisResult $other): self
     {

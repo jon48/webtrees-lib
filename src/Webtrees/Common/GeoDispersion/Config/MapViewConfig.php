@@ -60,6 +60,7 @@ class MapViewConfig implements MapViewConfigInterface
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::with()
+     * @return static
      */
     public function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self
     {

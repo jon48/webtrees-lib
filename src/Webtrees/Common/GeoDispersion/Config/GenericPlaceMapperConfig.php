@@ -40,7 +40,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
      * Set the generic mapper's config
      * 
      * @param array $config
-     * @return self
+     * @return $this
      */
     public function setConfig(array $config): self
     {
@@ -91,6 +91,9 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::jsonDeserialize()
+     *
+     * @param mixed $config
+     * @return $this
      */
     public function jsonDeserialize($config): self
     {
@@ -115,6 +118,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
+     * @return $this
      */
     public function withConfigUpdate(ServerRequestInterface $request): self
     {

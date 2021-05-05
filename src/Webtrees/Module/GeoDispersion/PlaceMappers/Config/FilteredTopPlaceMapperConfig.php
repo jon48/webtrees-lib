@@ -70,6 +70,9 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::jsonDeserialize()
+     *
+     * @param mixed $config
+     * @return $this
      */
     public function jsonDeserialize($config): self
     {
@@ -111,6 +114,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::withConfigUpdate()
+     * @return $this
      */
     public function withConfigUpdate(ServerRequestInterface $request): self
     {

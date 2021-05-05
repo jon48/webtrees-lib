@@ -68,7 +68,7 @@ class MapAdapterResult
      * The current object is modified, not the second one.
      *
      * @param MapAdapterResult $other
-     * @return self
+     * @return static
      */
     public function merge(MapAdapterResult $other): self
     {

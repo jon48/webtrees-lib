@@ -66,7 +66,7 @@ class GeoAnalysisMapAdapter
      * @param MapDefinitionInterface $map
      * @param PlaceMapperInterface $mapper
      * @param string $mapping_property
-     * @return self
+     * @return static
      */
     public function with(
         MapDefinitionInterface $map,

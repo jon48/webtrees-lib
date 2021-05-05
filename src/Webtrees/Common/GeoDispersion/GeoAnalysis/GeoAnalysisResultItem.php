@@ -67,7 +67,7 @@ class GeoAnalysisResultItem
     /**
      * Increment the count of occurrences of the GeoAnalysis Place in the analysis 
      * 
-     * @return self
+     * @return $this
      */
     public function increment(): self
     {

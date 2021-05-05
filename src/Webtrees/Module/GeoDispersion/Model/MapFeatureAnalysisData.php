@@ -76,7 +76,7 @@ class MapFeatureAnalysisData
     /**
      * Confirm that the feature exist in the target map
      *
-     * @return self
+     * @return $this
      */
     public function tagAsExisting(): self
     {
@@ -89,7 +89,7 @@ class MapFeatureAnalysisData
      *
      * @param GeoAnalysisPlace $place
      * @param int $count
-     * @return self
+     * @return $this
      */
     public function add(GeoAnalysisPlace $place, int $count): self
     {

@@ -27,7 +27,7 @@ interface PlaceMapperConfigInterface extends JsonSerializable
      * Deserialise the mapper configuration from a string or an array
      * 
      * @param mixed $config
-     * @return self
+     * @return $this
      */
     function jsonDeserialize($config): self;
     
@@ -61,7 +61,7 @@ interface PlaceMapperConfigInterface extends JsonSerializable
      * Return a PlaceMapperConfigInterface object updated according to its mapper configuration rules 
      * 
      * @param ServerRequestInterface $request
-     * @return self
+     * @return static
      */
     function withConfigUpdate(ServerRequestInterface $request): self;
 }

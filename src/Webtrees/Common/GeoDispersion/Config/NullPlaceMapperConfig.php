@@ -46,6 +46,9 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::jsonDeserialize()
+     *
+     * @param mixed $config
+     * @return $this
      */
     public function jsonDeserialize($config): self
     {
@@ -73,6 +76,7 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
+     * @return $this
      */
     public function withConfigUpdate(ServerRequestInterface $request): self
     {

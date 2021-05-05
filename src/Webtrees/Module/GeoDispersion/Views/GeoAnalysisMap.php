@@ -62,6 +62,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::withGlobalSettingsUpdate()
+     * @return static
      */
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {
@@ -144,7 +145,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
      * Returns a map view with a new color scheme configuration
      *
      * @param MapColorsConfig $config
-     * @return self
+     * @return static
      */
     public function withColors(?MapColorsConfig $config): self
     {

@@ -32,7 +32,7 @@ class NullFactSourceStatus extends FactSourceStatus
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\FactSourceStatus::combineWith()
      */
-    public function combineWith(SourceStatus $other): SourceStatus
+    public function combineWith(SourceStatus $other)
     {
         return $other;
     }

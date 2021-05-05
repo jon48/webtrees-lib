@@ -111,7 +111,6 @@ class SourceStatusService
 
         foreach ($record->facts($tags) as $fact) {
             $source_status = $source_status->combineWith($this->sourceStatusForFact($fact));
-            assert($source_status instanceof FactSourceStatus);
             if ($source_status->isFullySourced()) {
                 return $source_status;
             }

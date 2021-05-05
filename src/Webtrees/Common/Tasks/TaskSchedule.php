@@ -138,7 +138,7 @@ class TaskSchedule
     /**
      * Enable the schedule
      *
-     * @return self
+     * @return $this
      */
     public function enable(): self
     {
@@ -149,7 +149,7 @@ class TaskSchedule
     /**
      * Disable the schedule
      *
-     * @return self
+     * @return $this
      */
     public function disable(): self
     {
@@ -171,7 +171,7 @@ class TaskSchedule
      * Set the frequency of the schedule
      *
      * @param CarbonInterval $frequency
-     * @return self
+     * @return $this
      */
     public function setFrequency(CarbonInterval $frequency): self
     {
@@ -193,7 +193,7 @@ class TaskSchedule
      * Set the last successful run date/time
      *
      * @param Carbon $last_run
-     * @return self
+     * @return $this
      */
     public function setLastRunTime(Carbon $last_run): self
     {
@@ -215,7 +215,7 @@ class TaskSchedule
      * Set the last run result
      *
      * @param bool $last_result
-     * @return self
+     * @return $this
      */
     public function setLastResult(bool $last_result): self
     {
@@ -238,7 +238,7 @@ class TaskSchedule
      * Decrements the number of remaining occurences by 1.
      * The task will be disabled when the number reaches 0.
      *
-     * @return self
+     * @return $this
      */
     public function decrementRemainingOccurences(): self
     {
@@ -255,7 +255,7 @@ class TaskSchedule
      * Set the number of remaining occurences of task runs.
      *
      * @param int $nb_occurrences
-     * @return self
+     * @return $this
      */
     public function setRemainingOccurences(int $nb_occurrences): self
     {
@@ -275,7 +275,7 @@ class TaskSchedule
     /**
      * Informs the schedule that the task is going to run
      *
-     * @return self
+     * @return $this
      */
     public function startRunning(): self
     {
@@ -285,7 +285,7 @@ class TaskSchedule
 
     /**
      * Informs the schedule that the task has stopped running.
-     * @return self
+     * @return $this
      */
     public function stopRunning(): self
     {

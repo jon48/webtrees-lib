@@ -56,7 +56,7 @@ class FactSourceStatus extends SourceStatus
      * Set whether the fact is dated.
      *
      * @param bool $has_date
-     * @return self
+     * @return $this
      */
     public function setFactHasDate(bool $has_date): self
     {
@@ -68,7 +68,7 @@ class FactSourceStatus extends SourceStatus
      * Combinate whether the fact is dated with the previous status.
      *
      * @param bool $has_date
-     * @return self
+     * @return $this
      */
     public function addFactHasDate(bool $has_date): self
     {
@@ -92,7 +92,7 @@ class FactSourceStatus extends SourceStatus
      * Set whather the fact is dated with a precise day.
      *
      * @param bool $has_precise_date
-     * @return self
+     * @return $this
      */
     public function setFactHasPreciseDate(bool $has_precise_date): self
     {
@@ -100,6 +100,12 @@ class FactSourceStatus extends SourceStatus
         return $this;
     }
 
+    /**
+     * Combine whether the fact is dated with a precise day.
+     *
+     * @param bool $has_precise_date
+     * @return $this
+     */
     public function addFactHasPreciseDate(bool $has_precise_date): self
     {
         $this->has_precise_date = $this->has_precise_date || $has_precise_date;
@@ -120,7 +126,7 @@ class FactSourceStatus extends SourceStatus
      * Set whether the source citation is dated.
      *
      * @param bool $has_source_date
-     * @return self
+     * @return $this
      */
     public function setSourceHasDate(bool $has_source_date): self
     {
@@ -132,7 +138,7 @@ class FactSourceStatus extends SourceStatus
      * Combine whether the source citation is dated with the previous status.
      *
      * @param bool $has_source_date
-     * @return self
+     * @return $this
      */
     public function addSourceHasDate(bool $has_source_date): self
     {
@@ -154,7 +160,7 @@ class FactSourceStatus extends SourceStatus
      * Set whether the source citation date is close to the fact date.
      *
      * @param bool $source_date_match
-     * @return self
+     * @return $this
      */
     public function setSourceMatchesFactDate(bool $source_date_match): self
     {
@@ -166,7 +172,7 @@ class FactSourceStatus extends SourceStatus
      * Combine whether the source citation date is close to the fact date with the previous status.
      *
      * @param bool $source_date_match
-     * @return self
+     * @return $this
      */
     public function addSourceMatchesFactDate(bool $source_date_match): self
     {
@@ -219,7 +225,7 @@ class FactSourceStatus extends SourceStatus
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::combineWith()
      */
-    public function combineWith(SourceStatus $other): SourceStatus
+    public function combineWith(SourceStatus $other)
     {
         if ($other instanceof FactSourceStatus) {
             $this->addFactHasDate($other->factHasDate());

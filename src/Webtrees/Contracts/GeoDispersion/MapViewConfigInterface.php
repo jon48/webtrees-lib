@@ -37,7 +37,7 @@ interface MapViewConfigInterface
      * 
      * @param string $mapping_property
      * @param PlaceMapperConfigInterface $mapper_config
-     * @return self
+     * @return static
      */
     function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self;
 }

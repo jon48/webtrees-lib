@@ -135,7 +135,7 @@ class GeoAnalysisPlace
      * Set the GeoAnalysis Place status to Found, if the parameter is true
      * 
      * @param bool $include
-     * @return self
+     * @return $this
      */
     public function include(bool $include = true): self
     {
@@ -147,7 +147,7 @@ class GeoAnalysisPlace
      * Set the GeoAnalysis Place status to Excluded, if the parameter is true
      * 
      * @param bool $exclude
-     * @return self
+     * @return $this
      */
     public function exclude(bool $exclude = true): self
     {

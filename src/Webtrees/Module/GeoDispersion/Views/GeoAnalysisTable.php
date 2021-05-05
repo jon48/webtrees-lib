@@ -51,6 +51,7 @@ class GeoAnalysisTable extends AbstractGeoAnalysisView
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::withGlobalSettingsUpdate()
+     * @return $this
      */
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {

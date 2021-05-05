@@ -56,7 +56,7 @@ class SourceStatus
      *  Set whether the record contains a source.
      *
      * @param bool $source_exist
-     * @return self
+     * @return $this
      */
     public function setHasSource(bool $source_exist): self
     {
@@ -68,7 +68,7 @@ class SourceStatus
      * Combine whether the record contains a source with the previous status.
      *
      * @param bool $source_exist
-     * @return self
+     * @return $this
      */
     public function addHasSource(bool $source_exist): self
     {
@@ -91,7 +91,7 @@ class SourceStatus
      * Set whether the source citation is supported by a document.
      *
      * @param bool $has_document
-     * @return self
+     * @return $this
      */
     public function setHasSupportingDocument(bool $has_document): self
     {
@@ -103,7 +103,7 @@ class SourceStatus
      * Combine whether the source citation is supported by a document with the previous status.
      *
      * @param bool $has_document
-     * @return self
+     * @return $this
      */
     public function addHasSupportingDocument(bool $has_document): self
     {
@@ -146,10 +146,11 @@ class SourceStatus
      * Return an element combining properties of the current object with another SourceStatus.
      * Do not use the initial object anymore, it may not appropriately describe the status anymore.
      *
-     * @param SourceStatus $other
-     * @return self
+     * @template T of SourceStatus
+     * @param T $other
+     * @return $this|T
      */
-    public function combineWith(SourceStatus $other): self
+    public function combineWith(SourceStatus $other)
     {
         $this->addHasSource($other->hasSource());
         $this->addHasSupportingDocument($other->hasSource());
