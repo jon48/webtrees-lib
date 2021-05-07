@@ -55,7 +55,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
             'module_name'   =>  $module->name(),
             'view'          =>  $this,
             'colors'        =>  $this->colors(),
-            'map_adapters'  =>  app(MapAdapterDataService::class)->allForView($this)
+            'map_adapters'  =>  app(MapAdapterDataService::class)->allForView($this, true)
         ]);
     }
 

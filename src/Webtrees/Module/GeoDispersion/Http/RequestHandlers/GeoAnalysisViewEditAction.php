@@ -27,6 +27,7 @@ use MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 
 /**
  * Request handler for editing a geographical analysis view.
@@ -99,20 +100,21 @@ class GeoAnalysisViewEditAction implements RequestHandlerInterface
             ->with($view->isEnabled(), $description, $analysis, $place_depth, $top_places)
             ->withGlobalSettingsUpdate($request);
 
-        if ($this->geoview_data_service->update($new_view) > 0) {
+        try {
+            $this->geoview_data_service->update($new_view);
             FlashMessages::addMessage(
                 I18N::translate('The geographical dispersion analysis view has been successfully updated.'),
                 'success'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : View “' . $view->id() . '” has been updated.');
-        } else {
+        } catch (Throwable $ex) {
             FlashMessages::addMessage(
                 I18N::translate('An error occured while updating the geographical dispersion analysis view.'),
                 'danger'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
-            Log::addConfigurationLog('Module ' . $this->module->title() . ' : View “' . $view->id() . '” could not be updated. See error log.');
+            Log::addErrorLog('Module ' . $this->module->title() . ' : Error when updating view “' . $view->id() . '”: ' . $ex->getMessage());
         }
 
         return redirect($admin_config_route);

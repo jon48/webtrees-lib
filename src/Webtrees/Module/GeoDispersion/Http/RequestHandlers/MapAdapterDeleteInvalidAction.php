@@ -19,40 +19,40 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Services\ModuleService;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisMapAdapter;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapAdapterDataService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapDefinitionsService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Views\GeoAnalysisMap;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 
 /**
- * Request handler for editing a a geographical analysis map adapter.
+ * Request handler for deleting invalid geographical analysis map adapters for a view.
  */
-class MapAdapterEditAction implements RequestHandlerInterface
+class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
 {
     private ?GeoDispersionModule $module;
+    private GeoAnalysisViewDataService $geoview_data_service;
     private MapAdapterDataService $mapadapter_data_service;
-    private MapDefinitionsService $map_definition_service;
 
     /**
-     * Constructor for MapAdapterEditAction Request Handler
+     * Constructor for MapAdapterDeleteInvalidAction Request Handler
      *
      * @param ModuleService $module_service
+     * @param GeoAnalysisViewDataService $geoview_data_service
      * @param MapAdapterDataService $mapadapter_data_service
-     * @param MapDefinitionsService $map_definition_service
      */
     public function __construct(
         ModuleService $module_service,
-        MapAdapterDataService $mapadapter_data_service,
-        MapDefinitionsService $map_definition_service
+        GeoAnalysisViewDataService $geoview_data_service,
+        MapAdapterDataService $mapadapter_data_service
     ) {
         $this->module = $module_service->findByInterface(GeoDispersionModule::class)->first();
+        $this->geoview_data_service = $geoview_data_service;
         $this->mapadapter_data_service = $mapadapter_data_service;
-        $this->map_definition_service = $map_definition_service;
     }
 
     /**
@@ -72,50 +72,39 @@ class MapAdapterEditAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
         }
 
-        $adapter_id = (int) $request->getAttribute('adapter_id');
-        $map_adapter = $this->mapadapter_data_service->find($adapter_id);
+        $view_id = (int) $request->getAttribute('view_id');
+        $view = $this->geoview_data_service->find($tree, $view_id);
 
-        $params = (array) $request->getParsedBody();
-
-        $map = $this->map_definition_service->find($params['map_adapter_map'] ?? '');
-        $mapping_property   = $params['map_adapter_property_selected'] ?? '';
-
-        $mapper = null;
-        try {
-            $mapper = app($params['map_adapter_mapper'] ?? '');
-        } catch (BindingResolutionException $ex) {
-        }
-
-        if ($map_adapter === null || $map === null || $mapper === null || !($mapper instanceof PlaceMapperInterface)) {
+        if ($view === null || !($view instanceof GeoAnalysisMap)) {
             FlashMessages::addMessage(
-                I18N::translate('The parameters for the map configuration are not valid.'),
+                I18N::translate('The view with ID “%s” does not exist.', I18N::number($view_id)),
                 'danger'
             );
             return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
         }
 
-        $mapper->setConfig($mapper->config()->withConfigUpdate($request));
-        $new_map_adapter = $map_adapter->with($map, $mapper, $mapping_property);
+        $valid_map_adapters = $this->mapadapter_data_service
+            ->allForView($view)
+            ->map(fn(GeoAnalysisMapAdapter $map_adapter) => $map_adapter->id());
+
         try {
-            $this->mapadapter_data_service->update($new_map_adapter);
+            $this->mapadapter_data_service->deleteInvalid($view, $valid_map_adapters);
             FlashMessages::addMessage(
-                I18N::translate('The map configuration has been successfully updated.'),
+                I18N::translate('The invalid map configurations have been successfully deleted.'),
                 'success'
             );
-            //phpcs:ignore Generic.Files.LineLength.TooLong
-            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Map Adapter “' . $map_adapter->id() . '” has been updated.');
         } catch (Throwable $ex) {
             FlashMessages::addMessage(
-                I18N::translate('An error occured while updating the map configuration.'),
+                I18N::translate('An error occured while deleting the invalid map configurations.'),
                 'danger'
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
-            Log::addErrorLog('Module ' . $this->module->title() . ' : Error when updating Map Adapter “' . $map_adapter->id() . '”: ' . $ex->getMessage());
+            Log::addConfigurationLog('Module ' . $this->module->title() . ' : Error when deleting invalid map configurations: ' . $ex->getMessage());
         }
 
         return redirect(route(GeoAnalysisViewEditPage::class, [
-            'tree' => $tree->name(),
-            'view_id' => $map_adapter->geoAnalysisViewId()
+            'tree'      => $tree->name(),
+            'view_id'   => $view_id
         ]));
     }
 }

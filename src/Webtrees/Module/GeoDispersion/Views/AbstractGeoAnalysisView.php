@@ -68,6 +68,19 @@ abstract class AbstractGeoAnalysisView
     }
 
     /**
+     * Create a copy of the view with a new ID.
+     *
+     * @param int $id
+     * @return static
+     */
+    public function withId(int $id): self
+    {
+        $new = clone $this;
+        $new->id = $id;
+        return $new;
+    }
+
+    /**
      * Create a copy of the view with new properties.
      *
      * @param bool $enabled

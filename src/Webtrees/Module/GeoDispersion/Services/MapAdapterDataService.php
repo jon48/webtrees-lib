@@ -21,6 +21,7 @@ use MyArtJaub\Webtrees\Common\GeoDispersion\Config\MapViewConfig;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisMapAdapter;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Views\GeoAnalysisMap;
 use Closure;
 use stdClass;
@@ -62,16 +63,17 @@ class MapAdapterDataService
      * Get all GeoAnalysisMapAdapters linked to a Map View.
      *
      * @param GeoAnalysisMap $map_view
-     * @return Collection<GeoAnalysisMapAdapter>
+     * @param bool $show_invalid
+     * @return Collection<GeoAnalysisMapAdapter|null>
      */
-    public function allForView(GeoAnalysisMap $map_view): Collection
+    public function allForView(GeoAnalysisMap $map_view, bool $show_invalid = false): Collection
     {
-        return DB::table('maj_geodisp_mapviews')
+        $map_adapters = DB::table('maj_geodisp_mapviews')
             ->select('maj_geodisp_mapviews.*')
             ->where('majgm_majgv_id', '=', $map_view->id())
             ->get()
-            ->map($this->mapAdapterMapper())
-            ->filter();
+            ->map($this->mapAdapterMapper());
+        return $show_invalid ? $map_adapters : $map_adapters->filter();
     }
 
     /**
@@ -120,6 +122,21 @@ class MapAdapterDataService
     {
         return DB::table('maj_geodisp_mapviews')
             ->where('majgm_id', '=', $map_adapter->id())
+            ->delete();
+    }
+
+    /**
+     * Delete invalid GeoAnalysisMapAdapters from the database.
+     *
+     * @param AbstractGeoAnalysisView $view
+     * @param Collection $valid_map_adapters
+     * @return int
+     */
+    public function deleteInvalid(AbstractGeoAnalysisView $view, Collection $valid_map_adapters): int
+    {
+        return DB::table('maj_geodisp_mapviews')
+            ->where('majgm_majgv_id', '=', $view->id())
+            ->whereNotIn('majgm_id', $valid_map_adapters)
             ->delete();
     }
 

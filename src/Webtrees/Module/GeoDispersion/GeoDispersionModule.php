@@ -46,6 +46,7 @@ use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\GeoAnalysisView
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterAddAction;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterAddPage;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterDeleteAction;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterDeleteInvalidAction;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterEditAction;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterEditPage;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers\MapAdapterMapperConfig;
@@ -73,7 +74,7 @@ class GeoDispersionModule extends AbstractModule implements
     use ModuleGlobalTrait;
 
     // How to update the database schema for this module
-    private const SCHEMA_TARGET_VERSION   = 2;
+    private const SCHEMA_TARGET_VERSION   = 3;
     private const SCHEMA_SETTING_NAME     = 'MAJ_GEODISP_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';
 
@@ -164,6 +165,7 @@ class GeoDispersionModule extends AbstractModule implements
                         $router->post(MapAdapterEditAction::class, '/{adapter_id}', MapAdapterEditAction::class);
                         //phpcs:disable Generic.Files.LineLength.TooLong
                         $router->get(MapAdapterDeleteAction::class, '/{adapter_id}/delete', MapAdapterDeleteAction::class);
+                        $router->get(MapAdapterDeleteInvalidAction::class, '/delete-invalid/{view_id}', MapAdapterDeleteInvalidAction::class);
                         $router->get(MapAdapterMapperConfig::class, '/mapper/config{/adapter_id}', MapAdapterMapperConfig::class);
                         //phpcs:enable
                     });
