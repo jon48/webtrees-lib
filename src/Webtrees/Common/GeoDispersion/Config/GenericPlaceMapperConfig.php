@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -25,20 +26,20 @@ use Psr\Http\Message\ServerRequestInterface;
 class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
 {
     private array $config = [];
-    
+
     /**
      * Get the generic mapper's config
-     * 
+     *
      * @return array
      */
     public function config(): array
     {
         return $this->config;
     }
-    
+
     /**
      * Set the generic mapper's config
-     * 
+     *
      * @param array $config
      * @return $this
      */
@@ -47,7 +48,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
         $this->config = $config;
         return $this;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::get()
@@ -65,7 +66,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return key_exists($key, $this->config);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \JsonSerializable::jsonSerialize()
@@ -77,10 +78,10 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
             'config'    =>  $this->jsonSerializeConfig()
         ];
     }
-    
+
     /**
      * Returns a representation of the mapper config compatible with Json serialisation
-     * 
+     *
      * @return mixed
      */
     public function jsonSerializeConfig()
@@ -97,15 +98,15 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
      */
     public function jsonDeserialize($config): self
     {
-        if(is_string($config)) {
+        if (is_string($config)) {
             return $this->jsonDeserialize(json_decode($config));
         }
-        if(is_array($config)) {
+        if (is_array($config)) {
             return $this->setConfig($config);
         }
         return $this;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::configContent()
@@ -114,7 +115,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return '';
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()

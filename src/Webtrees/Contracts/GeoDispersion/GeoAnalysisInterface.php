@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -23,24 +24,24 @@ interface GeoAnalysisInterface
 {
     /**
      * Get the geographical dispersion analysis title
-     * 
+     *
      * @return string
      */
-    function title(): string;
-    
+    public function title(): string;
+
     /**
-     * Gets the function to translate 
-     * 
+     * Gets the function to translate
+     *
      * @return callable(int $count): string
      */
-    function itemsDescription(): callable;
-    
+    public function itemsDescription(): callable;
+
     /**
      * Get the results of the geographical dispersion analysis
-     * 
+     *
      * @param Tree $tree
      * @param int $depth
      * @return GeoAnalysisResults
      */
-    function results(Tree $tree, int $depth): GeoAnalysisResults;
+    public function results(Tree $tree, int $depth): GeoAnalysisResults;
 }

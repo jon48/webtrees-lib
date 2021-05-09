@@ -3,6 +3,8 @@
     <description>MyArtJaub coding standard for webtrees-lib</description>
 
     <!-- <file>src</file> -->
+    <file>src/Webtrees/Common</file>
+    <file>src/Webtrees/Contracts</file>
     <file>src/Webtrees/Http</file>
     <file>src/Webtrees/Module/AdminTasks</file>
     <file>src/Webtrees/Module/Certificates</file>

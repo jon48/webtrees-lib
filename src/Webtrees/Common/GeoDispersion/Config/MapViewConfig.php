@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -24,10 +25,10 @@ class MapViewConfig implements MapViewConfigInterface
 {
     private string $map_mapping_property;
     private PlaceMapperConfigInterface $mapper_config;
-    
+
     /**
      * Constructor for MapViewConfig
-     * 
+     *
      * @param string $map_mapping_property
      * @param PlaceMapperConfigInterface $mapper_config
      */
@@ -38,7 +39,7 @@ class MapViewConfig implements MapViewConfigInterface
         $this->map_mapping_property = $map_mapping_property;
         $this->mapper_config = $mapper_config ?? new NullPlaceMapperConfig();
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapMappingProperty()
@@ -47,7 +48,7 @@ class MapViewConfig implements MapViewConfigInterface
     {
         return $this->map_mapping_property;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapperConfig()
@@ -56,7 +57,7 @@ class MapViewConfig implements MapViewConfigInterface
     {
         return $this->mapper_config;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::with()
@@ -69,5 +70,4 @@ class MapViewConfig implements MapViewConfigInterface
         $new->mapper_config = $mapper_config;
         return $new;
     }
-
 }

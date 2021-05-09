@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -25,43 +26,43 @@ interface PlaceMapperConfigInterface extends JsonSerializable
 {
     /**
      * Deserialise the mapper configuration from a string or an array
-     * 
+     *
      * @param mixed $config
      * @return $this
      */
-    function jsonDeserialize($config): self;
-    
+    public function jsonDeserialize($config): self;
+
     /**
      * Check if the configuration contains a specific key
-     * 
+     *
      * @param string $key
      * @return bool
      */
-    function has(string $key): bool;
-    
+    public function has(string $key): bool;
+
     /**
      * Return the configuration associated with a key, or a default value if none found.
-     * 
+     *
      * @param string $key
      * @param mixed|null $default
      * @return mixed|null
      */
-    function get(string $key, $default = null);
-    
+    public function get(string $key, $default = null);
+
     /**
-     * Return the content of the mapper configuration section of the config page 
-     * 
+     * Return the content of the mapper configuration section of the config page
+     *
      * @param ModuleInterface $module
      * @param Tree $tree
      * @return string
      */
-    function configContent(ModuleInterface $module, Tree $tree): string;
-    
+    public function configContent(ModuleInterface $module, Tree $tree): string;
+
     /**
-     * Return a PlaceMapperConfigInterface object updated according to its mapper configuration rules 
-     * 
+     * Return a PlaceMapperConfigInterface object updated according to its mapper configuration rules
+     *
      * @param ServerRequestInterface $request
      * @return static
      */
-    function withConfigUpdate(ServerRequestInterface $request): self;
+    public function withConfigUpdate(ServerRequestInterface $request): self;
 }

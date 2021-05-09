@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -20,22 +21,22 @@ interface MapDefinitionInterface
 {
     /**
      * Get the map ID
-     * 
+     *
      * @return string
      */
-    function id(): string;
-    
+    public function id(): string;
+
     /**
      * Get the map title
-     * 
+     *
      * @return string
      */
-    function title(): string;
-    
+    public function title(): string;
+
     /**
      * Get the features in the map
-     * 
+     *
      * @return \Brick\Geo\IO\GeoJSON\Feature[]
      */
-    function features(): array;
+    public function features(): array;
 }

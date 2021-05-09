@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -32,15 +33,15 @@ class GeoAnalysisPlace
      * @var string INVALID_PLACE
      */
     private const INVALID_PLACE = '##INVALID##';
-    
+
     private Place $place;
     private int $depth;
     private bool $strict_depth;
     private bool $is_excluded;
-    
+
     /**
      * Constructor for GeoAnalysisPlace
-     * 
+     *
      * @param Tree $tree Default tree
      * @param Place|null $place Place resulting from the analysis
      * @param int $depth Place hierarchy depth defined by the geographical analysis view
@@ -53,10 +54,10 @@ class GeoAnalysisPlace
         $this->place = $this->extractPlace($place, $depth, $strict_depth) ?? new Place('', $tree);
         $this->is_excluded = false;
     }
-    
+
     /**
      * Process the provided Place to determine its status for further usage
-     * 
+     *
      * @param Place|null $place
      * @param int $depth
      * @param bool $strict_depth
@@ -64,76 +65,82 @@ class GeoAnalysisPlace
      */
     private function extractPlace(?Place $place, int $depth, bool $strict_depth): ?Place
     {
-        if($place === null) return null;
-        if(mb_strlen($place->gedcomName()) === 0) return null;
+        if ($place === null) {
+            return null;
+        }
+        if (mb_strlen($place->gedcomName()) === 0) {
+            return null;
+        }
         $parts = $place->lastParts($depth);
-        if($strict_depth && $parts->count() !== $depth) return new Place(self::INVALID_PLACE, $place->tree());
+        if ($strict_depth && $parts->count() !== $depth) {
+            return new Place(self::INVALID_PLACE, $place->tree());
+        }
         return new Place($parts->implode(', '), $place->tree());
     }
-    
+
     /**
      * Get the GeoAnalysis Place key
-     * 
+     *
      * @return string
      */
     public function key(): string
     {
         return $this->place->gedcomName();
     }
-    
+
     /**
      * Get the underlying Place object
-     * 
+     *
      * @return Place
      */
     public function place(): Place
     {
         return $this->place;
     }
-    
+
     /**
      * Check if the GeoAnalysis Place is in the Known status
-     * 
+     *
      * @return bool
      */
     public function isKnown(): bool
     {
         return !$this->isUnknown();
     }
-    
+
     /**
      * Check if the GeoAnalysis Place is in the Unknown status
-     * 
+     *
      * @return bool
      */
     public function isUnknown(): bool
     {
         return mb_strlen($this->place->gedcomName()) === 0;
     }
-    
+
     /**
      * Check if the GeoAnalysis Place is in the Invalid status
-     * 
+     *
      * @return bool
      */
     public function isInvalid(): bool
     {
         return $this->place->gedcomName() === self::INVALID_PLACE;
     }
-    
+
     /**
      * Check if the GeoAnalysis Place is in the Excluded status
-     * 
+     *
      * @return bool
      */
     public function isExcluded(): bool
     {
         return $this->isUnknown() || $this->isInvalid() || $this->is_excluded;
     }
-    
+
     /**
      * Set the GeoAnalysis Place status to Found, if the parameter is true
-     * 
+     *
      * @param bool $include
      * @return $this
      */
@@ -142,10 +149,10 @@ class GeoAnalysisPlace
         $this->is_excluded = !$include;
         return $this;
     }
-    
+
     /**
      * Set the GeoAnalysis Place status to Excluded, if the parameter is true
-     * 
+     *
      * @param bool $exclude
      * @return $this
      */
@@ -155,4 +162,3 @@ class GeoAnalysisPlace
         return $this;
     }
 }
-

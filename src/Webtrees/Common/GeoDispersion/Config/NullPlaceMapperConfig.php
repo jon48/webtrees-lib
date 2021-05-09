@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -42,7 +43,7 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::jsonDeserialize()
@@ -54,7 +55,7 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return $this;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
@@ -72,7 +73,7 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return '';
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
@@ -82,6 +83,4 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
     {
         return $this;
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -21,10 +22,10 @@ class GeoAnalysisResultItem
 {
     private GeoAnalysisPlace $place;
     private int $count;
-    
+
     /**
      * Constructor for GeoAnalysisResultItem
-     * 
+     *
      * @param GeoAnalysisPlace $place
      * @param int $count
      */
@@ -33,40 +34,40 @@ class GeoAnalysisResultItem
         $this->place = $place;
         $this->count = $count;
     }
-    
+
     /**
      * Get the item key.
-     * 
+     *
      * @return string
      */
     public function key(): string
     {
         return $this->place->key();
     }
-    
+
     /**
      * Get the referenced GeoAnalysis Place
-     * 
+     *
      * @return GeoAnalysisPlace
      */
     public function place(): GeoAnalysisPlace
     {
         return $this->place;
     }
-    
+
     /**
      * Get the count of occurences of the GeoAnalysis Place in the analysis
-     * 
+     *
      * @return int
      */
     public function count(): int
     {
         return $this->count;
     }
-    
+
     /**
-     * Increment the count of occurrences of the GeoAnalysis Place in the analysis 
-     * 
+     * Increment the count of occurrences of the GeoAnalysis Place in the analysis
+     *
      * @return $this
      */
     public function increment(): self
@@ -74,7 +75,7 @@ class GeoAnalysisResultItem
         $this->count++;
         return $this;
     }
-    
+
     /**
      * Clone the item object
      */
@@ -83,4 +84,3 @@ class GeoAnalysisResultItem
         $this->place = clone $this->place;
     }
 }
-

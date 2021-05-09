@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -21,7 +22,7 @@ use Throwable;
 
 /**
  * GeoJson map defined by a single file on a file system
- * 
+ *
  * @author Jonathan
  */
 class SimpleFilesystemMap implements MapDefinitionInterface
@@ -30,10 +31,10 @@ class SimpleFilesystemMap implements MapDefinitionInterface
     private string $title;
     private string $path;
     private FilesystemReader $filesystem;
-    
+
     /**
      * Constructor for SimpleFilesystemMap
-     * 
+     *
      * @param string $id
      * @param string $title
      * @param FilesystemReader $filesystem
@@ -46,7 +47,7 @@ class SimpleFilesystemMap implements MapDefinitionInterface
         $this->filesystem = $filesystem;
         $this->path = $path;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapDefinitionInterface::id()
@@ -64,7 +65,7 @@ class SimpleFilesystemMap implements MapDefinitionInterface
     {
         return $this->title;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapDefinitionInterface::features()
@@ -74,13 +75,11 @@ class SimpleFilesystemMap implements MapDefinitionInterface
         $reader = new GeoJSONReader();
         try {
             $feature_collection = $reader->read($this->filesystem->read($this->path));
-            if($feature_collection instanceof FeatureCollection) {
+            if ($feature_collection instanceof FeatureCollection) {
                 return $feature_collection->getFeatures();
             }
+        } catch (Throwable $ex) {
         }
-        catch(Throwable $ex) { }
         return [];
     }
-    
-
 }

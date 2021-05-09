@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -20,24 +21,24 @@ interface MapViewConfigInterface
 {
     /**
      * Get the feature property to be used for mapping the map feature with the analysis results
-     * 
+     *
      * @return string
      */
-    function mapMappingProperty(): string;
+    public function mapMappingProperty(): string;
 
     /**
      * Get the config of the mapper associated with the map view
-     * 
+     *
      * @return PlaceMapperConfigInterface
      */
-    function mapperConfig(): PlaceMapperConfigInterface;
-    
+    public function mapperConfig(): PlaceMapperConfigInterface;
+
     /**
      * Get a MapViewConfigInterface object with the new properties
-     * 
+     *
      * @param string $mapping_property
      * @param PlaceMapperConfigInterface $mapper_config
      * @return static
      */
-    function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self;
+    public function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self;
 }
