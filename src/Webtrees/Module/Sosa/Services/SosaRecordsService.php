@@ -78,6 +78,19 @@ class SosaRecordsService
     }
 
     /**
+     * Check whether an individual is a Sosa ancestor.
+     *
+     * @param Tree $tree
+     * @param UserInterface $user
+     * @param Individual $indi
+     * @return bool
+     */
+    public function isSosa(Tree $tree, UserInterface $user, Individual $indi): bool
+    {
+        return $this->sosaNumbers($tree, $user, $indi)->count() > 0;
+    }
+
+    /**
      * Returns all Sosa numbers associated to an Individual
      *
      * @param Tree $tree

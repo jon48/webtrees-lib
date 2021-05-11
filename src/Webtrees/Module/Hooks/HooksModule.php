@@ -129,6 +129,7 @@ class HooksModule extends AbstractModule implements
     public function listSubscribedHooks(): array
     {
         return [
+            app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this])
         ];
     }
 }

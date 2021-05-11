@@ -1,38 +1,44 @@
 <?php
+
  /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
  * @package MyArtJaub\Webtrees
- * @subpackage Hook
+ * @subpackage Hooks
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2011-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2011-2021, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
-namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
+
+declare(strict_types=1);
+
+namespace MyArtJaub\Webtrees\Contracts\Hooks;
 
 use Fisharebest\Webtrees\GedcomRecord;
 
 /**
- * Interface for modules which intends to extend the display name of Gedcom Records
+ * Interface for hooks intending to extend the display name of Gedcom Records
  */
-interface RecordNameTextExtenderInterface {
+interface RecordNameTextExtenderInterface extends HookInterface
+{
 
-	/**
-	 * Insert some content before the record name text.
-	 * 
-	 * @param GedcomRecord $grec Gedcom record
-	 * @param string $size Prepend size
-	 */
-	public function hRecordNamePrepend(GedcomRecord $grec, $size);
-	
-	/**
-	 * Insert some content after the record name text.
-	 * 
-	 * @param GedcomRecord $grec Gedcom record
-	 * @param string $size Append size
-	 */
-	public function hRecordNameAppend(GedcomRecord $grec, $size);
-	
+    /**
+     * Insert some content before the record name text.
+     *
+     * @param GedcomRecord $record Gedcom record
+     * @param bool $use_long Use the long text extender format
+     * @param string $size Prepend size
+     * @return string
+     */
+    public function recordNamePrepend(GedcomRecord $record, bool $use_long = false, string $size = ''): string;
+
+    /**
+     * Insert some content after the record name text.
+     *
+     * @param GedcomRecord $record Gedcom record
+     * @param bool $use_long Use the long text extender format
+     * @param string $size Append size
+     * @return string
+     */
+    public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string;
 }
-
-?>

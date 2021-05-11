@@ -22,8 +22,10 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
 use Fisharebest\Webtrees\Module\ModuleSidebarTrait;
+use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
+use MyArtJaub\Webtrees\Module\IsSourced\Hooks\IsSourcedStatusHook;
 use MyArtJaub\Webtrees\Module\IsSourced\Services\SourceStatusService;
 
 /**
@@ -32,7 +34,8 @@ use MyArtJaub\Webtrees\Module\IsSourced\Services\SourceStatusService;
 class IsSourcedModule extends AbstractModule implements
     ModuleMyArtJaubInterface,
     ModuleGlobalInterface,
-    ModuleSidebarInterface
+    ModuleSidebarInterface,
+    ModuleHookSubscriberInterface
 {
     use ModuleMyArtJaubTrait;
     use ModuleGlobalTrait;
@@ -117,5 +120,16 @@ class IsSourcedModule extends AbstractModule implements
             'source_status_marriages'   =>  $spouse_families_status,
             'source_status_death'       =>  $source_status_service->sourceStatusForDeath($individual)
         ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
+     */
+    public function listSubscribedHooks(): array
+    {
+        return [
+            app()->makeWith(IsSourcedStatusHook::class, [ 'module' => $this ])
+        ];
     }
 }

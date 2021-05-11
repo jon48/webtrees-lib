@@ -33,9 +33,11 @@ use Fisharebest\Webtrees\Module\ModuleSidebarInterface;
 use Fisharebest\Webtrees\Module\ModuleSidebarTrait;
 use Fisharebest\Webtrees\Services\MigrationService;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\ModuleGeoAnalysisProviderInterface;
+use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\Sosa\GeoAnalyses\SosaByGenerationGeoAnalysis;
+use MyArtJaub\Webtrees\Module\Sosa\Hooks\SosaIconHook;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsList;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListFamily;
 use MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers\AncestorsListIndividual;
@@ -58,7 +60,8 @@ class SosaModule extends AbstractModule implements
     ModuleGlobalInterface,
     ModuleMenuInterface,
     ModuleSidebarInterface,
-    ModuleGeoAnalysisProviderInterface
+    ModuleGeoAnalysisProviderInterface,
+    ModuleHookSubscriberInterface
 {
     use ModuleMyArtJaubTrait {
         boot as traitBoot;
@@ -304,6 +307,17 @@ class SosaModule extends AbstractModule implements
     {
         return [
             SosaByGenerationGeoAnalysis::class
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
+     */
+    public function listSubscribedHooks(): array
+    {
+        return [
+            app()->makeWith(SosaIconHook::class, [ 'module' => $this ])
         ];
     }
 }
