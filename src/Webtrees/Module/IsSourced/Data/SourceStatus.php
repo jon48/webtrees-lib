@@ -143,6 +143,16 @@ class SourceStatus
     }
 
     /**
+     * Get an indicative value to order source statuses
+     *
+     * @return int
+     */
+    public function order(): int
+    {
+        return ($this->hasSource() ? 1 : 0)  * (1 + ($this->hasSupportingDocument() ? 1 : 0));
+    }
+
+    /**
      * Return an element combining properties of the current object with another SourceStatus.
      * Do not use the initial object anymore, it may not appropriately describe the status anymore.
      *

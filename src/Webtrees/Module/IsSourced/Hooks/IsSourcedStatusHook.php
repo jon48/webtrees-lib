@@ -21,7 +21,7 @@ use MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface;
 use MyArtJaub\Webtrees\Module\IsSourced\Services\SourceStatusService;
 
 /**
- * Hook for displaying the status status for a record next to its name.
+ * Hook for displaying the source status for a record next to its name.
  */
 class IsSourcedStatusHook implements RecordNameTextExtenderInterface
 {

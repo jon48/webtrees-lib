@@ -25,6 +25,7 @@ use Fisharebest\Webtrees\Module\ModuleSidebarTrait;
 use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
+use MyArtJaub\Webtrees\Module\IsSourced\Hooks\IsSourcedStatusColumnsHook;
 use MyArtJaub\Webtrees\Module\IsSourced\Hooks\IsSourcedStatusHook;
 use MyArtJaub\Webtrees\Module\IsSourced\Services\SourceStatusService;
 
@@ -129,7 +130,8 @@ class IsSourcedModule extends AbstractModule implements
     public function listSubscribedHooks(): array
     {
         return [
-            app()->makeWith(IsSourcedStatusHook::class, [ 'module' => $this ])
+            app()->makeWith(IsSourcedStatusHook::class, [ 'module' => $this ]),
+            app()->makeWith(IsSourcedStatusColumnsHook::class, [ 'module' => $this ])
         ];
     }
 }

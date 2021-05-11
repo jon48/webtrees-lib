@@ -223,6 +223,20 @@ class FactSourceStatus extends SourceStatus
 
     /**
      * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::order()
+     */
+    public function order(): int
+    {
+        return ($this->factHasDate() ? 1 : 0) * ($this->hasSource() ? 1 : -1) *
+            ( 1 + ($this->factHasPreciseDate() ? 1 : 0) * (1 +
+                0b010 * ($this->sourceMatchesFactDate() ? 1 : 0) +
+                0b100 * ($this->hasSupportingDocument() ? 1 : 0)
+            )
+        );
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::combineWith()
      */
     public function combineWith(SourceStatus $other)

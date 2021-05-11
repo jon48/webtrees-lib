@@ -26,7 +26,12 @@ use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\CustomSimpleTagEditorCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\FactSourceTextExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\FamilyDatatablesExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\IndividualDatatablesExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\RecordNameTextExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\SosaFamilyDatatablesExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\SosaIndividualDatatablesExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\SosaMissingDatatablesExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers\AdminConfigPage;
 use MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers\ModulesHooksAction;
 use MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers\ModulesHooksPage;
@@ -130,8 +135,13 @@ class HooksModule extends AbstractModule implements
     {
         return [
             app()->makeWith(CustomSimpleTagEditorCollector::class, ['module' => $this]),
+            app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this]),
+            app()->makeWith(FamilyDatatablesExtenderCollector::class, ['module' => $this]),
+            app()->makeWith(IndividualDatatablesExtenderCollector::class, ['module' => $this]),
             app()->makeWith(RecordNameTextExtenderCollector::class, ['module' => $this]),
-            app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this])
+            app()->makeWith(SosaFamilyDatatablesExtenderCollector::class, ['module' => $this]),
+            app()->makeWith(SosaIndividualDatatablesExtenderCollector::class, ['module' => $this]),
+            app()->makeWith(SosaMissingDatatablesExtenderCollector::class, ['module' => $this])
         ];
     }
 }

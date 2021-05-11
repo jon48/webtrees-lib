@@ -12,6 +12,7 @@
  */
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Collection;
 use MyArtJaub\Webtrees\Contracts\Hooks\HookServiceInterface;
 
 /**
@@ -36,4 +37,16 @@ function hook(string $hook_interface, callable $apply, $default = null)
     }
 
     return $default;
+}
+
+/**
+ * Get the updated column index after insertion of new columns.
+ *
+ * @param int $initial_index
+ * @param Collection<int> $new_column_indexes
+ * @return int
+ */
+function columnIndex(int $initial_index, Collection $new_column_indexes): int
+{
+    return $initial_index + $new_column_indexes->filter(fn(int $i) => $i <= $initial_index)->count();
 }
