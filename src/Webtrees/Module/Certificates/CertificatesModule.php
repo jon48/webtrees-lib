@@ -19,7 +19,6 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Middleware\AuthAdministrator;
 use Fisharebest\Webtrees\Http\Middleware\AuthManager;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -28,13 +27,16 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
+use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Http\Middleware\AuthTreePreference;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate;
+use MyArtJaub\Webtrees\Module\Certificates\Hooks\CertificateTagEditorHook;
+use MyArtJaub\Webtrees\Module\Certificates\Hooks\SourceCertificateIconHook;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminConfigAction;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminConfigPage;
-use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminTreesPage;
+use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AutoCompleteFile;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\CertificateImage;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\CertificatePage;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\CertificatesList;
@@ -46,7 +48,8 @@ class CertificatesModule extends AbstractModule implements
     ModuleMyArtJaubInterface,
     ModuleConfigInterface,
     ModuleGlobalInterface,
-    ModuleListInterface
+    ModuleListInterface,
+    ModuleHookSubscriberInterface
 {
     use ModuleMyArtJaubTrait {
         boot as traitBoot;
@@ -82,14 +85,14 @@ class CertificatesModule extends AbstractModule implements
     {
         $this->traitBoot();
         Registry::elementFactory()->register([
-            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate')),
-            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate')),
-            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate')),
-            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate')),
-            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate')),
-            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate')),
-            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate')),
-            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'))
+            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this)
         ]);
     }
 
@@ -113,6 +116,12 @@ class CertificatesModule extends AbstractModule implements
                             ],
                         ]);
                 });
+
+                $router->get(AutoCompleteFile::class, '/autocomplete/file/{tree}/{query}', AutoCompleteFile::class)
+                    ->extras([
+                        'middleware'            =>  [AuthTreePreference::class],
+                        'permission_preference' =>  'MAJ_CERTIF_SHOW_CERT'
+                    ]);
 
                 $router->get(CertificatesList::class, '/list/{tree}{/cityobf}', CertificatesList::class)
                     ->extras([
@@ -186,5 +195,17 @@ class CertificatesModule extends AbstractModule implements
     public function listIsEmpty(Tree $tree): bool
     {
         return Auth::accessLevel($tree) > (int) $tree->getPreference('MAJ_CERTIF_SHOW_CERT', (string) Auth::PRIV_HIDE);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
+     */
+    public function listSubscribedHooks(): array
+    {
+        return [
+            app()->makeWith(CertificateTagEditorHook::class, ['module' => $this]),
+            app()->makeWith(SourceCertificateIconHook::class, ['module' => $this])
+        ];
     }
 }

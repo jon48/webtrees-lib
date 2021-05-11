@@ -1,34 +1,41 @@
 <?php
+
  /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
  * @package MyArtJaub\Webtrees
- * @subpackage Hook
+ * @subpackage Hooks
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2011-2016, Jonathan Jaubart
+ * @copyright Copyright (c) 2011-2021, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
-namespace MyArtJaub\Webtrees\Hook\HookInterfaces;
+
+declare(strict_types=1);
+
+namespace MyArtJaub\Webtrees\Contracts\Hooks;
+
+use Fisharebest\Webtrees\Tree;
 
 /**
- * Interface for modules providing an extension feature for texts describing Facts sources.
+ * Interface for hooks intending to extend the title of source citations
  */
-interface FactSourceTextExtenderInterface {
+interface FactSourceTextExtenderInterface extends HookInterface
+{
+    /**
+     * Insert some content before the source citation title.
+     *
+     * @param Tree $tree
+     * @param string $source_record
+     * @return string
+     */
+    public function factSourcePrepend(Tree $tree, string $source_record, int $level): string;
 
-	/**
-	 * Insert some content before the fact source text.
-	 * 
-	 * @param string $srec Source fact record
-	 */
-	public function hFactSourcePrepend($srec);
-	
-	/**
-	 * Insert some content after the fact source text.
-	 * 
-	 * @param string $srec Source fact record
-	 */
-	public function hFactSourceAppend($srec);
-	
+    /**
+     * Insert some content after the source citation title.
+     *
+     * @param Tree $tree
+     * @param string $source_record
+     * @return string
+     */
+    public function factSourceAppend(Tree $tree, string $source_record, int $level): string;
 }
-
-?>

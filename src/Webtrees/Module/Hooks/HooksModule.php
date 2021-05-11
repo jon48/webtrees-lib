@@ -129,6 +129,8 @@ class HooksModule extends AbstractModule implements
     public function listSubscribedHooks(): array
     {
         return [
+            app()->makeWith(CustomSimpleTagEditorCollector::class, ['module' => $this]),
+            app()->makeWith(RecordNameTextExtenderCollector::class, ['module' => $this]),
             app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this])
         ];
     }

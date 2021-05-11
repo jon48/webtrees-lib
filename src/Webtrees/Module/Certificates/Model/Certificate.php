@@ -32,45 +32,15 @@ class Certificate
      */
     private const FILENAME_PATTERN = '/^(?<year>\d{1,4})(\.(?<month>\d{1,2}))?(\.(?<day>\d{1,2}))?( (?<type>[A-Z]{1,2}))?\s(?<descr>.*)/'; //phpcs:ignore Generic.Files.LineLength.TooLong
 
-    /**
-     * @var Tree $tree
-     */
-    private $tree;
-
-    /**
-     * @var string $path
-     * */
-    private $path;
-
-    /**
-     * @var string|null $city
-     * $city */
-    private $city;
-
-    /**
-     * @var string|null $filename
-     */
-    private $filename;
-
-    /**
-     * @var string|null $extension
-     */
-    private $extension;
-
-    /**
-     * @var string|null $type
-     */
-    private $type;
-
-    /**
-     * @var string|null $description
-     */
-    private $description;
-
-    /**
-     * @var Date|null $date
-     */
-    private $date;
+    private Tree $tree;
+    private string $path;
+    private ?string $city = null;
+    private ?string $basename = null;
+    private ?string $filename = null;
+    private ?string $extension = null;
+    private ?string $type = null;
+    private ?string $description = null;
+    private ?Date $date = null;
 
     /**
      * Contructor for Certificate
@@ -95,8 +65,9 @@ class Certificate
     {
         $path_parts = pathinfo($path);
         $this->city = $path_parts['dirname'];
+        $this->basename = $path_parts['basename'];
         $this->filename = $path_parts['filename'];
-        $this->extension = $path_parts['extension'] ?? '';
+        $this->extension = strtolower($path_parts['extension'] ?? '');
 
         if (preg_match(self::FILENAME_PATTERN, $this->filename, $match) === 1) {
             $this->type = $match['type'];
@@ -151,6 +122,16 @@ class Certificate
     public function name(): string
     {
         return $this->filename ?? '';
+    }
+
+    /**
+     * Get the certificate file name.
+     *
+     * @return string
+     */
+    public function filename(): string
+    {
+        return $this->basename ?? '';
     }
 
     /**
