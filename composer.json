@@ -59,7 +59,10 @@
 		"psr-4" : {
 			"MyArtJaub\\" : "src/",
 			"MyArtJaub\\Tests\\Unit\\" : "tests/unit"
-		}
+		},
+        "files" : [
+            "src/Webtrees/Helpers/functions.php"
+        ]
 	},
     "autoload-dev": {
         "files" : [
