@@ -4,7 +4,7 @@ includes:
 parameters:
    level: max
    paths:
-      - src
+      - app
       - tests
    ignoreErrors:
       - '#^Call to an undefined method Aura\\Router\\Map::extras\(\)\.$#'

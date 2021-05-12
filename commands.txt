@@ -14,17 +14,17 @@ phpcbf --exclude=Generic.Files.LineEndings
 
 [...]\php7-nts-current\php.exe [...]\php-bin\phpDocumentor.phar
 
-phpmetrics --report-html=docs/metrics --git ./src
+phpmetrics --report-html=docs/metrics --git ./app
 
 REM Not sure how supported this is as of 2021
-pdepend --summary-xml=docs\pdepend\summary.xml --jdepend-chart=docs\pdepend\jdepend.svg --overview-pyramid=docs\pdepend\pyramid.svg ./src
+pdepend --summary-xml=docs\pdepend\summary.xml --jdepend-chart=docs\pdepend\jdepend.svg --overview-pyramid=docs\pdepend\pyramid.svg ./app
 
-phpcpd src
+phpcpd app
 
-phpmd src xml cleancode,codesize,design,naming,unusedcode --reportfile ./docs/phpmd/report.xml
+phpmd app xml cleancode,codesize,design,naming,unusedcode --reportfile ./docs/phpmd/report.xml
 
-phpmd src html cleancode --reportfile ./docs/phpmd/report-cleancode.html
-phpmd src html codesize --reportfile ./docs/phpmd/report-codesize.html
-phpmd src html design --reportfile ./docs/phpmd/report-design.html
-phpmd src html naming --reportfile ./docs/phpmd/report-naming.html
-phpmd src html unusedcode --reportfile ./docs/phpmd/report-unusedcode.html
+phpmd app html cleancode --reportfile ./docs/phpmd/report-cleancode.html
+phpmd app html codesize --reportfile ./docs/phpmd/report-codesize.html
+phpmd app html design --reportfile ./docs/phpmd/report-design.html
+phpmd app html naming --reportfile ./docs/phpmd/report-naming.html
+phpmd app html unusedcode --reportfile ./docs/phpmd/report-unusedcode.html

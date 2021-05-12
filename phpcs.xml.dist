@@ -2,7 +2,7 @@
 <ruleset name="MyArtJaub-webtrees-lib" namespace="MyArtJaub\Webtrees\CS\Standard">
     <description>MyArtJaub coding standard for webtrees-lib</description>
 
-    <file>src</file>
+    <file>app</file>
     <file>tests</file>
 
     <arg name="extensions" value="php"/>

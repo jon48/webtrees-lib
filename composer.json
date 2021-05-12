@@ -56,11 +56,11 @@
     },
 	"autoload" : {
 		"psr-4" : {
-			"MyArtJaub\\" : "src/",
-			"MyArtJaub\\Tests\\Unit\\" : "tests/unit"
+			"MyArtJaub\\Webtrees\\" : "app/",
+			"MyArtJaub\\Tests\\Unit\\Webtrees\\" : "tests/unit"
 		},
         "files" : [
-            "src/Webtrees/Helpers/functions.php"
+            "app/Helpers/functions.php"
         ]
 	},
     "autoload-dev": {

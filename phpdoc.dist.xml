@@ -13,7 +13,7 @@
         <folder>latest</folder>
         <api>
             <source dsn=".">
-                <path>src</path>
+                <path>app</path>
             </source>
             <default-package-name>MyArtJaub\Webtrees</default-package-name>
             <visibility>public</visibility>

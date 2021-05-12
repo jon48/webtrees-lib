@@ -18,7 +18,7 @@ engines:
       rulesets: "cleancode,codesize,design,naming,unusedcode"
 ratings:
   paths:
-  - "src/**"
+  - "app/**"
   - "**.php"
 exclude_paths:
   tests
