@@ -28,6 +28,7 @@ use MyArtJaub\Webtrees\Module\Hooks\Hooks\CustomSimpleTagEditorCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\FactSourceTextExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\FamilyDatatablesExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\IndividualDatatablesExtenderCollector;
+use MyArtJaub\Webtrees\Module\Hooks\Hooks\NameAccordionExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\RecordNameTextExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\SosaFamilyDatatablesExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\SosaIndividualDatatablesExtenderCollector;
@@ -138,6 +139,7 @@ class HooksModule extends AbstractModule implements
             app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this]),
             app()->makeWith(FamilyDatatablesExtenderCollector::class, ['module' => $this]),
             app()->makeWith(IndividualDatatablesExtenderCollector::class, ['module' => $this]),
+            app()->makeWith(NameAccordionExtenderCollector::class, ['module' => $this]),
             app()->makeWith(RecordNameTextExtenderCollector::class, ['module' => $this]),
             app()->makeWith(SosaFamilyDatatablesExtenderCollector::class, ['module' => $this]),
             app()->makeWith(SosaIndividualDatatablesExtenderCollector::class, ['module' => $this]),

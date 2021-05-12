@@ -13,6 +13,7 @@ parameters:
       - src/Webtrees/Module/GeoDispersion
       - src/Webtrees/Module/Hooks
       - src/Webtrees/Module/IsSourced
+      - src/Webtrees/Module/MiscExtensions
       - src/Webtrees/Module/PatronymicLineage
       - src/Webtrees/Module/Sosa
       - src/Webtrees/Module/WelcomeBlock
