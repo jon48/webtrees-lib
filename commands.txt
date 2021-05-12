@@ -4,24 +4,27 @@ composer install
 composer install --prefer-source
 composer update
 
-.\vendor\bin\phpunit --coverage-html ./docs/coverage_report/html/
+phpstan
+psalm
 
-phpunit-skelgen generate-test --bootstrap="phpunit.php" MyArtJaub\Webtrees\GedcomRecord src\Webtrees\GedcomRecord.php MyArtJaub\Tests\Webtrees\GedcomRecordTest tests\Webtrees\GedcomRecordTest.php
+phpcs -s --exclude=Generic.Files.LineEndings
+phpcbf --exclude=Generic.Files.LineEndings
 
-phpdoc -d ./src/ -t ./docs/phpdoc/
+.\vendor\bin\phpunit --coverage-html ./tests/coverage/ --coverage-clover ./tests/coverage.xml
 
-pdepend --summary-xml=docs\pdepend\summary.xml --jdepend-chart=docs\pdepend\jdepend.svg --overview-pyramid=docs\pdepend\pyramid.svg --exclude=Views$ ./src
+[...]\php7-nts-current\php.exe [...]\php-bin\phpDocumentor.phar
 
-pdepend-process --dashboard-html ./docs/pdepend/dashboard/ ./docs/pdepend/summary.xml
+phpmetrics --report-html=docs/metrics --git ./src
 
-phpcpd .\src
+REM Not sure how supported this is as of 2021
+pdepend --summary-xml=docs\pdepend\summary.xml --jdepend-chart=docs\pdepend\jdepend.svg --overview-pyramid=docs\pdepend\pyramid.svg ./src
 
-phpmd ./src xml cleancode,codesize,design,naming,unusedcode --reportfile ./docs/phpmd/report.xml
+phpcpd src
 
-phpmd ./src html cleancode --reportfile ./docs/phpmd/report-cleancode.html
-phpmd ./src html codesize --reportfile ./docs/phpmd/report-codesize.html
-phpmd ./src html design --reportfile ./docs/phpmd/report-design.html
-phpmd ./src html naming --reportfile ./docs/phpmd/report-naming.html
-phpmd ./src html unusedcode --reportfile ./docs/phpmd/report-unusedcode.html
+phpmd src xml cleancode,codesize,design,naming,unusedcode --reportfile ./docs/phpmd/report.xml
 
-phpcs ./src --standard=PSR2 --report-file=./docs/code_sniffer/report.txt
+phpmd src html cleancode --reportfile ./docs/phpmd/report-cleancode.html
+phpmd src html codesize --reportfile ./docs/phpmd/report-codesize.html
+phpmd src html design --reportfile ./docs/phpmd/report-design.html
+phpmd src html naming --reportfile ./docs/phpmd/report-naming.html
+phpmd src html unusedcode --reportfile ./docs/phpmd/report-unusedcode.html

@@ -2,20 +2,7 @@
 <ruleset name="MyArtJaub-webtrees-lib" namespace="MyArtJaub\Webtrees\CS\Standard">
     <description>MyArtJaub coding standard for webtrees-lib</description>
 
-    <!-- <file>src</file> -->
-    <file>src/Webtrees/Common</file>
-    <file>src/Webtrees/Contracts</file>
-    <file>src/Webtrees/Helpers</file>
-    <file>src/Webtrees/Http</file>
-    <file>src/Webtrees/Module/AdminTasks</file>
-    <file>src/Webtrees/Module/Certificates</file>
-    <file>src/Webtrees/Module/GeoDispersion</file>
-    <file>src/Webtrees/Module/Hooks</file>
-    <file>src/Webtrees/Module/IsSourced</file>
-    <file>src/Webtrees/Module/MiscExtensions</file>
-    <file>src/Webtrees/Module/PatronymicLineage</file>
-    <file>src/Webtrees/Module/Sosa</file>
-    <file>src/Webtrees/Module/WelcomeBlock</file>
+    <file>src</file>
     <file>tests</file>
 
     <arg name="extensions" value="php"/>

@@ -18,8 +18,8 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
-use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
+use MyArtJaub\Webtrees\Module\AdminTasks\Services\TokenService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -32,15 +32,17 @@ class AdminConfigPage implements RequestHandlerInterface
     use ViewResponseTrait;
 
     private ?AdminTasksModule $module;
+    private TokenService $token_service;
 
     /**
      * Constructor for Admin Config request handler
      *
      * @param ModuleService $module_service
      */
-    public function __construct(ModuleService $module_service)
+    public function __construct(ModuleService $module_service, TokenService $token_service)
     {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
+        $this->token_service = $token_service;
     }
 
     /**
@@ -57,7 +59,7 @@ class AdminConfigPage implements RequestHandlerInterface
 
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         if ($token === '') {
-            $token = Functions::generateRandomToken();
+            $token = $this->token_service->generateRandomToken();
             $this->module->setPreference('PAT_FORCE_EXEC_TOKEN', $token);
         }
 

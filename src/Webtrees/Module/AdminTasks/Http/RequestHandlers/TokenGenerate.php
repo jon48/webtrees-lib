@@ -17,9 +17,10 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Functions\Functions;
 use Fisharebest\Webtrees\Services\ModuleService;
-use MyArtJaub\Webtrees\Functions\Functions;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
+use MyArtJaub\Webtrees\Module\AdminTasks\Services\TokenService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -30,15 +31,17 @@ use Psr\Http\Server\RequestHandlerInterface;
 class TokenGenerate implements RequestHandlerInterface
 {
     private ?AdminTasksModule $module;
+    private TokenService $token_service;
 
     /**
      * Constructor for TokenGenerate request handler
      *
      * @param ModuleService $module_service
      */
-    public function __construct(ModuleService $module_service)
+    public function __construct(ModuleService $module_service, TokenService $token_service)
     {
         $this->module = $module_service->findByInterface(AdminTasksModule::class)->first();
+        $this->token_service = $token_service;
     }
 
     /**
@@ -51,7 +54,7 @@ class TokenGenerate implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $token = Functions::generateRandomToken();
+        $token = $this->token_service->generateRandomToken();
         $this->module->setPreference('MAJ_AT_FORCE_EXEC_TOKEN', $token);
         Log::addConfigurationLog($this->module->title() . ' : New token generated.');
 

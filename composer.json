@@ -26,7 +26,6 @@
 		"process-timeout" : 3600
 	},
 	"require" : {
-		"ext-xml": "*",
 		"aura/router": "~3.1",
 		"brick/geo": "^0.6.0",
 		"brick/math": "~0.9",

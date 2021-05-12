@@ -1,4 +1,5 @@
 <?php
+
 /**
  * webtrees-lib: MyArtJaub library for webtrees
  *
@@ -7,6 +8,7 @@
  * @copyright Copyright (c) 2020, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
+
 declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module;
@@ -23,19 +25,19 @@ use Fisharebest\Webtrees\Module\ModuleThemeInterface;
  * MyArtJaub Module
  */
 trait ModuleMyArtJaubTrait
-{    
+{
     use ModuleCustomTrait;
-    
+
     /**
      * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
      */
-    public function boot() : void
+    public function boot(): void
     {
         View::registerNamespace($this->name(), $this->resourcesFolder() . 'views/');
-        
+
         $this->loadRoutes(app(RouterContainer::class)->getMap());
     }
-    
+
     /**
      * @see \Fisharebest\Webtrees\Module\AbstractModule::resourcesFolder()
      */
@@ -43,61 +45,61 @@ trait ModuleMyArtJaubTrait
     {
         return Webtrees::MODULES_DIR . trim($this->name(), '_') . '/resources/';
     }
-    
+
     /**
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleAuthorName()
      */
-    public function customModuleAuthorName() : string
+    public function customModuleAuthorName(): string
     {
         return 'Jonathan Jaubart';
     }
-    
+
     /**
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleSupportUrl()
      */
-    public function customModuleSupportUrl() : string
+    public function customModuleSupportUrl(): string
     {
         return 'https://github.com/jon48/webtrees-lib';
     }
-    
+
     /**
      * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customTranslations()
-     * 
+     *
      * @return array<string, string>
      */
-    public function customTranslations(string $language) : array
+    public function customTranslations(string $language): array
     {
         $translation_file = $this->resourcesFolder() . 'lang/' . $language . '/messages.php';
-        
+
         try {
             $translation  = new Translation($translation_file);
             return $translation->asArray();
-        } catch (\Exception $e) { }
-        
+        } catch (\Exception $e) {
+        }
+
         return [];
     }
-    
+
     /**
      * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes
      */
-    public function loadRoutes(Map $router): void { }
-    
+    public function loadRoutes(Map $router): void
+    {
+    }
+
     /**
      * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::moduleCssUrl
      */
-    public function moduleCssUrl() : string
+    public function moduleCssUrl(): string
     {
         /** @var ModuleThemeInterface $theme */
         $theme = app(ModuleThemeInterface::class);
         $css_file = $this->resourcesFolder() . 'css/' . $theme->name() . '.min.css';
-        
-        if(file_exists($css_file)) {
+
+        if (file_exists($css_file)) {
             return $this->assetUrl('css/' . $theme->name() . '.min.css');
-        }
-        else {
+        } else {
             return $this->assetUrl('css/default.min.css');
         }
     }
-    
 }
- 

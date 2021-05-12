@@ -1,5 +1,6 @@
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-lib/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jon48/webtrees-lib/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-lib/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/jon48/webtrees-lib/?branch=main)
 [![Code Climate](https://codeclimate.com/github/jon48/webtrees-lib/badges/gpa.svg)](https://codeclimate.com/github/jon48/webtrees-lib)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 # webtrees-lib
 Library to extend webtrees core capabilities
@@ -17,20 +18,22 @@ Library to extend webtrees core capabilities
 ### License
 
 * **webtrees-lib: MyArtJaub library for webtrees**
-* Copyright (C) 2009 to 2020 Jonathan Jaubart.
-* Derived from **webtrees** - Copyright (C) 2010 to 2016  webtrees development team.
+* Copyright (C) 2009 to 2021 Jonathan Jaubart.
+* Derived from **webtrees** - Copyright (C) 2010 to 2021  webtrees development team.
 * Derived from PhpGedView - Copyright (C) 2002 to 2010  PGV Development Team.
 
-This program is free software; you can redistribute it and/or modify it under the
-terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-This program is distributed in the hope that it will be useful, but WITHOUT ANY
-WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-See the GPL.txt included with this software for more detailed licensing
-information.
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 ### Introduction
@@ -48,32 +51,34 @@ to split the library part of my code from the main **webtrees-geneajaubart** pac
 as well as renaming the modules from the too generic Perso prefix, to a more *branded*
 name: MyArtJaub (a rather bad pun on my surname...). 
 
+The major upgrade of **webtrees** from version 1 to version 2 at the end of 2019 meant
+that most of the code base was not compatible any longer, and required a nearly 
+complete restructuring and rewrite of the library. It has provided the opportunity to
+refactor some features for better maintainability or flexibility, and the updated 
+library can be used with **webtrees** 2.1.0 onwards.
+
 My personal and professional constraints have not allowed me to provide the same level
 of support as I used to, nevertheless I have always wished to share my changes 
 with the general **webtrees** audience. I was maintaining an SVN repository on Assembla,
 but since the migration of **webtrees** to Github, I have as well created the current
 Git repositories.
 
-Please read carefully the instructions below, as some modules need changes in the core
-code, hence cannot be just added to a standard **webtrees** installation.
+Please read carefully the instructions below, as some modules may require changes in the
+core code to enable all their features, hence cannot be just added to a standard
+**webtrees** installation.
 
 *Jonathan Jaubart*
 
 ### List of MyArtJaub modules
-
-Mandatory modules:
-
-* **MyArtJaub Hooks** (`myartjaub_hooks`)
-  * Allows hooking MyArtJaub modules in core code more easily.
-
-Available modules:
 
 * **MyArtJaub Administrative Tasks** (`myartjaub_admintasks`)
   * Runs administrative tasks on a scheduled manner.
 * **MyArtJaub Certificates** (`myartjaub_certificates`)
   * Alternative management of certificates supporting sources.
 * **MyArtJaub Geographical Dispersion** (`myartjaub_geodispersion`)
-  * Provide geographical dispersion analysis on Sosa ancestors.  
+  * Provide geographical dispersion analysis on Sosa ancestors. 
+* **MyArtJaub Hooks** (`myartjaub_hooks`)
+  * Allows hooking MyArtJaub modules in core code more easily.
 * **MyArtJaub Miscellaneous Extensions** (`myartjaub_misc`)
   * Placeholder module for miscellaneous extensions.
 * **MyArtJaub Patronymic Lineage** (`myartjaub_patronymiclineage`)
@@ -84,16 +89,18 @@ Available modules:
   * Provides information about the level and quality of sourced for records.
 * **MyArtJaub Welcome Block** (`myartjaub_welcome_block`)
   * Merge of standard welcome and login blocks, with display of Piwik statistics
-  
+
 ### General notes
 
 Please note that the modules are not translated directly in this library. Translations 
-would be managed through the related module structure in the  **webtrees-geneajaubart**.
+would be managed through the related module structure in the **webtrees-geneajaubart**
+project.
 
 ### System requirements
 
-It is required to run PHP 5.4 to be able to run the **webtrees-lib** library.
-Except the above, **webtrees-lib** shares the same requirements and system configuration as a standard **webtrees** installation.
+It is required to run PHP 7.4 to be able to run the **webtrees-lib** library.
+Except the above, **webtrees-lib** shares the same requirements and system configuration
+as a standard **webtrees** installation.
 
 ### Installation / Upgrading
 
@@ -131,6 +138,13 @@ In order to update the package, run the command:
 ```
 composer update
 ```
+
+### Issues / Security
+
+Issues should be raised in the [GitHub repository](https://github.com/jon48/webtrees-lib/issues)
+for **jon48/webtrees-lib**.
+
+A [security policy document](SECURITY.md) has been issued for this repository.
 
 ### Contacts
 
