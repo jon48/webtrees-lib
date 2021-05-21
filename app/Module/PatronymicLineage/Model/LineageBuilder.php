@@ -28,26 +28,14 @@ use Illuminate\Support\Collection;
  */
 class LineageBuilder
 {
+    private string $surname;
+    private Tree $tree;
+    private ?IndividualListModule $indilist_module;
 
     /**
-     * @var string $surname Reference surname
+     * @var Collection<string, bool> $used_indis Individuals already processed
      */
-    private $surname;
-
-    /**
-     * @var Tree $tree Reference tree
-     */
-    private $tree;
-
-    /**
-     * @var IndividualListModule|null $indilist_module
-     */
-    private $indilist_module;
-
-    /**
-     * @var Collection $used_indis Individuals already processed
-     */
-    private $used_indis;
+    private Collection $used_indis;
 
     /**
      * Constructor for Lineage Builder

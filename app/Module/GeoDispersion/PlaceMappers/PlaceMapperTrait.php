@@ -25,6 +25,8 @@ use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface;
 trait PlaceMapperTrait
 {
     private ?PlaceMapperConfigInterface $config = null;
+
+    /** @var array<string, mixed> $data */
     private array $data = [];
 
     /**

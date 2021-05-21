@@ -43,11 +43,12 @@ class PlaceMapperService
      * {@internal The list is generated based on the modules exposing ModulePlaceMapperProviderInterface}
      *
      * @param bool $include_disabled
-     * @return Collection
+     * @return Collection<PlaceMapperInterface>
      */
     public function all(bool $include_disabled = false): Collection
     {
-        return $this->module_service
+        /** @var Collection<PlaceMapperInterface> $place_mappers */
+        $place_mappers =  $this->module_service
             ->findByInterface(ModulePlaceMapperProviderInterface::class, $include_disabled)
             ->flatMap(fn(ModulePlaceMapperProviderInterface $module) => $module->listPlaceMappers())
             ->map(static function (string $mapper_class): ?PlaceMapperInterface {
@@ -58,6 +59,7 @@ class PlaceMapperService
                     return null;
                 }
             })->filter();
-        ;
+
+        return $place_mappers;
     }
 }

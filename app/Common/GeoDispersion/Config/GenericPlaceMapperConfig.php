@@ -25,12 +25,13 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
 {
+    /** @var array<string, mixed> $config */
     private array $config = [];
 
     /**
      * Get the generic mapper's config
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function config(): array
     {
@@ -40,7 +41,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     /**
      * Set the generic mapper's config
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      * @return $this
      */
     public function setConfig(array $config): self

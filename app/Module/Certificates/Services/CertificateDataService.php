@@ -159,7 +159,8 @@ class CertificateDataService
      * Yield lists of gedcom records linked to a certificate.
      *
      * @param Certificate $certificate
-     * @return Generator
+     * @return Generator<int, Collection<GedcomRecord>, mixed, void>
+     * @psalm-suppress InvalidReturnType
      */
     protected function linkedRecordsLists(Certificate $certificate): Generator
     {

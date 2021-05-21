@@ -13,6 +13,7 @@ Library to extend webtrees core capabilities
 * [General notes](#general-notes)
 * [System requirements](#system-requirements)
 * [Installation / Upgrading](#installation--upgrading)
+* [Issues / Security](#issues--security)
 * [Contacts](#contacts)
 
 ### License

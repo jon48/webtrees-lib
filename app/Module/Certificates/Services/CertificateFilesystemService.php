@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Certificates\Services;
 
 use Fisharebest\Flysystem\Adapter\ChrootAdapter;
+use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Support\Collection;
@@ -34,7 +35,7 @@ class CertificateFilesystemService
     /**
      * @var array<int,FilesystemOperator> $filesystem
      */
-    private $filesystem = [];
+    private array $filesystem = [];
 
     /**
      * Get the filesystem containing certificates for a tree.
@@ -88,13 +89,13 @@ class CertificateFilesystemService
      */
     public function cities(Tree $tree): array
     {
-        return $this->filesystem($tree)
+        $cities =  $this->filesystem($tree)
             ->listContents('')
-            ->filter(function (StorageAttributes $attributes): bool {
-                return $attributes->isDir();
-            })->map(function (StorageAttributes $attributes): string {
-                return $attributes->path();
-            })->toArray();
+            ->filter(fn (StorageAttributes $attributes): bool => $attributes->isDir())
+            ->map(fn (StorageAttributes $attributes): string => $attributes->path())
+            ->toArray();
+        usort($cities, I18N::comparator());
+        return $cities;
     }
 
     /**
@@ -107,17 +108,13 @@ class CertificateFilesystemService
     public function certificatesForCity(Tree $tree, string $city): Collection
     {
         $filesystem = $this->filesystem($tree);
-        $certificate_paths = collect($filesystem
-            ->listContents($city)
-            ->filter(function (StorageAttributes $attributes) use ($filesystem): bool {
-                return $attributes->isFile() && $this->isFileSupported($filesystem, $attributes->path());
-            })->map(function (StorageAttributes $attributes): string {
-                return $attributes->path();
-            })->toArray());
-
-        return $certificate_paths->map(function (string $path) use ($tree): Certificate {
-            return new Certificate($tree, $path);
-        });
+        $certificates_paths = $filesystem->listContents($city)
+            ->filter(fn (StorageAttributes $attributes): bool  =>
+                $attributes->isFile() && $this->isFileSupported($filesystem, $attributes->path()))
+            ->map(fn (StorageAttributes $attributes): string => $attributes->path())
+            ->toArray();
+        usort($certificates_paths, I18N::comparator());
+        return collect($certificates_paths)->map(fn (string $path): Certificate => new Certificate($tree, $path));
     }
 
     /**
@@ -131,18 +128,14 @@ class CertificateFilesystemService
     public function certificatesForCityContaining(Tree $tree, string $city, string $contains): Collection
     {
         $filesystem = $this->filesystem($tree);
-        $certificate_paths = collect($filesystem
-            ->listContents($city)
-            ->filter(function (StorageAttributes $attributes) use ($filesystem, $contains): bool {
-                return $attributes->isFile() && $this->isFileSupported($filesystem, $attributes->path())
-                    && mb_stripos($attributes->path(), $contains) !== false;
-            })->map(function (StorageAttributes $attributes): string {
-                return $attributes->path();
-            })->toArray());
-
-        return $certificate_paths->map(function (string $path) use ($tree): Certificate {
-            return new Certificate($tree, $path);
-        });
+        $certificates_paths = $filesystem->listContents($city)
+            ->filter(fn (StorageAttributes $attributes): bool  =>
+                $attributes->isFile() && $this->isFileSupported($filesystem, $attributes->path())
+                && mb_stripos($attributes->path(), $contains) !== false)
+            ->map(fn (StorageAttributes $attributes): string => $attributes->path())
+            ->toArray();
+        usort($certificates_paths, I18N::comparator());
+        return collect($certificates_paths)->map(fn (string $path): Certificate => new Certificate($tree, $path));
     }
 
     /**
@@ -158,9 +151,7 @@ class CertificateFilesystemService
             $mime = $filesystem->mimeType($path);
             return Registry::cache()->array()->remember(
                 'maj-certif-supportedfiles-' . $mime,
-                function () use ($mime): bool {
-                    return app(CertificateImageFactory::class)->isMimeTypeSupported($mime);
-                }
+                fn (): bool => app(CertificateImageFactory::class)->isMimeTypeSupported($mime)
             );
         } catch (UnableToRetrieveMetadata | FilesystemException $ex) {
         }

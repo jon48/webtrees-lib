@@ -87,7 +87,7 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
         $features = $features_index['grid'][$grid_box[0]][$grid_box[1]];
         foreach ($features as $feature) {
             $geometry = $feature->getGeometry();
-            if ($place_point->SRID() === $geometry->SRID() && $geometry->contains($place_point)) {
+            if ($geometry !== null && $place_point->SRID() === $geometry->SRID() && $geometry->contains($place_point)) {
                 return $feature->getProperty($feature_property);
             }
         }
@@ -101,7 +101,7 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
      * @param Point $grid_NE North-East point of the bounded grid
      * @param Point $grid_SW South-West point fo the bounded grid
      * @param int $grid_columns Number of columns/rows in the grid
-     * @return array|NULL
+     * @return int[]|NULL
      */
     protected function getGridCell(Point $point, Point $grid_NE, Point $grid_SW, int $grid_columns): ?array
     {
@@ -127,7 +127,8 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
      * {@internal The map is divided in a grid, eacg cell containing the features which bounding box overlaps that cell.
      * The grid is computed once for each map, and cached.}
      *
-     * @return array|NULL
+     * @phpcs:ignore Generic.Files.LineLength.TooLong
+     * @return array{grid: array<int, array<int, \Brick\Geo\IO\GeoJSON\Feature[]>>, nb_columns: int, map_NE: \Brick\Geo\Point, map_SW: \Brick\Geo\Point, SRID: int}|NULL
      */
     protected function featuresIndex(): ?array
     {

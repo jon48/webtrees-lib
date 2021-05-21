@@ -24,7 +24,7 @@ interface ModuleMyArtJaubInterface extends ModuleCustomInterface
     /**
      * Add module routes to webtrees route loader
      *
-     * @param Map $router
+     * @param Map<\Aura\Router\Route> $router
      */
     public function loadRoutes(Map $router): void;
 

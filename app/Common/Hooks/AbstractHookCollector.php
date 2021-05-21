@@ -28,7 +28,9 @@ use ReflectionClass;
  */
 abstract class AbstractHookCollector implements HookCollectorInterface, HookInterface
 {
+    /** @var Collection<THook> $hooks */
     protected Collection $hooks;
+
     private ModuleInterface $module;
 
     /**

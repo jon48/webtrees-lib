@@ -82,6 +82,8 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
+     *
+     * @param mixed[] $config
      */
     public function getBlock(Tree $tree, int $block_id, string $context, array $config = []): string
     {

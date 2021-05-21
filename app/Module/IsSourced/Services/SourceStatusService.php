@@ -102,7 +102,7 @@ class SourceStatusService
      * Return the status of source citations for a list of fact types associated with a record.
      *
      * @param GedcomRecord $record
-     * @param array $tags
+     * @param string[] $tags
      * @return FactSourceStatus
      */
     public function sourceStatusForFactsWithTags(GedcomRecord $record, array $tags): FactSourceStatus

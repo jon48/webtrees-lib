@@ -83,9 +83,10 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
         }
 
+        /** @var \Illuminate\Support\Collection<int> $valid_map_adapters */
         $valid_map_adapters = $this->mapadapter_data_service
             ->allForView($view)
-            ->map(fn(GeoAnalysisMapAdapter $map_adapter) => $map_adapter->id());
+            ->map(fn(GeoAnalysisMapAdapter $map_adapter): int => $map_adapter->id());
 
         try {
             $this->mapadapter_data_service->deleteInvalid($view, $valid_map_adapters);

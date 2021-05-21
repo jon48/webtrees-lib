@@ -43,11 +43,12 @@ class GeoAnalysisService
      * {@internal The list is generated based on the modules exposing ModuleGeoAnalysisProviderInterface
      *
      * @param bool $include_disabled
-     * @return Collection
+     * @return Collection<GeoAnalysisInterface>
      */
     public function all(bool $include_disabled = false): Collection
     {
-        return $this->module_service
+        /** @var Collection<GeoAnalysisInterface> $geoanalyses */
+        $geoanalyses = $this->module_service
             ->findByInterface(ModuleGeoAnalysisProviderInterface::class, $include_disabled)
             ->flatMap(fn(ModuleGeoAnalysisProviderInterface $module) => $module->listGeoAnalyses())
             ->map(static function (string $analysis_class): ?GeoAnalysisInterface {
@@ -58,5 +59,7 @@ class GeoAnalysisService
                     return null;
                 }
             })->filter();
+
+        return $geoanalyses;
     }
 }

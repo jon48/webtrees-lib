@@ -155,7 +155,7 @@ abstract class AbstractGeoAnalysisView
      *
      * @param ModuleInterface $module
      * @param GeoAnalysisResult $result
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     abstract public function globalTabContent(
@@ -168,8 +168,8 @@ abstract class AbstractGeoAnalysisView
      * Returns the content of the view detailed tab
      *
      * @param ModuleInterface $module
-     * @param Collection $results
-     * @param array $params
+     * @param Collection<string, GeoAnalysisResult> $results
+     * @param array<string, mixed> $params
      * @return string
      */
     public function detailedTabContent(ModuleInterface $module, Collection $results, array $params): string

@@ -24,54 +24,14 @@ use Fisharebest\Webtrees\Carbon;
  */
 class TaskSchedule
 {
-
-    /**
-     * Task Schedule ID
-     * @var int $id
-     */
-    private $id;
-
-    /**
-     * Task schedule status
-     * @var bool $enabled
-     */
-    private $enabled;
-
-    /**
-     * ID of the task attached to schedule
-     * @var string $task_id
-     */
-    private $task_id;
-
-    /**
-     * Last updated date
-     * @var Carbon $last_run
-     */
-    private $last_run;
-
-    /**
-     * Last run result
-     * @var bool $last_result
-     */
-    private $last_result;
-
-    /**
-     * Task run frequency
-     * @var CarbonInterval $frequency
-     */
-    private $frequency;
-
-    /**
-     * Task remaining runs
-     * @var int $nb_occurrences
-     */
-    private $nb_occurrences;
-
-    /**
-     * Current running status of the task
-     * @var bool $is_running
-     */
-    private $is_running;
+    private int $id;
+    private bool $enabled;
+    private string $task_id;
+    private Carbon $last_run;
+    private bool $last_result;
+    private CarbonInterval $frequency;
+    private int $nb_occurrences;
+    private bool $is_running;
 
     /**
      * Constructor for TaskSchedule
@@ -296,7 +256,8 @@ class TaskSchedule
     /**
      * Returns the schedule details as an associate array
      *
-     * @return array
+     * @phpcs:ignore Generic.Files.LineLength.TooLong
+     * @return array{id: int, task_id: string, enabled: bool, last_run: Carbon, last_result: bool, frequency: CarbonInterval, nb_occurrences: int, is_running: bool}
      */
     public function toArray(): array
     {

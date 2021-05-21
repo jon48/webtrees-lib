@@ -58,7 +58,7 @@ class GeoAnalysisDataService
      * {@internal The places are taken only from the individuals and families records.}
      *
      * @param Tree $tree
-     * @return array
+     * @return array<int, string[]>
      */
     public function placeHierarchyExample(Tree $tree): array
     {

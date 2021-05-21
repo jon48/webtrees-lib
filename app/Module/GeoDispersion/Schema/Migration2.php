@@ -198,7 +198,7 @@ class Migration2 implements MigrationInterface
      * Get all new map definitions IDs representing an old map definition
      *
      * @param string $map_xml
-     * @return array
+     * @return string[]
      */
     private function mapIdsFromOld(string $map_xml): array
     {

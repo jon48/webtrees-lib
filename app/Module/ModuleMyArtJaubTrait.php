@@ -82,6 +82,8 @@ trait ModuleMyArtJaubTrait
 
     /**
      * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes
+     *
+     * @param Map<\Aura\Router\Route> $router
      */
     public function loadRoutes(Map $router): void
     {

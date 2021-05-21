@@ -181,7 +181,7 @@ class GeoAnalysisMapAdapter
      * Populate the map features with the mapped Places and total count
      *
      * @param GeoAnalysisResult $result
-     * @return array
+     * @return mixed[]
      */
     protected function featureAnalysisData(GeoAnalysisResult $result): array
     {

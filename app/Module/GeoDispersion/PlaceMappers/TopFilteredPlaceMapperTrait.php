@@ -39,14 +39,14 @@ trait TopFilteredPlaceMapperTrait
     /**
      * Set the list of defined top level places.
      *
-     * @param array $top_places
+     * @param Place[] $top_places
      */
     public function setTopPlaces(array $top_places): void
     {
         $this->top_places = collect($top_places)
             ->filter(
                 /** @psalm-suppress MissingClosureParamType */
-                fn($top_places) => $top_places instanceof Place
+                fn($top_places): bool => $top_places instanceof Place
             )->toArray();
     }
 

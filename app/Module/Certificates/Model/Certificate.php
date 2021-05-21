@@ -204,7 +204,7 @@ class Certificate
      * Get the base parameters to be used in url referencing the certificate.
      *
      * @param UrlObfuscatorService $url_obfuscator_service
-     * @return array
+     * @return array{tree: string, cid: mixed}
      */
     public function urlParameters(UrlObfuscatorService $url_obfuscator_service = null): array
     {

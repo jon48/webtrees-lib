@@ -24,8 +24,8 @@ interface CustomSimpleTagEditorInterface extends HookInterface
     /**
      * Add the tag in the hierarchy of the expected tags
      *
-     * @param array $expected_tags
-     * @return array
+     * @param array<string, mixed> $expected_tags
+     * @return array<string, mixed>
      */
     public function addExpectedTags(array $expected_tags): array;
 

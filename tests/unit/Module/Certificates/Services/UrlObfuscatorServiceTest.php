@@ -64,6 +64,11 @@ class UrlObfuscatorServiceTest extends TestCase
     }
 
     // phpcs:disable Generic.Files.LineLength.TooLong
+    /**
+     * Data provider for valid data
+     *
+     * @return string[][]
+     */
     public function obfuscationValidData(): array
     {
         return [
@@ -73,6 +78,11 @@ class UrlObfuscatorServiceTest extends TestCase
         ];
     }
 
+    /**
+     * Data provider for invalid data
+     *
+     * @return string[][]
+     */
     public function obfuscationInvalidData(): array
     {
         return [

@@ -62,6 +62,8 @@ class GeoAnalysisResults
     /**
      * List of results by category of the geographical analysis.
      * The list is sorted first by the category order, then by the category description
+     *
+     * @return Collection<string, GeoAnalysisResult>
      */
     public function sortedDetailed(): Collection
     {

@@ -129,7 +129,7 @@ class MapAdapterDataService
      * Delete invalid GeoAnalysisMapAdapters from the database.
      *
      * @param AbstractGeoAnalysisView $view
-     * @param Collection $valid_map_adapters
+     * @param Collection<int> $valid_map_adapters
      * @return int
      */
     public function deleteInvalid(AbstractGeoAnalysisView $view, Collection $valid_map_adapters): int

@@ -30,10 +30,7 @@ use Illuminate\Support\Collection;
  */
 class SosaRecordsService
 {
-    /**
-     * @var int|null $max_system_generations
-     */
-    private $max_system_generations;
+    private ?int $max_system_generations = null;
 
     /**
      * Maximum number of generation the system is able to hold.
@@ -264,7 +261,7 @@ class SosaRecordsService
      *
      * @param Tree $tree
      * @param UserInterface $user
-     * @param array $sosa_records
+     * @param array<array<string,mixed>> $sosa_records
      */
     public function insertOrUpdate(Tree $tree, UserInterface $user, array $sosa_records): void
     {

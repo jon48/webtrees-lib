@@ -26,24 +26,13 @@ class LineageNode
 {
 
     /**
-     * @var Collection $linked_fams Spouse families linked to the node
+     * @var Collection<string, stdClass>  $linked_fams Spouse families linked to the node
      */
-    private $linked_fams;
+    private Collection $linked_fams;
 
-    /**
-     * @var ?Individual $node_indi Reference individual for the node
-     */
-    private $node_indi;
-
-    /**
-     * @var LineageRootNode $root_node Root node of the lineage
-     */
-    private $root_node;
-
-    /**
-     * @var ?string $alt_surname Linked surname, used to link to another lineage
-     */
-    private $alt_surname;
+    private ?Individual $node_indi;
+    private LineageRootNode $root_node;
+    private ?string $alt_surname;
 
     /**
      * Constructor for Lineage node
