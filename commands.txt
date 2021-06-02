@@ -2,7 +2,10 @@ composer dump-autoload
 
 composer install
 composer install --prefer-source
-composer update
+composer update --with-dependencies
+
+composer outdated -D
+npm outdated -D
 
 phpstan
 psalm

@@ -23,6 +23,8 @@ use Fisharebest\Webtrees\Http\Middleware\AuthManager;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
+use Fisharebest\Webtrees\Module\ModuleCustomTagsInterface;
+use Fisharebest\Webtrees\Module\ModuleCustomTagsTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
@@ -32,7 +34,6 @@ use MyArtJaub\Webtrees\Http\Middleware\AuthTreePreference;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate;
-use MyArtJaub\Webtrees\Module\Certificates\Hooks\CertificateTagEditorHook;
 use MyArtJaub\Webtrees\Module\Certificates\Hooks\SourceCertificateIconHook;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminConfigAction;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminConfigPage;
@@ -47,12 +48,16 @@ use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\CertificatesList
 class CertificatesModule extends AbstractModule implements
     ModuleMyArtJaubInterface,
     ModuleConfigInterface,
+    ModuleCustomTagsInterface,
     ModuleGlobalInterface,
     ModuleListInterface,
     ModuleHookSubscriberInterface
 {
     use ModuleMyArtJaubTrait {
-        boot as traitBoot;
+        ModuleMyArtJaubTrait::boot as traitMajBoot;
+    }
+    use ModuleCustomTagsTrait {
+        ModuleCustomTagsTrait::boot as traitCustomTagsBoot;
     }
     use ModuleConfigTrait;
     use ModuleGlobalTrait;
@@ -83,17 +88,8 @@ class CertificatesModule extends AbstractModule implements
      */
     public function boot(): void
     {
-        $this->traitBoot();
-        Registry::elementFactory()->register([
-            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this)
-        ]);
+        $this->traitMajBoot();
+        $this->traitCustomTagsBoot();
     }
 
     /**
@@ -163,6 +159,42 @@ class CertificatesModule extends AbstractModule implements
 
     /**
      * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleCustomTagsInterface::customSubTags()
+     */
+    public function customSubTags(): array
+    {
+        return [
+            'FAM:SOUR'      =>  [['_ACT', '0:1']],
+            'FAM:*:SOUR'    =>  [['_ACT', '0:1']],
+            'INDI:SOUR'     =>  [['_ACT', '0:1']],
+            'INDI:*:SOUR'   =>  [['_ACT', '0:1']],
+            'OBJE:SOUR'     =>  [['_ACT', '0:1']],
+            'OBJE:*:SOUR'   =>  [['_ACT', '0:1']],
+            'NOTE:SOUR'     =>  [['_ACT', '0:1']],
+            'NOTE:*:SOUR'   =>  [['_ACT', '0:1']]
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\ModuleCustomTagsInterface::customTags()
+     */
+    public function customTags(): array
+    {
+        return [
+            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this)
+        ];
+    }
+
+    /**
+     * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
      */
     public function headContent(): string
@@ -204,7 +236,6 @@ class CertificatesModule extends AbstractModule implements
     public function listSubscribedHooks(): array
     {
         return [
-            app()->makeWith(CertificateTagEditorHook::class, ['module' => $this]),
             app()->makeWith(SourceCertificateIconHook::class, ['module' => $this])
         ];
     }

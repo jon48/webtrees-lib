@@ -29,18 +29,8 @@ use stdClass;
  */
 class SosaStatisticsService
 {
-
-    /**
-     * Reference user
-     * @var UserInterface $user
-     */
-    private $user;
-
-    /**
-     * Reference tree
-     * @var Tree $tree
-     */
-    private $tree;
+    private UserInterface $user;
+    private Tree $tree;
 
     /**
      * Constructor for Sosa Statistics Service
@@ -485,9 +475,9 @@ class SosaStatisticsService
 
         if ($multiple_ancestors->count() > $limit) {
             $last_count = $multiple_ancestors->last()->sosa_count;
-            $multiple_ancestors = $multiple_ancestors->reject(function (stdClass $element) use ($last_count): bool {
-                return $element->sosa_count ==  $last_count;
-            });
+            $multiple_ancestors = $multiple_ancestors->reject(
+                fn (stdClass $element): bool => $element->sosa_count ===  $last_count
+            );
         }
         return $multiple_ancestors;
     }
@@ -500,18 +490,22 @@ class SosaStatisticsService
      *  - key : rank of the ancestor in generation G for which exclusive ancestors have been found
      *          For instance 3 represent the maternal grand father
      *          0 is used for shared ancestors
-     *  - values: number of ancestors exclusively in the ancestors of the ancestor in key
+     *  - values:
+     *      - branches: same as key
+     *      - majs_i_id: xref of the ancestor at rank key in generation G, or null for shared ancestors
+     *      - count_indi: number of ancestors exclusively in the ancestors of the ancestor at rank key
      *
-     *  For instance a result at generation 3 could be :
-     *      array (   0     =>  12      -> 12 ancestors are shared by the grand-parents
-     *                1     =>  32      -> 32 ancestors are exclusive to the paternal grand-father
-     *                2     =>  25      -> 25 ancestors are exclusive to the paternal grand-mother
-     *                3     =>  12      -> 12 ancestors are exclusive to the maternal grand-father
-     *                4     =>  30      -> 30 ancestors are exclusive to the maternal grand-mother
-     *            )
+     * For instance a result at generation 3 could be :
+     * [
+     *  0 => { branches: 0, majs_i_id: X1, count_indi: 12 } -> 12 ancestors are shared by the grand-parents
+     *  1 => { branches: 1, majs_i_id: X2, count_indi: 32 } -> 32 ancestors are exclusive to the paternal grand-father
+     *  2 => { branches: 2, majs_i_id: X3, count_indi: 25 } -> 25 ancestors are exclusive to the paternal grand-mother
+     *  3 => { branches: 3, majs_i_id: X4, count_indi: 12 } -> 12 ancestors are exclusive to the maternal grand-father
+     *  4 => { branches: 4, majs_i_id: X5, count_indi: 30 } -> 30 ancestors are exclusive to the maternal grand-mother
+     * ]
      *
      * @param int $gen
-     * @return Collection<int, int>
+     * @return Collection<int, \stdClass>
      */
     public function ancestorsDispersionForGeneration(int $gen): Collection
     {
@@ -523,7 +517,6 @@ class SosaStatisticsService
             ->where('majs_gen', '>=', $gen)
             ->groupBy('majs_i_id', 'branch');
 
-
         $consolidated_ancestors_branches = DB::table('maj_sosa')
             ->fromSub($ancestors_branches, 'indi_branch')
             ->select('i_id')
@@ -531,10 +524,19 @@ class SosaStatisticsService
             ->groupBy('i_id');
 
         return DB::table('maj_sosa')
-            ->fromSub($consolidated_ancestors_branches, 'indi_branch_consolidated')
-            ->select('branches')
+            ->rightJoinSub(
+                $consolidated_ancestors_branches,
+                'indi_branch_consolidated',
+                function (JoinClause $join) use ($gen): void {
+                    $join->where('maj_sosa.majs_gedcom_id', '=', $this->tree->id())
+                        ->where('maj_sosa.majs_user_id', '=', $this->user->id())
+                        ->where('branches', '>', 0)
+                        ->whereRaw('majs_sosa = POW(2, ? - 1) + branches - 1', [$gen]);
+                }
+            )
+            ->select(['branches', 'majs_i_id'])
             ->selectRaw('COUNT(i_id) AS count_indi')
-            ->groupBy('branches')
-            ->get()->pluck('count_indi', 'branches');
+            ->groupBy(['branches', 'majs_i_id'])
+            ->get()->keyBy('branches');
     }
 }

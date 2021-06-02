@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\Module\ModuleInterface;
 use Illuminate\Support\Collection;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResult;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
+use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
@@ -153,13 +154,13 @@ abstract class AbstractGeoAnalysisView
     /**
      * Returns the content of the view global tab
      *
-     * @param ModuleInterface $module
+     * @param GeoDispersionModule $module
      * @param GeoAnalysisResult $result
      * @param array<string, mixed> $params
      * @return string
      */
     abstract public function globalTabContent(
-        ModuleInterface $module,
+        GeoDispersionModule $module,
         GeoAnalysisResult $result,
         array $params
     ): string;

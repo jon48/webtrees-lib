@@ -16,8 +16,10 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Views;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\ModuleInterface;
+use Fisharebest\Webtrees\Services\LeafletJsService;
 use MyArtJaub\Webtrees\Common\GeoDispersion\Config\MapColorsConfig;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResult;
+use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapAdapterDataService;
 use Psr\Http\Message\ServerRequestInterface;
 use Spatie\Color\Hex;
@@ -90,7 +92,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalTabContent()
      */
-    public function globalTabContent(ModuleInterface $module, GeoAnalysisResult $result, array $params): string
+    public function globalTabContent(GeoDispersionModule $module, GeoAnalysisResult $result, array $params): string
     {
         $map_adapters = app(MapAdapterDataService::class)->allForView($this);
 
@@ -108,21 +110,12 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
             ]);
         }
 
-        //phpcs:disable Generic.Files.LineLength.TooLong
-        $basemap_provider = [
-            'url'    => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            'options' => [
-                'attribution' => '<a href="https://www.openstreetmap.org/copyright">&copy; OpenStreetMap</a> contributors',
-                'max_zoom'    => 19
-            ]
-        ];
-        //phpcs:enable
-
         return view($module->name() . '::geoanalysisview-tab-glb-map', $params + [
             'result'            =>  $adapter_result->geoAnalysisResult(),
             'features'          =>  $adapter_result->features(),
             'colors'            =>  $this->colors(),
-            'basemap_provider'  =>  $basemap_provider
+            'leaflet_config'    =>  app(LeafletJsService::class)->config(),
+            'js_script_url'     =>  $module->assetUrl('js/geodispersion.min.js')
         ]);
     }
 

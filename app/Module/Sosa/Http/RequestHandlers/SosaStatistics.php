@@ -24,6 +24,7 @@ use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Module\ModuleThemeInterface;
 use Fisharebest\Webtrees\Services\ModuleService;
+use Fisharebest\Webtrees\Services\RelationshipService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaStatisticsService;
 use Psr\Http\Message\ResponseInterface;
@@ -38,19 +39,18 @@ class SosaStatistics implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var SosaModule|null $module
-     */
-    private $module;
+    private ?SosaModule $module;
+    private RelationshipService $relationship_service;
 
     /**
      * Constructor for AncestorsList Request Handler
      *
      * @param ModuleService $module_service
      */
-    public function __construct(ModuleService $module_service)
+    public function __construct(ModuleService $module_service, RelationshipService $relationship_service)
     {
         $this->module = $module_service->findByInterface(SosaModule::class)->first();
+        $this->relationship_service = $relationship_service;
     }
 
     /**
@@ -83,7 +83,8 @@ class SosaStatistics implements RequestHandlerInterface
             'multiple_sosas'    =>  $sosa_stats_service->topMultipleAncestorsWithNoTies(10)->groupBy('sosa_count'),
             'sosa_dispersion_g2' =>  $sosa_stats_service->ancestorsDispersionForGeneration(2),
             'sosa_dispersion_g3' =>  $sosa_stats_service->ancestorsDispersionForGeneration(3),
-            'gen_depth_g3'      =>  $sosa_stats_service->generationDepthStatsAtGeneration(3)
+            'gen_depth_g3'      =>  $sosa_stats_service->generationDepthStatsAtGeneration(3),
+            'relationship_service'  =>  $this->relationship_service,
         ]);
     }
 

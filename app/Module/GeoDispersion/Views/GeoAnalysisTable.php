@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Views;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResult;
+use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use Psr\Http\Message\ServerRequestInterface;
 
 class GeoAnalysisTable extends AbstractGeoAnalysisView
@@ -62,7 +63,7 @@ class GeoAnalysisTable extends AbstractGeoAnalysisView
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalTabContent()
      */
-    public function globalTabContent(ModuleInterface $module, GeoAnalysisResult $result, array $params): string
+    public function globalTabContent(GeoDispersionModule $module, GeoAnalysisResult $result, array $params): string
     {
         return view($module->name() . '::geoanalysisview-tab-glb-table', $params + [
             'result'    =>  $result

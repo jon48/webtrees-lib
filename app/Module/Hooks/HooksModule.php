@@ -24,7 +24,6 @@ use MyArtJaub\Webtrees\Contracts\Hooks\HookServiceInterface;
 use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
-use MyArtJaub\Webtrees\Module\Hooks\Hooks\CustomSimpleTagEditorCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\FactSourceTextExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\FamilyDatatablesExtenderCollector;
 use MyArtJaub\Webtrees\Module\Hooks\Hooks\IndividualDatatablesExtenderCollector;
@@ -135,7 +134,6 @@ class HooksModule extends AbstractModule implements
     public function listSubscribedHooks(): array
     {
         return [
-            app()->makeWith(CustomSimpleTagEditorCollector::class, ['module' => $this]),
             app()->makeWith(FactSourceTextExtenderCollector::class, ['module' => $this]),
             app()->makeWith(FamilyDatatablesExtenderCollector::class, ['module' => $this]),
             app()->makeWith(IndividualDatatablesExtenderCollector::class, ['module' => $this]),

@@ -246,18 +246,13 @@ class SosaModule extends AbstractModule implements
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::sidebarTitle()
      */
-    public function sidebarTitle(): string
+    public function sidebarTitle(Individual $individual): string
     {
-        $request = app(ServerRequestInterface::class);
-        $xref = $request->getAttribute('xref');
-        $tree = $request->getAttribute('tree');
         $user = Auth::check() ? Auth::user() : new DefaultUser();
-
-        $individual = Registry::individualFactory()->make($xref, $tree);
 
         return view($this->name() . '::sidebar/title', [
             'module_name'   =>  $this->name(),
-            'sosa_numbers'  =>  app(SosaRecordsService::class)->sosaNumbers($tree, $user, $individual)
+            'sosa_numbers'  =>  app(SosaRecordsService::class)->sosaNumbers($individual->tree(), $user, $individual)
         ]);
     }
 

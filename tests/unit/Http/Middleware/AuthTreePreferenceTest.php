@@ -115,7 +115,7 @@ class AuthTreePreferenceTest extends TestCase
         $handler = self::createMock(RequestHandlerInterface::class);
 
         $tree = self::createMock(Tree::class);
-        $request    = self::createRequest()->withAttribute('tree', $tree);
+        $request = self::createRequest()->withAttribute('tree', $tree);
 
         $response = $this->authTreePreference->process($request, $handler);
 

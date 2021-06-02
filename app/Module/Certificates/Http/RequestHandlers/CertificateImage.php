@@ -156,7 +156,7 @@ class CertificateImage implements RequestHandlerInterface
             if ($repo !== null && ($repo = $repo->target()) !== null && $repo->canShowName()) {
                 return I18N::translate('© %s - %s', strip_tags($repo->fullName()), strip_tags($source->fullName()));
             }
-            return $source->fullName();
+            return strip_tags($source->fullName());
         }
         $default_text = $certificate->tree()->getPreference('MAJ_CERTIF_WM_DEFAULT');
         return $default_text !== '' ? $default_text : I18N::translate('This image is protected under copyright law.');
