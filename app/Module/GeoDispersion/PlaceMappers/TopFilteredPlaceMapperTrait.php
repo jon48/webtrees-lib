@@ -51,20 +51,6 @@ trait TopFilteredPlaceMapperTrait
     }
 
     /**
-     * Check whether a string ($haystack) ends with another string ($needle)
-     *
-     * {@internal This is redundant with the function str_ends_with in PHP8}
-     *
-     * @param string $haystack
-     * @param string $needle
-     * @return bool
-     */
-    private function endsWith(string $haystack, string $needle): bool
-    {
-        return substr_compare($haystack, $needle, -strlen($needle)) === 0;
-    }
-
-    /**
      * Check whether a Place belongs to one of the defined top places.
      *
      * @param Place $place
@@ -75,7 +61,7 @@ trait TopFilteredPlaceMapperTrait
         foreach ($this->top_places as $top_place) {
             if (
                 $top_place->tree()->id() === $place->tree()->id() &&
-                $this->endsWith($place->gedcomName(), $top_place->gedcomName())
+                str_ends_with($place->gedcomName(), $top_place->gedcomName())
             ) {
                     return true;
             }
