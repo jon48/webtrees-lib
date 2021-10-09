@@ -14,17 +14,17 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView;
-use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
 
 /**
  * Request handler for listing geographical dispersion analysis views

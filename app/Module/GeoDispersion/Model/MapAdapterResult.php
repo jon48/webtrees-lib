@@ -27,7 +27,7 @@ class MapAdapterResult
     private GeoAnalysisResult $result;
 
     /**
-     * @var \Brick\Geo\IO\GeoJSON\Feature[] $features
+     * @var array<int, \Brick\Geo\IO\GeoJSON\Feature> $features
      */
     private array $features;
 
@@ -56,7 +56,7 @@ class MapAdapterResult
     /**
      * Get the list of features to display on the map
      *
-     * @return \Brick\Geo\IO\GeoJSON\Feature[]
+     * @return array<int, \Brick\Geo\IO\GeoJSON\Feature>
      */
     public function features(): array
     {
@@ -74,7 +74,7 @@ class MapAdapterResult
     {
         return new static(
             $this->result->merge($other->result),
-            array_merge($this->features, $other->features)
+            [...$this->features, ...$other->features]
         );
     }
 }

@@ -149,7 +149,7 @@ class SourceStatusService
      */
     public function sourceStatusForMarriage(Family $family): FactSourceStatus
     {
-        $marr_events = array_merge(Gedcom::MARRIAGE_EVENTS, ['MARC', 'MARL', 'MARS']);
+        $marr_events = [...Gedcom::MARRIAGE_EVENTS, 'MARC', 'MARL', 'MARS'];
         return $this->sourceStatusForFactsWithTags($family, $marr_events);
     }
 }

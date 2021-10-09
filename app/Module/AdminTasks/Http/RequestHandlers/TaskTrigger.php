@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;

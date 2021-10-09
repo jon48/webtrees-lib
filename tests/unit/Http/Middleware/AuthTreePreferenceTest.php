@@ -20,7 +20,7 @@ use Fisharebest\Webtrees\TestCase;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\Contracts\UserInterface;
-use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use MyArtJaub\Webtrees\Http\Middleware\AuthTreePreference;
 use Psr\Http\Server\RequestHandlerInterface;
 

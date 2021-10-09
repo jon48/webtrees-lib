@@ -39,7 +39,7 @@ class CertificateDataServiceTest extends TestCase
      *
      * @var boolean
      */
-    protected static $uses_database = true;
+    protected static bool $uses_database = true;
 
     /**
      * @var CertificateDataService $certificate_data_service

@@ -16,7 +16,7 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Functions\Functions;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;

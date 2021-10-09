@@ -106,7 +106,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
                 'block'      => Str::kebab($this->name()),
                 'id'         => $block_id,
                 'config_url' => $this->configUrl($tree, $context, $block_id),
-                'title'      => $tree->title(),
+                'title'      => e($tree->title()),
                 'content'    => $content,
             ]);
         }

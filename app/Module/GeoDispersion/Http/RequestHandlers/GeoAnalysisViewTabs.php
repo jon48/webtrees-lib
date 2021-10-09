@@ -16,7 +16,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;

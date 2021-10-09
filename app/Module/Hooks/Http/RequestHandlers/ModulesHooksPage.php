@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use MyArtJaub\Webtrees\Contracts\Hooks\HookInterface;
 use MyArtJaub\Webtrees\Module\Hooks\Services\HookService;

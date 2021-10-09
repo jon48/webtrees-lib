@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Brick\Geo\IO\GeoJSON\Feature;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapDefinitionsService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
