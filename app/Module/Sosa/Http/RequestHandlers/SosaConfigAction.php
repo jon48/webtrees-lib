@@ -20,7 +20,9 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\UserService;
+use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -30,19 +32,19 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class SosaConfigAction implements RequestHandlerInterface
 {
-    /**
-     * @var UserService $user_service
-     */
-    private $user_service;
+    private UserService $user_service;
+    private SosaRecordsService $sosa_record_service;
 
     /**
      * Constructor for SosaConfigAction Request Handler
      *
      * @param UserService $user_service
+     * @param SosaRecordsService $sosa_records_service
      */
-    public function __construct(UserService $user_service)
+    public function __construct(UserService $user_service, SosaRecordsService $sosa_records_service)
     {
         $this->user_service = $user_service;
+        $this->sosa_record_service = $sosa_records_service;
     }
 
     /**
@@ -54,18 +56,16 @@ class SosaConfigAction implements RequestHandlerInterface
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
 
-        $params = $request->getParsedBody();
-        assert(is_array($params));
-
-        $user_id = (int) $params['sosa-userid'];
-        $root_id = $params['sosa-rootid'] ?? '';
-        $max_gen = $params['sosa-maxgen'] ?? '';
+        $user_id = Validator::parsedBody($request)->integer('sosa-userid');
+        $root_id = Validator::parsedBody($request)->isXref()->string('sosa-rootid') ?? '';
+        $max_gen = Validator::parsedBody($request)->integer('sosa-maxgen') ??
+            $this->sosa_record_service->maxSystemGenerations();
 
         if (Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
             if ($user !== null && ($root_indi = Registry::individualFactory()->make($root_id, $tree)) !== null) {
                 $tree->setUserPreference($user, 'MAJ_SOSA_ROOT_ID', $root_indi->xref());
-                $tree->setUserPreference($user, 'MAJ_SOSA_MAX_GEN', $max_gen);
+                $tree->setUserPreference($user, 'MAJ_SOSA_MAX_GEN', (string) $max_gen);
                 FlashMessages::addMessage(I18N::translate('The root individual has been updated.'));
                 return redirect(route(SosaConfig::class, [
                     'tree' => $tree->name(),

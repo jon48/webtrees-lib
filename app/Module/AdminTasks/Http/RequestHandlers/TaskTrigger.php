@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
@@ -54,7 +55,7 @@ class TaskTrigger implements RequestHandlerInterface
 
         $task_id = $request->getAttribute('task');
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
-        $force_token = $request->getQueryParams()['force'] ?? '';
+        $force_token = Validator::queryParams($request)->string('force') ?? '';
         $force = $token == $force_token;
 
         $task_schedules = $this->taskschedules_service->findTasksToRun($force, $task_id);

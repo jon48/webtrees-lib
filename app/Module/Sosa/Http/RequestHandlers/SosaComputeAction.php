@@ -20,6 +20,7 @@ use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaCalculatorService;
 use Psr\Http\Message\ResponseInterface;
@@ -31,10 +32,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class SosaComputeAction implements RequestHandlerInterface
 {
-    /**
-     * @var UserService $user_service
-     */
-    private $user_service;
+    private UserService $user_service;
 
     /**
      * Constructor for SosaConfigAction Request Handler
@@ -55,11 +53,8 @@ class SosaComputeAction implements RequestHandlerInterface
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
 
-        $params = $request->getParsedBody();
-        assert(is_array($params));
-
-        $user_id = (int) ($params['user_id'] ?? Auth::id() ?? 0);
-        $partial_from = $params['partial_from'] ?? null;
+        $user_id = Validator::parsedBody($request)->integer('user_id') ?? Auth::id() ?? 0;
+        $partial_from = Validator::parsedBody($request)->isXref()->string('partial_from');
 
         if (($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);

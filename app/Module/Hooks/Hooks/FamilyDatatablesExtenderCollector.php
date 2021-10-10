@@ -62,7 +62,7 @@ class FamilyDatatablesExtenderCollector extends AbstractHookCollector implements
     {
         $result = [];
         foreach ($this->hooks() as $hook) {
-            $result = array_merge($result, $hook->familyColumns($records));
+            $result += $hook->familyColumns($records);
         }
         return $result;
     }

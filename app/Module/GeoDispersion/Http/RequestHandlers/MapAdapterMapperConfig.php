@@ -16,8 +16,9 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
@@ -68,7 +69,7 @@ class MapAdapterMapperConfig implements RequestHandlerInterface
         $adapter_id = (int) $request->getAttribute('adapter_id');
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
-        $mapper_class = $request->getQueryParams()['mapper'] ?? '';
+        $mapper_class = Validator::queryParams($request)->string('mapper') ?? '';
         $mapper = null;
         if ($mapper_class === '' && $map_adapter !== null) {
             $mapper = $map_adapter->placeMapper();

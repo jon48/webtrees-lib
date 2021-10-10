@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers\Config;
 
 use Fisharebest\Webtrees\Place;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Services\TreeService;
 use Illuminate\Support\Collection;
@@ -123,19 +124,15 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
             return $this;
         }
 
-        $params = (array) $request->getParsedBody();
-
-        $top_places = $params['mapper_filt_top_places'] ?? [];
-        if (is_array($top_places)) {
-            $config = ['topPlaces' => []];
-            foreach ($top_places as $top_place_id) {
-                $place = Place::find((int) $top_place_id, $tree);
-                if (mb_strlen($place->gedcomName()) > 0) {
-                    $config['topPlaces'][] = $place;
-                }
+        $top_places = Validator::parsedBody($request)->array('mapper_filt_top_places') ?? [];
+        $config = ['topPlaces' => []];
+        foreach ($top_places as $top_place_id) {
+            $place = Place::find((int) $top_place_id, $tree);
+            if (mb_strlen($place->gedcomName()) > 0) {
+                $config['topPlaces'][] = $place;
             }
-            $this->setConfig($config);
         }
+        $this->setConfig($config);
         return $this;
     }
 }

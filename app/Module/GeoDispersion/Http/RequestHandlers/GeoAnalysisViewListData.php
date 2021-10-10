@@ -93,11 +93,11 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
                 ],
                 'type' =>  $view->icon($module),
                 'description' => [
-                    'display' => '<span dir="auto">' . e($view->description()) . '</span>',
+                    'display' => '<bdi>' . e($view->description()) . '</bdi>',
                     'raw' => e($view->description())
                 ],
                 'analysis' => [
-                    'display' => '<span dir="auto">' . e($view->analysis()->title()) . '</span>',
+                    'display' => '<bdi>' . e($view->analysis()->title()) . '</bdi>',
                     'raw' => e($view->analysis()->title())
                 ],
                 'place_depth' => [

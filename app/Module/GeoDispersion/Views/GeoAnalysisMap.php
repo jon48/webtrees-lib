@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Views;
 
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use Fisharebest\Webtrees\Services\LeafletJsService;
 use MyArtJaub\Webtrees\Common\GeoDispersion\Config\MapColorsConfig;
@@ -68,12 +69,10 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
      */
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {
-        $params = (array) $request->getParsedBody();
-
-        $default_color  = $params['view_map_color_default'] ?? '';
-        $stroke_color   = $params['view_map_color_stroke'] ?? '';
-        $maxvalue_color  = $params['view_map_color_maxvalue'] ?? '';
-        $hover_color  = $params['view_map_color_hover'] ?? '';
+        $default_color  = Validator::parsedBody($request)->string('view_map_color_default') ?? '';
+        $stroke_color   = Validator::parsedBody($request)->string('view_map_color_stroke') ?? '';
+        $maxvalue_color  = Validator::parsedBody($request)->string('view_map_color_maxvalue') ?? '';
+        $hover_color  = Validator::parsedBody($request)->string('view_map_color_hover') ?? '';
 
         try {
             return $this->withColors(new MapColorsConfig(

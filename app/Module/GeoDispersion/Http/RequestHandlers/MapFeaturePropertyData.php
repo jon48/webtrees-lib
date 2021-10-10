@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Brick\Geo\IO\GeoJSON\Feature;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapDefinitionsService;
 use Psr\Http\Message\ResponseInterface;
@@ -48,7 +49,7 @@ class MapFeaturePropertyData implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $map_id = $request->getQueryParams()['map_id'] ?? $request->getAttribute('map_id') ?? '';
+        $map_id = Validator::queryParams($request)->string('map_id') ?? $request->getAttribute('map_id') ?? '';
 
         return response(Registry::cache()->file()->remember(
             'map-properties-' . $map_id,

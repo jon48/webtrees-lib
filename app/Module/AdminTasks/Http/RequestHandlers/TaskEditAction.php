@@ -18,6 +18,7 @@ use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
 use MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface;
@@ -103,18 +104,15 @@ class TaskEditAction implements RequestHandlerInterface
             return false;
         }
 
-        $params = (array) $request->getParsedBody();
-
-        $frequency = (int) $params['frequency'];
+        $frequency = Validator::parsedBody($request)->integer('frequency') ?? 0;
         if ($frequency > 0) {
             $task_schedule->setFrequency(CarbonInterval::minutes($frequency));
         } else {
             FlashMessages::addMessage(I18N::translate('The frequency is not in a valid format.'), 'danger');
         }
 
-        $is_limited = (bool) $params['is_limited'];
-        $nb_occur = (int) $params['nb_occur'];
-
+        $is_limited = (bool) (Validator::parsedBody($request)->isBetween(0, 1)->integer('is_limited') ?? false);
+        $nb_occur = Validator::parsedBody($request)->integer('nb_occur') ?? 1;
         if ($is_limited) {
             if ($nb_occur > 0) {
                 $task_schedule->setRemainingOccurences($nb_occur);

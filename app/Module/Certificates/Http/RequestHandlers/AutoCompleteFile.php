@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\RequestHandlers\AbstractAutocompleteHandler;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\SearchService;
@@ -66,7 +67,7 @@ class AutoCompleteFile extends AbstractAutocompleteHandler
         $tree = $request->getAttribute('tree');
         assert($tree instanceof Tree);
 
-        $city = $request->getQueryParams()['cityobf'] ?? '';
+        $city = Validator::queryParams($request)->string('cityobf') ?? '';
 
         if ($this->module === null || $city === '' || !$this->url_obfuscator_service->tryDeobfuscate($city)) {
             return collect();

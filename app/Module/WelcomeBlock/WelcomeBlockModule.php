@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleBlockInterface;
 use Fisharebest\Webtrees\Module\ModuleBlockTrait;
@@ -138,28 +139,30 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
      */
     public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
-        $params = (array) $request->getParsedBody();
-
-        $matomo_enabled = $params['matomo_enabled'] == 'yes';
+        $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled') == 'yes';
         $this->setBlockSetting($block_id, 'matomo_enabled', $matomo_enabled ? 'yes' : 'no');
         if (!$matomo_enabled) {
             return;
         }
 
-        if (filter_var($params['matomo_url'], FILTER_VALIDATE_URL) === false) {
+        $matomo_url = trim(Validator::parsedBody($request)->string('matomo_url') ?? '');
+        if (filter_var($matomo_url, FILTER_VALIDATE_URL) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo URL provided is not valid.'), 'danger');
             return;
         }
 
-        if (filter_var($params['matomo_siteid'], FILTER_VALIDATE_INT) === false) {
+        $matomo_siteid = Validator::parsedBody($request)->integer('matomo_siteid');
+        if ($matomo_siteid === null) {
             FlashMessages::addMessage(I18N::translate('The Matomo Site ID provided is not valid.'), 'danger');
             return;
         }
 
+        $matomo_token = trim(Validator::parsedBody($request)->string('matomo_token') ?? '');
+
         $this
-            ->setBlockSetting($block_id, 'matomo_url', trim($params['matomo_url']))
-            ->setBlockSetting($block_id, 'matomo_token', trim($params['matomo_token']))
-            ->setBlockSetting($block_id, 'matomo_siteid', $params['matomo_siteid']);
+            ->setBlockSetting($block_id, 'matomo_url', $matomo_url)
+            ->setBlockSetting($block_id, 'matomo_token', $matomo_token)
+            ->setBlockSetting($block_id, 'matomo_siteid', (string) $matomo_siteid);
 
         Registry::cache()->file()->forget($this->name() . '-matomovisits-yearly-' . $block_id);
     }

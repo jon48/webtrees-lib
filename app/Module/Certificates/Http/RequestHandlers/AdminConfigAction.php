@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
 use Psr\Http\Message\ResponseInterface;
@@ -29,10 +30,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class AdminConfigAction implements RequestHandlerInterface
 {
-    /**
-     * @var CertificatesModule|null $module
-     */
-    private $module;
+    private ?CertificatesModule $module;
 
     /**
      * Constructor for Admin Config Action request handler
@@ -63,29 +61,35 @@ class AdminConfigAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        $params = (array) $request->getParsedBody();
-
-        $tree->setPreference('MAJ_CERTIF_SHOW_CERT', $params['MAJ_CERTIF_SHOW_CERT'] ?? (string) Auth::PRIV_HIDE);
+        $tree->setPreference(
+            'MAJ_CERTIF_SHOW_CERT',
+            (string) (Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_CERT') ?? Auth::PRIV_HIDE)
+        );
         $tree->setPreference(
             'MAJ_CERTIF_SHOW_NO_WATERMARK',
-            $params['MAJ_CERTIF_SHOW_NO_WATERMARK'] ?? (string) Auth::PRIV_HIDE
+            (string) (Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_NO_WATERMARK') ?? Auth::PRIV_HIDE)
         );
-        $tree->setPreference('MAJ_CERTIF_WM_DEFAULT', $params['MAJ_CERTIF_WM_DEFAULT'] ?? '');
+        $tree->setPreference(
+            'MAJ_CERTIF_WM_DEFAULT',
+            Validator::parsedBody($request)->string('MAJ_CERTIF_WM_DEFAULT') ?? ''
+        );
 
-        $watermark_font_size = $params['MAJ_CERTIF_WM_FONT_MAXSIZE'] ?? '';
-        if (is_numeric($watermark_font_size) && $watermark_font_size > 0) {
-            $tree->setPreference('MAJ_CERTIF_WM_FONT_MAXSIZE', $params['MAJ_CERTIF_WM_FONT_MAXSIZE']);
-        }
+        $tree->setPreference(
+            'MAJ_CERTIF_WM_FONT_MAXSIZE',
+            (string) (
+                Validator::parsedBody($request)->isBetween(0, PHP_INT_MAX)->integer('MAJ_CERTIF_WM_FONT_MAXSIZE') ?? 18
+            )
+        );
 
         // Only accept valid color for MAJ_WM_FONT_COLOR
-        $watermark_color = $params['MAJ_CERTIF_WM_FONT_COLOR'] ?? '';
+        $watermark_color = Validator::parsedBody($request)->string('MAJ_CERTIF_WM_FONT_COLOR') ?? '';
         if (preg_match('/#([a-fA-F0-9]{3}){1,2}/', $watermark_color) === 1) {
             $tree->setPreference('MAJ_CERTIF_WM_FONT_COLOR', $watermark_color);
         }
 
         // Only accept valid folders for MAJ_CERT_ROOTDIR
-        $cert_root_dir = $params['MAJ_CERTIF_ROOTDIR'] ?? '';
-        $cert_root_dir = preg_replace('/[:\/\\\\]+/', '/', $cert_root_dir);
+        $cert_root_dir = Validator::parsedBody($request)->string('MAJ_CERTIF_ROOTDIR') ?? '';
+        $cert_root_dir = preg_replace('/[:\/\\\\]+/', '/', $cert_root_dir) ?? '';
         $cert_root_dir = trim($cert_root_dir, '/') . '/';
         $tree->setPreference('MAJ_CERTIF_ROOTDIR', $cert_root_dir);
 

@@ -16,8 +16,9 @@ namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
 use MyArtJaub\Webtrees\Module\Certificates\Services\CertificateFilesystemService;
@@ -33,21 +34,9 @@ class CertificatesList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var CertificatesModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var CertificateFilesystemService $certif_filesystem
-     */
-    private $certif_filesystem;
-
-    /**
-     * @var UrlObfuscatorService $url_obfuscator_service
-     */
-    private $url_obfuscator_service;
-
+    private ?CertificatesModule $module;
+    private CertificateFilesystemService $certif_filesystem;
+    private UrlObfuscatorService $url_obfuscator_service;
 
     /**
      * Constructor for CertificatesList Request Handler
@@ -83,7 +72,7 @@ class CertificatesList implements RequestHandlerInterface
             return [$this->url_obfuscator_service->obfuscate($item), $item];
         }, $this->certif_filesystem->cities($tree));
 
-        $city = $request->getQueryParams()['cityobf'] ?? $request->getAttribute('cityobf') ?? '';
+        $city = Validator::queryParams($request)->string('cityobf') ?? $request->getAttribute('cityobf') ?? '';
 
         if ($city !== '' && $this->url_obfuscator_service->tryDeobfuscate($city)) {
             $title = I18N::translate('Certificates for %s', $city);

@@ -277,20 +277,17 @@ class SosaRecordsService
                     $bindings_placeholders[] = '(:tree_id' . $i . ', :user_id' . $i . ', :sosa' . $i . ',' .
                         ' :indi_id' . $i . ', :gen' . $i . ',' .
                         ' :byear' . $i . ', :byearest' . $i . ', :dyear' . $i . ', :dyearest' . $i . ')';
-                    $bindings_values = array_merge(
-                        $bindings_values,
-                        [
-                            'tree_id' . $i => $tree->id(),
-                            'user_id' . $i => $user->id(),
-                            'sosa' . $i => $row['sosa'],
-                            'indi_id' . $i => $row['indi'],
-                            'gen' . $i => $gen,
-                            'byear' . $i => $row['birth_year'],
-                            'byearest' . $i => $row['birth_year_est'],
-                            'dyear' . $i => $row['death_year'],
-                            'dyearest' . $i => $row['death_year_est']
-                        ]
-                    );
+                    $bindings_values += [
+                        'tree_id' . $i => $tree->id(),
+                        'user_id' . $i => $user->id(),
+                        'sosa' . $i => $row['sosa'],
+                        'indi_id' . $i => $row['indi'],
+                        'gen' . $i => $gen,
+                        'byear' . $i => $row['birth_year'],
+                        'byearest' . $i => $row['birth_year_est'],
+                        'dyear' . $i => $row['death_year'],
+                        'dyearest' . $i => $row['death_year_est']
+                    ];
                 } else {
                     DB::table('maj_sosa')->updateOrInsert(
                         [ 'majs_gedcom_id' => $tree->id(), 'majs_user_id' => $user->id(), 'majs_sosa' => $row['sosa']],

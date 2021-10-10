@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\RequestHandlers\AbstractModuleComponentAction;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\TreeService;
@@ -77,9 +78,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
      */
     protected function updateHookOrder(HookCollectorInterface $hook_collector, ServerRequestInterface $request): void
     {
-        $params = (array) $request->getParsedBody();
-
-        $order = (array) ($params['order'] ?? []);
+        $order = Validator::parsedBody($request)->array('order') ?? [];
         $order = array_flip($order);
 
         foreach ($hook_collector->hooks() as $hook) {

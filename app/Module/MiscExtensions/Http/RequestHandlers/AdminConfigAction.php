@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\MiscExtensions\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\MiscExtensions\MiscExtensionsModule;
 use Psr\Http\Message\ResponseInterface;
@@ -53,11 +54,18 @@ class AdminConfigAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class));
         }
 
-        $params = (array) $request->getParsedBody();
-
-        $this->module->setPreference('MAJ_TITLE_PREFIX', $params['MAJ_TITLE_PREFIX'] ?? '');
-        $this->module->setPreference('MAJ_DISPLAY_CNIL', $params['MAJ_DISPLAY_CNIL'] ?? '');
-        $this->module->setPreference('MAJ_CNIL_REFERENCE', $params['MAJ_CNIL_REFERENCE' ?? '']);
+        $this->module->setPreference(
+            'MAJ_TITLE_PREFIX',
+            Validator::parsedBody($request)->string('MAJ_TITLE_PREFIX') ?? ''
+        );
+        $this->module->setPreference(
+            'MAJ_DISPLAY_CNIL',
+            Validator::parsedBody($request)->string('MAJ_DISPLAY_CNIL') ?? ''
+        );
+        $this->module->setPreference(
+            'MAJ_CNIL_REFERENCE',
+            Validator::parsedBody($request)->string('MAJ_CNIL_REFERENCE') ?? ''
+        );
 
         FlashMessages::addMessage(
             I18N::translate('The preferences for the module “%s” have been updated.', $this->module->title()),

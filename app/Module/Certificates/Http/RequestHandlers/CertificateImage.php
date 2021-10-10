@@ -18,6 +18,7 @@ use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Contracts\UserInterface;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -37,30 +38,11 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class CertificateImage implements RequestHandlerInterface
 {
-    /**
-     * @var CertificatesModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var CertificateFilesystemService $certif_filesystem
-     */
-    private $certif_filesystem;
-
-    /**
-     * @var CertificateImageFactory $certif_image_factory
-     */
-    private $certif_image_factory;
-
-    /**
-     * @var CertificateDataService $certif_data_service
-     */
-    private $certif_data_service;
-
-    /**
-     * @var UrlObfuscatorService $url_obfuscator_service
-     */
-    private $url_obfuscator_service;
+    private ?CertificatesModule $module;
+    private CertificateFilesystemService $certif_filesystem;
+    private CertificateImageFactory $certif_image_factory;
+    private CertificateDataService $certif_data_service;
+    private UrlObfuscatorService $url_obfuscator_service;
 
     /**
      * Constructor for Certificate Image Request Handler
@@ -104,8 +86,8 @@ class CertificateImage implements RequestHandlerInterface
 
         if ($certificate === null) {
             return $this->certif_image_factory
-            ->replacementImageResponse((string) StatusCodeInterface::STATUS_NOT_FOUND)
-            ->withHeader('X-Image-Exception', I18N::translate('The certificate was not found in this family tree.'))
+                ->replacementImageResponse((string) StatusCodeInterface::STATUS_NOT_FOUND)
+                ->withHeader('X-Image-Exception', I18N::translate('The certificate was not found in this family tree.'))
             ;
         }
 
@@ -144,8 +126,8 @@ class CertificateImage implements RequestHandlerInterface
      */
     private function watermarkText(ServerRequestInterface $request, Certificate $certificate): string
     {
-        $sid = $request->getQueryParams()['sid'] ?? '';
-        if ($sid !== '') {
+        $sid = Validator::queryParams($request)->isXref()->string('sid');
+        if ($sid !== null) {
             $source = Registry::sourceFactory()->make($sid, $certificate->tree());
         } else {
             $source = $this->certif_data_service->oneLinkedSource($certificate);

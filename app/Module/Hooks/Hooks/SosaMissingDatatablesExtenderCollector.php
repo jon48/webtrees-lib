@@ -62,7 +62,7 @@ class SosaMissingDatatablesExtenderCollector extends AbstractHookCollector imple
     {
         $result = [];
         foreach ($this->hooks() as $hook) {
-            $result = array_merge($result, $hook->sosaMissingColumns($records));
+            $result += $hook->sosaMissingColumns($records);
         }
         return $result;
     }

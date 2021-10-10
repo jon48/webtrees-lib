@@ -82,7 +82,7 @@ class TasksList implements RequestHandlerInterface
                         'raw'       =>  $schedule->isEnabled() ? 1 : 0
                     ],
                     'task_name' =>  [
-                        'display'   =>  '<span dir="auto">' . e($task_name) . '</span>',
+                        'display'   =>  '<bdi>' . e($task_name) . '</bdi>',
                         'raw'       =>  $task_name
                     ],
                     'last_run'  =>  [
@@ -97,7 +97,7 @@ class TasksList implements RequestHandlerInterface
                         ]),
                         'raw'       =>  $schedule->wasLastRunSuccess() ? 1 : 0
                     ],
-                    'frequency' =>  '<span dir="auto">' . e($schedule->frequency()->cascade()->forHumans()) . '</span>',
+                    'frequency' =>  '<bdi>' . e($schedule->frequency()->cascade()->forHumans()) . '</bdi>',
                     'nb_occurrences'    =>  $schedule->remainingOccurences() > 0 ?
                         I18N::number($schedule->remainingOccurences()) :
                         I18N::translate('Unlimited'),

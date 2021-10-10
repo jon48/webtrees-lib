@@ -60,7 +60,7 @@ class TitlesCardHook implements NameAccordionExtenderInterface
         $titles = $this->individualTitles($individual, '/(.*?) ((' . $title_separator .  ')(.*))/i');
 
         return count($titles) === 0 ? '' :
-            view($this->module()->name() . '::components/card-titles', [ 'titles' => $titles ]);
+            view($this->module()->name() . '::components/accordion-item-titles', [ 'titles' => $titles ]);
     }
 
     /**

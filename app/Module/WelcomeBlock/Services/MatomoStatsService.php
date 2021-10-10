@@ -19,7 +19,7 @@ use Fisharebest\Webtrees\Carbon;
 use Fisharebest\Webtrees\Registry;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\GuzzleException;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
 
 /**
@@ -112,7 +112,7 @@ class MatomoStatsService
                         return (int)$result;
                     }
                 }
-            } catch (RequestException $ex) {
+            } catch (GuzzleException $ex) {
             }
         }
 

@@ -62,7 +62,7 @@ class IndividualDatatablesExtenderCollector extends AbstractHookCollector implem
     {
         $result = [];
         foreach ($this->hooks() as $hook) {
-            $result = array_merge($result, $hook->individualColumns($records));
+            $result += $hook->individualColumns($records);
         }
         return $result;
     }

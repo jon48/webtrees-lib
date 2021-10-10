@@ -62,7 +62,7 @@ class SosaFamilyDatatablesExtenderCollector extends AbstractHookCollector implem
     {
         $result = [];
         foreach ($this->hooks() as $hook) {
-            $result = array_merge($result, $hook->sosaFamilyColumns($records));
+            $result += $hook->sosaFamilyColumns($records);
         }
         return $result;
     }

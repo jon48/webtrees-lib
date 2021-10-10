@@ -212,10 +212,10 @@ class SosaModule extends AbstractModule implements
                     'menu-maj-sosa-compute',
                     [
                         'rel'           => 'nofollow',
-                        'data-href'     => route(SosaComputeModal::class, ['tree' => $tree->name(), 'xref' => $xref]),
-                        'data-target'   => '#wt-ajax-modal',
-                        'data-toggle'   => 'modal',
-                        'data-backdrop' => 'static'
+                        'data-wt-href'  => route(SosaComputeModal::class, ['tree' => $tree->name(), 'xref' => $xref]),
+                        'data-bs-target'    => '#wt-ajax-modal',
+                        'data-bs-toggle'    => 'modal',
+                        'data-bs-backdrop'  => 'static'
                     ]
                 ));
             }

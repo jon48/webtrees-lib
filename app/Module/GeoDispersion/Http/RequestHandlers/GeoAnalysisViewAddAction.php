@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
@@ -68,16 +69,13 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-
-        $params = (array) $request->getParsedBody();
-
-        $type           = $params['view_type'] ?? '';
-        $description    = $params['view_description'] ?? '';
-        $place_depth    = (int) ($params['view_depth'] ?? 1);
+        $type           = Validator::parsedBody($request)->string('view_type') ?? '';
+        $description    = Validator::parsedBody($request)->string('view_description') ?? '';
+        $place_depth    = Validator::parsedBody($request)->integer('view_depth') ?? 1;
 
         $analysis = null;
         try {
-            $analysis = app($params['view_analysis'] ?? '');
+            $analysis = app(Validator::parsedBody($request)->string('view_analysis') ?? '');
         } catch (BindingResolutionException $ex) {
         }
 

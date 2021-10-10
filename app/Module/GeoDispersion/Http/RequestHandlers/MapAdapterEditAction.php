@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface;
@@ -75,14 +76,12 @@ class MapAdapterEditAction implements RequestHandlerInterface
         $adapter_id = (int) $request->getAttribute('adapter_id');
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
-        $params = (array) $request->getParsedBody();
-
-        $map = $this->map_definition_service->find($params['map_adapter_map'] ?? '');
-        $mapping_property   = $params['map_adapter_property_selected'] ?? '';
+        $map = $this->map_definition_service->find(Validator::parsedBody($request)->string('map_adapter_map') ?? '');
+        $mapping_property   = Validator::parsedBody($request)->string('map_adapter_property_selected') ?? '';
 
         $mapper = null;
         try {
-            $mapper = app($params['map_adapter_mapper'] ?? '');
+            $mapper = app(Validator::parsedBody($request)->string('map_adapter_mapper') ?? '');
         } catch (BindingResolutionException $ex) {
         }
 

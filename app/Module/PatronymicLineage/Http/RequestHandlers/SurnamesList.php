@@ -16,8 +16,9 @@ namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Module\IndividualListModule;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\PatronymicLineageModule;
@@ -77,7 +78,7 @@ class SurnamesList implements RequestHandlerInterface
                 return $initial === '@' || $initial === ',';
             });
 
-        $show_all = $request->getQueryParams()['show_all'] ?? 'no';
+        $show_all = Validator::queryParams($request)->string('show_all') ?? 'no';
 
         if ($show_all === 'yes') {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . I18N::translate('All');

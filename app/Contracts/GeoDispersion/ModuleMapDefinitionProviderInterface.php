@@ -22,7 +22,7 @@ interface ModuleMapDefinitionProviderInterface
     /**
      * List map definitions provided by the module as an array.
      *
-     * @return MapDefinitionInterface[] List of map definitions
+     * @return array<int, MapDefinitionInterface> List of map definitions
      */
     public function listMapDefinition(): array;
 }

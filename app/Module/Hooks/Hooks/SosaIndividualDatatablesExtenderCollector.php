@@ -62,7 +62,7 @@ class SosaIndividualDatatablesExtenderCollector extends AbstractHookCollector im
     {
         $result = [];
         foreach ($this->hooks() as $hook) {
-            $result = array_merge($result, $hook->sosaIndividualColumns($records));
+            $result += $hook->sosaIndividualColumns($records);
         }
         return $result;
     }

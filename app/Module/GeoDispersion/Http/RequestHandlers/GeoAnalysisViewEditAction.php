@@ -18,12 +18,12 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -72,15 +72,13 @@ class GeoAnalysisViewEditAction implements RequestHandlerInterface
         $view_id = (int) $request->getAttribute('view_id');
         $view = $this->geoview_data_service->find($tree, $view_id, true);
 
-        $params = (array) $request->getParsedBody();
-
-        $description    = $params['view_description'] ?? '';
-        $place_depth    = (int) ($params['view_depth'] ?? 1);
-        $top_places     = (int) ($params['view_top_places'] ?? 0);
+        $description    = Validator::parsedBody($request)->string('view_description') ?? '';
+        $place_depth    = Validator::parsedBody($request)->integer('view_depth') ?? 1;
+        $top_places     = Validator::parsedBody($request)->integer('view_top_places') ?? 0;
 
         $analysis = null;
         try {
-            $analysis = app($params['view_analysis'] ?? '');
+            $analysis = app(Validator::parsedBody($request)->string('view_analysis') ?? '');
         } catch (BindingResolutionException $ex) {
         }
 

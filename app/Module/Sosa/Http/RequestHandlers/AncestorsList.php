@@ -18,8 +18,9 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
@@ -77,7 +78,7 @@ class AncestorsList implements RequestHandlerInterface
         /** @var SosaStatisticsService $sosa_stats_service */
         $sosa_stats_service = app()->makeWith(SosaStatisticsService::class, ['tree' => $tree, 'user' => $user]);
 
-        $current_gen = (int) ($request->getQueryParams()['gen'] ?? $request->getAttribute('gen') ?? 0);
+        $current_gen = (int) (Validator::queryParams($request)->integer('gen') ?? $request->getAttribute('gen') ?? 0);
 
         return $this->viewResponse($this->module->name() . '::list-ancestors-page', [
             'module_name'       =>  $this->module->name(),

@@ -18,8 +18,9 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
@@ -95,8 +96,8 @@ class SosaConfig implements RequestHandlerInterface
             'title'             =>  I18N::translate('Sosa Configuration'),
             'tree'              =>  $tree,
             'user_id'           =>  $request->getAttribute('user'),
-            'selected_user_id'  =>  (int) ($request->getQueryParams()['user_id'] ?? 0),
-            'immediate_compute' =>  ($request->getQueryParams()['compute'] ?? '') == 'yes',
+            'selected_user_id'  =>  Validator::queryParams($request)->integer('user_id') ?? 0,
+            'immediate_compute' =>  Validator::queryParams($request)->string('compute') == 'yes',
             'users_root'        =>  $users_root
         ]);
     }

@@ -21,6 +21,7 @@ use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\NoReplyUser;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\TreeUser;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\EmailService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Fisharebest\Webtrees\Services\TreeService;
@@ -141,13 +142,13 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
             $error_logs = $this->healthcheck_service->errorLogs($tree, $nb_days);
             $nb_errors = $error_logs->sum('nblogs');
 
-            $view_params = array_merge($view_params_site, [
+            $view_params = $view_params_site + [
                 'tree'              =>  $tree,
                 'total_by_type'     =>  $this->healthcheck_service->countByRecordType($tree),
                 'change_by_type'    =>  $this->healthcheck_service->changesByRecordType($tree, $nb_days),
                 'error_logs'        =>  $error_logs,
                 'nb_errors'         =>  $nb_errors
-            ]);
+            ];
 
             $res = $res && $this->email_service->send(
                 new TreeUser($tree),
@@ -180,11 +181,11 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
     public function updateConfig(ServerRequestInterface $request, TaskSchedule $task_schedule): bool
     {
         try {
-            $params = (array) $request->getParsedBody();
+            $validator = Validator::parsedBody($request);
 
             foreach ($this->tree_service->all() as $tree) {
                 if (Auth::isManager($tree)) {
-                    $tree_enabled = (bool) ($params['HEALTHCHECK_ENABLED_' . $tree->id()] ?? false);
+                    $tree_enabled = (bool) ($validator->integer('HEALTHCHECK_ENABLED_' . $tree->id()) ?? false);
                     $tree->setPreference(self::TREE_PREFERENCE_NAME, $tree_enabled ? '1' : '0');
                 }
             }
