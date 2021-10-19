@@ -25,7 +25,6 @@ use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Services\CertificateDataService;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 /**
@@ -35,19 +34,12 @@ use Symfony\Component\Cache\Adapter\NullAdapter;
  */
 class CertificateDataServiceTest extends TestCase
 {
-    /**
-     *
-     * @var boolean
-     */
     protected static bool $uses_database = true;
 
-    /**
-     * @var CertificateDataService $certificate_data_service
-     */
-    protected $certificate_data_service;
+    protected CertificateDataService $certificate_data_service;
 
     /**
-     * @var Certificate&MockObject $certificate
+     * @var Certificate&\PHPUnit\Framework\MockObject\MockObject $certificate
      */
     protected $certificate;
 

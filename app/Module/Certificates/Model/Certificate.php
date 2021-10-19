@@ -63,7 +63,7 @@ class Certificate
      */
     protected function extractDataFromPath(string $path): void
     {
-        $path_parts = pathinfo($path);
+        $path_parts = pathinfo($this->gedcomPath());
         $this->city = $path_parts['dirname'];
         $this->basename = $path_parts['basename'];
         $this->filename = $path_parts['filename'];

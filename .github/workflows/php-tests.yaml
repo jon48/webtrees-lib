@@ -1,0 +1,40 @@
+name: Tests PHP
+
+
+on:
+  push:
+    branches-ignore:
+      - '**-dev'
+    pull_request:
+
+jobs:
+
+  phpunit:
+    name: phpunit - PHP ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+    
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-version: ['7.4', '8.0']
+
+    runs-on: ${{ matrix.operating-system }}
+
+    steps:
+      - uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: gd,intl,mbstring,sqlite,zip
+          coverage: pcov
+
+      - uses: actions/checkout@v2
+
+      - run: composer validate
+
+      - run: composer install --no-progress
+
+      - run: vendor/bin/phpunit --coverage-clover=tests/coverage.xml
+
+      - uses: codecov/codecov-action@v2
+        with:
+          file: tests/coverage.xml
+          flags: unittests

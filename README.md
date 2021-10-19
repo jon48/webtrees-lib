@@ -1,5 +1,6 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jon48/webtrees-lib/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/jon48/webtrees-lib/?branch=main)
 [![Code Climate](https://codeclimate.com/github/jon48/webtrees-lib/badges/gpa.svg)](https://codeclimate.com/github/jon48/webtrees-lib)
+[![Codecov](https://codecov.io/gh/jon48/webtrees-lib/branch/main/graph/badge.svg?token=7WCB2HDKWY)](https://codecov.io/gh/jon48/webtrees-lib)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 # webtrees-lib

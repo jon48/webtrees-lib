@@ -26,23 +26,13 @@ use InvalidArgumentException;
  */
 class UrlObfuscatorServiceTest extends TestCase
 {
-    /**
-     * @var UrlObfuscatorService
-     */
-    protected $url_obfuscator_service;
+    protected UrlObfuscatorService $url_obfuscator_service;
+    protected string $valid_key;
+    protected string $valid_nonce;
 
     /**
-     * @var string
-     */
-    protected $valid_key;
-
-    /**
-     * @var string
-     */
-    protected $valid_nonce;
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\TestCase::setUp()
      */
     protected function setUp(): void
     {
@@ -54,7 +44,8 @@ class UrlObfuscatorServiceTest extends TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\TestCase::tearDown()
      */
     protected function tearDown(): void
     {

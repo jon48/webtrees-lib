@@ -23,7 +23,10 @@
 			"php" : "7.4"
 		},
 		"sort-packages" : true,
-		"process-timeout" : 3600
+		"process-timeout" : 3600,
+        "preferred-install": {
+            "fisharebest/webtrees": "source"
+        }
 	},
 	"require" : {
 		"aura/router": "~3.1",
@@ -57,16 +60,20 @@
     },
 	"autoload" : {
 		"psr-4" : {
-			"MyArtJaub\\Webtrees\\" : "app/",
-			"MyArtJaub\\Tests\\Unit\\Webtrees\\" : "tests/unit"
+			"MyArtJaub\\Webtrees\\" : "app/"
 		},
         "files" : [
             "app/Helpers/functions.php"
         ]
 	},
     "autoload-dev": {
+        "psr-4" : {
+            "MyArtJaub\\Tests\\Helpers\\Webtrees\\" : "tests/helpers",
+            "MyArtJaub\\Tests\\Unit\\Webtrees\\" : "tests/unit"
+        },
         "files" : [
-            "vendor/fisharebest/webtrees/tests/TestCase.php"
+            "vendor/fisharebest/webtrees/tests/TestCase.php",
+            "vendor/fisharebest/webtrees/tests/app/Elements/AbstractElementTest.php"
         ]
     },
     "scripts": {

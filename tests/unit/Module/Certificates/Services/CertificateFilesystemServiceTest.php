@@ -23,7 +23,6 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Services\CertificateFilesystemService;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class CertificateFilesystemServiceTest.
@@ -32,23 +31,17 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class CertificateFilesystemServiceTest extends TestCase
 {
-    /**
-     * @var CertificateFilesystemService $certificate_filesystem_service
-     */
-    protected $certificate_filesystem_service;
+    protected CertificateFilesystemService $certificate_filesystem_service;
+    protected Filesystem $filesystem;
 
     /**
-     * @var Tree&MockObject $tree
+     * @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree
      */
     protected $tree;
 
     /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\TestCase::setUp()
      */
     protected function setUp(): void
     {
@@ -80,7 +73,8 @@ class CertificateFilesystemServiceTest extends TestCase
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\TestCase::tearDown()
      */
     protected function tearDown(): void
     {

@@ -140,8 +140,9 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
     public function certificateNeedsWatermark(Certificate $certificate, UserInterface $user): bool
     {
         $tree = $certificate->tree();
+        $watermark_level = (int) ($tree->getPreference('MAJ_CERTIF_SHOW_NO_WATERMARK', (string) Auth::PRIV_HIDE));
 
-        return Auth::accessLevel($tree, $user) > $tree->getPreference('MAJ_CERTIF_SHOW_NO_WATERMARK');
+        return Auth::accessLevel($tree, $user) > $watermark_level;
     }
 
     /**

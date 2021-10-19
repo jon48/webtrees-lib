@@ -32,7 +32,7 @@ class AdminConfigActionTest extends TestCase
     public function testHandle(): void
     {
         $certificate_service = new CertificatesModule();
-        $certificate_service->setName('certificate_mod');
+        $certificate_service->setName('mod-certificates');
         $certificate_service->boot();
 
         $module_service = $this->createMock(ModuleService::class);
