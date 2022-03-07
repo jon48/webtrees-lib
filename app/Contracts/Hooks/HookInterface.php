@@ -21,7 +21,6 @@ use Fisharebest\Webtrees\Module\ModuleInterface;
  */
 interface HookInterface
 {
-
     /**
      * Get the module attached to the hook
      *

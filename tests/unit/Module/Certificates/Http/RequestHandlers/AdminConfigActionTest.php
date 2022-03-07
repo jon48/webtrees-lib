@@ -56,7 +56,10 @@ class AdminConfigActionTest extends TestCase
 
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         self::assertCount(1, $messages);
-        self::assertSame('success', $messages[0]->status);
+
+        $first_message = $messages[0];
+        self::assertObjectHasAttribute('status', $first_message);
+        self::assertSame('success', $first_message->status);
     }
 
     public function testHandleWithNoModule(): void
@@ -78,6 +81,9 @@ class AdminConfigActionTest extends TestCase
 
         self::assertSame(StatusCodeInterface::STATUS_FOUND, $response->getStatusCode());
         self::assertCount(1, $messages);
-        self::assertSame('danger', $messages[0]->status);
+
+        $first_message = $messages[0];
+        self::assertObjectHasAttribute('status', $first_message);
+        self::assertSame('danger', $first_message->status);
     }
 }

@@ -24,7 +24,6 @@ use ReflectionClass;
  * Abstract calss for hooks collectors.
  *
  * @template THook of HookInterface
- * @implements HookCollectorInterface<THook>
  */
 abstract class AbstractHookCollector implements HookCollectorInterface, HookInterface
 {
@@ -97,6 +96,8 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::hooks()
+     *
+     * @return Collection<THook>
      */
     public function hooks(): Collection
     {

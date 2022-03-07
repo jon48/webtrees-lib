@@ -67,6 +67,6 @@ class AuthTreePreference implements MiddlewareInterface
             throw new HttpAccessDeniedException();
         }
 
-        return redirect(route(LoginPage::class, ['tree' => $tree->name(), 'url' => $request->getUri()]));
+        return redirect(route(LoginPage::class, ['tree' => $tree->name(), 'url' => (string) $request->getUri()]));
     }
 }

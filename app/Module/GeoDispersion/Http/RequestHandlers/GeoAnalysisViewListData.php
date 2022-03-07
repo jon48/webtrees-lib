@@ -34,23 +34,19 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
 {
     private ?GeoDispersionModule $module;
     private GeoAnalysisViewDataService $geoview_data_service;
-    private DatatablesService $datatables_service;
 
     /**
      * Constructor for GeoAnalysisViewListData Request Handler
      *
      * @param ModuleService $module_service
      * @param GeoAnalysisViewDataService $geoview_data_service
-     * @param DatatablesService $datatables_service
      */
     public function __construct(
         ModuleService $module_service,
-        GeoAnalysisViewDataService $geoview_data_service,
-        DatatablesService $datatables_service
+        GeoAnalysisViewDataService $geoview_data_service
     ) {
         $this->module = $module_service->findByInterface(GeoDispersionModule::class)->first();
         $this->geoview_data_service = $geoview_data_service;
-        $this->datatables_service = $datatables_service;
     }
 
     /**

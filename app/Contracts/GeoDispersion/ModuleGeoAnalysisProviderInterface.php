@@ -19,7 +19,6 @@ namespace MyArtJaub\Webtrees\Contracts\GeoDispersion;
  */
 interface ModuleGeoAnalysisProviderInterface
 {
-
     /**
      * List geographical analyses provided by the module as an array.
      *

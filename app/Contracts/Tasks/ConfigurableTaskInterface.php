@@ -22,7 +22,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 interface ConfigurableTaskInterface
 {
-
     /**
      * Returns the HTML code to display the specific task configuration.
      *

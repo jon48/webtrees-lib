@@ -21,7 +21,6 @@ use Fisharebest\Webtrees\GedcomRecord;
  */
 interface RecordNameTextExtenderInterface extends HookInterface
 {
-
     /**
      * Insert some content before the record name text.
      *

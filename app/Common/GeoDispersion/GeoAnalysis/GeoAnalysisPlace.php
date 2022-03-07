@@ -35,8 +35,6 @@ class GeoAnalysisPlace
     private const INVALID_PLACE = '##INVALID##';
 
     private Place $place;
-    private int $depth;
-    private bool $strict_depth;
     private bool $is_excluded;
 
     /**
@@ -49,8 +47,6 @@ class GeoAnalysisPlace
      */
     public function __construct(Tree $tree, ?Place $place, int $depth, bool $strict_depth = false)
     {
-        $this->depth = $depth;
-        $this->strict_depth = $strict_depth;
         $this->place = $this->extractPlace($place, $depth, $strict_depth) ?? new Place('', $tree);
         $this->is_excluded = false;
     }

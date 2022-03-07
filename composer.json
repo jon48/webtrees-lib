@@ -26,15 +26,19 @@
 		"process-timeout" : 3600,
         "preferred-install": {
             "fisharebest/webtrees": "source"
-        }
+        },
+		"allow-plugins": {
+			"composer/package-versions-deprecated": true,
+			"phpstan/extension-installer": true
+		}
 	},
 	"require" : {
 		"aura/router": "~3.1",
-		"brick/geo": "^0.6.0",
+		"brick/geo": "^0.7.0",
 		"brick/math": "~0.9",
 		"fig/http-message-util": "^1.1",
 		"fisharebest/flysystem-chroot-adapter": "~2.0",
-		"fisharebest/webtrees": "dev-main",
+		"fisharebest/webtrees": "2.1.0-alpha.1",
 		"guzzlehttp/guzzle": "~7.1",
 		"illuminate/collections": "~8.20",
 		"illuminate/database": "~8.20",
@@ -50,9 +54,10 @@
 	},
 	"require-dev" : {
 		"league/flysystem-memory": "^2.0",
-		"phpstan/phpstan-deprecation-rules": "^0.12.5",
-		"phpstan/phpstan-phpunit": "^0.12.16",
-		"phpstan/phpstan-strict-rules": "^0.12.5",
+		"phpstan/extension-installer": "^1.1",
+		"phpstan/phpstan-deprecation-rules": "^1.0",
+		"phpstan/phpstan-phpunit": "^1.0",
+		"phpstan/phpstan-strict-rules": "^1.1",
 		"phpunit/phpunit": "@stable"
 	},
     "suggest": {

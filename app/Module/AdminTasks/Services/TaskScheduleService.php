@@ -66,9 +66,9 @@ class TaskScheduleService
     public function all(bool $sync_available = false, bool $include_disabled = true): Collection
     {
         $tasks_schedules = DB::table('maj_admintasks')
-        ->select()
-        ->get()
-        ->map(self::rowMapper());
+            ->select()
+            ->get()
+            ->map(self::rowMapper());
 
         if ($sync_available) {
             $available_tasks = clone $this->available();
@@ -81,9 +81,10 @@ class TaskScheduleService
                 }
             }
 
-            foreach ($available_tasks as $task_name => $task) {
-                /** @var TaskInterface $task */
-                $this->insertTask($task_name, $task->defaultFrequency());
+            foreach ($available_tasks as $task_name => $task_class) {
+                if (null !== $task = app($task_class)) {
+                    $this->insertTask($task_name, $task->defaultFrequency());
+                }
             }
 
             return $this->all(false, $include_disabled);
@@ -95,15 +96,20 @@ class TaskScheduleService
     /**
      * Returns tasks exposed through modules implementing ModuleTasksProviderInterface.
      *
-     * @return Collection<array<string, string>>
+     * @return Collection<string, string>
      */
     public function available(): Collection
     {
-        return Registry::cache()->array()->remember('maj-available-admintasks', function () {
-            return $this->module_service
-                ->findByInterface(ModuleTasksProviderInterface::class)
-                ->flatMap(fn(ModuleTasksProviderInterface $module) => $module->listTasks());
-        });
+        return Registry::cache()->array()->remember(
+            'maj-available-admintasks',
+            function (): Collection {
+                /** @var Collection<string, string> $tasks */
+                $tasks = $this->module_service
+                    ->findByInterface(ModuleTasksProviderInterface::class)
+                    ->flatMap(fn(ModuleTasksProviderInterface $module) => $module->listTasks());
+                return $tasks;
+            }
+        );
     }
 
     /**

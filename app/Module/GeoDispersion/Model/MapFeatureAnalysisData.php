@@ -22,7 +22,6 @@ use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisPlace;
  */
 class MapFeatureAnalysisData
 {
-    private string $id;
     private int $count;
     private bool $in_map;
     /**
@@ -32,12 +31,9 @@ class MapFeatureAnalysisData
 
     /**
      * Constructor for MapFeatureAnalysisData
-     *
-     * @param string $id
      */
-    public function __construct(string $id)
+    public function __construct()
     {
-        $this->id = $id;
         $this->count = 0;
         $this->places = new Collection();
         $this->in_map = false;

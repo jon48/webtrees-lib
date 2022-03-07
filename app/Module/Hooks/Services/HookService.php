@@ -55,9 +55,8 @@ class HookService implements HookServiceInterface
     /**
      * Find a hook collector by its name, with or without the disabled ones.
      *
-     * @template THook of HookInterface
      * @param string $hook_name
-     * @return HookCollectorInterface<THook>|null
+     * @return HookCollectorInterface|null
      */
     public function find(string $hook_name, bool $include_disabled = false): ?HookCollectorInterface
     {
@@ -68,9 +67,8 @@ class HookService implements HookServiceInterface
     /**
      * Get all hook collectors subscribed by modules, with hooks ordered, with or without the disabled ones.
      *
-     * @template THook of HookInterface
      * @param bool $include_disabled
-     * @return Collection<string, HookCollectorInterface<THook>>
+     * @return Collection<string, HookCollectorInterface>
      */
     public function all(bool $include_disabled = false): Collection
     {
@@ -115,8 +113,7 @@ class HookService implements HookServiceInterface
     /**
      * Update the order of the modules implementing a hook in the database.
      *
-     * @template THook of HookInterface
-     * @param HookCollectorInterface<THook> $hook_collector
+     * @param HookCollectorInterface $hook_collector
      * @param ModuleInterface $module
      * @param int $order
      * @return int

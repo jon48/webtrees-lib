@@ -19,7 +19,6 @@ namespace MyArtJaub\Webtrees\Contracts\Hooks;
  */
 interface ModuleHookSubscriberInterface
 {
-
     /**
      * List hooks to be subscribed by the module as an array.
      *

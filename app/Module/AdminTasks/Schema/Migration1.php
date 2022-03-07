@@ -24,7 +24,6 @@ use Fisharebest\Webtrees\Carbon;
  */
 class Migration1 implements MigrationInterface
 {
-
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()

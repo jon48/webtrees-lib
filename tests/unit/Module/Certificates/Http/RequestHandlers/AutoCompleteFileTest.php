@@ -19,7 +19,6 @@ use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
  */
 class AutoCompleteFileTest extends TestCase
 {
-
     public function testHandle(): void
     {
         $certificate_module = $this->createMock(CertificatesModule::class);

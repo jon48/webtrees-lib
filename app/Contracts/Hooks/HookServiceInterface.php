@@ -19,13 +19,12 @@ namespace MyArtJaub\Webtrees\Contracts\Hooks;
  */
 interface HookServiceInterface
 {
-
     /**
      * Select the hook collector to use for a specific hook interface
      *
      * @template THook of HookInterface
      * @param class-string<THook> $hook_interface
-     * @return HookCollectorInterface<THook>|NULL
+     * @return HookCollectorInterface|NULL
      */
     public function use(string $hook_interface): ?HookCollectorInterface;
 }

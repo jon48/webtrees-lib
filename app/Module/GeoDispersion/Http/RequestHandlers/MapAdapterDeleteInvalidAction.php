@@ -69,7 +69,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
         $view_id = (int) $request->getAttribute('view_id');
@@ -80,7 +80,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
                 I18N::translate('The view with ID “%s” does not exist.', I18N::number($view_id)),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
         /** @var \Illuminate\Support\Collection<int> $valid_map_adapters */

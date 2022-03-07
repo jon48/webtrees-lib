@@ -18,12 +18,9 @@ use Illuminate\Support\Collection;
 
 /**
  * Interface for collating hooks of a same interface.
- *
- * @template THook of HookInterface
  */
 interface HookCollectorInterface
 {
-
     /**
      * Get the unique internal name for the hook collector
      *
@@ -48,14 +45,14 @@ interface HookCollectorInterface
     /**
      * Get the interface collated by the hook collector
      *
-     * @return class-string<THook>
+     * @return class-string
      */
     public function hookInterface(): string;
 
     /**
      * Register a hook instance in the hook collector
      *
-     * @param THook $hook_instance
+     * @param HookInterface $hook_instance
      * @param int $order
      */
     public function register(HookInterface $hook_instance, int $order): void;
@@ -63,7 +60,7 @@ interface HookCollectorInterface
     /**
      * Get the list of hooks registered against the hook collector
      *
-     * @return Collection<THook>
+     * @return Collection<HookInterface>
      */
     public function hooks(): Collection;
 }

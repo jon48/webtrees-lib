@@ -27,7 +27,7 @@ class Watermark
 
     /**
      * Default maximum font size for watermarks
-     * @var string DEFAULT_SIZE
+     * @var int DEFAULT_SIZE
      * */
     public const DEFAULT_SIZE = 18;
 

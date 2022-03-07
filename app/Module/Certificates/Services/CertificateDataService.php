@@ -28,7 +28,6 @@ use Generator;
  */
 class CertificateDataService
 {
-
     /**
      * Find individuals linked to a certificate.
      *

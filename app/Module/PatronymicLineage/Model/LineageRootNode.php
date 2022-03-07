@@ -23,7 +23,6 @@ use Illuminate\Support\Collection;
  */
 class LineageRootNode extends LineageNode
 {
-
     /**
      * @var Collection<string, int> $places Places for the lineage node
      */

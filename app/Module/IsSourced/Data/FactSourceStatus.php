@@ -247,6 +247,8 @@ class FactSourceStatus extends SourceStatus
             $this->addSourceHasDate($other->sourceHasDate());
             $this->addSourceMatchesFactDate($other->sourceMatchesFactDate());
         }
-        return parent::combineWith($other);
+
+        parent::combineWith($other);
+        return $this;
     }
 }

@@ -193,6 +193,8 @@ class GeoDispersionModule extends AbstractModule implements
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleChartInterface::chartUrl()
+     *
+     * @param array<bool|int|string|array<mixed>|null> $parameters
      */
     public function chartUrl(Individual $individual, array $parameters = []): string
     {

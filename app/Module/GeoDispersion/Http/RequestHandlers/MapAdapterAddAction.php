@@ -76,7 +76,7 @@ class MapAdapterAddAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
         $view_id = (int) $request->getAttribute('view_id');
@@ -96,7 +96,7 @@ class MapAdapterAddAction implements RequestHandlerInterface
                 I18N::translate('The parameters for the map configuration are not valid.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree]));
+            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
         $new_adapter_id = $this->mapadapter_data_service->insertGetId(

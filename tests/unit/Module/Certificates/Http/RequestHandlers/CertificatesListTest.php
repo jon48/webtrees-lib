@@ -20,7 +20,6 @@ use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
  */
 class CertificatesListTest extends TestCase
 {
-
     public function testHandle(): void
     {
         $tree = self::createMock(Tree::class);

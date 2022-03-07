@@ -194,7 +194,7 @@ class GeoAnalysisMapAdapter
             if ($id !== null && mb_strlen($id) > 0) {
                 $features_mapping->put(
                     $id,
-                    $features_mapping->get($id, new MapFeatureAnalysisData($id))->add($item->place(), $item->count())
+                    $features_mapping->get($id, new MapFeatureAnalysisData())->add($item->place(), $item->count())
                 );
             } else {
                 $result->exclude($item->place());

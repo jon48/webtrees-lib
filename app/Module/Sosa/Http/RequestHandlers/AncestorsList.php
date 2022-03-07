@@ -36,28 +36,16 @@ class AncestorsList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var SosaModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var SosaRecordsService $sosa_record_service
-     */
-    private $sosa_record_service;
+    private ?SosaModule $module;
 
     /**
      * Constructor for AncestorsList Request Handler
      *
      * @param ModuleService $module_service
-     * @param SosaRecordsService $sosa_record_service
      */
-    public function __construct(
-        ModuleService $module_service,
-        SosaRecordsService $sosa_record_service
-    ) {
+    public function __construct(ModuleService $module_service)
+    {
         $this->module = $module_service->findByInterface(SosaModule::class)->first();
-        $this->sosa_record_service = $sosa_record_service;
     }
 
     /**

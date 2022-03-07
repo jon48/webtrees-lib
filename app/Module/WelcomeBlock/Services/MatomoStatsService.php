@@ -28,7 +28,6 @@ use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
  */
 class MatomoStatsService
 {
-
     /**
      * Returns the number of visits for the current year (up to the day before).
      * That statistic is cached for the day, to avoid unecessary calls to Matomo API.

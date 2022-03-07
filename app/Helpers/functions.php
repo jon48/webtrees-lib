@@ -22,7 +22,7 @@ use MyArtJaub\Webtrees\Contracts\Hooks\HookServiceInterface;
  * @template TReturn
  *
  * @param class-string<THook> $hook_interface
- * @param callable(\MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface<THook>): TReturn $apply
+ * @param callable(\MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface): TReturn $apply
  * @param TReturn|null $default
  * @return TReturn|null
  */

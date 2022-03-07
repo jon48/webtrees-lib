@@ -72,8 +72,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
     /**
      * Update the order of modules for a hook interface.
      *
-     * @template THook of \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface
-     * @param HookCollectorInterface<THook> $hook_collector
+     * @param HookCollectorInterface $hook_collector
      * @param ServerRequestInterface $request
      */
     protected function updateHookOrder(HookCollectorInterface $hook_collector, ServerRequestInterface $request): void

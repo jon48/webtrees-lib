@@ -92,6 +92,8 @@ class PatronymicLineageModule extends IndividualListModule implements
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listUrl()
+     *
+     * @param array<bool|int|string|array<mixed>|null> $parameters
      */
     public function listUrl(Tree $tree, array $parameters = []): string
     {

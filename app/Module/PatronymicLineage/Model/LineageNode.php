@@ -24,7 +24,6 @@ use stdClass;
  */
 class LineageNode
 {
-
     /**
      * @var Collection<string, stdClass>  $linked_fams Spouse families linked to the node
      */

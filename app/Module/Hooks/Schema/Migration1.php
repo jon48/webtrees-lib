@@ -23,7 +23,6 @@ use Illuminate\Database\Schema\Blueprint;
  */
 class Migration1 implements MigrationInterface
 {
-
     /**
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()

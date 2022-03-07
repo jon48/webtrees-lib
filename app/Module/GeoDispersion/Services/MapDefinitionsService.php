@@ -61,10 +61,15 @@ class MapDefinitionsService
     {
         return Registry::cache()->array()->remember(
             'maj-geodisp-maps-all',
-            fn() => $this->module_service
-                ->findByInterface(ModuleMapDefinitionProviderInterface::class, $include_disabled)
-                ->flatMap(fn(ModuleMapDefinitionProviderInterface $module) => $module->listMapDefinition())
-                ->mapWithKeys(fn(MapDefinitionInterface $map) => [ $map->id() => $map ])
+            function () use ($include_disabled): Collection {
+                /** @var Collection<string, MapDefinitionInterface> $map_definitions */
+                $map_definitions = $this->module_service
+                    ->findByInterface(ModuleMapDefinitionProviderInterface::class, $include_disabled)
+                    ->flatMap(fn(ModuleMapDefinitionProviderInterface $module) => $module->listMapDefinition())
+                    ->mapWithKeys(fn(MapDefinitionInterface $map) => [ $map->id() => $map ]);
+
+                return $map_definitions;
+            }
         );
     }
 }

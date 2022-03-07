@@ -19,7 +19,6 @@ namespace MyArtJaub\Webtrees\Contracts\Tasks;
  */
 interface ModuleTasksProviderInterface
 {
-
     /**
      * List tasks provided by the module as an associative array.
      * They keys are used as task IDs for storage and reference.

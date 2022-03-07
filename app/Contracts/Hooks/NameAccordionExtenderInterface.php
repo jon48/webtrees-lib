@@ -21,7 +21,6 @@ use Fisharebest\Webtrees\Individual;
  */
 interface NameAccordionExtenderInterface extends HookInterface
 {
-
     /**
      * Add a new card to the names accordion.
      *

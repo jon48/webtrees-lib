@@ -29,7 +29,6 @@ use MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus;
  */
 class SourceStatusService
 {
-
     /**
      * Maximum timespan between the date of a source and the date of the event to consider the source precise.
      * Arbitrally set to approximately a year around the event date.
