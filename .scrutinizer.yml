@@ -32,6 +32,8 @@ coding_style:
             other:
                 after_type_cast: false
 build:
+    environment:
+        php: 8.0
     nodes:
         analysis:
             tests:

@@ -15,7 +15,7 @@ phpdoc.dist.xml             export-ignore
 phpstan.neon.dist           export-ignore
 phpstan-baseline.neon       export-ignore
 phpunitgen.yml.dist         export-ignore
-psalm-baseline.xml          export-ignore
+psalm.baseline.xml          export-ignore
 psalm.xml                   export-ignore
 sonar-project.properties    export-ignore
 
