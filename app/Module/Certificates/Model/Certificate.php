@@ -67,7 +67,7 @@ class Certificate
         $this->city = $path_parts['dirname'];
         $this->basename = $path_parts['basename'];
         $this->filename = $path_parts['filename'];
-        $this->extension = strtolower($path_parts['extension'] ?? '');
+        $this->extension = strtoupper($path_parts['extension'] ?? '');
 
         if (preg_match(self::FILENAME_PATTERN, $this->filename, $match) === 1) {
             $this->type = $match['type'];

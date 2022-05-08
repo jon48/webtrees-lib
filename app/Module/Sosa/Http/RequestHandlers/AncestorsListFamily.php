@@ -20,6 +20,7 @@ use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -73,12 +74,9 @@ class AncestorsListFamily implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $user = Auth::check() ? $request->getAttribute('user') : new DefaultUser();
-
-        $current_gen = (int) ($request->getAttribute('gen') ?? 0);
+        $tree = Validator::attributes($request)->tree();
+        $user = Auth::check() ? Validator::attributes($request)->user() : new DefaultUser();
+        $current_gen = Validator::attributes($request)->integer('gen', 0);
 
         if ($current_gen <= 0) {
             return response('Invalid generation', StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY);

@@ -33,15 +33,7 @@ class SurnamesList implements RequestHandlerInterface
 {
     use ViewResponseTrait;
 
-    /**
-     * @var PatronymicLineageModule|null $module
-     */
-    private $module;
-
-    /**
-     * @var IndividualListModule|null $indilist_module
-     */
-    private $indilist_module;
+    private ?PatronymicLineageModule $module;
 
     /**
      * Constructor for SurnamesList Request Handler
@@ -51,7 +43,6 @@ class SurnamesList implements RequestHandlerInterface
     public function __construct(ModuleService $module_service)
     {
         $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
-        $this->indilist_module = $module_service->findByInterface(IndividualListModule::class)->first();
     }
 
     /**
@@ -64,28 +55,22 @@ class SurnamesList implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        if ($this->indilist_module === null) {
-            throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
-        }
+        $tree = Validator::attributes($request)->tree();
+        $initial = Validator::attributes($request)->string('alpha', '');
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $initial = $request->getAttribute('alpha');
-        $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
+        $initials_list = collect($this->module->surnameAlpha($tree, false, false, I18N::locale()))
             ->reject(function (int $count, string $initial): bool {
-
                 return $initial === '@' || $initial === ',';
             });
 
-        $show_all = Validator::queryParams($request)->string('show_all') ?? 'no';
+        $show_all = Validator::queryParams($request)->string('show_all', 'no');
 
         if ($show_all === 'yes') {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . I18N::translate('All');
-            $surnames = $this->indilist_module->surnames($tree, '', '', false, false, I18N::locale());
-        } elseif ($initial !== null && mb_strlen($initial) == 1) {
+            $surnames = $this->module->surnames($tree, '', '', false, false, I18N::locale());
+        } elseif (mb_strlen($initial) == 1) {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . $initial;
-            $surnames = $this->indilist_module->surnames($tree, '', $initial, false, false, I18N::locale());
+            $surnames = $this->module->surnames($tree, '', $initial, false, false, I18N::locale());
         } else {
             $title =  I18N::translate('Patronymic Lineages');
             $surnames = [];

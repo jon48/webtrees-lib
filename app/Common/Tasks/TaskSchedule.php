@@ -14,8 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Common\Tasks;
 
-use Carbon\CarbonInterval;
-use Fisharebest\Webtrees\Carbon;
+use Fisharebest\Webtrees\Contracts\TimestampInterface;
 
 /**
  * Object to describe a schedule for a task.
@@ -27,9 +26,9 @@ class TaskSchedule
     private int $id;
     private bool $enabled;
     private string $task_id;
-    private Carbon $last_run;
+    private TimestampInterface $last_run;
     private bool $last_result;
-    private CarbonInterval $frequency;
+    private int $frequency;
     private int $nb_occurrences;
     private bool $is_running;
 
@@ -39,9 +38,9 @@ class TaskSchedule
      * @param int $id Schedule ID
      * @param string $task_id Task ID
      * @param bool $enabled Is the schedule enabled
-     * @param Carbon $last_run Last successful run date/time
+     * @param TimestampInterface $last_run Last successful run date/time
      * @param bool $last_result Result of the last run
-     * @param CarbonInterval $frequency Schedule frequency
+     * @param int $frequency Schedule frequency in minutes
      * @param int $nb_occurrences Number of remaining occurrences to be run
      * @param bool $is_running Is the task currently running
      */
@@ -49,9 +48,9 @@ class TaskSchedule
         int $id,
         string $task_id,
         bool $enabled,
-        Carbon $last_run,
+        TimestampInterface $last_run,
         bool $last_result,
-        CarbonInterval $frequency,
+        int $frequency,
         int $nb_occurrences,
         bool $is_running
     ) {
@@ -120,9 +119,9 @@ class TaskSchedule
     /**
      * Get the frequency of the schedule
      *
-     * @return CarbonInterval
+     * @return int
      */
-    public function frequency(): CarbonInterval
+    public function frequency(): int
     {
         return $this->frequency;
     }
@@ -130,10 +129,10 @@ class TaskSchedule
     /**
      * Set the frequency of the schedule
      *
-     * @param CarbonInterval $frequency
+     * @param int $frequency
      * @return $this
      */
-    public function setFrequency(CarbonInterval $frequency): self
+    public function setFrequency(int $frequency): self
     {
         $this->frequency = $frequency;
         return $this;
@@ -142,9 +141,9 @@ class TaskSchedule
     /**
      * Get the date/time of the last successful run.
      *
-     * @return Carbon
+     * @return TimestampInterface
      */
-    public function lastRunTime(): Carbon
+    public function lastRunTime(): TimestampInterface
     {
         return $this->last_run;
     }
@@ -152,10 +151,10 @@ class TaskSchedule
     /**
      * Set the last successful run date/time
      *
-     * @param Carbon $last_run
+     * @param TimestampInterface $last_run
      * @return $this
      */
-    public function setLastRunTime(Carbon $last_run): self
+    public function setLastRunTime(TimestampInterface $last_run): self
     {
         $this->last_run = $last_run;
         return $this;
@@ -189,18 +188,18 @@ class TaskSchedule
      *
      * @return int
      */
-    public function remainingOccurences(): int
+    public function remainingOccurrences(): int
     {
         return $this->nb_occurrences;
     }
 
     /**
-     * Decrements the number of remaining occurences by 1.
+     * Decrements the number of remaining occurrences by 1.
      * The task will be disabled when the number reaches 0.
      *
      * @return $this
      */
-    public function decrementRemainingOccurences(): self
+    public function decrementRemainingOccurrences(): self
     {
         if ($this->nb_occurrences > 0) {
             $this->nb_occurrences--;
@@ -212,12 +211,12 @@ class TaskSchedule
     }
 
     /**
-     * Set the number of remaining occurences of task runs.
+     * Set the number of remaining occurrences of task runs.
      *
      * @param int $nb_occurrences
      * @return $this
      */
-    public function setRemainingOccurences(int $nb_occurrences): self
+    public function setRemainingOccurrences(int $nb_occurrences): self
     {
         $this->nb_occurrences = $nb_occurrences;
         return $this;
@@ -257,7 +256,7 @@ class TaskSchedule
      * Returns the schedule details as an associate array
      *
      * @phpcs:ignore Generic.Files.LineLength.TooLong
-     * @return array{id: int, task_id: string, enabled: bool, last_run: Carbon, last_result: bool, frequency: CarbonInterval, nb_occurrences: int, is_running: bool}
+     * @return array{id: int, task_id: string, enabled: bool, last_run: TimestampInterface, last_result: bool, frequency: int, nb_occurrences: int, is_running: bool}
      */
     public function toArray(): array
     {

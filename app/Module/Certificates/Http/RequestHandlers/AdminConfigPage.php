@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Contracts\UserInterface;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -62,16 +63,14 @@ class AdminConfigPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $user = $request->getAttribute('user');
-        assert($user instanceof UserInterface);
+        $user = Validator::attributes($request)->user();
 
         $all_trees = $this->tree_service->all()->filter(fn(Tree $tree) => Auth::isManager($tree, $user));
         if ($all_trees->count() === 0) {
             throw new HttpAccessDeniedException();
         }
 
-        $tree = $request->getAttribute('tree') ?? $all_trees->first();
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->treeOptional('tree') ?? $all_trees->first();
 
         $data_folder = Registry::filesystem()->dataName();
 

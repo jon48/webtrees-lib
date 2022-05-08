@@ -29,6 +29,8 @@ class Migration1 implements MigrationInterface
      */
     public function upgrade(): void
     {
+        $in_transaction = DB::connection()->getPdo()->inTransaction();
+
         if (DB::schema()->hasTable('maj_hooks')) {
             DB::schema()->drop('maj_hooks');
         }
@@ -40,5 +42,9 @@ class Migration1 implements MigrationInterface
 
             $table->primary(['majho_module_name', 'majho_hook_name']);
         });
+
+        if ($in_transaction && !DB::connection()->getPdo()->inTransaction()) {
+            DB::connection()->beginTransaction();
+        }
     }
 }

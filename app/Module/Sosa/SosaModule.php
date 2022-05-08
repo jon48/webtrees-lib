@@ -23,6 +23,7 @@ use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Menu;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\RequestHandlers\IndividualPage;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
@@ -148,7 +149,7 @@ class SosaModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.0-v.1';
+        return '2.1.1-v.1';
     }
 
     /**
@@ -197,14 +198,12 @@ class SosaModule extends AbstractModule implements
 
             /** @var ServerRequestInterface $request */
             $request = app(ServerRequestInterface::class);
-            $route = $request->getAttribute('route');
-            assert($route instanceof Route);
+            $route = Validator::attributes($request)->route();
 
             $root_indi_id = $tree->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID');
 
             if ($route->name === IndividualPage::class && mb_strlen($root_indi_id) > 0) {
-                $xref = $request->getAttribute('xref');
-                assert(is_string($xref));
+                $xref = Validator::attributes($request)->isXref()->string('xref', '');
 
                 $menu->addSubmenu(new Menu(
                     I18N::translate('Complete Sosas'),

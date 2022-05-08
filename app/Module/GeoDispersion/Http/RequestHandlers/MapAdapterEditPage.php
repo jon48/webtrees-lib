@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -70,10 +71,10 @@ class MapAdapterEditPage implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
 
-        $adapter_id = (int) $request->getAttribute('adapter_id');
+        $tree = Validator::attributes($request)->tree();
+
+        $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
         if ($map_adapter === null) {

@@ -29,6 +29,8 @@ class Migration1 implements MigrationInterface
      */
     public function upgrade(): void
     {
+        $in_transaction = DB::connection()->getPdo()->inTransaction();
+
         DB::schema()->create('maj_geodisp_views', static function (Blueprint $table): void {
             $table->integer('majgv_id')->autoIncrement();
             $table->integer('majgv_gedcom_id')->index();
@@ -53,5 +55,9 @@ class Migration1 implements MigrationInterface
 
             $table->foreign('majgm_majgv_id')->references('majgv_id')->on('maj_geodisp_views')->onDelete('cascade');
         });
+
+        if ($in_transaction && !DB::connection()->getPdo()->inTransaction()) {
+            DB::connection()->beginTransaction();
+        }
     }
 }

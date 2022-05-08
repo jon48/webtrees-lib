@@ -15,10 +15,13 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Certificates\Hooks;
 
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
+use MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
 
@@ -55,19 +58,49 @@ class SourceCertificateIconHook implements FactSourceTextExtenderInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourcePrepend()
      */
-    public function factSourcePrepend(Tree $tree, string $source_record, int $level): string
+    public function factSourcePrepend(Tree $tree, $fact): string
     {
         $permission_level = $tree->getPreference('MAJ_CERTIF_SHOW_CERT');
-        if (
-            is_numeric($permission_level) && Auth::accessLevel($tree) <= (int) $permission_level &&
-            preg_match('/^' . $level . ' _ACT (.*)$/m', $source_record, $match) === 1
+        if (is_numeric($permission_level) && Auth::accessLevel($tree) <= (int) $permission_level) {
+            $path = $this->extractPath($fact);
+
+            if ($path !== '') {
+                $certificate = new Certificate($tree, $path);
+                return view($this->module->name() . '::components/certificate-icon', [
+                    'module_name'               =>  $this->module->name(),
+                    'certificate'               =>  $certificate,
+                    'url_obfuscator_service'    =>  $this->url_obfuscator_service,
+                    'js_script_url'             =>  $this->module->assetUrl('js/certificates.min.js')
+                ]);
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Extract path from the provided fact objet.
+     *
+     * @param \Fisharebest\Webtrees\Fact|array<array<\Fisharebest\Webtrees\Contracts\ElementInterface|string>> $fact
+     * @return string
+     * @psalm-suppress RedundantConditionGivenDocblockType
+     */
+    private function extractPath($fact): string
+    {
+        if ($fact instanceof Fact && $fact->target() instanceof Source) {
+            return $fact->attribute('_ACT');
+        } elseif (
+            is_array($fact) && count($fact) == 2
+            && null !== ($source_elements = $fact[0]) && is_array($source_elements) // @phpstan-ignore-line
+            && null !== ($source_values = $fact[1]) && is_array($source_values) // @phpstan-ignore-line
         ) {
-            return view($this->module->name() . '::components/certificate-icon', [
-                'module_name'               =>  $this->module->name(),
-                'certificate'               =>  new Certificate($tree, $match[1]),
-                'url_obfuscator_service'    =>  $this->url_obfuscator_service,
-                'js_script_url'             =>  $this->module->assetUrl('js/certificates.min.js')
-            ]);
+            foreach ($source_elements as $key => $element) {
+                if (
+                    $element instanceof SourceCertificate
+                    && isset($source_values[$key]) && is_string($source_values[$key])
+                ) {
+                    return $element->canonical($source_values[$key]);
+                }
+            }
         }
         return '';
     }
@@ -76,7 +109,7 @@ class SourceCertificateIconHook implements FactSourceTextExtenderInterface
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourceAppend()
      */
-    public function factSourceAppend(Tree $tree, string $source_record, int $level): string
+    public function factSourceAppend(Tree $tree, $fact): string
     {
         return '';
     }

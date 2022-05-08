@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Module\IndividualListModule;
@@ -68,10 +69,8 @@ class LineagesPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $surname = $request->getAttribute('surname');
+        $tree = Validator::attributes($request)->tree();
+        $surname = Validator::attributes($request)->string('$surname', '');
 
         $initial = mb_substr($surname, 0, 1);
         $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))

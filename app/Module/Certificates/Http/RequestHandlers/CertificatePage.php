@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePage;
@@ -87,10 +88,9 @@ class CertificatePage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
-        $certif_path = $request->getAttribute('cid');
+        $certif_path = Validator::attributes($request)->string('cid', '');
         if ($certif_path !== '' && $this->url_obfuscator_service->tryDeobfuscate($certif_path)) {
             $certificate = $this->certif_filesystem->certificate($tree, $certif_path);
         }

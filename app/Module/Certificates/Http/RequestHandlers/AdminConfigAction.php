@@ -48,8 +48,7 @@ class AdminConfigAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
 
@@ -63,32 +62,32 @@ class AdminConfigAction implements RequestHandlerInterface
 
         $tree->setPreference(
             'MAJ_CERTIF_SHOW_CERT',
-            (string) (Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_CERT') ?? Auth::PRIV_HIDE)
+            (string) Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_CERT', Auth::PRIV_HIDE)
         );
         $tree->setPreference(
             'MAJ_CERTIF_SHOW_NO_WATERMARK',
-            (string) (Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_NO_WATERMARK') ?? Auth::PRIV_HIDE)
+            (string) Validator::parsedBody($request)->integer('MAJ_CERTIF_SHOW_NO_WATERMARK', Auth::PRIV_HIDE)
         );
         $tree->setPreference(
             'MAJ_CERTIF_WM_DEFAULT',
-            Validator::parsedBody($request)->string('MAJ_CERTIF_WM_DEFAULT') ?? ''
+            Validator::parsedBody($request)->string('MAJ_CERTIF_WM_DEFAULT', '')
         );
 
         $tree->setPreference(
             'MAJ_CERTIF_WM_FONT_MAXSIZE',
             (string) (
-                Validator::parsedBody($request)->isBetween(0, PHP_INT_MAX)->integer('MAJ_CERTIF_WM_FONT_MAXSIZE') ?? 18
+                Validator::parsedBody($request)->isBetween(0, PHP_INT_MAX)->integer('MAJ_CERTIF_WM_FONT_MAXSIZE', 18)
             )
         );
 
         // Only accept valid color for MAJ_WM_FONT_COLOR
-        $watermark_color = Validator::parsedBody($request)->string('MAJ_CERTIF_WM_FONT_COLOR') ?? '';
+        $watermark_color = Validator::parsedBody($request)->string('MAJ_CERTIF_WM_FONT_COLOR', '');
         if (preg_match('/#([a-fA-F0-9]{3}){1,2}/', $watermark_color) === 1) {
             $tree->setPreference('MAJ_CERTIF_WM_FONT_COLOR', $watermark_color);
         }
 
         // Only accept valid folders for MAJ_CERT_ROOTDIR
-        $cert_root_dir = Validator::parsedBody($request)->string('MAJ_CERTIF_ROOTDIR') ?? '';
+        $cert_root_dir = Validator::parsedBody($request)->string('MAJ_CERTIF_ROOTDIR', '');
         $cert_root_dir = preg_replace('/[:\/\\\\]+/', '/', $cert_root_dir) ?? '';
         $cert_root_dir = trim($cert_root_dir, '/') . '/';
         $tree->setPreference('MAJ_CERTIF_ROOTDIR', $cert_root_dir);

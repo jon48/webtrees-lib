@@ -63,13 +63,12 @@ class MapAdapterMapperConfig implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
-        $adapter_id = (int) $request->getAttribute('adapter_id');
+        $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
-        $mapper_class = Validator::queryParams($request)->string('mapper') ?? '';
+        $mapper_class = Validator::queryParams($request)->string('mapper', '');
         $mapper = null;
         if ($mapper_class === '' && $map_adapter !== null) {
             $mapper = $map_adapter->placeMapper();

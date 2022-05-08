@@ -20,8 +20,8 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Module\IndividualListModule;
 use Illuminate\Support\Collection;
+use MyArtJaub\Webtrees\Module\PatronymicLineage\PatronymicLineageModule;
 
 /**
  * Build the patronymic lineage for a surname
@@ -30,7 +30,7 @@ class LineageBuilder
 {
     private string $surname;
     private Tree $tree;
-    private ?IndividualListModule $indilist_module;
+    private PatronymicLineageModule $patrolineage_module;
 
     /**
      * @var Collection<string, bool> $used_indis Individuals already processed
@@ -43,11 +43,11 @@ class LineageBuilder
      * @param string $surname Reference surname
      * @param Tree $tree Gedcom tree
      */
-    public function __construct($surname, Tree $tree, IndividualListModule $indilist_module)
+    public function __construct(string $surname, Tree $tree, PatronymicLineageModule $patrolineage_module)
     {
         $this->surname = $surname;
         $this->tree = $tree;
-        $this->indilist_module = $indilist_module;
+        $this->patrolineage_module = $patrolineage_module;
         $this->used_indis = new Collection();
     }
 
@@ -58,12 +58,16 @@ class LineageBuilder
      */
     public function buildLineages(): ?Collection
     {
-        if ($this->indilist_module === null) {
-            return null;
-        }
-
-        $indis = $this->indilist_module->individuals($this->tree, $this->surname, '', '', false, false, I18N::locale());
-        //Warning - the IndividualListModule returns a clone of individuals objects. Cannot be used for object equality
+        $indis = $this->patrolineage_module->individuals(
+            $this->tree,
+            $this->surname,
+            '',
+            '',
+            false,
+            false,
+            I18N::locale()
+        );
+        //Warning - the individuals method returns a clone of individuals objects. Cannot be used for object equality
         if (count($indis) == 0) {
             return null;
         }

@@ -19,6 +19,7 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
@@ -58,10 +59,8 @@ class PedigreeCollapseData implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $user = Auth::check() ? $request->getAttribute('user') : new DefaultUser();
+        $tree = Validator::attributes($request)->tree();
+        $user = Auth::check() ? Validator::attributes($request)->user() : new DefaultUser();
 
         /** @var SosaStatisticsService $sosa_stats_service */
         $sosa_stats_service = app()->makeWith(SosaStatisticsService::class, ['tree' => $tree, 'user' => $user]);

@@ -56,8 +56,7 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
 
@@ -69,20 +68,17 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        $type           = Validator::parsedBody($request)->string('view_type') ?? '';
-        $description    = Validator::parsedBody($request)->string('view_description') ?? '';
-        $place_depth    = Validator::parsedBody($request)->integer('view_depth') ?? 1;
+        $type           = Validator::parsedBody($request)->isInArray(['table', 'map'])->string('view_type', '');
+        $description    = Validator::parsedBody($request)->string('view_description', '');
+        $place_depth    = Validator::parsedBody($request)->integer('view_depth', 1);
 
         $analysis = null;
         try {
-            $analysis = app(Validator::parsedBody($request)->string('view_analysis') ?? '');
+            $analysis = app(Validator::parsedBody($request)->string('view_analysis', ''));
         } catch (BindingResolutionException $ex) {
         }
 
-        if (
-            !in_array($type, ['table', 'map'], true) || $place_depth <= 0
-            || $analysis === null || !($analysis instanceof GeoAnalysisInterface)
-        ) {
+        if ($type === '' || $place_depth <= 0 || $analysis === null || !($analysis instanceof GeoAnalysisInterface)) {
             FlashMessages::addMessage(
                 I18N::translate('The parameters for the new view are not valid.'),
                 'danger'

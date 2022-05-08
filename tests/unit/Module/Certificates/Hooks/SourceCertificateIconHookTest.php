@@ -3,12 +3,17 @@
 namespace MyArtJaub\Tests\Unit\Webtrees\Module\Certificates\Hooks;
 
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\Fact;
+use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
+use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Tests\Helpers\Webtrees\TestCase;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
 use MyArtJaub\Webtrees\Module\Certificates\Hooks\SourceCertificateIconHook;
 use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
+use MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate;
 
 /**
  * Class SourceCertificateIconHookTest.
@@ -29,6 +34,10 @@ class SourceCertificateIconHookTest extends TestCase
 
         $module = $this->createMock(CertificatesModule::class);
         $module->setName('mod-certificates');
+
+        Registry::elementFactory()->registerTags([
+            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $module)
+        ]);
 
         $user_service = $this->createMock(UserService::class);
         $user_service->method('find')->willReturn(null);
@@ -56,15 +65,43 @@ class SourceCertificateIconHookTest extends TestCase
         self::assertSame('mod-certificates', $this->sci_hook->module()->name());
     }
 
-    public function testFactSourcePrepend(): void
+    public function testFactSourcePrependWithFact(): void
     {
         $tree = $this->createMock(Tree::class);
         $tree->method('getPreference')->with('MAJ_CERTIF_SHOW_CERT')->willReturn((string) Auth::PRIV_PRIVATE);
 
+        $source = $this->createMock(Source::class);
+
+        $fact_ok = $this->createMock(Fact::class);
+        $fact_ok->method('target')->willReturn($source);
+        $fact_ok->method('attribute')->with('_ACT')->willReturn('city/certificate.png');
+
+        $fact_fail = $this->createMock(Fact::class);
+        $fact_fail->method('target')->willReturn($source);
+        $fact_fail->method('attribute')->with('_ACT')->willReturn('');
+
         self::useDefaultViewFor('mod-certificates::components/certificate-icon');
 
-        self::assertNotEmpty($this->sci_hook->factSourcePrepend($tree, '3 _ACT city/certificate.png', 3));
-        self::assertEmpty($this->sci_hook->factSourcePrepend($tree, '1 BIRT Y', 3));
+        self::assertNotEmpty($this->sci_hook->factSourcePrepend($tree, $fact_ok));
+        self::assertEmpty($this->sci_hook->factSourcePrepend($tree, $fact_fail));
+    }
+
+    public function testFactSourcePrependWithArray(): void
+    {
+        $tree = $this->createMock(Tree::class);
+        $tree->method('getPreference')->with('MAJ_CERTIF_SHOW_CERT')->willReturn((string) Auth::PRIV_PRIVATE);
+
+        $array_ok = [[Registry::elementFactory()->make('INDI:SOUR:_ACT')], ['city/certificate.png']];
+        $array_fail_empty_value = [[Registry::elementFactory()->make('INDI:SOUR:_ACT')], ['']];
+        $array_fail_no_value = [[Registry::elementFactory()->make('INDI:SOUR:_ACT')], []];
+        $array_fail_no_act = [[Registry::elementFactory()->make('INDI:SOUR:DATA')], ['city/certificate.png']];
+
+        self::useDefaultViewFor('mod-certificates::components/certificate-icon');
+
+        self::assertNotEmpty($this->sci_hook->factSourcePrepend($tree, $array_ok));
+        self::assertEmpty($this->sci_hook->factSourcePrepend($tree, $array_fail_empty_value));
+        self::assertEmpty($this->sci_hook->factSourcePrepend($tree, $array_fail_no_value));
+        self::assertEmpty($this->sci_hook->factSourcePrepend($tree, $array_fail_no_act));
     }
 
     public function testFactSourceAppend(): void
@@ -72,6 +109,8 @@ class SourceCertificateIconHookTest extends TestCase
         $tree = $this->createMock(Tree::class);
         $tree->method('getPreference')->with('MAJ_CERTIF_SHOW_CERT')->willReturn((string) Auth::PRIV_PRIVATE);
 
-        self::assertEmpty($this->sci_hook->factSourceAppend($tree, '3 _ACT city/certificate.png', 3));
+        $array = [[Registry::elementFactory()->make('INDI:SOUR:_ACT')], ['city/certificate.png']];
+
+        self::assertEmpty($this->sci_hook->factSourceAppend($tree, $array));
     }
 }

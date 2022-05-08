@@ -72,13 +72,10 @@ class CertificateImage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
+        $user = Validator::attributes($request)->user();
 
-        $user = $request->getAttribute('user');
-        assert($user instanceof UserInterface);
-
-        $certif_path = $request->getAttribute('cid');
+        $certif_path = Validator::attributes($request)->string('cid', '');
         $certificate = null;
         if ($certif_path !== '' && $this->url_obfuscator_service->tryDeobfuscate($certif_path)) {
             $certificate = $this->certif_filesystem->certificate($tree, $certif_path);
@@ -126,8 +123,8 @@ class CertificateImage implements RequestHandlerInterface
      */
     private function watermarkText(ServerRequestInterface $request, Certificate $certificate): string
     {
-        $sid = Validator::queryParams($request)->isXref()->string('sid');
-        if ($sid !== null) {
+        $sid = Validator::queryParams($request)->isXref()->string('sid', '');
+        if ($sid !== '') {
             $source = Registry::sourceFactory()->make($sid, $certificate->tree());
         } else {
             $source = $this->certif_data_service->oneLinkedSource($certificate);

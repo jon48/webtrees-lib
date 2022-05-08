@@ -69,10 +69,10 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
      */
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {
-        $default_color  = Validator::parsedBody($request)->string('view_map_color_default') ?? '';
-        $stroke_color   = Validator::parsedBody($request)->string('view_map_color_stroke') ?? '';
-        $maxvalue_color  = Validator::parsedBody($request)->string('view_map_color_maxvalue') ?? '';
-        $hover_color  = Validator::parsedBody($request)->string('view_map_color_hover') ?? '';
+        $default_color  = Validator::parsedBody($request)->string('view_map_color_default', '');
+        $stroke_color   = Validator::parsedBody($request)->string('view_map_color_stroke', '');
+        $maxvalue_color  = Validator::parsedBody($request)->string('view_map_color_maxvalue', '');
+        $hover_color  = Validator::parsedBody($request)->string('view_map_color_hover', '');
 
         try {
             return $this->withColors(new MapColorsConfig(

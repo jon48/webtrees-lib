@@ -19,10 +19,11 @@ use MyArtJaub\Webtrees\Contracts\Hooks\HookServiceInterface;
  * Invoke a hook interface and get hold of its result.
  *
  * @template THook of \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface
+ * @template TCollector of \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface
  * @template TReturn
  *
  * @param class-string<THook> $hook_interface
- * @param callable(\MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface): TReturn $apply
+ * @param callable(TCollector): TReturn $apply
  * @param TReturn|null $default
  * @return TReturn|null
  */

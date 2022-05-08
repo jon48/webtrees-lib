@@ -62,7 +62,7 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
      */
     public function isMimeTypeSupported(string $mime): bool
     {
-        return array_key_exists($mime, self::INTERVENTION_FORMATS);
+        return array_key_exists($mime, self::SUPPORTED_FORMATS);
     }
 
     /**
@@ -114,7 +114,7 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
                 }
             }
 
-            $format  = static::INTERVENTION_FORMATS[$image->mime()] ?? 'jpg';
+            $format  = static::SUPPORTED_FORMATS[$image->mime()] ?? 'jpg';
             $quality = $this->extractImageQuality($image, static::GD_DEFAULT_IMAGE_QUALITY);
             $data    = (string) $image->encode($format, $quality);
 

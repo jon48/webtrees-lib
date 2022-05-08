@@ -50,11 +50,10 @@ class SosaComputeAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
-        $user_id = Validator::parsedBody($request)->integer('user_id') ?? Auth::id() ?? 0;
-        $partial_from = Validator::parsedBody($request)->isXref()->string('partial_from');
+        $user_id = Validator::parsedBody($request)->integer('user_id', Auth::id() ?? 0);
+        $partial_from = Validator::parsedBody($request)->isXref()->string('partial_from', '');
 
         if (($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
@@ -63,7 +62,7 @@ class SosaComputeAction implements RequestHandlerInterface
             $sosa_calc_service = app()->makeWith(SosaCalculatorService::class, [ 'tree' => $tree, 'user' => $user]);
 
             if (
-                $partial_from !== null &&
+                $partial_from !== '' &&
                 ($sosa_from = Registry::individualFactory()->make($partial_from, $tree)) !== null
             ) {
                 $res = $sosa_calc_service->computeFromIndividual($sosa_from);

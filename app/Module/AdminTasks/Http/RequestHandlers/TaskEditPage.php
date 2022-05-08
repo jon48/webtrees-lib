@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -59,7 +60,7 @@ class TaskEditPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $task_sched_id = (int) $request->getAttribute('task');
+        $task_sched_id = Validator::attributes($request)->integer('task', -1);
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
 
         if ($task_schedule === null) {

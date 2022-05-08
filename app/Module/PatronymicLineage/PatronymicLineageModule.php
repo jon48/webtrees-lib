@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
 
 use Aura\Router\Map;
+use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
@@ -23,6 +24,7 @@ use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
+use Illuminate\Support\Collection;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\LineagesPage;
@@ -131,5 +133,42 @@ class PatronymicLineageModule extends IndividualListModule implements
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\IndividualListModule::individuals()
+     *
+     * Implemented to set the visibility to public.
+     * This should probably be in a service, but this hack allows for reuse of mainstream code.
+     */
+    public function individuals(
+        Tree $tree,
+        string $surn,
+        string $salpha,
+        string $galpha,
+        bool $marnm,
+        bool $fams,
+        LocaleInterface $locale
+    ): Collection {
+        return parent::individuals($tree, $surn, $salpha, $galpha, $marnm, $fams, $locale);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnames()
+     *
+     * Implemented to set the visibility to public.
+     * This should probably be in a service, but this hack allows for reuse of mainstream code.
+     */
+    public function surnames(
+        Tree $tree,
+        string $surn,
+        string $salpha,
+        bool $marnm,
+        bool $fams,
+        LocaleInterface $locale
+    ): array {
+        return parent::surnames($tree, $surn, $salpha, $marnm, $fams, $locale);
     }
 }

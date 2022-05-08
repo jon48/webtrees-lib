@@ -56,15 +56,15 @@ class AdminConfigAction implements RequestHandlerInterface
 
         $this->module->setPreference(
             'MAJ_TITLE_PREFIX',
-            Validator::parsedBody($request)->string('MAJ_TITLE_PREFIX') ?? ''
+            Validator::parsedBody($request)->string('MAJ_TITLE_PREFIX', '')
         );
         $this->module->setPreference(
             'MAJ_DISPLAY_CNIL',
-            Validator::parsedBody($request)->string('MAJ_DISPLAY_CNIL') ?? ''
+            Validator::parsedBody($request)->string('MAJ_DISPLAY_CNIL', '')
         );
         $this->module->setPreference(
             'MAJ_CNIL_REFERENCE',
-            Validator::parsedBody($request)->string('MAJ_CNIL_REFERENCE') ?? ''
+            Validator::parsedBody($request)->string('MAJ_CNIL_REFERENCE', '')
         );
 
         FlashMessages::addMessage(

@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use Psr\Http\Message\ResponseInterface;
@@ -56,12 +57,11 @@ class SosaComputeModal implements RequestHandlerInterface
             ]));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         return response(view($this->module->name() . '::modals/sosa-compute', [
             'tree'          => $tree,
-            'xref'          =>  $request->getAttribute('xref')
+            'xref'          => Validator::attributes($request)->isXref()->string('xref', '')
         ]));
     }
 }

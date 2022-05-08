@@ -63,8 +63,7 @@ class CertificatesList implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $title = I18N::translate('Certificates');
 
@@ -72,7 +71,10 @@ class CertificatesList implements RequestHandlerInterface
             return [$this->url_obfuscator_service->obfuscate($item), $item];
         }, $this->certif_filesystem->cities($tree));
 
-        $city = Validator::queryParams($request)->string('cityobf') ?? $request->getAttribute('cityobf') ?? '';
+        $city = Validator::queryParams($request)->string(
+            'cityobf',
+            Validator::attributes($request)->string('cityobf', '')
+        );
 
         if ($city !== '' && $this->url_obfuscator_service->tryDeobfuscate($city)) {
             $title = I18N::translate('Certificates for %s', $city);

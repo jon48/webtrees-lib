@@ -49,7 +49,10 @@ class MapFeaturePropertyData implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $map_id = Validator::queryParams($request)->string('map_id') ?? $request->getAttribute('map_id') ?? '';
+        $map_id = Validator::queryParams($request)->string(
+            'map_id',
+            Validator::attributes($request)->string('map_id', '')
+        );
 
         return response(Registry::cache()->file()->remember(
             'map-properties-' . $map_id,

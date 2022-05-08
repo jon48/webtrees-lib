@@ -76,7 +76,6 @@ class UrlObfuscatorService
             throw new InvalidArgumentException('The key needs to be SODIUM_CRYPTO_SECRETBOX_KEYBYTES long');
         }
 
-        \Fisharebest\Webtrees\DebugBar::addMessage($key);
         $encryted = sodium_crypto_secretbox($cleartext, $nonce, $key);
         return strtr(base64_encode($nonce . $encryted), '+/=', '._-');
     }

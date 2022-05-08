@@ -15,23 +15,17 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
-use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
+use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisDataService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisService;
+use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Fisharebest\Webtrees\Services\TreeService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
-use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Contracts\UserInterface;
-use Fisharebest\Webtrees\Exceptions\HttpAccessDeniedException;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisDataService;
-use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisService;
 
 /**
  * Request handler for displaying configuration of a geographical analysis view.
@@ -76,10 +70,10 @@ class GeoAnalysisViewEditPage implements RequestHandlerInterface
         if ($this->module === null) {
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
 
-        $view_id = (int) $request->getAttribute('view_id');
+        $tree = Validator::attributes($request)->tree();
+
+        $view_id = Validator::attributes($request)->integer('view_id', -1);
         $view = $this->geoview_data_service->find($tree, $view_id, true);
 
         if ($view === null) {

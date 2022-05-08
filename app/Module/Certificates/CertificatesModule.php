@@ -23,8 +23,6 @@ use Fisharebest\Webtrees\Http\Middleware\AuthManager;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
 use Fisharebest\Webtrees\Module\ModuleConfigTrait;
-use Fisharebest\Webtrees\Module\ModuleCustomTagsInterface;
-use Fisharebest\Webtrees\Module\ModuleCustomTagsTrait;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
@@ -48,16 +46,12 @@ use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\CertificatesList
 class CertificatesModule extends AbstractModule implements
     ModuleMyArtJaubInterface,
     ModuleConfigInterface,
-    ModuleCustomTagsInterface,
     ModuleGlobalInterface,
     ModuleListInterface,
     ModuleHookSubscriberInterface
 {
     use ModuleMyArtJaubTrait {
         ModuleMyArtJaubTrait::boot as traitMajBoot;
-    }
-    use ModuleCustomTagsTrait {
-        ModuleCustomTagsTrait::boot as traitCustomTagsBoot;
     }
     use ModuleConfigTrait;
     use ModuleGlobalTrait;
@@ -89,7 +83,28 @@ class CertificatesModule extends AbstractModule implements
     public function boot(): void
     {
         $this->traitMajBoot();
-        $this->traitCustomTagsBoot();
+
+        Registry::elementFactory()->registerTags([
+            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
+            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this)
+        ]);
+
+        Registry::elementFactory()->registerSubTags([
+            'FAM:SOUR'      =>  [['_ACT', '0:1']],
+            'FAM:*:SOUR'    =>  [['_ACT', '0:1']],
+            'INDI:SOUR'     =>  [['_ACT', '0:1']],
+            'INDI:*:SOUR'   =>  [['_ACT', '0:1']],
+            'OBJE:SOUR'     =>  [['_ACT', '0:1']],
+            'OBJE:*:SOUR'   =>  [['_ACT', '0:1']],
+            'NOTE:SOUR'     =>  [['_ACT', '0:1']],
+            'NOTE:*:SOUR'   =>  [['_ACT', '0:1']]
+        ]);
     }
 
     /**
@@ -145,7 +160,7 @@ class CertificatesModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.0-v.1';
+        return '2.1.1-v.1';
     }
 
     /**
@@ -155,42 +170,6 @@ class CertificatesModule extends AbstractModule implements
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomTagsInterface::customSubTags()
-     */
-    public function customSubTags(): array
-    {
-        return [
-            'FAM:SOUR'      =>  [['_ACT', '0:1']],
-            'FAM:*:SOUR'    =>  [['_ACT', '0:1']],
-            'INDI:SOUR'     =>  [['_ACT', '0:1']],
-            'INDI:*:SOUR'   =>  [['_ACT', '0:1']],
-            'OBJE:SOUR'     =>  [['_ACT', '0:1']],
-            'OBJE:*:SOUR'   =>  [['_ACT', '0:1']],
-            'NOTE:SOUR'     =>  [['_ACT', '0:1']],
-            'NOTE:*:SOUR'   =>  [['_ACT', '0:1']]
-        ];
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomTagsInterface::customTags()
-     */
-    public function customTags(): array
-    {
-        return [
-            'FAM:SOUR:_ACT'     =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'FAM:*:SOUR:_ACT'   =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'INDI:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'INDI:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'OBJE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'OBJE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'NOTE:SOUR:_ACT'    =>  new SourceCertificate(I18N::translate('Certificate'), $this),
-            'NOTE:*:SOUR:_ACT'  =>  new SourceCertificate(I18N::translate('Certificate'), $this)
-        ];
     }
 
     /**

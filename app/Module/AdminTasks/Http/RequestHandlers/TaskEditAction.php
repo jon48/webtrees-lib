@@ -65,7 +65,7 @@ class TaskEditAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        $task_sched_id = (int) $request->getAttribute('task');
+        $task_sched_id = Validator::attributes($request)->integer('task', -1);
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
 
         if ($task_schedule === null) {
@@ -104,26 +104,26 @@ class TaskEditAction implements RequestHandlerInterface
             return false;
         }
 
-        $frequency = Validator::parsedBody($request)->integer('frequency') ?? 0;
+        $frequency = Validator::parsedBody($request)->integer('frequency', 0);
         if ($frequency > 0) {
-            $task_schedule->setFrequency(CarbonInterval::minutes($frequency));
+            $task_schedule->setFrequency($frequency);
         } else {
             FlashMessages::addMessage(I18N::translate('The frequency is not in a valid format.'), 'danger');
         }
 
-        $is_limited = (bool) (Validator::parsedBody($request)->isBetween(0, 1)->integer('is_limited') ?? false);
-        $nb_occur = Validator::parsedBody($request)->integer('nb_occur') ?? 1;
+        $is_limited = Validator::parsedBody($request)->boolean('is_limited', false);
+        $nb_occur = Validator::parsedBody($request)->integer('nb_occur', 1);
         if ($is_limited) {
             if ($nb_occur > 0) {
-                $task_schedule->setRemainingOccurences($nb_occur);
+                $task_schedule->setRemainingOccurrences($nb_occur);
             } else {
                 FlashMessages::addMessage(
-                    I18N::translate('The number of remaining occurences is not in a valid format.'),
+                    I18N::translate('The number of remaining occurrences is not in a valid format.'),
                     'danger'
                 );
             }
         } else {
-            $task_schedule->setRemainingOccurences(0);
+            $task_schedule->setRemainingOccurrences(0);
         }
 
         try {

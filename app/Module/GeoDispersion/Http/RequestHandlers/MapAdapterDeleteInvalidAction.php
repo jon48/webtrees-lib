@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Model\GeoAnalysisMapAdapter;
@@ -61,8 +62,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         if ($this->module === null) {
             FlashMessages::addMessage(
@@ -72,7 +72,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
-        $view_id = (int) $request->getAttribute('view_id');
+        $view_id = Validator::attributes($request)->integer('view_id', -1);
         $view = $this->geoview_data_service->find($tree, $view_id);
 
         if ($view === null || !($view instanceof GeoAnalysisMap)) {

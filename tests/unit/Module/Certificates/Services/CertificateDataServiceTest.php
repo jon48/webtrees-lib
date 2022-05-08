@@ -21,6 +21,7 @@ use Fisharebest\Webtrees\Source;
 use Fisharebest\Webtrees\TestCase;
 use Fisharebest\Webtrees\Contracts\CacheFactoryInterface;
 use Fisharebest\Webtrees\Contracts\UserInterface;
+use Fisharebest\Webtrees\Services\GedcomImportService;
 use Fisharebest\Webtrees\Services\TreeService;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
@@ -92,7 +93,9 @@ class CertificateDataServiceTest extends TestCase
         $cache_factory->method('array')->willReturn(new Cache(new NullAdapter()));
         Registry::cache($cache_factory);
 
-        $tree_service = new TreeService();
+        $import_service = self::createMock(GedcomImportService::class);
+
+        $tree_service = new TreeService($import_service);
         $tree = $tree_service->create('name', 'title');
         $this->certificate->method('tree')->willReturn($tree);
 

@@ -108,7 +108,13 @@ class Migration2 implements MigrationInterface
             }
         }
 
+        $in_transaction = DB::connection()->getPdo()->inTransaction();
+
         DB::schema()->drop('maj_geodispersion');
+
+        if ($in_transaction && !DB::connection()->getPdo()->inTransaction()) {
+            DB::connection()->beginTransaction();
+        }
 
         FlashMessages::addMessage(I18N::translate(
             'The geographical dispersion analyses have been migrated for webtrees 2. Please review their settings.'

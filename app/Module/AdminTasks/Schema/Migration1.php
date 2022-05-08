@@ -14,10 +14,11 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Schema;
 
+use Carbon\Carbon;
 use Fisharebest\Webtrees\Schema\MigrationInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Blueprint;
-use Fisharebest\Webtrees\Carbon;
+use Fisharebest\Webtrees\Registry;
 
 /**
  * Upgrade the database schema from version 1 (webtrees 1.0) to version 2 (webtrees 2.0).
@@ -30,6 +31,8 @@ class Migration1 implements MigrationInterface
      */
     public function upgrade(): void
     {
+        $in_transaction = DB::connection()->getPdo()->inTransaction();
+
         // Clean up previous admin tasks table if it exists
         DB::schema()->dropIfExists('maj_admintasks');
 
@@ -44,5 +47,9 @@ class Migration1 implements MigrationInterface
             $table->smallInteger('majat_nb_occur')->default(0);
             $table->boolean('majat_running')->default(false);
         });
+
+        if ($in_transaction && !DB::connection()->getPdo()->inTransaction()) {
+            DB::connection()->beginTransaction();
+        }
     }
 }

@@ -60,8 +60,7 @@ class SosaConfig implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $users_root = array();
         if (Auth::check()) {
@@ -95,9 +94,9 @@ class SosaConfig implements RequestHandlerInterface
             'module_name'       =>  $this->module->name(),
             'title'             =>  I18N::translate('Sosa Configuration'),
             'tree'              =>  $tree,
-            'user_id'           =>  $request->getAttribute('user'),
-            'selected_user_id'  =>  Validator::queryParams($request)->integer('user_id') ?? 0,
-            'immediate_compute' =>  Validator::queryParams($request)->string('compute') == 'yes',
+            'user_id'           =>  Validator::attributes($request)->user(),
+            'selected_user_id'  =>  Validator::queryParams($request)->integer('user_id', 0),
+            'immediate_compute' =>  Validator::queryParams($request)->string('compute', '') == 'yes',
             'users_root'        =>  $users_root
         ]);
     }

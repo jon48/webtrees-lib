@@ -28,6 +28,7 @@
 # Utilities configuration files
 /phpunit.xml
 /phpdoc.xml
+/phpstan.neon
 /pdepend.xml
 /.phpunit.result.cache
 

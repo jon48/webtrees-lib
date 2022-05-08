@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\WelcomeBlock\Http\RequestHandlers;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
@@ -70,11 +71,11 @@ class MatomoStats implements RequestHandlerInterface
             ], StatusCodeInterface::STATUS_NOT_FOUND);
         }
 
-        $block_id = filter_var($request->getAttribute('block_id'), FILTER_VALIDATE_INT);
+        $block_id = Validator::attributes($request)->integer('block_id', -1);
         $nb_visits_year = $nb_visits_today = null;
 
         try {
-            if ($block_id !== false && $this->module->isMatomoEnabled($block_id)) {
+            if ($block_id !== -1 && $this->module->isMatomoEnabled($block_id)) {
                 $nb_visits_today = $this->matomo_service->visitsToday($this->module, $block_id) ?? 0;
                 $nb_visits_year = ($this->matomo_service->visitsThisYear($this->module, $block_id) ?? 0)
                     + $nb_visits_today;

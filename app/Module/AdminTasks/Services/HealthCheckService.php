@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Services;
 
-use Fisharebest\Webtrees\Carbon;
+use Carbon\Carbon;
 use Fisharebest\Webtrees\Tree;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Query\Builder;
@@ -98,8 +98,8 @@ class HealthCheckService
      *      - Value: stdClass object
      *          - log message:  Error log message
      *          - type:         'site' if no associated Tree, the Tree ID otherwise
-     *          - nblogs:       The number of occurence of the same error message
-     *          - lastoccurred: Date/time of the last occurence of the error message
+     *          - nblogs:       The number of occurrence of the same error message
+     *          - lastoccurred: Date/time of the last occurrence of the error message
      *
      * @param Tree $tree
      * @param int $nb_days

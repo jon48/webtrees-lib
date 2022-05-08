@@ -51,7 +51,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $hook_name = $request->getAttribute('hook_name');
+        $hook_name = Validator::attributes($request)->string('hook_name', '');
         $hook_collector = $this->hook_service->find($hook_name, true);
         if ($hook_collector === null) {
             FlashMessages::addMessage(I18N::translate('The hook with name “%s” does not exist.', $hook_name), 'danger');
@@ -77,7 +77,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
      */
     protected function updateHookOrder(HookCollectorInterface $hook_collector, ServerRequestInterface $request): void
     {
-        $order = Validator::parsedBody($request)->array('order') ?? [];
+        $order = Validator::parsedBody($request)->array('order');
         $order = array_flip($order);
 
         foreach ($hook_collector->hooks() as $hook) {

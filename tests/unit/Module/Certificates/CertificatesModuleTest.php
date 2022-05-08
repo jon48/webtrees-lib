@@ -52,12 +52,6 @@ class CertificatesModuleTest extends TestCase
         self::assertNotEmpty($this->certificates_module->getConfigLink());
     }
 
-    public function testCustomTags(): void
-    {
-        self::assertCount(8, $this->certificates_module->customTags());
-        self::assertCount(8, $this->certificates_module->customSubTags());
-    }
-
     public function testHeadContent(): void
     {
         self::expectExceptionMessageMatches('/filemtime\(\): stat failed/');

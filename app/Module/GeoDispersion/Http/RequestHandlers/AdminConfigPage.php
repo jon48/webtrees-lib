@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Contracts\UserInterface;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -71,16 +72,14 @@ class AdminConfigPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $user = $request->getAttribute('user');
-        assert($user instanceof UserInterface);
+        $user = Validator::attributes($request)->user();
 
         $all_trees = $this->tree_service->all()->filter(fn(Tree $tree) => Auth::isManager($tree, $user));
         if ($all_trees->count() === 0) {
             throw new HttpAccessDeniedException();
         }
 
-        $tree = $request->getAttribute('tree') ?? $all_trees->first();
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->treeOptional() ?? $all_trees->first();
 
         $same_tree = fn(Tree $tree_collection): bool => $tree->id() === $tree_collection->id();
         if (!$all_trees->contains($same_tree)) {

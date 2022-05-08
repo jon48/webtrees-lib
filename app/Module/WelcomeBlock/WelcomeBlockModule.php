@@ -77,7 +77,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
      */
     public function customModuleVersion(): string
     {
-        return '2.0.11-v.2';
+        return '2.1.1-v.1';
     }
 
     /**
@@ -139,25 +139,25 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
      */
     public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
-        $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled') == 'yes';
+        $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled', '') == 'yes';
         $this->setBlockSetting($block_id, 'matomo_enabled', $matomo_enabled ? 'yes' : 'no');
         if (!$matomo_enabled) {
             return;
         }
 
-        $matomo_url = trim(Validator::parsedBody($request)->string('matomo_url') ?? '');
+        $matomo_url = trim(Validator::parsedBody($request)->string('matomo_url', ''));
         if (filter_var($matomo_url, FILTER_VALIDATE_URL) === false) {
             FlashMessages::addMessage(I18N::translate('The Matomo URL provided is not valid.'), 'danger');
             return;
         }
 
-        $matomo_siteid = Validator::parsedBody($request)->integer('matomo_siteid');
-        if ($matomo_siteid === null) {
+        $matomo_siteid = Validator::parsedBody($request)->integer('matomo_siteid', -1);
+        if ($matomo_siteid === -1) {
             FlashMessages::addMessage(I18N::translate('The Matomo Site ID provided is not valid.'), 'danger');
             return;
         }
 
-        $matomo_token = trim(Validator::parsedBody($request)->string('matomo_token') ?? '');
+        $matomo_token = trim(Validator::parsedBody($request)->string('matomo_token', ''));
 
         $this
             ->setBlockSetting($block_id, 'matomo_url', $matomo_url)

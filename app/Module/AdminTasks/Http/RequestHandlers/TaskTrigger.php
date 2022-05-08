@@ -53,9 +53,9 @@ class TaskTrigger implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $task_id = $request->getAttribute('task');
+        $task_id = Validator::attributes($request)->string('task', '');
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
-        $force_token = Validator::queryParams($request)->string('force') ?? '';
+        $force_token = Validator::queryParams($request)->string('force', '');
         $force = $token == $force_token;
 
         $task_schedules = $this->taskschedules_service->findTasksToRun($force, $task_id);

@@ -58,21 +58,25 @@ class FactSourceTextExtenderCollector extends AbstractHookCollector implements F
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourcePrepend()
      */
-    public function factSourcePrepend(Tree $tree, string $source_record, int $level): string
+    public function factSourcePrepend(Tree $tree, $fact): string
     {
         return $this->hooks()
-            ->map(fn(FactSourceTextExtenderInterface $hook) => $hook->factSourcePrepend($tree, $source_record, $level))
-            ->implode('');
+            ->map(
+                fn(FactSourceTextExtenderInterface $hook) =>
+                    $hook->factSourcePrepend($tree, $fact)
+            )->implode('');
     }
 
     /**
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourceAppend()
      */
-    public function factSourceAppend(Tree $tree, string $source_record, int $level): string
+    public function factSourceAppend(Tree $tree, $fact): string
     {
         return $this->hooks()
-            ->map(fn(FactSourceTextExtenderInterface $hook) => $hook->factSourcePrepend($tree, $source_record, $level))
-            ->implode('');
+            ->map(
+                fn(FactSourceTextExtenderInterface $hook) =>
+                    $hook->factSourcePrepend($tree, $fact)
+            )->implode('');
     }
 }

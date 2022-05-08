@@ -68,8 +68,7 @@ class MapAdapterAddAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         if ($this->module === null) {
             FlashMessages::addMessage(
@@ -79,15 +78,15 @@ class MapAdapterAddAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
-        $view_id = (int) $request->getAttribute('view_id');
+        $view_id = Validator::attributes($request)->integer('view_id', -1);
         $view = $this->geoview_data_service->find($tree, $view_id);
 
-        $map = $this->map_definition_service->find(Validator::parsedBody($request)->string('map_adapter_map') ?? '');
-        $mapping_property   = Validator::parsedBody($request)->string('map_adapter_property_selected') ?? '';
+        $map = $this->map_definition_service->find(Validator::parsedBody($request)->string('map_adapter_map', ''));
+        $mapping_property   = Validator::parsedBody($request)->string('map_adapter_property_selected', '');
 
         $mapper = null;
         try {
-            $mapper = app(Validator::parsedBody($request)->string('map_adapter_mapper') ?? '');
+            $mapper = app(Validator::parsedBody($request)->string('map_adapter_mapper', ''));
         } catch (BindingResolutionException $ex) {
         }
 

@@ -55,8 +55,7 @@ class GeoAnalysisViewEditAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
 
@@ -69,16 +68,16 @@ class GeoAnalysisViewEditAction implements RequestHandlerInterface
         }
 
 
-        $view_id = (int) $request->getAttribute('view_id');
+        $view_id = Validator::attributes($request)->integer('view_id', -1);
         $view = $this->geoview_data_service->find($tree, $view_id, true);
 
-        $description    = Validator::parsedBody($request)->string('view_description') ?? '';
-        $place_depth    = Validator::parsedBody($request)->integer('view_depth') ?? 1;
-        $top_places     = Validator::parsedBody($request)->integer('view_top_places') ?? 0;
+        $description    = Validator::parsedBody($request)->string('view_description', '');
+        $place_depth    = Validator::parsedBody($request)->integer('view_depth', 1);
+        $top_places     = Validator::parsedBody($request)->integer('view_top_places', 0);
 
         $analysis = null;
         try {
-            $analysis = app(Validator::parsedBody($request)->string('view_analysis') ?? '');
+            $analysis = app(Validator::parsedBody($request)->string('view_analysis', ''));
         } catch (BindingResolutionException $ex) {
         }
 

@@ -29,6 +29,7 @@ class Migration2 implements MigrationInterface
      */
     public function upgrade(): void
     {
+        $in_transaction = DB::connection()->getPdo()->inTransaction();
 
         // Clean up previous sosa table if it exists
         DB::schema()->dropIfExists('maj_sosa');
@@ -54,5 +55,9 @@ class Migration2 implements MigrationInterface
             $table->foreign('majs_gedcom_id')->references('gedcom_id')->on('gedcom')->onDelete('cascade');
             $table->foreign('majs_user_id')->references('user_id')->on('user')->onDelete('cascade');
         });
+
+        if ($in_transaction && !DB::connection()->getPdo()->inTransaction()) {
+            DB::connection()->beginTransaction();
+        }
     }
 }

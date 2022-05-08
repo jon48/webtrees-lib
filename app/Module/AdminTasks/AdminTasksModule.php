@@ -133,7 +133,7 @@ class AdminTasksModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.0-v.1';
+        return '2.1.1-v.1';
     }
 
     /**

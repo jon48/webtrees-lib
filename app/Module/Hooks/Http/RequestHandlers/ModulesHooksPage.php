@@ -15,8 +15,9 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use MyArtJaub\Webtrees\Contracts\Hooks\HookInterface;
 use MyArtJaub\Webtrees\Module\Hooks\Services\HookService;
 use Psr\Http\Message\ResponseInterface;
@@ -50,7 +51,7 @@ class ModulesHooksPage implements RequestHandlerInterface
     {
         $this->layout = 'layouts/administration';
 
-        $hook_name = $request->getAttribute('hook_name');
+        $hook_name = Validator::attributes($request)->string('hook_name', '');
         $hook = $this->hook_service->find($hook_name, true);
         if ($hook === null) {
             throw new HttpNotFoundException(I18N::translate('The hook with name “%s” does not exist.', $hook_name));

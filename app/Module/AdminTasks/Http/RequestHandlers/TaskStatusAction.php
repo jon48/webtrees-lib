@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
 use MyArtJaub\Webtrees\Module\AdminTasks\Services\TaskScheduleService;
@@ -60,7 +61,7 @@ class TaskStatusAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        $task_sched_id = (int) $request->getAttribute('task');
+        $task_sched_id = Validator::attributes($request)->integer('task', -1);
         $task_schedule = $this->taskschedules_service->find($task_sched_id);
 
         $admin_config_route = route(AdminConfigPage::class);
@@ -73,7 +74,9 @@ class TaskStatusAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        ((bool) $request->getAttribute('enable', false)) ? $task_schedule->enable() : $task_schedule->disable();
+        Validator::attributes($request)->boolean('enable', false) ?
+            $task_schedule->enable() :
+            $task_schedule->disable();
 
         if ($this->taskschedules_service->update($task_schedule) > 0) {
             FlashMessages::addMessage(

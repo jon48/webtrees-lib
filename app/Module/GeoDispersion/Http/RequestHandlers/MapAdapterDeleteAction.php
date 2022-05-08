@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\MapAdapterDataService;
@@ -51,8 +52,7 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
 
@@ -63,7 +63,8 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
             );
             return redirect($admin_config_route);
         }
-        $adapter_id = (int) $request->getAttribute('adapter_id');
+
+        $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
         if ($map_adapter === null) {

@@ -119,12 +119,13 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
      */
     public function withConfigUpdate(ServerRequestInterface $request): self
     {
-        $tree = $request->getAttribute('tree');
-        if (!($tree instanceof Tree)) {
+        $tree = Validator::attributes($request)->treeOptional();
+
+        if ($tree === null) {
             return $this;
         }
 
-        $top_places = Validator::parsedBody($request)->array('mapper_filt_top_places') ?? [];
+        $top_places = Validator::parsedBody($request)->array('mapper_filt_top_places');
         $config = ['topPlaces' => []];
         foreach ($top_places as $top_place_id) {
             $place = Place::find((int) $top_place_id, $tree);

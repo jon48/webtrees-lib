@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\WelcomeBlock\Services;
 
+use Carbon\Carbon;
 use Fig\Http\Message\StatusCodeInterface;
-use Fisharebest\Webtrees\Carbon;
 use Fisharebest\Webtrees\Registry;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;

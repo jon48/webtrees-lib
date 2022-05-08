@@ -64,18 +64,16 @@ class AutoCompleteFile extends AbstractAutocompleteHandler
      */
     protected function search(ServerRequestInterface $request): Collection
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $city = Validator::queryParams($request)->string('cityobf') ?? '';
+        $tree = Validator::attributes($request)->tree();
+        $city = Validator::queryParams($request)->string('cityobf', '');
 
         if ($this->module === null || $city === '' || !$this->url_obfuscator_service->tryDeobfuscate($city)) {
             return collect();
         }
 
-        $query  = $request->getAttribute('query') ?? '';
+        $query  =  Validator::attributes($request)->string('query', '');
 
-        /** @var Collection<string> $results */
+        /** @var Collection<int, string> $results */
         $results =  $this->certif_filesystem
             ->certificatesForCityContaining($tree, $city, $query)
             ->map(fn(Certificate $certificate): string => $certificate->filename());

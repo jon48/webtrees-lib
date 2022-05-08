@@ -53,13 +53,14 @@ class SosaConfigAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
-        $user_id = Validator::parsedBody($request)->integer('sosa-userid');
-        $root_id = Validator::parsedBody($request)->isXref()->string('sosa-rootid') ?? '';
-        $max_gen = Validator::parsedBody($request)->integer('sosa-maxgen') ??
-            $this->sosa_record_service->maxSystemGenerations();
+        $user_id = Validator::parsedBody($request)->integer('sosa-userid', -1);
+        $root_id = Validator::parsedBody($request)->isXref()->string('sosa-rootid', '');
+        $max_gen = Validator::parsedBody($request)->integer(
+            'sosa-maxgen',
+            $this->sosa_record_service->maxSystemGenerations()
+        );
 
         if (Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
             $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);

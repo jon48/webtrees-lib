@@ -18,6 +18,7 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
@@ -52,8 +53,7 @@ class GeoAnalysisViewStatusAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
 
@@ -65,7 +65,7 @@ class GeoAnalysisViewStatusAction implements RequestHandlerInterface
             return redirect($admin_config_route);
         }
 
-        $view_id = (int) $request->getAttribute('view_id');
+        $view_id = Validator::attributes($request)->integer('view_id', -1);
         $view = $this->geoview_data_service->find($tree, $view_id, true);
 
         if ($view === null) {
@@ -77,7 +77,7 @@ class GeoAnalysisViewStatusAction implements RequestHandlerInterface
         }
 
         try {
-            $this->geoview_data_service->updateStatus($view, (bool) $request->getAttribute('enable', false));
+            $this->geoview_data_service->updateStatus($view, Validator::attributes($request)->boolean('enable', false));
             FlashMessages::addMessage(
                 I18N::translate('The geographical dispersion analysis view has been successfully updated.'),
                 'success'

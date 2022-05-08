@@ -18,6 +18,7 @@ use Fig\Http\Message\RequestMethodInterface;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\RequestHandlers\LoginPage;
 use Psr\Http\Message\ResponseInterface;
@@ -36,15 +37,9 @@ class AuthTreePreference implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-        /** @var Tree $tree */
-
-        $route = $request->getAttribute('route');
-        assert($route instanceof \Aura\Router\Route);
-        /** @var \Aura\Router\Route $route */
-
-        $user = $request->getAttribute('user');
+        $tree = Validator::attributes($request)->tree();
+        $route = Validator::attributes($request)->route();
+        $user = Validator::attributes($request)->user();
 
         $permission_preference = $route->extras['permission_preference'] ?? '';
         $permission_level = $permission_preference === '' ? '' : $tree->getPreference($permission_preference);

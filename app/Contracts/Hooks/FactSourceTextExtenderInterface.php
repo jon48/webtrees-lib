@@ -25,17 +25,17 @@ interface FactSourceTextExtenderInterface extends HookInterface
      * Insert some content before the source citation title.
      *
      * @param Tree $tree
-     * @param string $source_record
+     * @param \Fisharebest\Webtrees\Fact|array<array<\Fisharebest\Webtrees\Contracts\ElementInterface|string>> $fact
      * @return string
      */
-    public function factSourcePrepend(Tree $tree, string $source_record, int $level): string;
+    public function factSourcePrepend(Tree $tree, $fact): string;
 
     /**
      * Insert some content after the source citation title.
      *
      * @param Tree $tree
-     * @param string $source_record
+     * @param \Fisharebest\Webtrees\Fact|array<array<\Fisharebest\Webtrees\Contracts\ElementInterface|string>> $fact
      * @return string
      */
-    public function factSourceAppend(Tree $tree, string $source_record, int $level): string;
+    public function factSourceAppend(Tree $tree, $fact): string;
 }

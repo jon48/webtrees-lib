@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -59,11 +60,8 @@ class GeoAnalysisViewPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
-
-        $view_id = $request->getAttribute('view_id');
-        $view_id = is_numeric($view_id) ? (int) $view_id : 0;
+        $tree = Validator::attributes($request)->tree();
+        $view_id = Validator::attributes($request)->integer('view_id', 0);
 
         return $this->viewResponse($this->module->name() . '::geoanalysisview-page', [
             'module_name'           =>  $this->module->name(),

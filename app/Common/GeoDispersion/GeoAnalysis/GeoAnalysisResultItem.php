@@ -16,7 +16,7 @@ namespace MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis;
 
 /**
  * Individual item in the result of a geographical dispersion analysis.
- * It references the GeoAnalysis Place, and its number of occurences in the analysis.
+ * It references the GeoAnalysis Place, and its number of occurrences in the analysis.
  */
 class GeoAnalysisResultItem
 {
@@ -56,7 +56,7 @@ class GeoAnalysisResultItem
     }
 
     /**
-     * Get the count of occurences of the GeoAnalysis Place in the analysis
+     * Get the count of occurrences of the GeoAnalysis Place in the analysis
      *
      * @return int
      */

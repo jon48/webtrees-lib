@@ -62,8 +62,7 @@ class MapAdapterEditAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $tree = $request->getAttribute('tree');
-        assert($tree instanceof Tree);
+        $tree = Validator::attributes($request)->tree();
 
         if ($this->module === null) {
             FlashMessages::addMessage(
@@ -73,15 +72,15 @@ class MapAdapterEditAction implements RequestHandlerInterface
             return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
         }
 
-        $adapter_id = (int) $request->getAttribute('adapter_id');
+        $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
         $map_adapter = $this->mapadapter_data_service->find($adapter_id);
 
-        $map = $this->map_definition_service->find(Validator::parsedBody($request)->string('map_adapter_map') ?? '');
-        $mapping_property   = Validator::parsedBody($request)->string('map_adapter_property_selected') ?? '';
+        $map = $this->map_definition_service->find(Validator::parsedBody($request)->string('map_adapter_map', ''));
+        $mapping_property   = Validator::parsedBody($request)->string('map_adapter_property_selected', '');
 
         $mapper = null;
         try {
-            $mapper = app(Validator::parsedBody($request)->string('map_adapter_mapper') ?? '');
+            $mapper = app(Validator::parsedBody($request)->string('map_adapter_mapper', ''));
         } catch (BindingResolutionException $ex) {
         }
 

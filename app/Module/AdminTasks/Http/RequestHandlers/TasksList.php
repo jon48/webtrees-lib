@@ -14,9 +14,9 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
+use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
-use Fisharebest\Webtrees\Services\DatatablesService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
@@ -86,10 +86,10 @@ class TasksList implements RequestHandlerInterface
                         'raw'       =>  $task_name
                     ],
                     'last_run'  =>  [
-                        'display'   =>  $schedule->lastRunTime()->unix() === 0 ?
+                        'display'   =>  $schedule->lastRunTime()->timestamp() === 0 ?
                             view('components/datetime', ['timestamp' => $schedule->lastRunTime()]) :
                             view('components/datetime-diff', ['timestamp' => $schedule->lastRunTime()]),
-                        'raw'       =>  $schedule->lastRunTime()->unix()
+                        'raw'       =>  $schedule->lastRunTime()->timestamp()
                     ],
                     'last_result'   =>  [
                         'display'   => view($module_name . '::components/yes-no-icons', [
@@ -97,9 +97,10 @@ class TasksList implements RequestHandlerInterface
                         ]),
                         'raw'       =>  $schedule->wasLastRunSuccess() ? 1 : 0
                     ],
-                    'frequency' =>  '<bdi>' . e($schedule->frequency()->cascade()->forHumans()) . '</bdi>',
-                    'nb_occurrences'    =>  $schedule->remainingOccurences() > 0 ?
-                        I18N::number($schedule->remainingOccurences()) :
+                    'frequency' =>
+                        '<bdi>' . e(CarbonInterval::minutes($schedule->frequency())->cascade()->forHumans()) . '</bdi>',
+                    'nb_occurrences'    =>  $schedule->remainingOccurrences() > 0 ?
+                        I18N::number($schedule->remainingOccurrences()) :
                         I18N::translate('Unlimited'),
                     'running'   =>  view($module_name . '::components/yes-no-icons', [
                         'yes' => $schedule->isRunning(),
