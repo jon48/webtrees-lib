@@ -45,6 +45,18 @@ class SosaStatisticsService
     }
 
     /**
+     * Check if PDO support the queries used in Sosa statistics.
+     *
+     * SQLite does not support RIGHT and FULL JOIN, and POWER/SQRT require a specific compilation flag.
+     *
+     * @return bool
+     */
+    public function isPdoSupported(): bool
+    {
+        return DB::connection()->getDriverName() !== 'sqlite';
+    }
+
+    /**
      * Return the root individual for the reference tree and user.
      *
      * @return Individual|NULL
@@ -237,6 +249,10 @@ class SosaStatisticsService
      */
     public function pedigreeCollapseByGenerationData(): array
     {
+        if (!$this->isPdoSupported()) {
+            return [];
+        }
+
         $table_prefix = DB::connection()->getTablePrefix();
 
         $list_gen = DB::table('maj_sosa')->select('majs_gen')->distinct()
@@ -387,6 +403,10 @@ class SosaStatisticsService
      */
     public function generationDepthStatsAtGeneration(int $gen): Collection
     {
+        if (!$this->isPdoSupported()) {
+            return collect();
+        }
+
         $table_prefix = DB::connection()->getTablePrefix();
         $missing_ancestors_by_gen = DB::table('maj_sosa AS sosa')
             ->selectRaw($table_prefix . 'sosa.majs_gen - ? AS majs_gen_norm', [$gen])
@@ -509,6 +529,10 @@ class SosaStatisticsService
      */
     public function ancestorsDispersionForGeneration(int $gen): Collection
     {
+        if (!$this->isPdoSupported()) {
+            return collect();
+        }
+
         $ancestors_branches = DB::table('maj_sosa')
             ->select('majs_i_id AS i_id')
             ->selectRaw('FLOOR(majs_sosa / POW(2, (majs_gen - ?))) - POW(2, ? -1) + 1 AS branch', [$gen, $gen])
