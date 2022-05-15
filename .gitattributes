@@ -9,6 +9,7 @@
 .codeclimate.yml            export-ignore
 .scrutinizer.yml            export-ignore
 .sensiolabs.yml             export-ignore
+codecov.yml                 export-ignore
 commands.txt                export-ignore
 phpcs.xml.dist              export-ignore
 phpdoc.dist.xml             export-ignore
