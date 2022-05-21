@@ -56,7 +56,7 @@ class TaskTrigger implements RequestHandlerInterface
         $task_id = Validator::attributes($request)->string('task', '');
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         $force_token = Validator::queryParams($request)->string('force', '');
-        $force = $token == $force_token;
+        $force = $token !== '' &&  $token === $force_token;
 
         $task_schedules = $this->taskschedules_service->findTasksToRun($force, $task_id);
 

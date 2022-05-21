@@ -14,12 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Tasks;
 
+use Carbon\CarbonImmutable;
 use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\NoReplyUser;
-use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\TreeUser;
 use Fisharebest\Webtrees\Validator;
@@ -112,11 +112,10 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         $res = true;
 
         // Compute the number of days to compute
-        $interval_lastrun =
-            Registry::timestampFactory()->now()->timestamp() -  $task_schedule->lastRunTime()->timestamp();
-        $task_freq_seconds = 60 * $task_schedule->frequency();
-        $interval = $interval_lastrun > $task_freq_seconds ? $interval_lastrun : $task_freq_seconds;
-        $nb_days = (int) CarbonInterval::seconds($interval)->ceilDay()->totalDays;
+        $interval_lastrun = $task_schedule->lastRunTime()->diffAsCarbonInterval(CarbonImmutable::now());
+        $interval_frequency = CarbonInterval::minutes($task_schedule->frequency());
+        $interval = $interval_lastrun->greaterThan($interval_frequency) ? $interval_lastrun : $interval_frequency;
+        $nb_days = (int) $interval->ceilDay()->totalDays;
 
         $view_params_site = [
             'nb_days'               =>  $nb_days,

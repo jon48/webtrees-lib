@@ -60,7 +60,7 @@ class AdminConfigPage implements RequestHandlerInterface
         $token = $this->module->getPreference('MAJ_AT_FORCE_EXEC_TOKEN');
         if ($token === '') {
             $token = $this->token_service->generateRandomToken();
-            $this->module->setPreference('PAT_FORCE_EXEC_TOKEN', $token);
+            $this->module->setPreference('MAJ_AT_FORCE_EXEC_TOKEN', $token);
         }
 
         return $this->viewResponse($this->module->name() . '::admin/config', [

@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Carbon\CarbonInterval;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
@@ -64,6 +65,7 @@ class TasksList implements RequestHandlerInterface
             ->map(function (TaskSchedule $schedule) use ($module, $module_name): array {
                 $task = $this->taskschedules_service->findTask($schedule->taskId());
                 $task_name = $task !== null ? $task->name() : I18N::translate('Task not found');
+                $last_run_timestamp = Registry::timestampFactory()->make($schedule->lastRunTime()->getTimestamp());
 
                 return [
                     'edit' =>   view($module_name . '::admin/tasks-table-options', [
@@ -86,10 +88,10 @@ class TasksList implements RequestHandlerInterface
                         'raw'       =>  $task_name
                     ],
                     'last_run'  =>  [
-                        'display'   =>  $schedule->lastRunTime()->timestamp() === 0 ?
-                            view('components/datetime', ['timestamp' => $schedule->lastRunTime()]) :
-                            view('components/datetime-diff', ['timestamp' => $schedule->lastRunTime()]),
-                        'raw'       =>  $schedule->lastRunTime()->timestamp()
+                        'display'   =>  $last_run_timestamp->timestamp() === 0 ?
+                            view('components/datetime', ['timestamp' => $last_run_timestamp]) :
+                            view('components/datetime-diff', ['timestamp' => $last_run_timestamp]),
+                        'raw'       =>  $schedule->lastRunTime()->getTimestamp()
                     ],
                     'last_result'   =>  [
                         'display'   => view($module_name . '::components/yes-no-icons', [

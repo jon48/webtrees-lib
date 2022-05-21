@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Services;
 
-use Carbon\CarbonInterval;
+use Carbon\CarbonImmutable;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Registry;
@@ -201,30 +201,25 @@ class TaskScheduleService
      * @param string $task_id Specific task ID to be run
      * @return Collection<TaskSchedule>
      */
-    public function findTasksToRun(bool $force, string $task_id = null): Collection
+    public function findTasksToRun(bool $force, string $task_id = ''): Collection
     {
         $query = DB::table('maj_admintasks')
             ->select()
             ->where('majat_status', '=', 'enabled')
             ->where(function (Builder $query): void {
-
                 $query->where('majat_running', '=', 0)
-                ->orWhere(
-                    'majat_last_run',
-                    '<=',
-                    Registry::timestampFactory()->now()->addSeconds(-self::TASK_TIME_OUT)->toDateTimeString()
-                );
+                    ->orWhere('majat_last_run', '<=', CarbonImmutable::now('UTC')->subSeconds(self::TASK_TIME_OUT));
             });
 
         if (!$force) {
             $query->where(function (Builder $query): void {
 
-                $query->where('majat_running', '=', 0)
+                $query->where('majat_last_result', '=', 0)
                     ->orWhereRaw('DATE_ADD(majat_last_run, INTERVAL majat_frequency MINUTE) <= NOW()');
             });
         }
 
-        if ($task_id !== null) {
+        if ($task_id !== '') {
             $query->where('majat_task_id', '=', $task_id);
         }
 
@@ -254,7 +249,7 @@ class TaskScheduleService
             !$task_schedule->isRunning() &&
             ($force ||
                 $task_schedule->lastRunTime()->addMinutes($task_schedule->frequency())
-                    ->compare(Registry::timestampFactory()->now()) < 0
+                    ->lessThan(CarbonImmutable::now('UTC'))
             )
         ) {
             $task_schedule->setLastResult(false);
@@ -276,7 +271,7 @@ class TaskScheduleService
                 }
 
                 if ($task_schedule->wasLastRunSuccess()) {
-                    $task_schedule->setLastRunTime(Registry::timestampFactory()->now());
+                    $task_schedule->setLastRunTime(CarbonImmutable::now('UTC'));
                     $task_schedule->decrementRemainingOccurrences();
                 }
                 $task_schedule->stopRunning();
@@ -293,12 +288,11 @@ class TaskScheduleService
     public static function rowMapper(): Closure
     {
         return static function (stdClass $row): TaskSchedule {
-
             return new TaskSchedule(
                 (int) $row->majat_id,
                 $row->majat_task_id,
                 $row->majat_status === 'enabled',
-                Registry::timestampFactory()->fromString($row->majat_last_run),
+                CarbonImmutable::parse($row->majat_last_run, 'UTC'),
                 (bool) $row->majat_last_result,
                 (int) $row->majat_frequency,
                 (int) $row->majat_nb_occur,

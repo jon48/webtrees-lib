@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Common\Tasks;
 
-use Fisharebest\Webtrees\Contracts\TimestampInterface;
+use Carbon\CarbonInterface;
 
 /**
  * Object to describe a schedule for a task.
@@ -26,7 +26,7 @@ class TaskSchedule
     private int $id;
     private bool $enabled;
     private string $task_id;
-    private TimestampInterface $last_run;
+    private CarbonInterface $last_run;
     private bool $last_result;
     private int $frequency;
     private int $nb_occurrences;
@@ -38,7 +38,7 @@ class TaskSchedule
      * @param int $id Schedule ID
      * @param string $task_id Task ID
      * @param bool $enabled Is the schedule enabled
-     * @param TimestampInterface $last_run Last successful run date/time
+     * @param CarbonInterface $last_run Last successful run date/time
      * @param bool $last_result Result of the last run
      * @param int $frequency Schedule frequency in minutes
      * @param int $nb_occurrences Number of remaining occurrences to be run
@@ -48,7 +48,7 @@ class TaskSchedule
         int $id,
         string $task_id,
         bool $enabled,
-        TimestampInterface $last_run,
+        CarbonInterface $last_run,
         bool $last_result,
         int $frequency,
         int $nb_occurrences,
@@ -141,9 +141,9 @@ class TaskSchedule
     /**
      * Get the date/time of the last successful run.
      *
-     * @return TimestampInterface
+     * @return CarbonInterface
      */
-    public function lastRunTime(): TimestampInterface
+    public function lastRunTime(): CarbonInterface
     {
         return $this->last_run;
     }
@@ -151,10 +151,10 @@ class TaskSchedule
     /**
      * Set the last successful run date/time
      *
-     * @param TimestampInterface $last_run
+     * @param CarbonInterface $last_run
      * @return $this
      */
-    public function setLastRunTime(TimestampInterface $last_run): self
+    public function setLastRunTime(CarbonInterface $last_run): self
     {
         $this->last_run = $last_run;
         return $this;
@@ -256,7 +256,7 @@ class TaskSchedule
      * Returns the schedule details as an associate array
      *
      * @phpcs:ignore Generic.Files.LineLength.TooLong
-     * @return array{id: int, task_id: string, enabled: bool, last_run: TimestampInterface, last_result: bool, frequency: int, nb_occurrences: int, is_running: bool}
+     * @return array{id: int, task_id: string, enabled: bool, last_run: CarbonInterface, last_result: bool, frequency: int, nb_occurrences: int, is_running: bool}
      */
     public function toArray(): array
     {
