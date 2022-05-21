@@ -52,7 +52,11 @@ class SosaComputeAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $user_id = Validator::parsedBody($request)->integer('user_id', Auth::id() ?? 0);
+        // Cannot use Validator with negative integers issue webtrees #4408
+        // $user_id = Validator::parsedBody($request)->integer('user_id', Auth::id() ?? 0);
+        $parsed_body = (array) $request->getParsedBody();
+        $user_id = (int) filter_var($parsed_body['user_id'] ?? Auth::id(), FILTER_VALIDATE_INT);
+
         $partial_from = Validator::parsedBody($request)->isXref()->string('partial_from', '');
 
         if (($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Sosa\GeoAnalyses;
 
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
@@ -70,7 +71,7 @@ class SosaByGenerationGeoAnalysis implements GeoAnalysisInterface
         $results = new GeoAnalysisResults();
 
         $unique_ancestors = $this->records_service
-            ->listAncestors($tree, Auth::user())
+            ->listAncestors($tree, Auth::check() ? Auth::user() : new DefaultUser())
             ->uniqueStrict(fn(stdClass $item): string => $item->majs_i_id);
 
         foreach ($unique_ancestors as $item) {

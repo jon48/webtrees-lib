@@ -86,10 +86,15 @@ class AncestorsListIndividual implements RequestHandlerInterface
         $nb_ancestors_all = $list_ancestors->count();
 
         /** @var \Illuminate\Support\Collection<int, \Fisharebest\Webtrees\Individual> $list_ancestors */
-        $list_ancestors = $list_ancestors->mapWithKeys(function (stdClass $value) use ($tree): ?array {
+        $list_ancestors = $list_ancestors
+            ->filter(function (stdClass $value) use ($tree): bool {
                 $indi = Registry::individualFactory()->make($value->majs_i_id, $tree);
-                return ($indi !== null && $indi->canShowName()) ? [(int) $value->majs_sosa => $indi] : null;
-        })->filter();
+                return $indi !== null && $indi->canShowName();
+            })
+            ->mapWithKeys(function (stdClass $value) use ($tree): array {
+                $indi = Registry::individualFactory()->make($value->majs_i_id, $tree);
+                return [(int) $value->majs_sosa => $indi];
+            });
 
         $nb_ancestors_shown = $list_ancestors->count();
 

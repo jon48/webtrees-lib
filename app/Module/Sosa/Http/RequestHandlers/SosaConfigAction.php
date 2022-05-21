@@ -55,7 +55,10 @@ class SosaConfigAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $user_id = Validator::parsedBody($request)->integer('sosa-userid', -1);
+        // Cannot use Validator with negative integers issue webtrees #4408
+        //$user_id = Validator::parsedBody($request)->integer('sosa-userid', -1);
+        $parsed_body = (array) $request->getParsedBody();
+        $user_id = (int) filter_var($parsed_body['sosa-userid'] ?? 0, FILTER_VALIDATE_INT);
         $root_id = Validator::parsedBody($request)->isXref()->string('sosa-rootid', '');
         $max_gen = Validator::parsedBody($request)->integer(
             'sosa-maxgen',

@@ -86,10 +86,15 @@ class AncestorsListFamily implements RequestHandlerInterface
         $nb_families_all = $list_families->count();
 
         /** @var \Illuminate\Support\Collection<int, \Fisharebest\Webtrees\Family> $list_families */
-        $list_families = $list_families->mapWithKeys(function (stdClass $value) use ($tree): ?array {
+        $list_families = $list_families
+            ->filter(function (stdClass $value) use ($tree): bool {
                 $fam = Registry::familyFactory()->make($value->f_id, $tree);
-                return ($fam !== null && $fam->canShow()) ? [(int) $value->majs_sosa => $fam] : null;
-        })->filter();
+                return $fam !== null && $fam->canShow();
+            })
+            ->mapWithKeys(function (stdClass $value) use ($tree): array {
+                $fam = Registry::familyFactory()->make($value->f_id, $tree);
+                return [(int) $value->majs_sosa => $fam];
+            });
 
         $nb_families_shown = $list_families->count();
 

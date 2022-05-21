@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Sosa\Hooks;
 
 use Fisharebest\Webtrees\Auth;
+use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleInterface;
@@ -65,9 +66,10 @@ class SosaIconHook implements RecordNameTextExtenderInterface
      */
     public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
+        $current_user = Auth::check() ? Auth::user() : new DefaultUser();
         if (
             $record instanceof Individual &&
-            $this->sosa_records_service->isSosa($record->tree(), Auth::user(), $record)
+            $this->sosa_records_service->isSosa($record->tree(), $current_user, $record)
         ) {
             return view($this->module->name() . '::icons/sosa', [ 'size_style' => $size ]);
         }
