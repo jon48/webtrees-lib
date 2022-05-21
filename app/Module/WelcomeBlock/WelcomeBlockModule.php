@@ -139,7 +139,7 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
      */
     public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
-        $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled', '') == 'yes';
+        $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled', '') === 'yes';
         $this->setBlockSetting($block_id, 'matomo_enabled', $matomo_enabled ? 'yes' : 'no');
         if (!$matomo_enabled) {
             return;

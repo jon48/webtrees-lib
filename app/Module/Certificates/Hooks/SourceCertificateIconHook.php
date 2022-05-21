@@ -89,7 +89,7 @@ class SourceCertificateIconHook implements FactSourceTextExtenderInterface
         if ($fact instanceof Fact && $fact->target() instanceof Source) {
             return $fact->attribute('_ACT');
         } elseif (
-            is_array($fact) && count($fact) == 2
+            is_array($fact) && count($fact) === 2
             && null !== ($source_elements = $fact[0]) && is_array($source_elements) // @phpstan-ignore-line
             && null !== ($source_values = $fact[1]) && is_array($source_values) // @phpstan-ignore-line
         ) {

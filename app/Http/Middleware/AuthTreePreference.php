@@ -16,7 +16,7 @@ namespace MyArtJaub\Webtrees\Http\Middleware;
 
 use Fig\Http\Message\RequestMethodInterface;
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
@@ -62,6 +62,9 @@ class AuthTreePreference implements MiddlewareInterface
             throw new HttpAccessDeniedException();
         }
 
-        return redirect(route(LoginPage::class, ['tree' => $tree->name(), 'url' => (string) $request->getUri()]));
+        return Registry::responseFactory()->redirect(
+            LoginPage::class,
+            ['tree' => $tree->name(), 'url' => (string) $request->getUri()]
+        );
     }
 }

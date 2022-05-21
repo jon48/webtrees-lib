@@ -19,7 +19,6 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaCalculatorService;
@@ -59,8 +58,8 @@ class SosaComputeAction implements RequestHandlerInterface
 
         $partial_from = Validator::parsedBody($request)->isXref()->string('partial_from', '');
 
-        if (($user_id == -1 && Auth::isManager($tree)) || Auth::id() == $user_id) {
-            $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
+        if (($user_id === -1 && Auth::isManager($tree)) || Auth::id() === $user_id) {
+            $user = $user_id === -1 ? new DefaultUser() : $this->user_service->find($user_id);
 
             /** @var SosaCalculatorService $sosa_calc_service */
             $sosa_calc_service = app()->makeWith(SosaCalculatorService::class, [ 'tree' => $tree, 'user' => $user]);
@@ -75,13 +74,13 @@ class SosaComputeAction implements RequestHandlerInterface
             }
 
             return $res ?
-                response('', 200) :
-                response(
+                Registry::responseFactory()->response() :
+                Registry::responseFactory()->response(
                     I18N::translate('An error occurred while computing Sosa ancestors.'),
                     StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR
                 );
         }
-        return response(
+        return Registry::responseFactory()->response(
             I18N::translate('You do not have permission to modify the user.'),
             StatusCodeInterface::STATUS_FORBIDDEN
         );

@@ -19,7 +19,6 @@ use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
@@ -65,21 +64,21 @@ class SosaConfigAction implements RequestHandlerInterface
             $this->sosa_record_service->maxSystemGenerations()
         );
 
-        if (Auth::id() == $user_id || ($user_id == -1 && Auth::isManager($tree))) {
-            $user = $user_id == -1 ? new DefaultUser() : $this->user_service->find($user_id);
+        if (Auth::id() === $user_id || ($user_id === -1 && Auth::isManager($tree))) {
+            $user = $user_id === -1 ? new DefaultUser() : $this->user_service->find($user_id);
             if ($user !== null && ($root_indi = Registry::individualFactory()->make($root_id, $tree)) !== null) {
                 $tree->setUserPreference($user, 'MAJ_SOSA_ROOT_ID', $root_indi->xref());
                 $tree->setUserPreference($user, 'MAJ_SOSA_MAX_GEN', (string) $max_gen);
                 FlashMessages::addMessage(I18N::translate('The root individual has been updated.'));
-                return redirect(route(SosaConfig::class, [
+                return Registry::responseFactory()->redirect(SosaConfig::class, [
                     'tree' => $tree->name(),
                     'compute' => 'yes',
                     'user_id' => $user_id
-                ]));
+                ]);
             }
         }
 
         FlashMessages::addMessage(I18N::translate('The root individual could not be updated.'), 'danger');
-        return redirect(route(SosaConfig::class, ['tree' => $tree->name()]));
+        return Registry::responseFactory()->redirect(SosaConfig::class, ['tree' => $tree->name()]);
     }
 }

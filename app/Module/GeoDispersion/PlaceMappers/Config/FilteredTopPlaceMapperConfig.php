@@ -85,7 +85,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
                 'topPlaces' => collect($config['topPlaces'] ?? [])
                     ->filter(
                         /** @psalm-suppress MissingClosureParamType */
-                        fn($item): bool => is_array($item) && count($item) == 2
+                        fn($item): bool => is_array($item) && count($item) === 2
                     )->map(function (array $item): ?Place {
                         try {
                             return new Place($item[1], $this->tree_service->find($item[0]));

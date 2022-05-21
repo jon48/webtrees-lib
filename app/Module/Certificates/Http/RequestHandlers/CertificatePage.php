@@ -16,10 +16,10 @@ namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\RequestHandlers\TreePage;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
@@ -97,7 +97,7 @@ class CertificatePage implements RequestHandlerInterface
 
         if (!isset($certificate)) {
             FlashMessages::addMessage('The requested certificate is not valid.');
-            return redirect(route(TreePage::class, ['tree' => $tree->name()]));
+            return Registry::responseFactory()->redirect(TreePage::class, ['tree' => $tree->name()]);
         }
 
         return $this->viewResponse($this->module->name() . '::certificate-page', [

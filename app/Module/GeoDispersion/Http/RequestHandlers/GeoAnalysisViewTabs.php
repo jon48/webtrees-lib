@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -83,6 +83,6 @@ class GeoAnalysisViewTabs implements RequestHandlerInterface
             ])
         ];
 
-        return response($response);
+        return Registry::responseFactory()->response($response);
     }
 }

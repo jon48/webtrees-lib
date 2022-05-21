@@ -61,7 +61,7 @@ class TasksList implements RequestHandlerInterface
 
         $module = $this->module;
         $module_name = $this->module->name();
-        return response(['data' => $this->taskschedules_service->all(true, true)
+        return Registry::responseFactory()->response(['data' => $this->taskschedules_service->all(true, true)
             ->map(function (TaskSchedule $schedule) use ($module, $module_name): array {
                 $task = $this->taskschedules_service->findTask($schedule->taskId());
                 $task_name = $task !== null ? $task->name() : I18N::translate('Task not found');

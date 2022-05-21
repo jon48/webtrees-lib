@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Common\Tasks\TaskSchedule;
@@ -54,14 +55,12 @@ class TaskEditAction implements RequestHandlerInterface
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $admin_config_route = route(AdminConfigPage::class);
-
         if ($this->module === null) {
             FlashMessages::addMessage(
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class);
         }
 
         $task_sched_id = Validator::attributes($request)->integer('task', -1);
@@ -72,7 +71,7 @@ class TaskEditAction implements RequestHandlerInterface
                 I18N::translate('The task shedule with ID “%s” does not exist.', I18N::number($task_sched_id)),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class);
         }
 
         $success = $this->updateGeneralSettings($task_schedule, $request);
@@ -87,7 +86,7 @@ class TaskEditAction implements RequestHandlerInterface
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Task Schedule “' . $task_schedule->id() . '” has been updated.');
         }
 
-        return redirect($admin_config_route);
+        return Registry::responseFactory()->redirect(AdminConfigPage::class);
     }
 
     /**

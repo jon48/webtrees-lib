@@ -17,6 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -58,14 +59,12 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
-
         if ($this->module === null) {
             FlashMessages::addMessage(
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $type           = Validator::parsedBody($request)->isInArray(['table', 'map'])->string('view_type', '');
@@ -83,7 +82,7 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
                 I18N::translate('The parameters for the new view are not valid.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         if ($type === 'map') {
@@ -100,8 +99,9 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : View “' . $new_view_id . '” has been added.');
-            return redirect(
-                route(GeoAnalysisViewEditPage::class, ['tree' => $tree->name(), 'view_id' => $new_view_id ])
+            return Registry::responseFactory()->redirect(
+                GeoAnalysisViewEditPage::class,
+                ['tree' => $tree->name(), 'view_id' => $new_view_id ]
             );
         } else {
             FlashMessages::addMessage(
@@ -110,7 +110,7 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
             );
             //phpcs:ignore Generic.Files.LineLength.TooLong
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : A new View could not be added. See error log.');
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
     }
 }

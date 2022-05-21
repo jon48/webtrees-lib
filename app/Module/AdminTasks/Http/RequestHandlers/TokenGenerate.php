@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\AdminTasks\AdminTasksModule;
@@ -57,6 +58,6 @@ class TokenGenerate implements RequestHandlerInterface
         $this->module->setPreference('MAJ_AT_FORCE_EXEC_TOKEN', $token);
         Log::addConfigurationLog($this->module->title() . ' : New token generated.');
 
-        return response(['token' => $token]);
+        return Registry::responseFactory()->response(['token' => $token]);
     }
 }

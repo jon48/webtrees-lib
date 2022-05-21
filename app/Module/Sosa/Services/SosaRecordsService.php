@@ -191,7 +191,7 @@ class SosaRecordsService
      */
     public function listMissingAncestorsAtGeneration(Tree $tree, UserInterface $user, int $gen): Collection
     {
-        if ($gen == 1) {
+        if ($gen === 1) {
             return collect();
         }
 

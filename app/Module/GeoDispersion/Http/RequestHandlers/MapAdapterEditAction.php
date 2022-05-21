@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -69,7 +69,7 @@ class MapAdapterEditAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
@@ -89,7 +89,7 @@ class MapAdapterEditAction implements RequestHandlerInterface
                 I18N::translate('The parameters for the map configuration are not valid.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $mapper->setConfig($mapper->config()->withConfigUpdate($request));
@@ -111,9 +111,9 @@ class MapAdapterEditAction implements RequestHandlerInterface
             Log::addErrorLog('Module ' . $this->module->title() . ' : Error when updating Map Adapter “' . $map_adapter->id() . '”: ' . $ex->getMessage());
         }
 
-        return redirect(route(GeoAnalysisViewEditPage::class, [
+        return Registry::responseFactory()->redirect(MapAdapterEditPage::class, [
             'tree' => $tree->name(),
-            'view_id' => $map_adapter->geoAnalysisViewId()
-        ]));
+            'adapter_id' => $map_adapter->id()
+        ]);
     }
 }

@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
@@ -54,14 +54,12 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
-
         if ($this->module === null) {
             FlashMessages::addMessage(
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $adapter_id = Validator::attributes($request)->integer('adapter_id', -1);
@@ -72,7 +70,7 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
                 I18N::translate('The map configuration with ID “%d” does not exist.', I18N::number($adapter_id)),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         if ($this->mapadapter_data_service->delete($map_adapter) > 0) {
@@ -91,9 +89,9 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Map Adapter “' . $map_adapter->id() . '” could not be deleted. See error log.');
         }
 
-        return redirect(route(GeoAnalysisViewEditPage::class, [
+        return Registry::responseFactory()->redirect(GeoAnalysisViewEditPage::class, [
             'tree'      => $tree->name(),
             'view_id'   => $map_adapter->geoAnalysisViewId()
-        ]));
+        ]);
     }
 }

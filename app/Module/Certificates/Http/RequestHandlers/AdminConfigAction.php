@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
@@ -50,14 +50,12 @@ class AdminConfigAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
-
         if ($this->module === null) {
             FlashMessages::addMessage(
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $tree->setPreference(
@@ -97,6 +95,6 @@ class AdminConfigAction implements RequestHandlerInterface
             'success'
         );
 
-        return redirect($admin_config_route);
+        return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
     }
 }

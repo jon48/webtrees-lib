@@ -19,10 +19,9 @@ use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
 use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
@@ -79,7 +78,10 @@ class AncestorsListFamily implements RequestHandlerInterface
         $current_gen = Validator::attributes($request)->integer('gen', 0);
 
         if ($current_gen <= 0) {
-            return response('Invalid generation', StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY);
+            return Registry::responseFactory()->response(
+                'Invalid generation',
+                StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY
+            );
         }
 
         $list_families = $this->sosa_record_service->listAncestorFamiliesAtGeneration($tree, $user, $current_gen);

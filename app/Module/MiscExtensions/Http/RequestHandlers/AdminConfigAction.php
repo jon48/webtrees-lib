@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\MiscExtensions\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\MiscExtensions\MiscExtensionsModule;
@@ -51,7 +52,7 @@ class AdminConfigAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class));
+            return Registry::responseFactory()->redirect(AdminConfigPage::class);
         }
 
         $this->module->setPreference(
@@ -72,6 +73,6 @@ class AdminConfigAction implements RequestHandlerInterface
             'success'
         );
 
-        return redirect(route(AdminConfigPage::class));
+        return Registry::responseFactory()->redirect(AdminConfigPage::class);
     }
 }

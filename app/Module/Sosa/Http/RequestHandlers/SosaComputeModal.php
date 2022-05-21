@@ -14,9 +14,8 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 
-use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\Sosa\SosaModule;
@@ -51,7 +50,7 @@ class SosaComputeModal implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {
-            return response(view('modals/error', [
+            return Registry::responseFactory()->response(view('modals/error', [
                 'title' => I18N::translate('Error'),
                 'error' => I18N::translate('The attached module could not be found.')
             ]));
@@ -59,7 +58,7 @@ class SosaComputeModal implements RequestHandlerInterface
 
         $tree = Validator::attributes($request)->tree();
 
-        return response(view($this->module->name() . '::modals/sosa-compute', [
+        return Registry::responseFactory()->response(view($this->module->name() . '::modals/sosa-compute', [
             'tree'          => $tree,
             'xref'          => Validator::attributes($request)->isXref()->string('xref', '')
         ]));

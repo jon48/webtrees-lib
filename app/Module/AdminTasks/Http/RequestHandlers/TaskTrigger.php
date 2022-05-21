@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\AdminTasks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -64,6 +65,6 @@ class TaskTrigger implements RequestHandlerInterface
             $this->taskschedules_service->run($task_schedule, $force);
         }
 
-        return response();
+        return Registry::responseFactory()->response();
     }
 }

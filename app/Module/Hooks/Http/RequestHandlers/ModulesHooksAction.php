@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\Hooks\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\RequestHandlers\AbstractModuleComponentAction;
 use Fisharebest\Webtrees\Services\ModuleService;
@@ -55,7 +56,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
         $hook_collector = $this->hook_service->find($hook_name, true);
         if ($hook_collector === null) {
             FlashMessages::addMessage(I18N::translate('The hook with name “%s” does not exist.', $hook_name), 'danger');
-            return redirect(AdminConfigPage::class);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class);
         }
 
         foreach ($hook_collector->hooks() as $hook) {
@@ -66,7 +67,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
 
         FlashMessages::addMessage(I18N::translate('The hook preferences have been updated.'), 'success');
 
-        return redirect(route(ModulesHooksPage::class, ['hook_name' => $hook_name]));
+        return Registry::responseFactory()->redirect(ModulesHooksPage::class, ['hook_name' => $hook_name]);
     }
 
     /**

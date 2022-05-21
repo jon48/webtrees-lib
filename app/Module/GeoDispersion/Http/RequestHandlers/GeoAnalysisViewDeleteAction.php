@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
@@ -54,14 +54,12 @@ class GeoAnalysisViewDeleteAction implements RequestHandlerInterface
     {
         $tree = Validator::attributes($request)->tree();
 
-        $admin_config_route = route(AdminConfigPage::class, ['tree' => $tree->name()]);
-
         if ($this->module === null) {
             FlashMessages::addMessage(
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $view_id = Validator::attributes($request)->integer('view_id', -1);
@@ -72,7 +70,7 @@ class GeoAnalysisViewDeleteAction implements RequestHandlerInterface
                 I18N::translate('The view with ID “%s” does not exist.', I18N::number($view_id)),
                 'danger'
             );
-            return redirect($admin_config_route);
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         if ($this->geoview_data_service->delete($view) > 0) {
@@ -91,6 +89,6 @@ class GeoAnalysisViewDeleteAction implements RequestHandlerInterface
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : View “' . $view->id() . '” could not be deleted. See error log.');
         }
 
-        return redirect($admin_config_route);
+        return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
     }
 }

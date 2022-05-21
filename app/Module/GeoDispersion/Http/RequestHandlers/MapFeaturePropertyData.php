@@ -54,7 +54,7 @@ class MapFeaturePropertyData implements RequestHandlerInterface
             Validator::attributes($request)->string('map_id', '')
         );
 
-        return response(Registry::cache()->file()->remember(
+        return Registry::responseFactory()->response(Registry::cache()->file()->remember(
             'map-properties-' . $map_id,
             function () use ($map_id): array {
                 $map = $this->map_definition_service->find($map_id);

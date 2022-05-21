@@ -15,10 +15,9 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
-use Fisharebest\Webtrees\Services\DatatablesService;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisViewDataService;
@@ -64,7 +63,7 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
 
         $module = $this->module;
         $module_name = $this->module->name();
-        return response(['data' => $this->geoview_data_service->all($tree, true)
+        return Registry::responseFactory()->response(['data' => $this->geoview_data_service->all($tree, true)
             ->map(fn(AbstractGeoAnalysisView $view) => [
                 'edit' => view($module_name . '::admin/view-table-options', [
                     'view_id' => $view->id(),

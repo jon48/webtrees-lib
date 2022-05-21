@@ -90,7 +90,7 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
             $image = $this->imageManager()->make($filesystem->readStream($filename));
             $image = $this->autorotateImage($image);
 
-            if ($watermark == null) {
+            if ($watermark === null) {
                 throw new InvalidArgumentException('Watermark data not defined');
             }
 

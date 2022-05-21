@@ -68,7 +68,7 @@ class SurnamesList implements RequestHandlerInterface
         if ($show_all === 'yes') {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . I18N::translate('All');
             $surnames = $this->module->surnames($tree, '', '', false, false, I18N::locale());
-        } elseif (mb_strlen($initial) == 1) {
+        } elseif (mb_strlen($initial) === 1) {
             $title = I18N::translate('Patronymic Lineages') . ' — ' . $initial;
             $surnames = $this->module->surnames($tree, '', $initial, false, false, I18N::locale());
         } else {

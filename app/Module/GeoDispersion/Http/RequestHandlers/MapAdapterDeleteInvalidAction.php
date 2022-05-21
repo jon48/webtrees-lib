@@ -17,7 +17,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\Http\RequestHandlers;
 use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\GeoDispersion\GeoDispersionModule;
@@ -69,7 +69,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         $view_id = Validator::attributes($request)->integer('view_id', -1);
@@ -80,7 +80,7 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
                 I18N::translate('The view with ID “%s” does not exist.', I18N::number($view_id)),
                 'danger'
             );
-            return redirect(route(AdminConfigPage::class, ['tree' => $tree->name()]));
+            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
         }
 
         /** @var \Illuminate\Support\Collection<int> $valid_map_adapters */
@@ -103,9 +103,9 @@ class MapAdapterDeleteInvalidAction implements RequestHandlerInterface
             Log::addConfigurationLog('Module ' . $this->module->title() . ' : Error when deleting invalid map configurations: ' . $ex->getMessage());
         }
 
-        return redirect(route(GeoAnalysisViewEditPage::class, [
+        return Registry::responseFactory()->redirect(GeoAnalysisViewEditPage::class, [
             'tree'      => $tree->name(),
             'view_id'   => $view_id
-        ]));
+        ]);
     }
 }

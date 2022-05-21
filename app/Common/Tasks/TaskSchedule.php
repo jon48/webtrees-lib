@@ -203,7 +203,7 @@ class TaskSchedule
     {
         if ($this->nb_occurrences > 0) {
             $this->nb_occurrences--;
-            if ($this->nb_occurrences == 0) {
+            if ($this->nb_occurrences === 0) {
                 $this->disable();
             }
         }

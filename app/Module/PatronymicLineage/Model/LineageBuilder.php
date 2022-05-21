@@ -68,7 +68,7 @@ class LineageBuilder
             I18N::locale()
         );
         //Warning - the individuals method returns a clone of individuals objects. Cannot be used for object equality
-        if (count($indis) == 0) {
+        if (count($indis) === 0) {
             return null;
         }
 
@@ -102,12 +102,11 @@ class LineageBuilder
         }
 
         return $root_lineages->sort(function (LineageRootNode $a, LineageRootNode $b) {
-
-            if ($a->numberChildNodes() == $b->numberChildNodes()) {
+            if ($a->numberChildNodes() === $b->numberChildNodes()) {
                 return 0;
             }
             return ($a->numberChildNodes() > $b->numberChildNodes()) ? -1 : 1;
-        });
+        })->values();
     }
 
     /**
@@ -128,18 +127,18 @@ class LineageBuilder
             /** @var Family $child_family */
             $child_family->husband();
             if (($husb = $child_family->husband()) !== null) {
-                if ($husb->isPendingAddition() && $husb->privatizeGedcom(Auth::PRIV_HIDE) == '') {
+                if ($husb->isPendingAddition() && $husb->privatizeGedcom(Auth::PRIV_HIDE) === '') {
                     return $indi;
                 }
                 return $this->getLineageRootIndividual($husb);
             } elseif (($wife = $child_family->wife()) !== null) {
-                if (!($wife->isPendingAddition() && $wife->privatizeGedcom(Auth::PRIV_HIDE) == '')) {
+                if (!($wife->isPendingAddition() && $wife->privatizeGedcom(Auth::PRIV_HIDE) === '')) {
                     $indi_surname = $indi->getAllNames()[$indi->getPrimaryName()]['surname'];
                     $wife_surname = $wife->getAllNames()[$wife->getPrimaryName()]['surname'];
                     if (
                         $indi->canShowName()
                         && $wife->canShowName()
-                        && I18N::comparator()($indi_surname, $wife_surname) == 0
+                        && I18N::comparator()($indi_surname, $wife_surname) === 0
                     ) {
                             return $this->getLineageRootIndividual($wife);
                     }
@@ -163,7 +162,7 @@ class LineageBuilder
 
         $indi_node = $node->individual();
         if ($indi_node !== null) {
-            if ($node->families()->count() == 0) {
+            if ($node->families()->count() === 0) {
                 foreach ($indi_node->spouseFamilies() as $spouse_family) {
                     $node->addFamily($spouse_family);
                 }
@@ -191,11 +190,11 @@ class LineageBuilder
             $nb_children = $nb_natural = 0;
 
             foreach ($spouse_family->children() as $child) {
-                if (!($child->isPendingAddition() && $child->privatizeGedcom(Auth::PRIV_HIDE) == '')) {
+                if (!($child->isPendingAddition() && $child->privatizeGedcom(Auth::PRIV_HIDE) === '')) {
                     $child_surname = $child->getAllNames()[$child->getPrimaryName()]['surname'] ?? '';
 
                     $nb_children++;
-                    if ($indi_node !== null && $indi_node->sex() == 'F') { //If the root individual is the mother
+                    if ($indi_node !== null && $indi_node->sex() === 'F') { //If the root individual is the mother
                         //Print only lineages of children with the same surname as their mother
                         //(supposing they are natural children)
                         /** @psalm-suppress RedundantCondition */
@@ -203,7 +202,7 @@ class LineageBuilder
                             $spouse === null ||
                             ($spouse_surname !== '' && I18N::comparator()($child_surname, $spouse_surname) != 0)
                         ) {
-                            if (I18N::comparator()($child_surname, $indi_surname) == 0) {
+                            if (I18N::comparator()($child_surname, $indi_surname) === 0) {
                                 $nb_natural++;
                                 $node_child = new LineageNode($child, $node->rootNode());
                                 $node_child = $this->buildLineage($node_child);
@@ -215,9 +214,9 @@ class LineageBuilder
                         //Print if the children does not bear the same name as his mother
                         //(and different from his father)
                         if (
-                            mb_strlen($child_surname) == 0 ||
-                            mb_strlen($indi_surname) == 0 || mb_strlen($spouse_surname) == 0 ||
-                            I18N::comparator()($child_surname, $indi_surname) == 0 ||
+                            mb_strlen($child_surname) === 0 ||
+                            mb_strlen($indi_surname) === 0 || mb_strlen($spouse_surname) === 0 ||
+                            I18N::comparator()($child_surname, $indi_surname) === 0 ||
                             I18N::comparator()($child_surname, $spouse_surname) != 0
                         ) {
                             $node_child = new LineageNode($child, $node->rootNode());

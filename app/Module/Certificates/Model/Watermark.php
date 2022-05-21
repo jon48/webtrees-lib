@@ -110,7 +110,7 @@ class Watermark
         $len = mb_strlen($this->text);
         while ($this->stringLengthEstimate($len, $this->size) > 0.9 * $width) {
             $this->size--;
-            if ($this->size == 2) {
+            if ($this->size === 2) {
                 return;
             }
         }

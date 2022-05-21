@@ -151,7 +151,7 @@ class SosaStatisticsService
             ->selectRaw('SUM(majs_gen * majs_gen) AS sum_x2')
             ->get()->first();
 
-        return $row->n == 0 ? 0 :
+        return $row->n === 0 ? 0 :
             -($row->n * $row->sum_xy - $row->sum_x * $row->sum_y) / ($row->n * $row->sum_x2 - pow($row->sum_x, 2));
     }
 
