@@ -90,16 +90,12 @@ class SosaConfig implements RequestHandlerInterface
                 $max_gen_system;
         };
 
-        // Cannot use Validator with negative integers issue webtrees #4408
-        $selected_user_id = (int) filter_var($request->getQueryParams()['user_id'] ?? 0, FILTER_VALIDATE_INT);
-
         return $this->viewResponse($this->module->name() . '::config-page', [
             'module_name'       =>  $this->module->name(),
             'title'             =>  I18N::translate('Sosa Configuration'),
             'tree'              =>  $tree,
             'user_id'           =>  Validator::attributes($request)->user(),
-            //'selected_user_id'  =>  Validator::queryParams($request)->integer('user_id', 0), // See webtree #4408
-            'selected_user_id'  =>  $selected_user_id,
+            'selected_user_id'  =>  Validator::queryParams($request)->integer('user_id', 0),
             'immediate_compute' =>  Validator::queryParams($request)->string('compute', '') === 'yes',
             'users_root'        =>  $users_root
         ]);

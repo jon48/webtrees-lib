@@ -56,7 +56,7 @@ class SourceCertificate extends AbstractElement
      * {@inheritDoc}
      * @see \Fisharebest\Webtrees\Elements\AbstractElement::canonical()
      */
-    public function canonical($value): string
+    public function canonical(string $value): string
     {
         return strtr($value, '\\', '/');
     }

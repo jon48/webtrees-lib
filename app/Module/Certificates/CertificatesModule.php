@@ -160,7 +160,7 @@ class CertificatesModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.1-v.1';
+        return '2.1.3-v.1';
     }
 
     /**
