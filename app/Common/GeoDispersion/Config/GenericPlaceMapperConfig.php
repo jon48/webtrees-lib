@@ -100,7 +100,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
     public function jsonDeserialize($config): self
     {
         if (is_string($config)) {
-            return $this->jsonDeserialize(json_decode($config));
+            return $this->jsonDeserialize((array) json_decode($config));
         }
         if (is_array($config)) {
             return $this->setConfig($config);

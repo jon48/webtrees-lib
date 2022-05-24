@@ -27,7 +27,7 @@ use ReflectionClass;
  */
 abstract class AbstractHookCollector implements HookCollectorInterface, HookInterface
 {
-    /** @var Collection<THook> $hooks */
+    /** @var Collection<int, array<THook>> $hooks */
     protected Collection $hooks;
 
     private ModuleInterface $module;
@@ -86,11 +86,7 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
      */
     public function register(HookInterface $hook_instance, int $order): void
     {
-        if ($this->hooks->has($order)) {
-            $this->hooks->splice($order + 1, 0, [$hook_instance]);
-        } else {
-            $this->hooks->put($order, $hook_instance);
-        }
+        $this->hooks->put($order, $this->hooks->get($order, []) + [$hook_instance]);
     }
 
     /**
@@ -101,6 +97,7 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
      */
     public function hooks(): Collection
     {
-        return $this->hooks->sortKeys();
+        /** @var Collection<THook> */
+        return $this->hooks->sortKeys()->flatten();
     }
 }
