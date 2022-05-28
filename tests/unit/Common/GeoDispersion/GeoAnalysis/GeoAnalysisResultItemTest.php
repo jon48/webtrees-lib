@@ -17,7 +17,7 @@ class GeoAnalysisResultItemTest extends TestCase
     protected int $count;
 
     /** @var GeoAnalysisPlace&\PHPUnit\Framework\MockObject\MockObject $place */
-    protected $place;
+    protected GeoAnalysisPlace $place;
 
     /**
      * {@inheritdoc}

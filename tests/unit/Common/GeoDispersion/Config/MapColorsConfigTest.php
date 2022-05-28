@@ -17,16 +17,16 @@ class MapColorsConfigTest extends TestCase
     protected MapColorsConfig $mapColorsConfig;
 
     /** @var Color&\PHPUnit\Framework\MockObject\MockObject $default */
-    protected $default;
+    protected Color $default;
 
     /** @var Color&\PHPUnit\Framework\MockObject\MockObject $stroke */
-    protected $stroke;
+    protected Color $stroke;
 
     /** @var Color&\PHPUnit\Framework\MockObject\MockObject $max_value */
-    protected $max_value;
+    protected Color $max_value;
 
     /** @var Color&\PHPUnit\Framework\MockObject\MockObject $hover */
-    protected $hover;
+    protected Color $hover;
 
     /**
      * {@inheritdoc}

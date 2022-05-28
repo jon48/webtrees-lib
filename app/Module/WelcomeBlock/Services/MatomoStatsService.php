@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Fig\Http\Message\StatusCodeInterface;
 use Fisharebest\Webtrees\Registry;
 use GuzzleHttp\Client;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Exception\GuzzleException;
 use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
@@ -28,6 +29,25 @@ use MyArtJaub\Webtrees\Module\WelcomeBlock\WelcomeBlockModule;
  */
 class MatomoStatsService
 {
+    protected ?HandlerStack $handler = null;
+
+    /**
+     * Set or get the http handler for the service
+     *
+     * @param HandlerStack $handler
+     * @return HandlerStack
+     */
+    public function httpHandler(HandlerStack $handler = null): HandlerStack
+    {
+        if ($this->handler === null) {
+            $this->handler = HandlerStack::create();
+        }
+        if ($handler !== null) {
+            $this->handler = $handler;
+        }
+        return $this->handler;
+    }
+
     /**
      * Returns the number of visits for the current year (up to the day before).
      * That statistic is cached for the day, to avoid unecessary calls to Matomo API.
@@ -90,7 +110,8 @@ class MatomoStatsService
         ) {
             try {
                 $http_client = new Client([
-                    RequestOptions::TIMEOUT => 30
+                    RequestOptions::TIMEOUT => 30,
+                    'handler'   => $this->handler
                 ]);
 
                 $response = $http_client->get($settings['matomo_url'], [

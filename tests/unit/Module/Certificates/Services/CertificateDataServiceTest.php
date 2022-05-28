@@ -42,7 +42,7 @@ class CertificateDataServiceTest extends TestCase
     /**
      * @var Certificate&\PHPUnit\Framework\MockObject\MockObject $certificate
      */
-    protected $certificate;
+    protected Certificate $certificate;
 
     /**
      * {@inheritdoc}

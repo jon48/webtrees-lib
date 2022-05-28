@@ -21,6 +21,9 @@ use Fisharebest\Webtrees\View;
  */
 class TestCase extends \Fisharebest\Webtrees\TestCase
 {
+    /** @var string DEFAULT_VIEW_TEXT */
+    public const DEFAULT_VIEW_TEXT = 'DEFAULT VIEW';
+
     /**
      * Register a view namespace to test views folder structure.
      *

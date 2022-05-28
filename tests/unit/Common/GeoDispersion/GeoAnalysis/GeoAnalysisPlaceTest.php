@@ -19,10 +19,10 @@ class GeoAnalysisPlaceTest extends TestCase
     protected bool $strict_depth;
 
     /** @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree */
-    protected $tree;
+    protected Tree $tree;
 
     /** @var Place&\PHPUnit\Framework\MockObject\MockObject $place */
-    protected $place;
+    protected Place $place;
 
     /**
      * {@inheritdoc}
@@ -53,7 +53,7 @@ class GeoAnalysisPlaceTest extends TestCase
     }
 
     /**
-     * Data provider for GeoAnalysusPlace tests
+     * Data provider for GeoAnalysisPlace tests
      * @return array<array<mixed>>
      */
     public function placeData(): array

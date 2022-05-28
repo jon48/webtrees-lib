@@ -37,7 +37,7 @@ class CertificateFilesystemServiceTest extends TestCase
     /**
      * @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree
      */
-    protected $tree;
+    protected Tree $tree;
 
     /**
      * {@inheritDoc}

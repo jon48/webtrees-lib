@@ -15,7 +15,6 @@ use MyArtJaub\Webtrees\Module\Certificates\Factories\CertificateImageFactory;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Certificate;
 use MyArtJaub\Webtrees\Module\Certificates\Model\Watermark;
 use MyArtJaub\Webtrees\Module\Certificates\Services\CertificateFilesystemService;
-use PHPUnit\Framework\MockObject\MockObject;
 use BadMethodCallException;
 
 /**
@@ -29,8 +28,8 @@ class CertificateImageFactoryTest extends TestCase
 
     protected CertificateImageFactory $certificate_image_factory;
 
-    /** @var Tree|MockObject $tree */
-    protected $tree;
+    /** @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree */
+    protected Tree $tree;
 
     /**
      * {@inheritdoc}

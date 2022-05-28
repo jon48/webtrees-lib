@@ -18,7 +18,7 @@ class AbstractHookCollectorTest extends TestCase
     protected $abstract_hook_collector;
 
     /** @var ModuleInterface&\PHPUnit\Framework\MockObject\MockObject $module */
-    protected $module;
+    protected ModuleInterface $module;
 
     /**
      * {@inheritdoc}

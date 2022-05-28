@@ -16,7 +16,6 @@ use Fisharebest\Webtrees\Services\UserService;
 use MyArtJaub\Tests\Helpers\Webtrees\TestCase;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
 use MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AdminConfigPage;
-use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class AdminConfigPageTest.
@@ -25,11 +24,11 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class AdminConfigPageTest extends TestCase
 {
-    /** @var ModuleService&MockObject $module_service */
-    protected $module_service;
+    /** @var ModuleService&\PHPUnit\Framework\MockObject\MockObject $module_service */
+    protected ModuleService $module_service;
 
-    /** @var User|MockObject $user */
-    protected $user;
+    /** @var User&\PHPUnit\Framework\MockObject\MockObject $user */
+    protected User $user;
 
     /**
      * {@inheritDoc}

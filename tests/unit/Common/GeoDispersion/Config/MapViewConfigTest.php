@@ -17,7 +17,7 @@ class MapViewConfigTest extends TestCase
     protected string $map_mapping_property;
 
     /** @var PlaceMapperConfigInterface&\PHPUnit\Framework\MockObject\MockObject $mapper_config */
-    protected $mapper_config;
+    protected PlaceMapperConfigInterface $mapper_config;
 
     /**
      * {@inheritdoc}
