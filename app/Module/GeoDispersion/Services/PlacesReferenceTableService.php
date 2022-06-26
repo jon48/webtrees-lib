@@ -99,17 +99,6 @@ class PlacesReferenceTableService
     }
 
     /**
-     * Get the placeholder tag for a column_name
-     *
-     * @param string $column_name
-     * @return string
-     */
-    private function tagName(string $column_name): string
-    {
-        return array_flip(self::COLUMN_MAPPING)[$column_name] ?? '';
-    }
-
-    /**
      * Sanitize string for use in a SQL query.
      *
      * @param string $string
