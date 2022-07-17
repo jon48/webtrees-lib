@@ -67,7 +67,7 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
 
         if ($map_adapter === null) {
             FlashMessages::addMessage(
-                I18N::translate('The map configuration with ID “%d” does not exist.', I18N::number($adapter_id)),
+                I18N::translate('The map configuration with ID “%s” does not exist.', I18N::number($adapter_id)),
                 'danger'
             );
             return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);

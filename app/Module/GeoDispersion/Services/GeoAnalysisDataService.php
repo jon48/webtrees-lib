@@ -84,6 +84,6 @@ class GeoAnalysisDataService
                 return [ count($place_array) => $place_array ];
             })
             ->sortKeys()
-            ->last();
+            ->last() ?? [];
     }
 }
