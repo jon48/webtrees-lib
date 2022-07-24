@@ -25,5 +25,5 @@ jobs:
 
       - run: composer global require squizlabs/php_codesniffer=* --quiet
 
-      - name: PHP
+      - name: PHPCS
         run: ~/.composer/vendor/bin/phpcs -s

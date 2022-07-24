@@ -16,6 +16,7 @@ namespace MyArtJaub\Webtrees\Module\MiscExtensions;
 
 use Aura\Router\Map;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\View;
 use Fisharebest\Webtrees\Module\AbstractModule;
 use Fisharebest\Webtrees\Module\ModuleConfigInterface;
@@ -23,6 +24,7 @@ use Fisharebest\Webtrees\Module\ModuleConfigTrait;
 use MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
+use MyArtJaub\Webtrees\Module\MiscExtensions\Factories\LegacyXrefFactory;
 use MyArtJaub\Webtrees\Module\MiscExtensions\Hooks\TitlesCardHook;
 use MyArtJaub\Webtrees\Module\MiscExtensions\Http\RequestHandlers\AdminConfigAction;
 use MyArtJaub\Webtrees\Module\MiscExtensions\Http\RequestHandlers\AdminConfigPage;
@@ -68,6 +70,10 @@ class MiscExtensionsModule extends AbstractModule implements
     {
         $this->traitBoot();
         View::registerCustomView('::modules/privacy-policy/page', $this->name() . '::privacy-policy');
+
+        if ((int) $this->getPreference('MAJ_USE_LEGACY_XREF') === 1) {
+            Registry::xrefFactory(new LegacyXrefFactory());
+        }
     }
 
     /**
@@ -95,7 +101,7 @@ class MiscExtensionsModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.3-v.1';
+        return '2.1.3-v.2';
     }
 
     /**
