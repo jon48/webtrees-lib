@@ -67,7 +67,7 @@ class AbstractHookCollectorTest extends TestCase
 
         $registered_hooks = $this->abstract_hook_collector->hooks();
 
-        self::assertCount(2, $registered_hooks);
+        self::assertCount(3, $registered_hooks);
         self::assertSame($hook_3, $registered_hooks->get(0));
         self::assertSame($hook_1, $registered_hooks->get(1));
     }

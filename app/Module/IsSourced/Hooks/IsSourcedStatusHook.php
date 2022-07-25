@@ -65,22 +65,12 @@ class IsSourcedStatusHook implements RecordNameTextExtenderInterface
     public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         if ($use_long && $record instanceof Individual) {
-            return
-                view($this->module()->name() . '::icons/source-status', [
-                    'module_name' => $this->module()->name(),
-                    'source_status' => $this->source_status_service->sourceStatusForRecord($record),
-                    'context'  => 'INDI',
-                    'size_style' => $size ]) .
-                view($this->module()->name() . '::icons/source-status', [
-                    'module_name' => $this->module()->name(),
-                    'source_status' => $this->source_status_service->sourceStatusForBirth($record),
-                    'context'  => 'INDI:BIRT',
-                    'size_style' => $size ]) .
-                ($record->isDead() ? view($this->module()->name() . '::icons/source-status', [
-                    'module_name' => $this->module()->name(),
-                    'source_status' => $this->source_status_service->sourceStatusForDeath($record),
-                    'context'  => 'INDI:DEAT',
-                    'size_style' => $size ]) : '') ;
+            return view($this->module()->name() . '::hooks/name-append', [
+                'module_name'           =>  $this->module()->name(),
+                'source_status_service' =>  $this->source_status_service,
+                'individual'            =>  $record,
+                'size_style'            =>  $size
+            ]);
         }
         return '';
     }

@@ -115,7 +115,7 @@ class HooksModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.1-v.1';
+        return '2.1.6-v.1';
     }
 
     /**
