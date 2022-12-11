@@ -170,7 +170,9 @@ class GeoAnalysisMapAdapter
             ->each(
                 fn (MapFeatureAnalysisData $data) =>
                     $data->places()->each(
-                        fn(GeoAnalysisPlace $place) => $result->exclude($place)
+                        function (GeoAnalysisPlace $place) use ($result): void {
+                            $result->exclude($place);
+                        }
                     )
             );
 

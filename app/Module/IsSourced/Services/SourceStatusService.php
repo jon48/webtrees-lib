@@ -20,6 +20,7 @@ use Fisharebest\Webtrees\Family;
 use Fisharebest\Webtrees\Gedcom;
 use Fisharebest\Webtrees\GedcomRecord;
 use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use MyArtJaub\Webtrees\Module\IsSourced\Data\FactSourceStatus;
 use MyArtJaub\Webtrees\Module\IsSourced\Data\NullFactSourceStatus;
 use MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus;
@@ -38,6 +39,27 @@ class SourceStatusService
     private const DATE_PRECISION_MARGIN = 180;
 
     /**
+     * Extract gedcom for all source citations of a fact.
+     * Logic removed from \Fisharebest\Webtrees\Fact.
+     *
+     * @param Fact $fact
+     * @return string[]
+     */
+    private function extractCitations(Fact $fact)
+    {
+        $extract_regex = '/\n(2 SOUR @(' . Gedcom::REGEX_XREF . ')@(?:\n[3-9] .*)*)/';
+        preg_match_all($extract_regex, $fact->gedcom(), $matches, PREG_SET_ORDER);
+        $citations = [];
+        foreach ($matches as $match) {
+            $source = Registry::sourceFactory()->make($match[2], $fact->record()->tree());
+            if ($source !== null && $source->canShow()) {
+                $citations[] = $match[1];
+            }
+        }
+        return $citations;
+    }
+
+    /**
      * Return the status of source citations for a fact.
      *
      * @param Fact $fact
@@ -52,7 +74,7 @@ class SourceStatusService
             ->setFactHasDate($date->isOK())
             ->setFactHasPreciseDate($date->qual1 === '' && $date->minimumJulianDay() === $date->maximumJulianDay());
 
-        foreach ($fact->getCitations() as $citation) {
+        foreach ($this->extractCitations($fact) as $citation) {
             $source_status
                 ->setHasSource(true)
                 ->addHasSupportingDocument(preg_match('/\n3 _ACT (?:.*)/', $citation) === 1);

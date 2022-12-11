@@ -60,6 +60,7 @@ class NullPlaceMapperConfig implements PlaceMapperConfigInterface
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [];

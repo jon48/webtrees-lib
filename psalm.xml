@@ -23,6 +23,11 @@
 	
 	<issueHandlers>
 	   <TooManyTemplateParams errorLevel="info" />
+	   <InvalidClassConstantType>
+           <errorLevel type="suppress">
+            <referencedConstant name="MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers\AutoCompleteFile::CACHE_LIFE" />
+           </errorLevel>
+	   </InvalidClassConstantType>
        <InvalidArgument>
            <errorLevel type="suppress">
                <referencedFunction name="Illuminate\Database\Query\Builder::groupBy" />

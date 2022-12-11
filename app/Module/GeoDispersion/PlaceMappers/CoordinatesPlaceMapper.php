@@ -16,7 +16,7 @@ namespace MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers;
 
 use Brick\Geo\BoundingBox;
 use Brick\Geo\Point;
-use Brick\Geo\Engine\GeometryEngineRegistry;
+use Brick\Geo\Engine\GeometryEngine;
 use Brick\Geo\Engine\PDOEngine;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Place;
@@ -39,6 +39,7 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
     use PlaceMapperTrait;
 
     private ?string $cache_key = null;
+    private ?GeometryEngine $geometry_engine = null;
 
     /**
      * {@inheritDoc}
@@ -81,13 +82,16 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
             $features_index['map_SW'],
             $features_index['nb_columns']
         );
-        if ($grid_box === null || !$this->setGeometryEngine()) {
+        if ($grid_box === null || !$this->setGeometryEngine() || $this->geometry_engine == null) {
             return null;
         }
         $features = $features_index['grid'][$grid_box[0]][$grid_box[1]];
         foreach ($features as $feature) {
             $geometry = $feature->getGeometry();
-            if ($geometry !== null && $place_point->SRID() === $geometry->SRID() && $geometry->contains($place_point)) {
+            if (
+                $geometry !== null && $place_point->SRID() === $geometry->SRID() &&
+                $this->geometry_engine->contains($geometry, $place_point)
+            ) {
                 return $feature->getProperty($feature_property);
             }
         }
@@ -190,11 +194,11 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
     protected function setGeometryEngine(): bool
     {
         try {
-            if (!GeometryEngineRegistry::has()) {
-                GeometryEngineRegistry::set(new PDOEngine(DB::connection()->getPdo()));
+            if ($this->geometry_engine === null) {
+                $this->geometry_engine = new PDOEngine(DB::connection()->getPdo());
             }
             $point = Point::xy(1, 1);
-            return $point->equals($point);
+            return $this->geometry_engine->equals($point, $point);
         } catch (Throwable $ex) {
         }
         return false;

@@ -86,7 +86,7 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
      */
     public function register(HookInterface $hook_instance, int $order): void
     {
-        $this->hooks->put($order, [...$this->hooks->get($order, []), $hook_instance]);
+        $this->hooks->put($order, array_merge($this->hooks->get($order, []), [$hook_instance]));
     }
 
     /**

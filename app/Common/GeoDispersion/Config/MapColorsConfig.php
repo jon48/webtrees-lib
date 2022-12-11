@@ -102,6 +102,7 @@ class MapColorsConfig implements JsonSerializable
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
      */
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [
