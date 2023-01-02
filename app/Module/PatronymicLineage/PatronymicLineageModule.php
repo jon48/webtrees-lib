@@ -15,10 +15,11 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage;
 
 use Aura\Router\Map;
-use Fisharebest\Localization\Locale\LocaleInterface;
 use Fisharebest\Webtrees\I18N;
+use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Module\IndividualListModule;
 use Fisharebest\Webtrees\Module\ModuleGlobalInterface;
 use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
@@ -30,6 +31,7 @@ use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\LineagesPage;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\SurnamesList;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Support\Str;
 
 /**
  * Patronymic Lineage Module.
@@ -88,7 +90,7 @@ class PatronymicLineageModule extends IndividualListModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.0.11-v.1';
+        return '2.2.0-v.1';
     }
 
     /**
@@ -99,22 +101,39 @@ class PatronymicLineageModule extends IndividualListModule implements
      */
     public function listUrl(Tree $tree, array $parameters = []): string
     {
-        $surname = $parameters['surname'] ?? '';
+        $surname = $parameters['surname'] ?? null;
+        $surname = is_string($surname) ? $surname : null;
 
-        $xref = app(ServerRequestInterface::class)->getAttribute('xref', '');
-        if ($xref !== '' && ($individual = Registry::individualFactory()->make($xref, $tree)) !== null) {
-            $surname = $individual->getAllNames()[$individual->getPrimaryName()]['surname'];
+        $request = app(ServerRequestInterface::class);
+
+        // If a surname is already in the query attribute, use it
+        if ($surname === null) {
+            $surname_attr =  Validator::attributes($request)->string('surname', '');
+            $surname_param =  Validator::queryParams($request)->string('surname', '');
+            $surname_body =  Validator::parsedBody($request)->string('surname', '');
+            $surname = $surname_attr !== '' ? $surname_attr : (
+                $surname_param !== '' ? $surname_param : (
+                $surname_body !== '' ? $surname_body : null
+            ));
         }
 
-        if ($surname !== '') {
+        // If nothing found, and on an individual page, use its name
+        $xref = Validator::attributes($request)->isXref()->string('xref', '');
+        if ($xref !== '') {
+            $individual = Registry::individualFactory()->make($xref, $tree);
+            if ($individual instanceof Individual && $individual->canShow()) {
+                $primary_name = $individual->getPrimaryName();
+                $surname ??= $individual->getAllNames()[$primary_name]['surn'] ?? null;
+            }
+        }
+
+        if (Str::length($surname ?? '') > 0 && $surname !== Individual::NOMEN_NESCIO) {
             return route(LineagesPage::class, [
                 'tree'      =>  $tree->name(),
                 'surname'   =>  $surname
             ] + $parameters);
         }
-        return route(SurnamesList::class, [
-            'tree'  =>  $tree->name()
-        ] + $parameters);
+        return route(SurnamesList::class, ['tree'  =>  $tree->name() ] + $parameters);
     }
 
     /**
@@ -144,31 +163,36 @@ class PatronymicLineageModule extends IndividualListModule implements
      */
     public function individuals(
         Tree $tree,
-        string $surn,
-        string $salpha,
+        string $surname,
+        array $surnames,
         string $galpha,
         bool $marnm,
-        bool $fams,
-        LocaleInterface $locale
+        bool $fams
     ): Collection {
-        return parent::individuals($tree, $surn, $salpha, $galpha, $marnm, $fams, $locale);
+        return parent::individuals($tree, $surname, $surnames, $galpha, $marnm, $fams);
     }
 
     /**
      * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnames()
+     * @see \Fisharebest\Webtrees\Module\IndividualListModule::allSurnames()
      *
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
-    public function surnames(
-        Tree $tree,
-        string $surn,
-        string $salpha,
-        bool $marnm,
-        bool $fams,
-        LocaleInterface $locale
-    ): array {
-        return parent::surnames($tree, $surn, $salpha, $marnm, $fams, $locale);
+    public function allSurnames($tree, $marnm, $fams): array
+    {
+        return parent::allSurnames($tree, $marnm, $fams);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnameInitials()
+     *
+     * Implemented to set the visibility to public.
+     * This should probably be in a service, but this hack allows for reuse of mainstream code.
+     */
+    public function surnameInitials($all_surnames): array
+    {
+        return parent::surnameInitials($all_surnames);
     }
 }

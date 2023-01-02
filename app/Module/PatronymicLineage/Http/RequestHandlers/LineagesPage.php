@@ -15,11 +15,11 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
+use Fisharebest\Webtrees\Individual;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Validator;
-use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
-use Fisharebest\Webtrees\Module\IndividualListModule;
+use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Services\ModuleService;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\PatronymicLineageModule;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Model\LineageBuilder;
@@ -40,11 +40,6 @@ class LineagesPage implements RequestHandlerInterface
     private $module;
 
     /**
-     * @var IndividualListModule|null $indilist_module
-     */
-    private $indilist_module;
-
-    /**
      * Constructor for LineagesPage Request handler
      *
      * @param ModuleService $module_service
@@ -52,7 +47,6 @@ class LineagesPage implements RequestHandlerInterface
     public function __construct(ModuleService $module_service)
     {
         $this->module = $module_service->findByInterface(PatronymicLineageModule::class)->first();
-        $this->indilist_module = $module_service->findByInterface(IndividualListModule::class)->first();
     }
 
     /**
@@ -65,20 +59,31 @@ class LineagesPage implements RequestHandlerInterface
             throw new HttpNotFoundException(I18N::translate('The attached module could not be found.'));
         }
 
-        if ($this->indilist_module === null) {
-            throw new HttpNotFoundException(I18N::translate('There is no module to handle individual lists.'));
+        $tree = Validator::attributes($request)->tree();
+        $surname_attr = Validator::attributes($request)->string('surname', '');
+        $surname = I18N::strtoupper(I18N::language()->normalize($surname_attr));
+
+        if ($surname_attr !== $surname) {
+            return Registry::responseFactory()
+                ->redirect(LineagesPage::class, ['tree' => $tree->name(), 'surname' => $surname]);
         }
 
-        $tree = Validator::attributes($request)->tree();
-        $surname = Validator::attributes($request)->string('surname', '');
+        if ($surname === '' ||  $surname === Individual::NOMEN_NESCIO) {
+            return Registry::responseFactory()->redirect(SurnamesList::class, ['tree' => $tree->name()]);
+        }
 
-        $initial = mb_substr($surname, 0, 1);
-        $initials_list = collect($this->indilist_module->surnameAlpha($tree, false, false, I18N::locale()))
+        $surn_initial = I18N::language()->initialLetter($surname);
+
+        $all_surnames = $this->module->allSurnames($tree, false, false);
+        $initials_list = collect($this->module->surnameInitials($all_surnames))
             ->reject(function (int $count, string $initial): bool {
                 return $initial === '@' || $initial === ',';
             });
+        $surname_variants = array_keys($all_surnames[$surname] ?? [$surname => $surname]);
+        uasort($surname_variants, I18N::comparator());
+        $surname_legend = implode('/', $surname_variants);
 
-        $title = I18N::translate('Patronymic Lineages') . ' — ' . $surname;
+        $title = I18N::translate('Patronymic Lineages') . ' — ' . $surname_legend;
 
         $lineages = app()->make(LineageBuilder::class, ['surname' => $surname])->buildLineages();
 
@@ -87,9 +92,10 @@ class LineagesPage implements RequestHandlerInterface
             'module'        =>  $this->module,
             'tree'          =>  $tree,
             'initials_list' =>  $initials_list,
-            'initial'       =>  $initial,
+            'initial'       =>  $surn_initial,
             'show_all'      =>  'no',
             'surname'       =>  $surname,
+            'surname_legend' =>  $surname_legend,
             'lineages'      =>  $lineages,
             'nb_lineages'   =>  $lineages !== null ? $lineages->count() : 0
         ]);
