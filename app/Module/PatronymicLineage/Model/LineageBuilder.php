@@ -58,14 +58,15 @@ class LineageBuilder
      */
     public function buildLineages(): ?Collection
     {
+        $all_surnames = $this->patrolineage_module->allSurnames($this->tree, false, false);
+
         $indis = $this->patrolineage_module->individuals(
             $this->tree,
             $this->surname,
-            '',
+            array_keys($all_surnames[$this->surname] ?? []),
             '',
             false,
-            false,
-            I18N::locale()
+            false
         );
         //Warning - the individuals method returns a clone of individuals objects. Cannot be used for object equality
         if (count($indis) === 0) {

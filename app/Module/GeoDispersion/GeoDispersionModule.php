@@ -117,7 +117,7 @@ class GeoDispersionModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.3-v.2';
+        return '2.1.14-v.2';
     }
 
     /**

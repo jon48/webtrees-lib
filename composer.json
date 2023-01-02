@@ -38,7 +38,7 @@
 		"brick/math": "~0.9",
 		"fig/http-message-util": "^1.1",
 		"fisharebest/flysystem-chroot-adapter": "~2.0",
-		"fisharebest/webtrees": "~2.1.8",
+		"fisharebest/webtrees": "~2.1.14",
 		"guzzlehttp/guzzle": "~7.1",
 		"illuminate/collections": "~8.20",
 		"illuminate/database": "~8.20",
