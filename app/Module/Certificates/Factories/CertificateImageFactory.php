@@ -106,6 +106,7 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
                 $font->color($watermark->color());
                 $font->size($watermark->size());
                 $font->valign('top');
+                $font->align('center'); // Required for bug in Intervention / image
             };
 
             for ($i = min((int) ceil($width * 0.1), $watermark_x); $i < $width; $i += $watermark_x) {

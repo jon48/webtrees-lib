@@ -7,6 +7,7 @@ use Fisharebest\Webtrees\MediaFile;
 use Fisharebest\Webtrees\TestCase;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Contracts\UserInterface;
+use Intervention\Image\AbstractFont;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
@@ -40,7 +41,10 @@ class CertificateImageFactoryTest extends TestCase
 
         $im_manager = new ImageManager(['driver' => 'gd']);
         $image = $im_manager->canvas(200, 150, '#96C8FF');
-        $image->text('Test', 50, 80);
+        $image->text('Test', 50, 80, function (AbstractFont $font) {
+            $font->align('center');
+            $font->valign('center');
+        });
 
         $mem_adapter = new InMemoryFilesystemAdapter();
         $mem_adapter->write('city/certificate.png', $image->stream('png')->getContents(), new Config());
