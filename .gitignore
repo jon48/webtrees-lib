@@ -30,5 +30,5 @@
 /phpdoc.xml
 /phpstan.neon
 /pdepend.xml
-/.phpunit.result.cache
+/.phpunit.cache
 
