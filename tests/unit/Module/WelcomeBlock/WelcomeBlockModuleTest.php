@@ -114,7 +114,7 @@ class WelcomeBlockModuleTest extends TestCase
      * Data provider for SaveBlockConfiguration tests
      * @return array<array<mixed>>
      */
-    public function blockConfigurations(): array
+    public static function blockConfigurations(): array
     {
         return [
             ['false', '', '1', '', false, '', 0,''],

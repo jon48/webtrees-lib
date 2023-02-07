@@ -19,7 +19,7 @@ class CertificateTest extends TestCase
      * Data provider for certificate tests
      * @return array<array<string|array<string>>>
      */
-    public function certificateData(): array
+    public static function certificateData(): array
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         return [

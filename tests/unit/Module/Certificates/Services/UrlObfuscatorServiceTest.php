@@ -60,7 +60,7 @@ class UrlObfuscatorServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function obfuscationValidData(): array
+    public static function obfuscationValidData(): array
     {
         return [
             ['Test Text To Obfuscate', 'MTIzNDEyMzQxMjM0MTIzNDEyMzQxMjM0ttJ9rj2l7P9v3ANNk10Ko3a0M_n8vye0LIhi4ankTsEiqPMUD7o-'],
@@ -74,7 +74,7 @@ class UrlObfuscatorServiceTest extends TestCase
      *
      * @return string[][]
      */
-    public function obfuscationInvalidData(): array
+    public static function obfuscationInvalidData(): array
     {
         return [
             ['Invalid&', 'The encrypted value is not in correct base64 format.'],

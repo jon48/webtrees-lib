@@ -56,7 +56,7 @@ class GeoAnalysisPlaceTest extends TestCase
      * Data provider for GeoAnalysisPlace tests
      * @return array<array<mixed>>
      */
-    public function placeData(): array
+    public static function placeData(): array
     {
         // phpcs:disable Generic.Files.LineLength.TooLong
         return [
