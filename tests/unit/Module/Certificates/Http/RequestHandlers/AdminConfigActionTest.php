@@ -58,7 +58,7 @@ class AdminConfigActionTest extends TestCase
         self::assertCount(1, $messages);
 
         $first_message = $messages[0];
-        self::assertObjectHasAttribute('status', $first_message);
+        self::assertTrue(property_exists($first_message, 'status'));
         self::assertSame('success', $first_message->status);
     }
 
@@ -83,7 +83,7 @@ class AdminConfigActionTest extends TestCase
         self::assertCount(1, $messages);
 
         $first_message = $messages[0];
-        self::assertObjectHasAttribute('status', $first_message);
+        self::assertTrue(property_exists($first_message, 'status'));
         self::assertSame('danger', $first_message->status);
     }
 }

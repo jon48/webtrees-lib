@@ -77,7 +77,7 @@ class MatomoStatsServiceTest extends TestCase
      * Data provider for VisitsThisYear tests.
      * @return array<array<mixed>>
      */
-    public function httpResponsesYearly(): array
+    public static function httpResponsesYearly(): array
     {
         return [
             [[new Response(404)], null],
@@ -109,7 +109,7 @@ class MatomoStatsServiceTest extends TestCase
      * Data provider for VisitsToday tests.
      * @return array<array<mixed>>
      */
-    public function httpResponsesToday(): array
+    public static function httpResponsesToday(): array
     {
         return [
             [[new Response(404)], null],
