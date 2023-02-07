@@ -43,14 +43,14 @@ class PlaceMapperService
      * {@internal The list is generated based on the modules exposing ModulePlaceMapperProviderInterface}
      *
      * @param bool $include_disabled
-     * @return Collection<PlaceMapperInterface>
+     * @return Collection<int, PlaceMapperInterface>
      */
     public function all(bool $include_disabled = false): Collection
     {
-        /** @var Collection<PlaceMapperInterface> $place_mappers */
+        /** @var Collection<int, PlaceMapperInterface> $place_mappers */
         $place_mappers =  $this->module_service
             ->findByInterface(ModulePlaceMapperProviderInterface::class, $include_disabled)
-            ->flatMap(fn(ModulePlaceMapperProviderInterface $module) => $module->listPlaceMappers())
+            ->flatMap(fn(ModulePlaceMapperProviderInterface $module): array => $module->listPlaceMappers())
             ->map(static function (string $mapper_class): ?PlaceMapperInterface {
                 try {
                     $mapper = app($mapper_class);

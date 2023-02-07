@@ -44,11 +44,14 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
     /**
      * Get the configured Top Places to filter on
      *
-     * @return Collection<Place>
+     * @return Collection<int, Place>
      */
     public function topPlaces(): Collection
     {
-        return collect($this->get('topPlaces', []))
+        $top_places_config = $this->get('topPlaces');
+        $top_places_config = is_array($top_places_config) ? $top_places_config : [];
+
+        return collect($top_places_config)
             ->filter(
                 /** @psalm-suppress MissingClosureParamType */
                 fn($item): bool => $item instanceof Place
@@ -81,8 +84,11 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
             return $this->jsonDeserialize(json_decode($config));
         }
         if (is_array($config)) {
+            $top_places_config = $config['topPlaces'] ?? [];
+            $top_places_config = is_array($top_places_config) ? $top_places_config : [];
+
             $this->setConfig([
-                'topPlaces' => collect($config['topPlaces'] ?? [])
+                'topPlaces' => collect($top_places_config)
                     ->filter(
                         /** @psalm-suppress MissingClosureParamType */
                         fn($item): bool => is_array($item) && count($item) === 2

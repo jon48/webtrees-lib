@@ -22,7 +22,7 @@ interface IndividualDatatablesExtenderInterface extends HookInterface
     /**
      * Get the columns to be added to individuals datatables
      *
-     * @param iterable<\Fisharebest\Webtrees\Individual> $records
+     * @param iterable<array-key, \Fisharebest\Webtrees\Individual> $records
      * @return array<string, array<string, array<string, mixed>>>
      */
     public function individualColumns(iterable $records): array;

@@ -25,7 +25,7 @@ class MapFeatureAnalysisData
     private int $count;
     private bool $in_map;
     /**
-     * @var Collection<GeoAnalysisPlace> $places
+     * @var Collection<int, GeoAnalysisPlace> $places
      */
     private Collection $places;
 
@@ -42,7 +42,7 @@ class MapFeatureAnalysisData
     /**
      * Get the list of places mapped to the feature
      *
-     * @return Collection<GeoAnalysisPlace>
+     * @return Collection<int, GeoAnalysisPlace>
      */
     public function places(): Collection
     {

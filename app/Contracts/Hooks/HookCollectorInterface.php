@@ -45,7 +45,7 @@ interface HookCollectorInterface
     /**
      * Get the interface collated by the hook collector
      *
-     * @return class-string
+     * @return class-string<\MyArtJaub\Webtrees\Contracts\Hooks\HookInterface>
      */
     public function hookInterface(): string;
 
@@ -60,7 +60,7 @@ interface HookCollectorInterface
     /**
      * Get the list of hooks registered against the hook collector
      *
-     * @return Collection<HookInterface>
+     * @return Collection<int, HookInterface>
      */
     public function hooks(): Collection;
 }

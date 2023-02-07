@@ -64,7 +64,8 @@ class MapAdapterDataService
      *
      * @param GeoAnalysisMap $map_view
      * @param bool $show_invalid
-     * @return Collection<GeoAnalysisMapAdapter|null>
+     * @return ($show_invalid is true ? Collection<int, ?GeoAnalysisMapAdapter> :
+     *              Collection<int, GeoAnalysisMapAdapter>)
      */
     public function allForView(GeoAnalysisMap $map_view, bool $show_invalid = false): Collection
     {
@@ -129,7 +130,7 @@ class MapAdapterDataService
      * Delete invalid GeoAnalysisMapAdapters from the database.
      *
      * @param AbstractGeoAnalysisView $view
-     * @param Collection<int> $valid_map_adapters
+     * @param Collection<array-key, int> $valid_map_adapters
      * @return int
      */
     public function deleteInvalid(AbstractGeoAnalysisView $view, Collection $valid_map_adapters): int

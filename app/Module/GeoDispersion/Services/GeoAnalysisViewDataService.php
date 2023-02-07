@@ -42,7 +42,7 @@ class GeoAnalysisViewDataService
     public function find(Tree $tree, int $id, bool $include_disabled = false): ?AbstractGeoAnalysisView
     {
         return $this->all($tree, $include_disabled)
-            ->first(fn(AbstractGeoAnalysisView $view): bool => $view->id() === $id);
+            ->first(static fn(AbstractGeoAnalysisView $view): bool => $view->id() === $id);
     }
 
     /**
@@ -52,21 +52,20 @@ class GeoAnalysisViewDataService
      *
      * @param Tree $tree
      * @param bool $include_disabled
-     * @return Collection<AbstractGeoAnalysisView>
+     * @return Collection<int, AbstractGeoAnalysisView>
      */
     public function all(Tree $tree, bool $include_disabled = false): Collection
     {
         return Registry::cache()->array()->remember(
             'all-geodispersion-views',
-            function () use ($tree, $include_disabled): Collection {
-                return DB::table('maj_geodisp_views')
+            fn (): Collection =>
+                DB::table('maj_geodisp_views')
                     ->select('maj_geodisp_views.*')
                     ->where('majgv_gedcom_id', '=', $tree->id())
                     ->get()
                     ->map($this->viewMapper($tree))
-                    ->filter()
-                    ->filter($this->enabledFilter($include_disabled));
-            }
+                    ->filter(static fn (?AbstractGeoAnalysisView $view): bool => $view !== null)
+                    ->filter($this->enabledFilter($include_disabled))
         );
     }
 

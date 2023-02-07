@@ -29,7 +29,7 @@ class GeoAnalysisResultTest extends TestCase
     protected GeoAnalysisPlace $place_3;
     protected GeoAnalysisPlace $place_4;
 
-    /** @var Collection<GeoAnalysisResultItem> $result_items */
+    /** @var Collection<array-key, GeoAnalysisResultItem> $result_items */
     protected Collection $result_items;
 
     /**
@@ -132,8 +132,8 @@ class GeoAnalysisResultTest extends TestCase
     {
         $sorted_places = $this->geoanalysis_result->sortedKnownPlaces();
         self::assertSameSize($this->result_items, $sorted_places);
-        self::assertSame($this->place_1, $sorted_places->first()->place());
-        self::assertSame($this->place_3, $sorted_places->last()->place());
+        self::assertSame($this->place_1, $sorted_places->first()?->place());
+        self::assertSame($this->place_3, $sorted_places->last()?->place());
     }
 
     public function testExcludedPlaces(): void

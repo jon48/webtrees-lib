@@ -78,6 +78,6 @@ class AutoCompleteFile extends AbstractAutocompleteHandler
             ->certificatesForCityContaining($tree, $city, $query)
             ->map(fn(Certificate $certificate): string => $certificate->filename());
 
-        return $results;
+        return $results->values();
     }
 }

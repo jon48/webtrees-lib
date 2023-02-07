@@ -103,7 +103,7 @@ class CertificateFilesystemService
      *
      * @param Tree $tree
      * @param string $city
-     * @return Collection<Certificate>
+     * @return Collection<int<0, max>, Certificate>
      */
     public function certificatesForCity(Tree $tree, string $city): Collection
     {
@@ -114,7 +114,8 @@ class CertificateFilesystemService
             ->map(fn (StorageAttributes $attributes): string => $attributes->path())
             ->toArray();
         usort($certificates_paths, I18N::comparator());
-        return collect($certificates_paths)->map(fn (string $path): Certificate => new Certificate($tree, $path));
+        return collect($certificates_paths)
+            ->map(static fn (string $path): Certificate => new Certificate($tree, $path));
     }
 
     /**
@@ -123,7 +124,7 @@ class CertificateFilesystemService
      * @param Tree $tree
      * @param string $city
      * @param string $contains
-     * @return Collection<Certificate>
+     * @return Collection<int<0, max>, Certificate>
      */
     public function certificatesForCityContaining(Tree $tree, string $city, string $contains): Collection
     {
@@ -135,7 +136,8 @@ class CertificateFilesystemService
             ->map(fn (StorageAttributes $attributes): string => $attributes->path())
             ->toArray();
         usort($certificates_paths, I18N::comparator());
-        return collect($certificates_paths)->map(fn (string $path): Certificate => new Certificate($tree, $path));
+        return collect($certificates_paths)
+            ->map(static fn (string $path): Certificate => new Certificate($tree, $path));
     }
 
     /**

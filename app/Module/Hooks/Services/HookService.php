@@ -68,7 +68,7 @@ class HookService implements HookServiceInterface
      * Get all hook collectors subscribed by modules, with hooks ordered, with or without the disabled ones.
      *
      * @param bool $include_disabled
-     * @return Collection<string, HookCollectorInterface>
+     * @return Collection<class-string<HookInterface>, HookCollectorInterface>
      */
     public function all(bool $include_disabled = false): Collection
     {
@@ -79,14 +79,12 @@ class HookService implements HookServiceInterface
 
             $hooks = $this->module_service
                 ->findByInterface(ModuleHookSubscriberInterface::class, $include_disabled)
-                ->flatMap(fn(ModuleHookSubscriberInterface $module) => $module->listSubscribedHooks());
+                ->flatMap(fn(ModuleHookSubscriberInterface $module): array => $module->listSubscribedHooks());
 
+            /** @var Collection<class-string<HookInterface>, HookCollectorInterface> */
             $hook_collectors = collect();
             $hook_instances = collect();
             foreach ($hooks as $hook) {
-                if (!($hook instanceof HookInterface)) {
-                    continue;
-                }
                 if ($hook instanceof HookCollectorInterface) {
                     $hook_collectors->put($hook->hookInterface(), $hook);
                 } else {
@@ -98,7 +96,7 @@ class HookService implements HookServiceInterface
                 $hook_info = $hooks_info->get($hook_collector->name()) ?? collect();
                 foreach (
                     $hook_instances->filter(
-                        fn(HookInterface $hook): bool => $hook instanceof $hook_interface
+                        fn(HookInterface $hook): bool => is_a($hook, $hook_interface)
                     ) as $hook_instance
                 ) {
                     $hook_module_info = $hook_info->get($hook_instance->module()->name(), collect())->first();

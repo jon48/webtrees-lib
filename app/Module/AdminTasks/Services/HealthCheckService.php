@@ -103,7 +103,7 @@ class HealthCheckService
      *
      * @param Tree $tree
      * @param int $nb_days
-     * @return Collection<\stdClass>
+     * @return Collection<int, \stdClass>
      */
     public function errorLogs(Tree $tree, int $nb_days): Collection
     {

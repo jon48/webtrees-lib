@@ -106,7 +106,7 @@ class GeoAnalysisResults
     public function addPlaceInCreatedCategory(string $category_name, GeoAnalysisPlace $place): void
     {
         if ($this->detailed->has($category_name)) {
-            $this->detailed->get($category_name)->addPlace($place);
+            $this->detailed->get($category_name)?->addPlace($place);
         }
     }
 

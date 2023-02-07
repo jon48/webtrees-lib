@@ -35,7 +35,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection<\Fisharebest\Webtrees\Individual>
+     * @return Collection<int, \Fisharebest\Webtrees\Individual>
      */
     public function linkedIndividuals(Certificate $certificate): Collection
     {
@@ -56,7 +56,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection<\Fisharebest\Webtrees\Family>
+     * @return Collection<int, \Fisharebest\Webtrees\Family>
      */
     public function linkedFamilies(Certificate $certificate): Collection
     {
@@ -77,7 +77,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection<\Fisharebest\Webtrees\Media>
+     * @return Collection<int, \Fisharebest\Webtrees\Media>
      */
     public function linkedMedias(Certificate $certificate): Collection
     {
@@ -98,7 +98,7 @@ class CertificateDataService
      * but does not work with Sqlite if no default escape has been defined}
      *
      * @param Certificate $certificate
-     * @return Collection<\Fisharebest\Webtrees\Note>
+     * @return Collection<int, \Fisharebest\Webtrees\Note>
      */
     public function linkedNotes(Certificate $certificate): Collection
     {
@@ -158,7 +158,7 @@ class CertificateDataService
      * Yield lists of gedcom records linked to a certificate.
      *
      * @param Certificate $certificate
-     * @return Generator<int, Collection<GedcomRecord>, mixed, void>
+     * @return Generator<int, Collection<int, \Fisharebest\Webtrees\GedcomRecord>, mixed, void>
      * @psalm-suppress InvalidReturnType
      */
     protected function linkedRecordsLists(Certificate $certificate): Generator

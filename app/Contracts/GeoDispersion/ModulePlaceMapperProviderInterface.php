@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\GeoDispersion;
 
+use Fisharebest\Webtrees\Module\ModuleInterface;
+
 /**
  * Inferface for modules providing place mappers.
  */
-interface ModulePlaceMapperProviderInterface
+interface ModulePlaceMapperProviderInterface extends ModuleInterface
 {
     /**
      * List place mappers provided by the module as an array.

@@ -28,7 +28,7 @@ class GeoAnalysisResult
     private int $order;
     private int $unknown_count;
     /**
-     * @var Collection<GeoAnalysisResultItem>
+     * @var Collection<string, GeoAnalysisResultItem>
      */
     private Collection $places;
 
@@ -37,7 +37,7 @@ class GeoAnalysisResult
      *
      * @param string $description
      * @param int $order
-     * @param Collection<GeoAnalysisResultItem> $places
+     * @param Collection<string, GeoAnalysisResultItem> $places
      * @param int $unknown
      */
     final public function __construct(
@@ -138,7 +138,7 @@ class GeoAnalysisResult
             if ($other->places->has($item->key())) {
                 $item->place()->exclude(
                     $item->place()->isExcluded()
-                    && $other->places->get($item->key())->place()->isExcluded()
+                    && ($other->places->get($item->key())?->place()?->isExcluded() ?? true)
                 );
             }
         });
@@ -210,7 +210,7 @@ class GeoAnalysisResult
      * Get the list of Known places with their associated count
      *
      * @param bool $exclude_other
-     * @return Collection<GeoAnalysisResultItem>
+     * @return Collection<string, GeoAnalysisResultItem>
      */
     public function knownPlaces(bool $exclude_other = false): Collection
     {
@@ -225,7 +225,7 @@ class GeoAnalysisResult
      * The list is sorted first by descending count, then by ascending Place name
      *
      * @param bool $exclude_other
-     * @return Collection<GeoAnalysisResultItem>
+     * @return Collection<string, GeoAnalysisResultItem>
      */
     public function sortedKnownPlaces(bool $exclude_other = false): Collection
     {
@@ -239,7 +239,7 @@ class GeoAnalysisResult
     /**
      * Get the list of Excluded places
      *
-     * @return Collection<GeoAnalysisResultItem>
+     * @return Collection<string, GeoAnalysisResultItem>
      */
     public function excludedPlaces(): Collection
     {

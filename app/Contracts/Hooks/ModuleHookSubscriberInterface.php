@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\Hooks;
 
+use Fisharebest\Webtrees\Module\ModuleInterface;
+
 /**
  * Interface for module subscribing to hooks.
  */
-interface ModuleHookSubscriberInterface
+interface ModuleHookSubscriberInterface extends ModuleInterface
 {
     /**
      * List hooks to be subscribed by the module as an array.

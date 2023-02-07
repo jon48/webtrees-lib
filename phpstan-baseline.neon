@@ -1,3 +1,46 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Parameter \\#2 \\$value of method Illuminate\\\\Support\\\\Collection\\<int,array\\<THook of MyArtJaub\\\\Webtrees\\\\Contracts\\\\Hooks\\\\HookInterface\\>\\>\\:\\:put\\(\\) expects array\\<THook of MyArtJaub\\\\Webtrees\\\\Contracts\\\\Hooks\\\\HookInterface\\>, array\\<MyArtJaub\\\\Webtrees\\\\Contracts\\\\Hooks\\\\HookInterface\\> given\\.$#"
+			count: 1
+			path: app/Common/Hooks/AbstractHookCollector.php
 
+		-
+			message: "#^Generator expects value type Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\GedcomRecord\\>, Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\Family\\> given\\.$#"
+			count: 1
+			path: app/Module/Certificates/Services/CertificateDataService.php
+
+		-
+			message: "#^Generator expects value type Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\GedcomRecord\\>, Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\Individual\\> given\\.$#"
+			count: 1
+			path: app/Module/Certificates/Services/CertificateDataService.php
+
+		-
+			message: "#^Generator expects value type Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\GedcomRecord\\>, Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\Media\\> given\\.$#"
+			count: 1
+			path: app/Module/Certificates/Services/CertificateDataService.php
+
+		-
+			message: "#^Generator expects value type Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\GedcomRecord\\>, Illuminate\\\\Support\\\\Collection\\<int, Fisharebest\\\\Webtrees\\\\Note\\> given\\.$#"
+			count: 1
+			path: app/Module/Certificates/Services/CertificateDataService.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),stdClass\\|null\\>\\:\\:map\\(\\) expects callable\\(stdClass\\|null, \\(int\\|string\\)\\)\\: array\\<int, string\\>, Closure\\(stdClass\\)\\: array\\<int, string\\> given\\.$#"
+			count: 1
+			path: app/Module/GeoDispersion/Http/RequestHandlers/MapFeaturePropertyData.php
+
+		-
+			message: "#^Method MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Services\\\\GeoAnalysisViewDataService\\:\\:all\\(\\) should return Illuminate\\\\Support\\\\Collection\\<int, MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Views\\\\AbstractGeoAnalysisView\\> but returns Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\), MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Views\\\\AbstractGeoAnalysisView\\|null\\>\\.$#"
+			count: 1
+			path: app/Module/GeoDispersion/Services/GeoAnalysisViewDataService.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Views\\\\AbstractGeoAnalysisView\\|null\\>\\:\\:filter\\(\\) expects \\(callable\\(MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Views\\\\AbstractGeoAnalysisView\\|null, \\(int\\|string\\)\\)\\: bool\\)\\|null, Closure\\(MyArtJaub\\\\Webtrees\\\\Module\\\\GeoDispersion\\\\Views\\\\AbstractGeoAnalysisView\\)\\: bool given\\.$#"
+			count: 1
+			path: app/Module/GeoDispersion/Services/GeoAnalysisViewDataService.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<int,MyArtJaub\\\\Webtrees\\\\Module\\\\Sosa\\\\Data\\\\MissingAncestor\\|null\\>\\:\\:sum\\(\\) expects \\(callable\\(MyArtJaub\\\\Webtrees\\\\Module\\\\Sosa\\\\Data\\\\MissingAncestor\\|null\\)\\: mixed\\)\\|string\\|null, Closure\\(MyArtJaub\\\\Webtrees\\\\Module\\\\Sosa\\\\Data\\\\MissingAncestor\\)\\: 0\\|1\\|2 given\\.$#"
+			count: 1
+			path: app/Module/Sosa/Http/RequestHandlers/MissingAncestorsList.php

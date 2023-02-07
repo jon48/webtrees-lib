@@ -58,17 +58,17 @@ class GeoAnalysisResultsTest extends TestCase
         $this->geoanalysis_results->addPlaceInCategory('test_a', 3, $this->place);
 
         self::assertCount(2, $this->geoanalysis_results->detailed());
-        self::assertSame('test_z', $this->geoanalysis_results->detailed()->first()->description());
+        self::assertSame('test_z', $this->geoanalysis_results->detailed()->first()?->description());
 
         self::assertCount(2, $this->geoanalysis_results->sortedDetailed());
-        self::assertSame('test_a', $this->geoanalysis_results->sortedDetailed()->first()->description());
+        self::assertSame('test_a', $this->geoanalysis_results->sortedDetailed()->first()?->description());
     }
 
     public function testAddPlace(): void
     {
         $this->geoanalysis_results->addPlace($this->place);
         self::assertSame(1, $this->geoanalysis_results->global()->countKnown());
-        self::assertSame($this->place, $this->geoanalysis_results->global()->knownPlaces()->first()->place());
+        self::assertSame($this->place, $this->geoanalysis_results->global()->knownPlaces()->first()?->place());
     }
 
     public function testAddCategory(): void
@@ -76,7 +76,6 @@ class GeoAnalysisResultsTest extends TestCase
         $this->geoanalysis_results->addCategory('test', 3);
         self::assertCount(1, $this->geoanalysis_results->detailed());
     }
-
     public function testAddPlaceInCreatedCategory(): void
     {
         $this->geoanalysis_results->addPlaceInCreatedCategory('test', $this->place);
@@ -85,13 +84,14 @@ class GeoAnalysisResultsTest extends TestCase
         $this->geoanalysis_results->addCategory('test', 3);
         $this->geoanalysis_results->addPlaceInCreatedCategory('test', $this->place);
         self::assertCount(1, $this->geoanalysis_results->detailed());
-        self::assertSame(1, $this->geoanalysis_results->detailed()->get('test')->countKnown());
+
+        self::assertSame(1, $this->geoanalysis_results->detailed()->get('test')?->countKnown());
     }
 
     public function testAddPlaceInCategory(): void
     {
         $this->geoanalysis_results->addPlaceInCategory('test', 3, $this->place);
         self::assertCount(1, $this->geoanalysis_results->detailed());
-        self::assertSame(1, $this->geoanalysis_results->detailed()->get('test')->countKnown());
+        self::assertSame(1, $this->geoanalysis_results->detailed()->get('test')?->countKnown());
     }
 }

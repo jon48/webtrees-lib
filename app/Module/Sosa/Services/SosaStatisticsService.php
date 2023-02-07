@@ -151,9 +151,12 @@ class SosaStatisticsService
             ->selectRaw('SUM(majs_gen * majs_gen) AS sum_x2')
             ->get()->first();
 
+        if ($row === null || (int) $row->n === 0) {
+            return 0;
+        }
+
         $denom = $row->n * $row->sum_x2 - pow($row->sum_x, 2);
-        return ((int) $row->n === 0 || $denom === 0) ? 0 :
-            -($row->n * $row->sum_xy - $row->sum_x * $row->sum_y) / $denom;
+        return $denom === 0 ? 0 : -($row->n * $row->sum_xy - $row->sum_x * $row->sum_y) / $denom;
     }
 
     /**
@@ -464,7 +467,7 @@ class SosaStatisticsService
      *      - sosa_count: number of duplications of the ancestor (e.g. 3 if it appears 3 times)
      *
      * @param int $limit
-     * @return Collection<\stdClass>
+     * @return Collection<int, \stdClass>
      */
     public function topMultipleAncestorsWithNoTies(int $limit): Collection
     {
@@ -495,7 +498,7 @@ class SosaStatisticsService
             ->get();
 
         if ($multiple_ancestors->count() > $limit) {
-            $last_count = $multiple_ancestors->last()->sosa_count;
+            $last_count = $multiple_ancestors->last()?->sosa_count ?? 0;
             $multiple_ancestors = $multiple_ancestors->reject(
                 fn (stdClass $element): bool => $element->sosa_count ===  $last_count
             );

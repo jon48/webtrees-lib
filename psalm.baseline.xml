@@ -1,3 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.10.0@916b098b008f6de4543892b1e0651c1c3b92cbfa">
+<files psalm-version="5.6.0@e784128902dfe01d489c4123d69918a9f3c1eac5">
+  <file src="app/Common/Hooks/AbstractHookCollector.php">
+    <InvalidArgument>
+      <code>array_merge($this-&gt;hooks-&gt;get($order, []), [$hook_instance])</code>
+    </InvalidArgument>
+  </file>
+  <file src="app/Module/GeoDispersion/Http/RequestHandlers/MapFeaturePropertyData.php">
+    <InvalidArgument>
+      <code>map</code>
+      <code>static fn(stdClass $properties): array =&gt; array_keys(get_object_vars($properties))</code>
+    </InvalidArgument>
+  </file>
+  <file src="app/Module/GeoDispersion/Model/GeoAnalysisMapAdapter.php">
+    <InvalidArgument>
+      <code>$features_mapping-&gt;get($id, new MapFeatureAnalysisData())-&gt;add($item-&gt;place(), $item-&gt;count())</code>
+      <code>$id</code>
+      <code>$id</code>
+    </InvalidArgument>
+  </file>
+  <file src="app/Module/GeoDispersion/Services/GeoAnalysisViewDataService.php">
+    <InvalidArgument>
+      <code>$this-&gt;enabledFilter($include_disabled)</code>
+      <code>filter</code>
+    </InvalidArgument>
+    <InvalidReturnStatement>
+      <code>Registry::cache()-&gt;array()-&gt;remember(&#13;
+            'all-geodispersion-views',&#13;
+            fn (): Collection =&gt;&#13;
+                DB::table('maj_geodisp_views')&#13;
+                    -&gt;select('maj_geodisp_views.*')&#13;
+                    -&gt;where('majgv_gedcom_id', '=', $tree-&gt;id())&#13;
+                    -&gt;get()&#13;
+                    -&gt;map($this-&gt;viewMapper($tree))&#13;
+                    -&gt;filter(static fn (?AbstractGeoAnalysisView $view): bool =&gt; $view !== null)&#13;
+                    -&gt;filter($this-&gt;enabledFilter($include_disabled))&#13;
+        )</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code>Collection&lt;int, AbstractGeoAnalysisView&gt;</code>
+    </InvalidReturnType>
+  </file>
+  <file src="app/Module/Hooks/Services/HookService.php">
+    <NoValue>
+      <code>$hook_instance</code>
+      <code>$hook_instance</code>
+    </NoValue>
+  </file>
+  <file src="app/Module/PatronymicLineage/Model/LineageBuilder.php">
+    <InvalidArgument>
+      <code>$root_node</code>
+    </InvalidArgument>
+  </file>
+  <file src="app/Module/Sosa/Http/RequestHandlers/MissingAncestorsList.php">
+    <InvalidArgument>
+      <code>function (MissingAncestor $value): int {&#13;
+            return ($value-&gt;isFatherMissing() ? 1 : 0) + ($value-&gt;isMotherMissing() ? 1 : 0);&#13;
+        }</code>
+      <code>sum</code>
+    </InvalidArgument>
+  </file>
+  <file src="tests/unit/Common/Helpers/FunctionsTest.php">
+    <InvalidArgument>
+      <code>$new_column_indexes</code>
+      <code>$new_column_indexes</code>
+      <code>$new_column_indexes</code>
+      <code>$new_column_indexes</code>
+      <code>$new_column_indexes</code>
+    </InvalidArgument>
+  </file>
 </files>

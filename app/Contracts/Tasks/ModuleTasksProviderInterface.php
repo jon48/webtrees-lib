@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\Tasks;
 
+use Fisharebest\Webtrees\Module\ModuleInterface;
+
 /**
  * Inferface for modules exposing tasks to be run on a schedule
  */
-interface ModuleTasksProviderInterface
+interface ModuleTasksProviderInterface extends ModuleInterface
 {
     /**
      * List tasks provided by the module as an associative array.

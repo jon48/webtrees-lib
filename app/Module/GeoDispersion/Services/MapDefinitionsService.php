@@ -65,7 +65,7 @@ class MapDefinitionsService
                 /** @var Collection<string, MapDefinitionInterface> $map_definitions */
                 $map_definitions = $this->module_service
                     ->findByInterface(ModuleMapDefinitionProviderInterface::class, $include_disabled)
-                    ->flatMap(fn(ModuleMapDefinitionProviderInterface $module) => $module->listMapDefinition())
+                    ->flatMap(fn(ModuleMapDefinitionProviderInterface $module): array => $module->listMapDefinition())
                     ->mapWithKeys(fn(MapDefinitionInterface $map) => [ $map->id() => $map ]);
 
                 return $map_definitions;

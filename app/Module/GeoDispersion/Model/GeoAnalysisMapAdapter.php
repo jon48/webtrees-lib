@@ -156,7 +156,8 @@ class GeoAnalysisMapAdapter
                     ->withProperty(
                         'places',
                         $feature_data->places()
-                            ->map(fn(GeoAnalysisPlace $place): string => $place->place()->firstParts(1)->first())
+                            ->map(fn(GeoAnalysisPlace $place): string => $place->place()->firstParts(1)->first() ?? '')
+                            ->filter(fn(string $place_name): bool => $place_name !== '')
                             ->sort(I18N::comparator())
                             ->toArray()
                     );

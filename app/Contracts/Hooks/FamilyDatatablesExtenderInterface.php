@@ -22,7 +22,7 @@ interface FamilyDatatablesExtenderInterface extends HookInterface
     /**
      * Get the columns to be added to families datatables
      *
-     * @param iterable<\Fisharebest\Webtrees\Family> $records
+     * @param iterable<array-key, \Fisharebest\Webtrees\Family> $records
      * @return array<string, array<string, array<string, mixed>>>
      */
     public function familyColumns(iterable $records): array;

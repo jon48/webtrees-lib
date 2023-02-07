@@ -74,7 +74,7 @@ class TitlesCardHook implements NameAccordionExtenderInterface
     protected function individualTitles(Individual $individual, string $pattern): array
     {
         $titles_list = [];
-        /** @var \Illuminate\Support\Collection<string> $titles */
+        /** @var \Illuminate\Support\Collection<int, string> $titles */
         $titles = $individual->facts(['TITL'])
             ->sortByDesc(fn(Fact $fact) => $fact->date()->julianDay())
             ->map(fn(Fact $fact) => $fact->value());

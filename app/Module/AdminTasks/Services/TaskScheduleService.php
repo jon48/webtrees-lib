@@ -60,7 +60,7 @@ class TaskScheduleService
      *
      * @param bool $sync_available Should tasks synchronised with available ones
      * @param bool $include_disabled Should disabled tasks be returned
-     * @return Collection<TaskSchedule> Collection of TaskSchedule
+     * @return Collection<int, TaskSchedule> Collection of TaskSchedule
      */
     public function all(bool $sync_available = false, bool $include_disabled = true): Collection
     {
@@ -105,7 +105,7 @@ class TaskScheduleService
                 /** @var Collection<string, string> $tasks */
                 $tasks = $this->module_service
                     ->findByInterface(ModuleTasksProviderInterface::class)
-                    ->flatMap(fn(ModuleTasksProviderInterface $module) => $module->listTasks());
+                    ->flatMap(fn(ModuleTasksProviderInterface $module): array => $module->listTasks());
                 return $tasks;
             }
         );
@@ -199,7 +199,7 @@ class TaskScheduleService
      *
      * @param bool $force Should the run be forced
      * @param string $task_id Specific task ID to be run
-     * @return Collection<TaskSchedule>
+     * @return Collection<int, TaskSchedule>
      */
     public function findTasksToRun(bool $force, string $task_id = ''): Collection
     {

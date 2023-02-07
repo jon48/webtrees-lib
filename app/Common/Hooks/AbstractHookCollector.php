@@ -93,11 +93,11 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::hooks()
      *
-     * @return Collection<THook>
+     * @return Collection<int, THook>
      */
     public function hooks(): Collection
     {
-        /** @var Collection<THook> */
+        /** @var Collection<int, THook> */
         return $this->hooks->sortKeys()->flatten();
     }
 }

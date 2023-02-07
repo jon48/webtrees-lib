@@ -19,7 +19,6 @@ use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
-use Fisharebest\Webtrees\Contracts\UserInterface;
 use Fisharebest\Webtrees\Http\Exceptions\HttpAccessDeniedException;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
@@ -71,6 +70,7 @@ class AdminConfigPage implements RequestHandlerInterface
         }
 
         $tree = Validator::attributes($request)->treeOptional('tree') ?? $all_trees->first();
+        assert($tree instanceof Tree);
 
         $data_folder = Registry::filesystem()->dataName();
 

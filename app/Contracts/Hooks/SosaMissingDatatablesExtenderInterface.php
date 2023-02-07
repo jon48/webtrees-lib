@@ -22,7 +22,7 @@ interface SosaMissingDatatablesExtenderInterface extends HookInterface
     /**
      * Get the columns to be added to missing ancestors datatables
      *
-     * @param iterable<\Fisharebest\Webtrees\Individual> $records
+     * @param iterable<array-key, \Fisharebest\Webtrees\Individual> $records
      * @return array<string, array<string, array<string, mixed>>>
      */
     public function sosaMissingColumns(iterable $records): array;

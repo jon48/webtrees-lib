@@ -54,15 +54,12 @@ class LineageNode
      * @param Family $fams
      * @return stdClass
      */
-    public function addFamily(Family $fams): object
+    public function addFamily(Family $fams): stdClass
     {
-        if (!$this->linked_fams->has($fams->xref())) {
-            $this->linked_fams->put($fams->xref(), (object) [
-                'family'   =>  $fams,
-                'children' =>  new Collection()
-            ]);
-        }
-        return $this->linked_fams->get($fams->xref());
+        return $this->linked_fams->getOrPut($fams->xref(), (object) [
+            'family'   =>  $fams,
+            'children' =>  new Collection()
+        ]);
     }
 
     /**

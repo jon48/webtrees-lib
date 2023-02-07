@@ -44,7 +44,7 @@ function hook(string $hook_interface, callable $apply, $default = null)
  * Get the updated column index after insertion of new columns.
  *
  * @param int $initial_index
- * @param Collection<int> $new_column_indexes
+ * @param Collection<array-key, int> $new_column_indexes
  * @return int
  */
 function columnIndex(int $initial_index, Collection $new_column_indexes): int

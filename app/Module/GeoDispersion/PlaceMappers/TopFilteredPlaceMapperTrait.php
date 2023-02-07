@@ -43,11 +43,7 @@ trait TopFilteredPlaceMapperTrait
      */
     public function setTopPlaces(array $top_places): void
     {
-        $this->top_places = collect($top_places)
-            ->filter(
-                /** @psalm-suppress MissingClosureParamType */
-                fn($top_places): bool => $top_places instanceof Place
-            )->toArray();
+        $this->top_places = $top_places;
     }
 
     /**

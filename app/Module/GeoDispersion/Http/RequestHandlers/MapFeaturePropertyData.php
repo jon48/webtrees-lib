@@ -64,10 +64,10 @@ class MapFeaturePropertyData implements RequestHandlerInterface
 
                 $features = [];
                 collect($map->features())
-                    ->map(fn(Feature $feature): ?stdClass => $feature->getProperties())
-                    ->filter()
-                    ->map(fn(stdClass $properties): array => array_keys(get_object_vars($properties)))
-                    ->each(function (array $properties) use (&$features): void {
+                    ->map(static fn(Feature $feature): ?stdClass => $feature->getProperties())
+                    ->filter(static fn(?stdClass $obj): bool => $obj !== null)
+                    ->map(static fn(stdClass $properties): array => array_keys(get_object_vars($properties)))
+                    ->each(static function (array $properties) use (&$features): void {
                         $features = count($features) === 0 ? $properties : array_intersect($features, $properties);
                     });
 
