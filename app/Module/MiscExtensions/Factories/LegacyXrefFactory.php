@@ -56,15 +56,15 @@ class LegacyXrefFactory extends XrefFactory
 
         $setting_name = 'MAJ_MISC_XREF_NEXT_' . $prefix;
         // Lock the row, so that only one new XREF may be generated at a time.
-        DB::table('gedcom_setting')
+        $num = (int) DB::table('gedcom_setting')
             ->where('gedcom_id', '=', $tree->id())
             ->where('setting_name', '=', $setting_name)
             ->lockForUpdate()
-            ->get();
+            ->value('setting_value');
 
         $increment = 1.0;
         do {
-            $num = (int) $tree->getPreference($setting_name) + (int) $increment;
+            $num += (int) $increment;
 
             // This exponential increment allows us to scan over large blocks of
             // existing data in a reasonable time.
