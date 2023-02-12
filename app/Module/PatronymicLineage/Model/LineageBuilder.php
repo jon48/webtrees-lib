@@ -6,7 +6,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage PatronymicLineage
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2009-2022, Jonathan Jaubart
+ * @copyright Copyright (c) 2009-2023, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 
