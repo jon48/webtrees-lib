@@ -101,7 +101,7 @@ class MiscExtensionsModule extends AbstractModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.3-v.2';
+        return '2.2.0-v.1';
     }
 
     /**
