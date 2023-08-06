@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\GeoDispersion;
 
+use Fisharebest\Webtrees\Module\ModuleInterface;
+
 /**
  * Inferface for modules providing geographical analyses.
  */
-interface ModuleGeoAnalysisProviderInterface
+interface ModuleGeoAnalysisProviderInterface extends ModuleInterface
 {
     /**
      * List geographical analyses provided by the module as an array.

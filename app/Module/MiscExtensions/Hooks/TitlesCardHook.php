@@ -68,7 +68,7 @@ class TitlesCardHook implements NameAccordionExtenderInterface
      * Split the title based on a pattern to identify the title and the land it refers to.
      *
      * @param Individual $individual
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @return array<string, string[]>
      */
     protected function individualTitles(Individual $individual, string $pattern): array

@@ -14,10 +14,12 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Contracts\GeoDispersion;
 
+use Fisharebest\Webtrees\Module\ModuleInterface;
+
 /**
  * Inferface for modules providing map definitions.
  */
-interface ModuleMapDefinitionProviderInterface
+interface ModuleMapDefinitionProviderInterface extends ModuleInterface
 {
     /**
      * List map definitions provided by the module as an array.
