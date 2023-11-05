@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Tests\Unit\Webtrees\Module\Certificates\Elements;
 
-use Fisharebest\Webtrees\Elements\AbstractElementTest;
+use Fisharebest\Webtrees\Elements\AbstractElementTestCase;
 use MyArtJaub\Tests\Helpers\Webtrees\TestCase;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
 use MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate;
@@ -26,7 +26,7 @@ use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
  *
  * @covers \MyArtJaub\Webtrees\Module\Certificates\Elements\SourceCertificate
  */
-class SourceCertificateTest extends AbstractElementTest
+class SourceCertificateTest extends AbstractElementTestCase
 {
     /**
      * {@inheritDoc}

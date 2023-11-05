@@ -29,6 +29,7 @@ class CertificatesModuleTest extends TestCase
 
         $this->certificates_module = new CertificatesModule();
         $this->certificates_module->setName('mod-certificates');
+        $this->certificates_module->boot();
     }
 
     /**
@@ -44,8 +45,6 @@ class CertificatesModuleTest extends TestCase
 
     public function testMetadata(): void
     {
-        $this->certificates_module->boot();
-
         self::assertNotEmpty($this->certificates_module->title());
         self::assertNotEmpty($this->certificates_module->description());
         self::assertNotEmpty($this->certificates_module->customModuleVersion());

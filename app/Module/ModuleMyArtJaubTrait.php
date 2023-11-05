@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module;
 
 use Aura\Router\Map;
-use Aura\Router\RouterContainer;
 use Fisharebest\Localization\Translation;
+use Fisharebest\Webtrees\Registry;
 use Fisharebest\Webtrees\View;
 use Fisharebest\Webtrees\Webtrees;
 use Fisharebest\Webtrees\Module\ModuleCustomTrait;
@@ -35,7 +35,7 @@ trait ModuleMyArtJaubTrait
     {
         View::registerNamespace($this->name(), $this->resourcesFolder() . 'views/');
 
-        $this->loadRoutes(app(RouterContainer::class)->getMap());
+        $this->loadRoutes(Registry::routeFactory()->routeMap());
     }
 
     /**

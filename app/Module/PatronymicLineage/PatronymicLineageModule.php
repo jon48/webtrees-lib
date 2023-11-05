@@ -26,12 +26,13 @@ use Fisharebest\Webtrees\Module\ModuleGlobalTrait;
 use Fisharebest\Webtrees\Module\ModuleListInterface;
 use Fisharebest\Webtrees\Module\ModuleListTrait;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface;
 use MyArtJaub\Webtrees\Module\ModuleMyArtJaubTrait;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\LineagesPage;
 use MyArtJaub\Webtrees\Module\PatronymicLineage\Http\RequestHandlers\SurnamesList;
 use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Support\Str;
+use ReflectionMethod;
 
 /**
  * Patronymic Lineage Module.
@@ -163,13 +164,29 @@ class PatronymicLineageModule extends IndividualListModule implements
      */
     public function individuals(
         Tree $tree,
-        string $surname,
-        array $surnames,
+        array $surns_to_show,
         string $galpha,
         bool $marnm,
         bool $fams
     ): Collection {
-        return parent::individuals($tree, $surname, $surnames, $galpha, $marnm, $fams);
+        return parent::individuals($tree, $surns_to_show, $galpha, $marnm, $fams);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnameData()
+     *
+     * Implemented to set the visibility to public.
+     * This should probably be in a service, but this hack allows for reuse of mainstream code.
+     *
+     * @return array<object{n_surn:string,n_surname:string,total:int}>
+     */
+    public function surnameData(Tree $tree, bool $marnm, bool $fams): array
+    {
+        $reflectionMethod = new ReflectionMethod(IndividualListModule::class, 'surnameData');
+        $reflectionMethod->setAccessible(true);
+
+        return $reflectionMethod->invoke($this, $tree, $marnm, $fams);
     }
 
     /**
@@ -179,9 +196,9 @@ class PatronymicLineageModule extends IndividualListModule implements
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
-    public function allSurnames($tree, $marnm, $fams): array
+    public function allSurnames(array $surname_data): array
     {
-        return parent::allSurnames($tree, $marnm, $fams);
+        return parent::allSurnames($surname_data);
     }
 
     /**
@@ -191,8 +208,8 @@ class PatronymicLineageModule extends IndividualListModule implements
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
-    public function surnameInitials($all_surnames): array
+    public function surnameInitials(array $surname_data): array
     {
-        return parent::surnameInitials($all_surnames);
+        return parent::surnameInitials($surname_data);
     }
 }

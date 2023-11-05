@@ -17,6 +17,8 @@ use Exception;
  */
 class MatomoStatsTest extends TestCase
 {
+    protected static bool $uses_database = true;
+
     /** @var WelcomeBlockModule&\PHPUnit\Framework\MockObject\MockObject $welcome_block_module */
     protected WelcomeBlockModule $welcome_block_module;
 

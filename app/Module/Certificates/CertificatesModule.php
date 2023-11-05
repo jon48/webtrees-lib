@@ -111,7 +111,7 @@ class CertificatesModule extends AbstractModule implements
      * {@inheritDoc}
      * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
      */
-    public function loadRoutes($router): void
+    public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
 

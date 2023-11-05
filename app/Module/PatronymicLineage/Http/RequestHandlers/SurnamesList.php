@@ -57,9 +57,10 @@ class SurnamesList implements RequestHandlerInterface
         $tree = Validator::attributes($request)->tree();
         $initial = Validator::attributes($request)->string('alpha', '');
 
-        $all_surnames = $this->module->allSurnames($tree, false, false);
+        $surname_data     = $this->module->surnameData($tree, false, false);
+        $all_surnames     = $this->module->allSurnames($surname_data);
         $initials_list = array_filter(
-            $this->module->surnameInitials($all_surnames),
+            $this->module->surnameInitials($surname_data),
             static fn (string $x): bool => $x !== '@' && $x !== ',',
             ARRAY_FILTER_USE_KEY
         );

@@ -38,7 +38,7 @@
 		"brick/math": "~0.9",
 		"fig/http-message-util": "^1.1",
 		"fisharebest/flysystem-chroot-adapter": "~2.0",
-		"fisharebest/webtrees": "~2.1.14",
+		"fisharebest/webtrees": "~2.1.18",
 		"guzzlehttp/guzzle": "~7.1",
 		"illuminate/collections": "~8.20",
 		"illuminate/database": "~8.20",
@@ -78,7 +78,7 @@
         },
         "files" : [
             "vendor/fisharebest/webtrees/tests/TestCase.php",
-            "vendor/fisharebest/webtrees/tests/app/Elements/AbstractElementTest.php"
+            "vendor/fisharebest/webtrees/tests/app/Elements/AbstractElementTestCase.php"
         ]
     },
     "scripts": {

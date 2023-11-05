@@ -45,7 +45,7 @@ class LineageBuilder
      */
     public function __construct(string $surname, Tree $tree, PatronymicLineageModule $patrolineage_module)
     {
-        $this->surname = $surname;
+        $this->surname = I18N::strtoupper(I18N::language()->normalize($surname));
         $this->tree = $tree;
         $this->patrolineage_module = $patrolineage_module;
         $this->used_indis = new Collection();
@@ -58,17 +58,23 @@ class LineageBuilder
      */
     public function buildLineages(): ?Collection
     {
-        $all_surnames = $this->patrolineage_module->allSurnames($this->tree, false, false);
+        $surname_data = $this->patrolineage_module->surnameData($this->tree, false, false);
+        $all_surnames = $this->patrolineage_module->allSurnames($surname_data);
+        $surname_variants = array_keys($all_surnames[$this->surname] ?? []);
 
+        if (count($surname_variants) === 0) {
+            return null;
+        }
+
+        //Warning - the individuals method returns a clone of individuals objects. Cannot be used for object equality
         $indis = $this->patrolineage_module->individuals(
             $this->tree,
-            $this->surname,
-            array_keys($all_surnames[$this->surname] ?? []),
+            $surname_variants,
             '',
             false,
             false
         );
-        //Warning - the individuals method returns a clone of individuals objects. Cannot be used for object equality
+
         if (count($indis) === 0) {
             return null;
         }

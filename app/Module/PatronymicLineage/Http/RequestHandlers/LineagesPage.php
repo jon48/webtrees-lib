@@ -74,11 +74,14 @@ class LineagesPage implements RequestHandlerInterface
 
         $surn_initial = I18N::language()->initialLetter($surname);
 
-        $all_surnames = $this->module->allSurnames($tree, false, false);
-        $initials_list = collect($this->module->surnameInitials($all_surnames))
-            ->reject(function (int $count, string $initial): bool {
-                return $initial === '@' || $initial === ',';
-            });
+        $surname_data     = $this->module->surnameData($tree, false, false);
+        $all_surnames     = $this->module->allSurnames($surname_data);
+        $initials_list = array_filter(
+            $this->module->surnameInitials($surname_data),
+            static fn (string $x): bool => $x !== '@' && $x !== ',',
+            ARRAY_FILTER_USE_KEY
+        );
+
         $surname_variants = array_keys($all_surnames[$surname] ?? [$surname => $surname]);
         uasort($surname_variants, I18N::comparator());
         $surname_legend = implode('/', $surname_variants);
