@@ -18,8 +18,8 @@ use Fisharebest\Webtrees\FlashMessages;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Log;
 use Fisharebest\Webtrees\Registry;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
+use Fisharebest\Webtrees\Http\RequestHandlers\HomePage;
 use Fisharebest\Webtrees\Services\ModuleService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
@@ -64,7 +64,7 @@ class GeoAnalysisViewAddAction implements RequestHandlerInterface
                 I18N::translate('The attached module could not be found.'),
                 'danger'
             );
-            return Registry::responseFactory()->redirect(AdminConfigPage::class, ['tree' => $tree->name()]);
+            return Registry::responseFactory()->redirect(HomePage::class, ['tree' => $tree->name()]);
         }
 
         $type           = Validator::parsedBody($request)->isInArray(['table', 'map'])->string('view_type', '');
