@@ -186,7 +186,7 @@ class GeoAnalysisViewDataService
     private function colorsDecoder(string $colors_config): ?MapColorsConfig
     {
         $colors = json_decode($colors_config, true);
-        if (!is_array($colors) && count($colors) !== 4) {
+        if (!is_array($colors) || count($colors) !== 4) {
             return null;
         }
         try {

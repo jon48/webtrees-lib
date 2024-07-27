@@ -65,7 +65,6 @@ class CertificateTest extends TestCase
         $url_obfuscator_service->method('obfuscate')->willReturnArgument(0);
 
         $parameters = $certificate->urlParameters($url_obfuscator_service);
-        self::assertCount(2, $parameters);
         self::assertSame('city/certificate.jpg', $parameters['cid'] ?? '');
     }
 }

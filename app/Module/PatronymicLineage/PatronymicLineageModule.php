@@ -91,7 +91,7 @@ class PatronymicLineageModule extends IndividualListModule implements
      */
     public function customModuleVersion(): string
     {
-        return '2.1.14-v.1';
+        return '2.1.18-v.1';
     }
 
     /**
