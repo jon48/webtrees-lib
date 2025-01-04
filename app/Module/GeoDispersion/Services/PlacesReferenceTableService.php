@@ -76,9 +76,6 @@ class PlacesReferenceTableService
         }
 
         $mapping = (array) $rows->first();
-        if (count($columns_select) === 0) {
-            return $target_format;
-        }
 
         return str_replace(
             array_map(fn($tag) => '{' . $tag . '}', $columns_select[1]),

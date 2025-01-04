@@ -76,7 +76,7 @@ class GeoAnalysisDataService
             ->get()->pluck('g_gedcom')
             ->flatMap(static function (string $gedcom): array {
                 preg_match_all('/\n2 PLAC (.+)/', $gedcom, $matches);
-                return $matches[1] ?? [];
+                return $matches[1];
             })
             ->sort(I18N::comparator())->reverse()
             ->mapWithKeys(static function (string $place): array {

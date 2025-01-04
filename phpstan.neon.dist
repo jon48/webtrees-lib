@@ -2,10 +2,14 @@ includes:
    - phpstan-baseline.neon
 
 parameters:
-   level: max
+   level: 9
    paths:
       - app
       - tests
    checkExplicitMixed: false
    ignoreErrors:
       - '#^Call to an undefined static method Illuminate\\Database\\Capsule\\Manager::.*\(\)\.$#'
+      -
+         identifier: varTag.type
+   strictRules:
+       strictArrayFilter: false

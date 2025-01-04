@@ -38,7 +38,6 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
 {
     use PlaceMapperTrait;
 
-    private ?string $cache_key = null;
     private ?GeometryEngine $geometry_engine = null;
 
     /**
@@ -82,7 +81,7 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
             $features_index['map_SW'],
             $features_index['nb_columns']
         );
-        if ($grid_box === null || !$this->setGeometryEngine() || $this->geometry_engine == null) {
+        if ($grid_box === null || !$this->setGeometryEngine() || $this->geometry_engine === null) {
             return null;
         }
         $features = $features_index['grid'][$grid_box[0]][$grid_box[1]];
@@ -128,7 +127,7 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
     /**
      * Get an indexed array of the features of the map.
      *
-     * {@internal The map is divided in a grid, eacg cell containing the features which bounding box overlaps that cell.
+     * {@internal The map is divided in a grid, each cell containing the features which bounding box overlaps that cell.
      * The grid is computed once for each map, and cached.}
      *
      * @phpcs:ignore Generic.Files.LineLength.TooLong
@@ -211,13 +210,10 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
      */
     protected function cacheKey(): ?string
     {
-        if ($this->cache_key === null) {
-            $map_def = $this->data('map');
-            if ($map_def === null || !($map_def instanceof MapDefinitionInterface)) {
-                return null;
-            }
-            return spl_object_id($this) . '-map-' . $map_def->id();
+        $map_def = $this->data('map');
+        if ($map_def === null || !($map_def instanceof MapDefinitionInterface)) {
+            return null;
         }
-        return $this->cache_key;
+        return spl_object_id($this) . '-map-' . $map_def->id();
     }
 }

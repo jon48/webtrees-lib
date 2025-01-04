@@ -73,12 +73,10 @@ class Certificate
             $this->type = $match['type'];
             $this->description = $match['descr'];
 
-            $day = $match['day'] ?? '';
-            $month_date = DateTime::createFromFormat('m', $match['month'] ?? '');
+            $month_date = DateTime::createFromFormat('m', $match['month']);
             $month = $month_date !== false ? strtoupper($month_date->format('M')) : '';
-            $year = $match['year'] ?? '';
 
-            $this->date = new Date(sprintf('%s %s %s', $day, $month, $year));
+            $this->date = new Date(sprintf('%s %s %s', $match['day'], $month, $match['year']));
         } else {
             $this->description = $this->filename;
         }

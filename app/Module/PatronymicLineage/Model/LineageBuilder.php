@@ -207,7 +207,7 @@ class LineageBuilder
                         /** @psalm-suppress RedundantCondition */
                         if (
                             $spouse === null ||
-                            ($spouse_surname !== '' && I18N::comparator()($child_surname, $spouse_surname) != 0)
+                            ($spouse_surname !== '' && I18N::comparator()($child_surname, $spouse_surname) !== 0)
                         ) {
                             if (I18N::comparator()($child_surname, $indi_surname) === 0) {
                                 $nb_natural++;
@@ -224,7 +224,7 @@ class LineageBuilder
                             mb_strlen($child_surname) === 0 ||
                             mb_strlen($indi_surname) === 0 || mb_strlen($spouse_surname) === 0 ||
                             I18N::comparator()($child_surname, $indi_surname) === 0 ||
-                            I18N::comparator()($child_surname, $spouse_surname) != 0
+                            I18N::comparator()($child_surname, $spouse_surname) !== 0
                         ) {
                             $node_child = new LineageNode($child, $node->rootNode());
                             $node_child = $this->buildLineage($node_child);
