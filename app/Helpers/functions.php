@@ -7,7 +7,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage Helpers
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2021-2024, Jonathan Jaubart
+ * @copyright Copyright (c) 2021-2025, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 

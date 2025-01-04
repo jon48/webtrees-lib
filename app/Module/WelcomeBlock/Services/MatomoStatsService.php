@@ -6,7 +6,7 @@
  * @package MyArtJaub\Webtrees
  * @subpackage WelcomeBlock
  * @author Jonathan Jaubart <dev@jaubart.com>
- * @copyright Copyright (c) 2020-2024, Jonathan Jaubart
+ * @copyright Copyright (c) 2020-2025, Jonathan Jaubart
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3
  */
 
