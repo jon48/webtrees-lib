@@ -3,6 +3,7 @@
 .gitattributes export-ignore 
 .gitignore     export-ignore
 
+vendor-bin/    export-ignore
 
 # CI tools
 .github/                    export-ignore

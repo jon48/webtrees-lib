@@ -28,6 +28,7 @@
             "fisharebest/webtrees": "source"
         },
 		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true,
 			"composer/package-versions-deprecated": true,
 			"phpstan/extension-installer": true
 		}
@@ -53,11 +54,8 @@
 		"symfony/polyfill-php80": "^1.23"
 	},
 	"require-dev" : {
+		"bamarni/composer-bin-plugin": "^1.8",
 		"league/flysystem-memory": "^2.0",
-		"phpstan/extension-installer": "^1.1",
-		"phpstan/phpstan-deprecation-rules": "^1.0",
-		"phpstan/phpstan-phpunit": "^1.0",
-		"phpstan/phpstan-strict-rules": "^1.1",
 		"phpunit/phpunit": "@stable"
 	},
     "suggest": {
@@ -84,9 +82,15 @@
     "scripts": {
         "webtrees-lib:phpcs" : "phpcs -s",
         "webtrees-lib:phpcbf" : "phpcbf",
-        "webtrees-lib:phpstan" : "phpstan analyze",
+        "webtrees-lib:phpstan" : "./vendor-bin/phpstan/vendor/bin/phpstan analyze",
         "webtrees-lib:sonar" : "sonar-scanner",
         "webtrees-lib:test": "phpunit",
         "webtrees-lib:coverage": "phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage"
-    }
+    },
+	"extra": {
+		"bamarni-bin": {
+            "bin-links": false,
+			"forward-command": true
+        }
+	}
 }
