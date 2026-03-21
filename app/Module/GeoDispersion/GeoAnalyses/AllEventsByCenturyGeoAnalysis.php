@@ -14,14 +14,13 @@ declare(strict_types=1);
 
 namespace MyArtJaub\Webtrees\Module\GeoDispersion\GeoAnalyses;
 
-use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\I18N;
 use Fisharebest\Webtrees\Tree;
-use Fisharebest\Webtrees\Statistics\Service\CenturyService;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisPlace;
 use MyArtJaub\Webtrees\Common\GeoDispersion\GeoAnalysis\GeoAnalysisResults;
 use MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface;
 use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisDataService;
+use NumberFormatter;
 
 /**
  * Analyse the geographical dispersion of all individuals and families' events, detailed by century.
@@ -29,18 +28,15 @@ use MyArtJaub\Webtrees\Module\GeoDispersion\Services\GeoAnalysisDataService;
 class AllEventsByCenturyGeoAnalysis implements GeoAnalysisInterface
 {
     private GeoAnalysisDataService $geoanalysis_data_service;
-    private CenturyService $century_service;
 
     /**
      * Constructor for AllEventsByCenturyGeoAnalysis
      *
      * @param GeoAnalysisDataService $geoanalysis_data_service
-     * @param CenturyService $century_service
      */
-    public function __construct(GeoAnalysisDataService $geoanalysis_data_service, CenturyService $century_service)
+    public function __construct(GeoAnalysisDataService $geoanalysis_data_service)
     {
         $this->geoanalysis_data_service = $geoanalysis_data_service;
-        $this->century_service = $century_service;
     }
 
     /**
@@ -80,7 +76,7 @@ class AllEventsByCenturyGeoAnalysis implements GeoAnalysisInterface
                 if ($date->isOK()) {
                     $century = intdiv($date->gregorianYear(), 100);
                     $results->addPlaceInCategory(
-                        I18N::translate('%s century', $this->century_service->centuryName($century)),
+                        I18N::translate('%s century', $this->centuryName($century)),
                         $century,
                         $place
                     );
@@ -89,5 +85,24 @@ class AllEventsByCenturyGeoAnalysis implements GeoAnalysisInterface
         }
 
         return $results;
+    }
+
+    /**
+     * Century name, English => 21st, Polish => XXI, etc.
+     * Used to be a public service, now private in \Fisharebest\Webtrees\StatisticData
+     */
+    public function centuryName(int $century): string
+    {
+        if ($century < 0) {
+            return I18N::translate('%s BCE', $this->centuryName(-$century));
+        }
+
+        $formatter = new \NumberFormatter('en-US', \NumberFormatter::ORDINAL);
+        $centuryOrdinal = $formatter->format($century);
+
+        if ($century > 21 || $centuryOrdinal === false) {
+            return ($century - 1) . '01-' . $century . '00';
+        }
+        return I18N::translateContext('CENTURY', $centuryOrdinal);
     }
 }
