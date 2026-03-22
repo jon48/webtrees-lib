@@ -19,10 +19,7 @@ class CertificatesModuleTest extends TestCase
 {
     protected CertificatesModule $certificates_module;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,10 +29,7 @@ class CertificatesModuleTest extends TestCase
         $this->certificates_module->boot();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

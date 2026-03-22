@@ -26,19 +26,13 @@ class SimplePlaceMapper implements PlaceMapperInterface
 {
     use PlaceMapperTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Mapping on place name');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::map()
-     */
+    #[\Override]
     public function map(Place $place, string $feature_property): ?string
     {
         return $place->firstParts(1)->first();

@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface;
  */
 class FactSourceTextExtenderCollector extends AbstractHookCollector implements FactSourceTextExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Text extender for source citations’ title');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Extends the title of source citations with additional text or icons.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return FactSourceTextExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourcePrepend()
-     */
+    #[\Override]
     public function factSourcePrepend(Tree $tree, $fact): string
     {
         return $this->hooks()
@@ -67,10 +55,7 @@ class FactSourceTextExtenderCollector extends AbstractHookCollector implements F
             )->implode('');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourceAppend()
-     */
+    #[\Override]
     public function factSourceAppend(Tree $tree, $fact): string
     {
         return $this->hooks()

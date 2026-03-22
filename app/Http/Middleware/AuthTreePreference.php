@@ -31,10 +31,7 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class AuthTreePreference implements MiddlewareInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\MiddlewareInterface::process()
-     */
+    #[\Override]
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $tree = Validator::attributes($request)->tree();

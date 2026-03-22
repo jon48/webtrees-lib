@@ -28,10 +28,7 @@ use MyArtJaub\Webtrees\Module\Certificates\Services\UrlObfuscatorService;
  */
 class SourceCertificateTest extends AbstractElementTestCase
 {
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -50,10 +47,7 @@ class SourceCertificateTest extends AbstractElementTestCase
         TestCase::useDefaultViewFor('mod-certificates::components/edit-certificate');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Elements\AbstractElementTest::testCanonical()
-     */
+    #[\Override]
     public function testCanonical(): void
     {
         self::assertSame('certificate-path.jpg', self::$element->canonical('certificate-path.jpg'));

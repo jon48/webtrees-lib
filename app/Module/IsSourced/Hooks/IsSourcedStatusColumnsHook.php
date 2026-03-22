@@ -51,19 +51,13 @@ class IsSourcedStatusColumnsHook implements
         $this->source_status_service = $source_status_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\IndividualDatatablesExtenderInterface::individualColumns()
-     */
+    #[\Override]
     public function individualColumns(iterable $records): array
     {
         $records = collect($records);
@@ -109,10 +103,7 @@ class IsSourcedStatusColumnsHook implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\FamilyDatatablesExtenderInterface::familyColumns()
-     */
+    #[\Override]
     public function familyColumns(iterable $records): array
     {
         $records = collect($records);
@@ -140,10 +131,7 @@ class IsSourcedStatusColumnsHook implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\SosaIndividualDatatablesExtenderInterface::sosaIndividualColumns()
-     */
+    #[\Override]
     public function sosaIndividualColumns(iterable $records): array
     {
         $columns = $this->individualColumns($records);
@@ -152,19 +140,13 @@ class IsSourcedStatusColumnsHook implements
         return $columns;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\SosaFamilyDatatablesExtenderInterface::sosaFamilyColumns()
-     */
+    #[\Override]
     public function sosaFamilyColumns(iterable $records): array
     {
         return $this->familyColumns($records);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\SosaMissingDatatablesExtenderInterface::sosaMissingColumns()
-     */
+    #[\Override]
     public function sosaMissingColumns(iterable $records): array
     {
         $records = collect($records);

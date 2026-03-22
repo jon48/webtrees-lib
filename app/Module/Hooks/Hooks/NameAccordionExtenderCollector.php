@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\NameAccordionExtenderInterface;
  */
 class NameAccordionExtenderCollector extends AbstractHookCollector implements NameAccordionExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Individual names accordion extender');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Extends the names accordion of on an individual’s page.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return NameAccordionExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\NameAccordionExtenderInterface::accordionCard()
-     */
+    #[\Override]
     public function accordionCard(Individual $individual): string
     {
         return $this->hooks()

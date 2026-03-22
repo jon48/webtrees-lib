@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\SosaMissingDatatablesExtenderInterface;
 class SosaMissingDatatablesExtenderCollector extends AbstractHookCollector implements
     SosaMissingDatatablesExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Columns extender for tables of missing ancestors');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Add additional columns to tables of missing ancestors');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return SosaMissingDatatablesExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\SosaMissingDatatablesExtenderInterface::sosaMissingColumns()
-     */
+    #[\Override]
     public function sosaMissingColumns(iterable $records): array
     {
         $result = [];

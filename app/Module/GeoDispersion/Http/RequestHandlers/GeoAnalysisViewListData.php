@@ -49,10 +49,7 @@ class GeoAnalysisViewListData implements RequestHandlerInterface
         $this->geoview_data_service = $geoview_data_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

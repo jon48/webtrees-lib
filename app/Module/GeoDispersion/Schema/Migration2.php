@@ -70,10 +70,7 @@ class Migration2 implements MigrationInterface
         'yvelinesbycommunes.xml'        =>  'fr-dpt-78-communes'
     ];
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
-     */
+    #[\Override]
     public function upgrade(): void
     {
         if (!DB::schema()->hasTable('maj_geodispersion')) {

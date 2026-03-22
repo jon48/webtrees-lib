@@ -22,9 +22,7 @@ class MatomoStatsTest extends TestCase
     /** @var WelcomeBlockModule&\PHPUnit\Framework\MockObject\MockObject $welcome_block_module */
     protected WelcomeBlockModule $welcome_block_module;
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,9 +36,7 @@ class MatomoStatsTest extends TestCase
         self::useDefaultViewFor('mod-welcomeblock::matomo-stats');
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

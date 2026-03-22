@@ -24,10 +24,7 @@ class SourceCertificateIconHookTest extends TestCase
 {
     protected SourceCertificateIconHook $sci_hook;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,10 +44,7 @@ class SourceCertificateIconHookTest extends TestCase
         $this->sci_hook = new SourceCertificateIconHook($module, $url_obfuscator_service);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

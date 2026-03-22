@@ -38,28 +38,19 @@ class AllEventsByTypeGeoAnalysis implements GeoAnalysisInterface
         $this->geoanalysis_data_service = $geoanalysis_data_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('All events places by event type');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface::itemsDescription()
-     */
+    #[\Override]
     public function itemsDescription(): callable
     {
         return fn(int $count): string => I18N::plural('event', 'events', $count);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\GeoAnalysisInterface::results()
-     */
+    #[\Override]
     public function results(Tree $tree, int $depth): GeoAnalysisResults
     {
         $results = new GeoAnalysisResults();

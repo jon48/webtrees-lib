@@ -55,10 +55,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
             );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::jsonSerializeConfig()
-     */
+    #[\Override]
     public function jsonSerializeConfig()
     {
         return [
@@ -68,13 +65,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::jsonDeserialize()
-     *
-     * @param mixed $config
-     * @return $this
-     */
+    #[\Override]
     public function jsonDeserialize($config): self
     {
         if (is_string($config)) {
@@ -100,10 +91,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::configContent()
-     */
+    #[\Override]
     public function configContent(ModuleInterface $module, Tree $tree): string
     {
         return view($module->name() . '::mappers/filtered-top-config', [
@@ -112,11 +100,7 @@ class FilteredTopPlaceMapperConfig extends GenericPlaceMapperConfig
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\GeoDispersion\Config\GenericPlaceMapperConfig::withConfigUpdate()
-     * @return $this
-     */
+    #[\Override]
     public function withConfigUpdate(ServerRequestInterface $request): self
     {
         $tree = Validator::attributes($request)->treeOptional();

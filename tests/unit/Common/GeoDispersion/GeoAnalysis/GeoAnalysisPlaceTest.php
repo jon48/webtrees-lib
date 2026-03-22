@@ -24,9 +24,7 @@ class GeoAnalysisPlaceTest extends TestCase
     /** @var Place&\PHPUnit\Framework\MockObject\MockObject $place */
     protected Place $place;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,9 +36,7 @@ class GeoAnalysisPlaceTest extends TestCase
         $this->geoanalysis_place = new GeoAnalysisPlace($this->tree, $this->place, $this->depth, $this->strict_depth);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

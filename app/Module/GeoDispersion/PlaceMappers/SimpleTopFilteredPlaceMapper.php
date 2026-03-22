@@ -30,19 +30,13 @@ class SimpleTopFilteredPlaceMapper extends SimplePlaceMapper implements PlaceMap
 {
     use TopFilteredPlaceMapperTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers\SimplePlaceMapper::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Mapping on place name with filter');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         parent::boot();
@@ -52,10 +46,7 @@ class SimpleTopFilteredPlaceMapper extends SimplePlaceMapper implements PlaceMap
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::config()
-     */
+    #[\Override]
     public function config(): PlaceMapperConfigInterface
     {
         if (!(parent::config() instanceof FilteredTopPlaceMapperConfig)) {
@@ -64,10 +55,7 @@ class SimpleTopFilteredPlaceMapper extends SimplePlaceMapper implements PlaceMap
         return parent::config();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\PlaceMappers\SimplePlaceMapper::map()
-     */
+    #[\Override]
     public function map(Place $place, string $feature_property): ?string
     {
         if (!$this->belongsToTopLevels($place)) {

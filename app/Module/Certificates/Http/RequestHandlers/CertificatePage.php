@@ -78,10 +78,7 @@ class CertificatePage implements RequestHandlerInterface
         $this->url_obfuscator_service = $url_obfuscator_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

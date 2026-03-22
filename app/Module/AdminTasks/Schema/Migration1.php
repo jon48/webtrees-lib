@@ -18,17 +18,13 @@ use Carbon\Carbon;
 use Fisharebest\Webtrees\Schema\MigrationInterface;
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Blueprint;
-use Fisharebest\Webtrees\Registry;
 
 /**
  * Upgrade the database schema from version 1 (webtrees 1.0) to version 2 (webtrees 2.0).
  */
 class Migration1 implements MigrationInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
-     */
+    #[\Override]
     public function upgrade(): void
     {
         $in_transaction = DB::connection()->getPdo()->inTransaction();

@@ -32,9 +32,7 @@ class GeoAnalysisResultTest extends TestCase
     /** @var Collection<GeoAnalysisResultItem> $result_items */
     protected Collection $result_items;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -60,9 +58,7 @@ class GeoAnalysisResultTest extends TestCase
             new GeoAnalysisResult($this->description, $this->order, $this->result_items, $this->unknown);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

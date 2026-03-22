@@ -19,7 +19,6 @@ use Brick\Math\RoundingMode;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
@@ -54,10 +53,7 @@ class SosaStatistics implements RequestHandlerInterface
         $this->relationship_service = $relationship_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

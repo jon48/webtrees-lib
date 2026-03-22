@@ -48,28 +48,19 @@ class SimpleFilesystemMap implements MapDefinitionInterface
         $this->path = $path;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapDefinitionInterface::id()
-     */
+    #[\Override]
     public function id(): string
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapDefinitionInterface::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return $this->title;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapDefinitionInterface::features()
-     */
+    #[\Override]
     public function features(): array
     {
         $reader = new GeoJSONReader();

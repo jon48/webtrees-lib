@@ -39,10 +39,7 @@ class CertificateFilesystemServiceTest extends TestCase
      */
     protected Tree $tree;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -72,10 +69,7 @@ class CertificateFilesystemServiceTest extends TestCase
         $this->certificate_filesystem_service->setFilesystem($this->tree, $this->filesystem);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

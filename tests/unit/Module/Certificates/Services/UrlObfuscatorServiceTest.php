@@ -30,10 +30,7 @@ class UrlObfuscatorServiceTest extends TestCase
     protected string $valid_key;
     protected string $valid_nonce;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,10 +40,7 @@ class UrlObfuscatorServiceTest extends TestCase
         $this->valid_nonce = str_repeat('1234', 6); // SODIUM_CRYPTO_SECRETBOX_NONCEBYTES = 24
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -42,10 +42,7 @@ class HookService implements HookServiceInterface
         $this->module_service = $module_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookServiceInterface::use()
-     */
+    #[\Override]
     public function use(string $hook_interface): ?HookCollectorInterface
     {
         return $this->all()->get($hook_interface);

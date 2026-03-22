@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Sosa;
 
 use Aura\Router\Map;
-use Aura\Router\Route;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
@@ -75,29 +74,21 @@ class SosaModule extends AbstractModule implements
     private const SCHEMA_TARGET_VERSION   = 3;
     private const SCHEMA_SETTING_NAME     = 'MAJ_SOSA_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';
-/**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “Sosa” module */ I18N::translate('Sosa');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “Sosa” module */ I18N::translate('Calculate and display Sosa ancestors of the root person.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitBoot();
@@ -108,10 +99,7 @@ class SosaModule extends AbstractModule implements
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -143,28 +131,19 @@ class SosaModule extends AbstractModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.3-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleMenuInterface::defaultMenuOrder()
-     */
+    #[\Override]
     public function defaultMenuOrder(): int
     {
         return 7;
     }
 
-    /**
-     * {@inhericDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleMenuInterface::getMenu()
-     */
+    #[\Override]
     public function getMenu(Tree $tree): ?Menu
     {
         $menu = new Menu(I18N::translate('Sosa Statistics'));
@@ -223,28 +202,19 @@ class SosaModule extends AbstractModule implements
         return $menu;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
-     */
+    #[\Override]
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::bodyContent()
-     */
+    #[\Override]
     public function bodyContent(): string
     {
         return '<script src="' . $this->assetUrl('js/sosa.min.js') . '"></script>';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::sidebarTitle()
-     */
+    #[\Override]
     public function sidebarTitle(Individual $individual): string
     {
         $user = Auth::check() ? Auth::user() : new DefaultUser();
@@ -255,10 +225,7 @@ class SosaModule extends AbstractModule implements
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarContent()
-     */
+    #[\Override]
     public function getSidebarContent(Individual $individual): string
     {
         $sosa_root_xref = $individual->tree()->getUserPreference(Auth::user(), 'MAJ_SOSA_ROOT_ID');
@@ -272,10 +239,7 @@ class SosaModule extends AbstractModule implements
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::hasSidebarContent()
-     */
+    #[\Override]
     public function hasSidebarContent(Individual $individual): bool
     {
         $user = Auth::check() ? Auth::user() : new DefaultUser();
@@ -284,19 +248,13 @@ class SosaModule extends AbstractModule implements
             ->sosaNumbers($individual->tree(), $user, $individual)->count() > 0;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::defaultSidebarOrder()
-     */
+    #[\Override]
     public function defaultSidebarOrder(): int
     {
         return 1;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\ModuleGeoAnalysisProviderInterface::listGeoAnalyses()
-     */
+    #[\Override]
     public function listGeoAnalyses(): array
     {
         return [
@@ -304,10 +262,7 @@ class SosaModule extends AbstractModule implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
-     */
+    #[\Override]
     public function listSubscribedHooks(): array
     {
         return [

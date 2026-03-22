@@ -44,10 +44,7 @@ class TokenGenerate implements RequestHandlerInterface
         $this->token_service = $token_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

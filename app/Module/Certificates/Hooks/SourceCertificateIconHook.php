@@ -45,19 +45,13 @@ class SourceCertificateIconHook implements FactSourceTextExtenderInterface
         $this->url_obfuscator_service = $url_obfuscator_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourcePrepend()
-     */
+    #[\Override]
     public function factSourcePrepend(Tree $tree, $fact): string
     {
         $permission_level = $tree->getPreference('MAJ_CERTIF_SHOW_CERT');
@@ -105,10 +99,7 @@ class SourceCertificateIconHook implements FactSourceTextExtenderInterface
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\FactSourceTextExtenderInterface::factSourceAppend()
-     */
+    #[\Override]
     public function factSourceAppend(Tree $tree, $fact): string
     {
         return '';

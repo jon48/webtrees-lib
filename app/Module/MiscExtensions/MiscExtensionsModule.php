@@ -43,29 +43,20 @@ class MiscExtensionsModule extends AbstractModule implements
     }
     use ModuleConfigTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “MiscExtensions” module */ I18N::translate('Miscellaneous extensions');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “MiscExtensions” module */ I18N::translate('Miscellaneous extensions for webtrees.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitBoot();
@@ -76,10 +67,7 @@ class MiscExtensionsModule extends AbstractModule implements
         }
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -95,28 +83,19 @@ class MiscExtensionsModule extends AbstractModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.15-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
-     */
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
-     */
+    #[\Override]
     public function listSubscribedHooks(): array
     {
         return [

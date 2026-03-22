@@ -18,7 +18,6 @@ use Fisharebest\Webtrees\Fact;
 use Fisharebest\Webtrees\Individual;
 use Fisharebest\Webtrees\Module\ModuleInterface;
 use MyArtJaub\Webtrees\Contracts\Hooks\NameAccordionExtenderInterface;
-use MyArtJaub\Webtrees\Module\Sosa\Services\SosaRecordsService;
 
 /**
  * Hook for displaying the individual's title in the names accordion.
@@ -37,19 +36,13 @@ class TitlesCardHook implements NameAccordionExtenderInterface
         $this->module = $module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\NameAccordionExtenderInterface::accordionCard()
-     */
+    #[\Override]
     public function accordionCard(Individual $individual): string
     {
         $title_separator = $this->module->getPreference('MAJ_TITLE_PREFIX');

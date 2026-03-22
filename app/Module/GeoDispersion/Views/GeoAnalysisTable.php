@@ -22,47 +22,31 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class GeoAnalysisTable extends AbstractGeoAnalysisView
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::type()
-     */
+    #[\Override]
     public function type(): string
     {
         return I18N::translateContext('GEODISPERSION', 'Table');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::icon()
-     */
+    #[\Override]
     public function icon(ModuleInterface $module): string
     {
         return view($module->name() . '::icons/view-table', ['type' => $this->type()]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalSettingsContent()
-     */
+    #[\Override]
     public function globalSettingsContent(ModuleInterface $module): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::withGlobalSettingsUpdate()
-     * @return $this
-     */
+    #[\Override]
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalTabContent()
-     */
+    #[\Override]
     public function globalTabContent(GeoDispersionModule $module, GeoAnalysisResult $result, array $params): string
     {
         return view($module->name() . '::geoanalysisview-tab-glb-table', $params + [

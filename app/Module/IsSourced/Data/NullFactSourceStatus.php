@@ -19,19 +19,13 @@ namespace MyArtJaub\Webtrees\Module\IsSourced\Data;
  */
 class NullFactSourceStatus extends FactSourceStatus
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::isSet()
-     */
+    #[\Override]
     public function isSet(): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\FactSourceStatus::combineWith()
-     */
+    #[\Override]
     public function combineWith(SourceStatus $other)
     {
         return $other;

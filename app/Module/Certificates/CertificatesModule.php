@@ -57,29 +57,20 @@ class CertificatesModule extends AbstractModule implements
     use ModuleGlobalTrait;
     use ModuleListTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “Certificates” module */ I18N::translate('Certificates');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “Certificates” module */ I18N::translate('Display and edition of certificates linked to sources.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitMajBoot();
@@ -107,10 +98,7 @@ class CertificatesModule extends AbstractModule implements
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -154,66 +142,43 @@ class CertificatesModule extends AbstractModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.3-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
-     */
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
-     */
+    #[\Override]
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listUrl()
-     *
-     * @param array<bool|int|string|array<mixed>|null> $parameters
-     */
+    #[\Override]
     public function listUrl(Tree $tree, array $parameters = []): string
     {
         return route(CertificatesList::class, ['tree' => $tree->name() ] + $parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listMenuClass()
-     */
+    #[\Override]
     public function listMenuClass(): string
     {
         return 'menu-maj-certificates';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listIsEmpty()
-     */
+    #[\Override]
     public function listIsEmpty(Tree $tree): bool
     {
         return Auth::accessLevel($tree) > (int) $tree->getPreference('MAJ_CERTIF_SHOW_CERT', (string) Auth::PRIV_HIDE);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
-     */
+    #[\Override]
     public function listSubscribedHooks(): array
     {
         return [

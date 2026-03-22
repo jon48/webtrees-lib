@@ -57,28 +57,19 @@ class AdminTasksModule extends AbstractModule implements
     private const SCHEMA_SETTING_NAME     = 'MAJ_ADMTASKS_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Administration Tasks');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Manage and run nearly-scheduled administration tasks.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitBoot();
@@ -89,10 +80,7 @@ class AdminTasksModule extends AbstractModule implements
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -127,37 +115,25 @@ class AdminTasksModule extends AbstractModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleLatestVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.3-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
-     */
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::bodyContent()
-     */
+    #[\Override]
     public function bodyContent(): string
     {
         return view($this->name() . '::snippet', [ 'url' => route(TaskTrigger::class) ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see ModuleTasksProviderInterface::listTasks()
-     */
+    #[\Override]
     public function listTasks(): array
     {
         return [

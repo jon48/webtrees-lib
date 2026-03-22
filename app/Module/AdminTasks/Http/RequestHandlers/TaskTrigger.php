@@ -44,10 +44,7 @@ class TaskTrigger implements RequestHandlerInterface
         $this->taskschedules_service = $taskschedules_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

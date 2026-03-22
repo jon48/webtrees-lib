@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\SosaFamilyDatatablesExtenderInterface;
 class SosaFamilyDatatablesExtenderCollector extends AbstractHookCollector implements
     SosaFamilyDatatablesExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Columns extender for tables of ancestors’ families');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Add additional columns to tables of ancestors’ families');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return SosaFamilyDatatablesExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\SosaFamilyDatatablesExtenderInterface::sosaFamilyColumns()
-     */
+    #[\Override]
     public function sosaFamilyColumns(iterable $records): array
     {
         $result = [];

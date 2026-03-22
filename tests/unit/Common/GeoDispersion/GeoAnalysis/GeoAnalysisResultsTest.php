@@ -19,9 +19,7 @@ class GeoAnalysisResultsTest extends TestCase
     protected Tree $tree;
     protected GeoAnalysisPlace $place;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,9 +29,7 @@ class GeoAnalysisResultsTest extends TestCase
         $this->geoanalysis_results = new GeoAnalysisResults();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

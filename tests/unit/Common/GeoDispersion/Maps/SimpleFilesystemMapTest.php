@@ -19,9 +19,7 @@ class SimpleFilesystemMapTest extends TestCase
     protected string $title;
     protected string $path;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,9 +42,7 @@ class SimpleFilesystemMapTest extends TestCase
         $this->simple_filesystem_map = new SimpleFilesystemMap($this->id, $this->title, $filesystem, $this->path);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

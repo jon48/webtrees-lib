@@ -98,10 +98,7 @@ class MapColorsConfig implements JsonSerializable
         return $this->hover;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see JsonSerializable::jsonSerialize()
-     */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {

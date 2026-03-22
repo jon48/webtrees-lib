@@ -149,19 +149,13 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
      * Neutralise the methods associated with MediaFile.
      */
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\ImageFactory::mediaFileResponse()
-     */
+    #[\Override]
     public function mediaFileResponse(MediaFile $media_file, bool $add_watermark, bool $download): ResponseInterface
     {
         throw new BadMethodCallException("Invalid method for Certificates");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\ImageFactory::mediaFileThumbnailResponse()
-     */
+    #[\Override]
     public function mediaFileThumbnailResponse(
         MediaFile $media_file,
         int $width,
@@ -172,29 +166,20 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
         throw new BadMethodCallException("Invalid method for Certificates");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\ImageFactory::createWatermark()
-     */
+    #[\Override]
     public function createWatermark(int $width, int $height, MediaFile $media_file): Image
     {
 
         throw new BadMethodCallException("Invalid method for Certificates");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\ImageFactory::fileNeedsWatermark()
-     */
+    #[\Override]
     public function fileNeedsWatermark(MediaFile $media_file, UserInterface $user): bool
     {
         throw new BadMethodCallException("Invalid method for Certificates");
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\ImageFactory::thumbnailNeedsWatermark()
-     */
+    #[\Override]
     public function thumbnailNeedsWatermark(MediaFile $media_file, UserInterface $user): bool
     {
         throw new BadMethodCallException("Invalid method for Certificates");

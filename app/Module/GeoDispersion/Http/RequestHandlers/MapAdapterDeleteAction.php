@@ -47,10 +47,7 @@ class MapAdapterDeleteAction implements RequestHandlerInterface
         $this->mapadapter_data_service = $mapadapter_data_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $tree = Validator::attributes($request)->tree();

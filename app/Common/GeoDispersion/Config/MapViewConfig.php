@@ -40,29 +40,19 @@ class MapViewConfig implements MapViewConfigInterface
         $this->mapper_config = $mapper_config ?? new NullPlaceMapperConfig();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapMappingProperty()
-     */
+    #[\Override]
     public function mapMappingProperty(): string
     {
         return $this->map_mapping_property;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::mapperConfig()
-     */
+    #[\Override]
     public function mapperConfig(): PlaceMapperConfigInterface
     {
         return $this->mapper_config;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\MapViewConfigInterface::with()
-     * @return static
-     */
+    #[\Override]
     public function with(string $mapping_property, PlaceMapperConfigInterface $mapper_config): self
     {
         $new = clone $this;

@@ -42,28 +42,19 @@ class SosaIconHook implements RecordNameTextExtenderInterface
         $this->sosa_records_service = $sosa_records_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNamePrepend()
-     */
+    #[\Override]
     public function recordNamePrepend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNameAppend()
-     */
+    #[\Override]
     public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         $current_user = Auth::check() ? Auth::user() : new DefaultUser();

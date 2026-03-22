@@ -46,10 +46,7 @@ class ModulesHooksAction extends AbstractModuleComponentAction
         $this->hook_service = $hook_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $hook_name = Validator::attributes($request)->string('hook_name', '');

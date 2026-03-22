@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface;
  */
 class RecordNameTextExtenderCollector extends AbstractHookCollector implements RecordNameTextExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Text extender for records’ name');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Extends the full name of GEDCOM records with additional text or icons.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return RecordNameTextExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNamePrepend()
-     */
+    #[\Override]
     public function recordNamePrepend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         return $this->hooks()
@@ -65,10 +53,7 @@ class RecordNameTextExtenderCollector extends AbstractHookCollector implements R
             ->implode('');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNameAppend()
-     */
+    #[\Override]
     public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         return $this->hooks()

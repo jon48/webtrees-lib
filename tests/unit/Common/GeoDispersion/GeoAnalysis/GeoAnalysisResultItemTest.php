@@ -19,9 +19,7 @@ class GeoAnalysisResultItemTest extends TestCase
     /** @var GeoAnalysisPlace&\PHPUnit\Framework\MockObject\MockObject $place */
     protected GeoAnalysisPlace $place;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,9 +30,7 @@ class GeoAnalysisResultItemTest extends TestCase
         $this->geoanalysis_result_item = new GeoAnalysisResultItem($this->place, $this->count);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -30,10 +30,7 @@ class AdminConfigPageTest extends TestCase
     /** @var User&\PHPUnit\Framework\MockObject\MockObject $user */
     protected User $user;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -58,10 +55,7 @@ class AdminConfigPageTest extends TestCase
         Registry::filesystem($filesystem_factory);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

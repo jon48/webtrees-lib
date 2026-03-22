@@ -52,19 +52,13 @@ class SourceCertificate extends AbstractElement
         $this->url_obfuscator_service = $url_obfuscator_service ?? app(UrlObfuscatorService::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Elements\AbstractElement::canonical()
-     */
+    #[\Override]
     public function canonical(string $value): string
     {
         return strtr($value, '\\', '/');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Elements\AbstractElement::edit()
-     */
+    #[\Override]
     public function edit(string $id, string $name, string $value, Tree $tree): string
     {
         list($city, $file) = explode('/', $this->canonical($value), 2) + ['', ''];

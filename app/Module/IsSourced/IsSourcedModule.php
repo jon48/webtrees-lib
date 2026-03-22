@@ -42,64 +42,43 @@ class IsSourcedModule extends AbstractModule implements
     use ModuleGlobalTrait;
     use ModuleSidebarTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Sourced events');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Indicate if events related to an record are sourced.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.8-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
-     */
+    #[\Override]
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::bodyContent()
-     */
+    #[\Override]
     public function bodyContent(): string
     {
         return '<script src="' . $this->assetUrl('js/issourced.min.js') . '"></script>';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::hasSidebarContent()
-     */
+    #[\Override]
     public function hasSidebarContent(Individual $individual): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleSidebarInterface::getSidebarContent()
-     */
+    #[\Override]
     public function getSidebarContent(Individual $individual): string
     {
         /** @var SourceStatusService $source_status_service */
@@ -123,10 +102,7 @@ class IsSourcedModule extends AbstractModule implements
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
-     */
+    #[\Override]
     public function listSubscribedHooks(): array
     {
         return [

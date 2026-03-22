@@ -22,9 +22,7 @@ class TaskScheduleTest extends TestCase
     protected int $frequency;
     protected int $remaining;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,9 +46,7 @@ class TaskScheduleTest extends TestCase
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

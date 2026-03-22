@@ -26,60 +26,38 @@ use JsonSerializable;
  */
 class NullPlaceMapperConfig implements PlaceMapperConfigInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::get()
-     */
+    #[\Override]
     public function get(string $key, $default = null)
     {
         return $default;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::has()
-     */
+    #[\Override]
     public function has(string $key): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::jsonDeserialize()
-     *
-     * @param mixed $config
-     * @return $this
-     */
+    #[\Override]
     public function jsonDeserialize($config): self
     {
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see JsonSerializable::jsonSerialize()
-     */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return [];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::configContent()
-     */
+    #[\Override]
     public function configContent(ModuleInterface $module, Tree $tree): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
-     * @return $this
-     */
+    #[\Override]
     public function withConfigUpdate(ServerRequestInterface $request): self
     {
         return $this;

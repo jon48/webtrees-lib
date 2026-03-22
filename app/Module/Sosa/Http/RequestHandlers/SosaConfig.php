@@ -17,7 +17,6 @@ namespace MyArtJaub\Webtrees\Module\Sosa\Http\RequestHandlers;
 use Fisharebest\Webtrees\Auth;
 use Fisharebest\Webtrees\DefaultUser;
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -50,10 +49,7 @@ class SosaConfig implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(SosaModule::class)->first();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

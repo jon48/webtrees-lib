@@ -14,10 +14,7 @@ class WatermarkTest extends TestCase
 {
     protected Watermark $watermark;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,10 +22,7 @@ class WatermarkTest extends TestCase
         $this->watermark = new Watermark('WatermarkTest', '#ff00f0', 42);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -31,9 +31,7 @@ class WelcomeBlockModuleTest extends TestCase
     /** @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree */
     protected Tree $tree;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,9 +50,7 @@ class WelcomeBlockModuleTest extends TestCase
         self::useDefaultViewFor('::modules/block-template');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

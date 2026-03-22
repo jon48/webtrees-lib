@@ -57,10 +57,7 @@ class MatomoStats implements RequestHandlerInterface
         $this->matomo_service = $matomo_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/ajax';

@@ -180,19 +180,13 @@ class FactSourceStatus extends SourceStatus
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::isFullySourced()
-     */
+    #[\Override]
     public function isFullySourced(): bool
     {
         return parent::isFullySourced() && $this->sourceMatchesFactDate();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::label()
-     */
+    #[\Override]
     public function label(string $context): string
     {
         $context_label = Registry::elementFactory()->make($context)->label();
@@ -221,10 +215,7 @@ class FactSourceStatus extends SourceStatus
         return I18N::translate('%s not found', $context_label);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::order()
-     */
+    #[\Override]
     public function order(): int
     {
         return ($this->factHasDate() ? 1 : 0) * ($this->hasSource() ? 1 : -1) *
@@ -235,10 +226,7 @@ class FactSourceStatus extends SourceStatus
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\IsSourced\Data\SourceStatus::combineWith()
-     */
+    #[\Override]
     public function combineWith(SourceStatus $other)
     {
         if ($other instanceof FactSourceStatus) {

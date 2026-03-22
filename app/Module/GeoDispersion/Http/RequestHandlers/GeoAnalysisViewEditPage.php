@@ -59,10 +59,7 @@ class GeoAnalysisViewEditPage implements RequestHandlerInterface
         $this->geoanalysis_data_service = $geoanalysis_data_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/administration';

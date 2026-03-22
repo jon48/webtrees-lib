@@ -44,9 +44,7 @@ class CertificateDataServiceTest extends TestCase
      */
     protected Certificate $certificate;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,9 +55,7 @@ class CertificateDataServiceTest extends TestCase
         $this->certificate->method('gedcomPath')->willReturn('location1/image1.jpg');
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

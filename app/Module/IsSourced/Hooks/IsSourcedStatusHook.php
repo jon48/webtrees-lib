@@ -40,28 +40,19 @@ class IsSourcedStatusHook implements RecordNameTextExtenderInterface
         $this->source_status_service = $source_status_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNamePrepend()
-     */
+    #[\Override]
     public function recordNamePrepend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\RecordNameTextExtenderInterface::recordNameAppend()
-     */
+    #[\Override]
     public function recordNameAppend(GedcomRecord $record, bool $use_long = false, string $size = ''): string
     {
         if ($use_long && $record instanceof Individual) {

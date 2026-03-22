@@ -43,58 +43,38 @@ abstract class AbstractHookCollector implements HookCollectorInterface, HookInte
         $this->module = $module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookInterface::module()
-     */
+    #[\Override]
     public function module(): ModuleInterface
     {
         return $this->module;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::name()
-     */
+    #[\Override]
     public function name(): string
     {
         return $this->module->name() . '-' .
             mb_substr(str_replace('collector', '', mb_strtolower((new ReflectionClass($this))->getShortName())), 0, 64);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::title()
-     */
+    #[\Override]
     abstract public function title(): string;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::description()
-     */
+    #[\Override]
     abstract public function description(): string;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::hookInterface()
-     */
+    #[\Override]
     abstract public function hookInterface(): string;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::register()
-     */
+    #[\Override]
     public function register(HookInterface $hook_instance, int $order): void
     {
         $this->hooks->put($order, array_merge($this->hooks->get($order, []), [$hook_instance]));
     }
 
     /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\HookCollectorInterface::hooks()
-     *
      * @return Collection<THook>
      */
+    #[\Override]
     public function hooks(): Collection
     {
         /** @var Collection<THook> */

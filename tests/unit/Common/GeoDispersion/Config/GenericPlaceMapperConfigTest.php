@@ -20,9 +20,7 @@ class GenericPlaceMapperConfigTest extends TestCase
     /** @var array<string, string> $mapper_config */
     protected $mapper_config;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,9 +30,7 @@ class GenericPlaceMapperConfigTest extends TestCase
         $this->generic_place_mapper_config->setConfig($this->mapper_config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

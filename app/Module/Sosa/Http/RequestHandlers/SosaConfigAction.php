@@ -46,10 +46,7 @@ class SosaConfigAction implements RequestHandlerInterface
         $this->sosa_record_service = $sosa_records_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $tree = Validator::attributes($request)->tree();

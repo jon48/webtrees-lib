@@ -28,9 +28,7 @@ class MapColorsConfigTest extends TestCase
     /** @var Color&\PHPUnit\Framework\MockObject\MockObject $hover */
     protected Color $hover;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,9 +44,7 @@ class MapColorsConfigTest extends TestCase
         $this->mapColorsConfig = new MapColorsConfig($this->default, $this->stroke, $this->max_value, $this->hover);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

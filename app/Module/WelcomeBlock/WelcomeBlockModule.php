@@ -37,29 +37,20 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
     use ModuleMyArtJaubTrait;
     use ModuleBlockTrait;
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “WelcomeBlock” module */ I18N::translate('MyArtJaub Welcome Block');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “WelcomeBlock” module */ I18N::translate('The MyArtJaub Welcome block welcomes the visitor to the site, allows a quick login to the site, and displays statistics on visits.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -71,21 +62,13 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.3-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::getBlock()
-     *
-     * @param mixed[] $config
-     */
+    #[\Override]
     public function getBlock(Tree $tree, int $block_id, string $context, array $config = []): string
     {
         $fab_welcome_block_view = app(\Fisharebest\Webtrees\Module\WelcomeBlockModule::class)
@@ -115,28 +98,19 @@ class WelcomeBlockModule extends AbstractModule implements ModuleMyArtJaubInterf
         return $content;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::isTreeBlock()
-     */
+    #[\Override]
     public function isTreeBlock(): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::editBlockConfiguration()
-     */
+    #[\Override]
     public function editBlockConfiguration(Tree $tree, int $block_id): string
     {
         return view($this->name() . '::config', $this->matomoSettings($block_id));
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleBlockInterface::saveBlockConfiguration()
-     */
+    #[\Override]
     public function saveBlockConfiguration(ServerRequestInterface $request, int $block_id): void
     {
         $matomo_enabled = Validator::parsedBody($request)->string('matomo_enabled', '') === 'yes';

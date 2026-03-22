@@ -32,10 +32,7 @@ class LegacyXrefFactory extends XrefFactory
         'REPO' => 'R',
     ];
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\XrefFactory::make()
-     */
+    #[\Override]
     public function make(string $record_type): string
     {
         $prefix = static::TYPE_TO_PREFIX[$record_type] ?? 'X';
@@ -43,10 +40,7 @@ class LegacyXrefFactory extends XrefFactory
         return $this->generate($prefix, '');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Factories\XrefFactory::generate()
-     */
+    #[\Override]
     protected function generate($prefix, $suffix): string
     {
         $tree = app(Tree::class);

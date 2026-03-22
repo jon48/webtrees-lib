@@ -27,37 +27,25 @@ use MyArtJaub\Webtrees\Contracts\Hooks\IndividualDatatablesExtenderInterface;
 class IndividualDatatablesExtenderCollector extends AbstractHookCollector implements
     IndividualDatatablesExtenderInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Columns extender for tables of individuals');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return I18N::translate('Add additional columns to tables of individuals');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Common\Hooks\AbstractHookCollector::hookInterface()
-     */
+    #[\Override]
     public function hookInterface(): string
     {
         return IndividualDatatablesExtenderInterface::class;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\IndividualDatatablesExtenderInterface::individualColumns()
-     */
+    #[\Override]
     public function individualColumns(iterable $records): array
     {
         $result = [];

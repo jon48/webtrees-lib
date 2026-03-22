@@ -42,10 +42,7 @@ class AdminConfigAction implements RequestHandlerInterface
         $this->module = $module_service->findByInterface(MiscExtensionsModule::class)->first();
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

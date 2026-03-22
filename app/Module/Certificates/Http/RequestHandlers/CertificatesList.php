@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace MyArtJaub\Webtrees\Module\Certificates\Http\RequestHandlers;
 
 use Fisharebest\Webtrees\I18N;
-use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\Validator;
 use Fisharebest\Webtrees\Http\ViewResponseTrait;
 use Fisharebest\Webtrees\Http\Exceptions\HttpNotFoundException;
@@ -53,10 +52,7 @@ class CertificatesList implements RequestHandlerInterface
         $this->url_obfuscator_service = $url_obfuscator_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

@@ -47,29 +47,20 @@ class PatronymicLineageModule extends IndividualListModule implements
     use ModuleListTrait;
     use ModuleGlobalTrait;
 
-     /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “Patronymic lineage” module */ I18N::translate('Patronymic Lineages');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “Patronymic lineage” module */ I18N::translate('Display lineages of people holding the same surname.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -85,21 +76,13 @@ class PatronymicLineageModule extends IndividualListModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.18-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listUrl()
-     *
-     * @param array<bool|int|string|array<mixed>|null> $parameters
-     */
+    #[\Override]
     public function listUrl(Tree $tree, array $parameters = []): string
     {
         $surname = $parameters['surname'] ?? null;
@@ -137,31 +120,23 @@ class PatronymicLineageModule extends IndividualListModule implements
         return route(SurnamesList::class, ['tree'  =>  $tree->name() ] + $parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleListInterface::listMenuClass()
-     */
+    #[\Override]
     public function listMenuClass(): string
     {
         return 'menu-maj-patrolineage';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
-     */
+    #[\Override]
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\IndividualListModule::individuals()
-     *
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
+    #[\Override]
     public function individuals(
         Tree $tree,
         array $surns_to_show,
@@ -173,9 +148,6 @@ class PatronymicLineageModule extends IndividualListModule implements
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnameData()
-     *
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      *
@@ -190,24 +162,20 @@ class PatronymicLineageModule extends IndividualListModule implements
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\IndividualListModule::allSurnames()
-     *
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
+    #[\Override]
     public function allSurnames(array $surname_data): array
     {
         return parent::allSurnames($surname_data);
     }
 
     /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\IndividualListModule::surnameInitials()
-     *
      * Implemented to set the visibility to public.
      * This should probably be in a service, but this hack allows for reuse of mainstream code.
      */
+    #[\Override]
     public function surnameInitials(array $surname_data): array
     {
         return parent::surnameInitials($surname_data);

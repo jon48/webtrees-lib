@@ -61,10 +61,7 @@ class AncestorsListIndividual implements RequestHandlerInterface
         $this->sosa_record_service = $sosa_record_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/ajax';

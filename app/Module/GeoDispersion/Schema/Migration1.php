@@ -23,10 +23,7 @@ use Illuminate\Database\Schema\Blueprint;
  */
 class Migration1 implements MigrationInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
-     */
+    #[\Override]
     public function upgrade(): void
     {
         $in_transaction = DB::connection()->getPdo()->inTransaction();

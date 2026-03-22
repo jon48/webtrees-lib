@@ -36,9 +36,7 @@ class AuthTreePreferenceTest extends TestCase
      */
     protected $authTreePreference;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,9 +44,7 @@ class AuthTreePreferenceTest extends TestCase
         $this->authTreePreference = new AuthTreePreference();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

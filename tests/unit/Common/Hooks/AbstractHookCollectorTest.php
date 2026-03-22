@@ -20,9 +20,7 @@ class AbstractHookCollectorTest extends TestCase
     /** @var ModuleInterface&\PHPUnit\Framework\MockObject\MockObject $module */
     protected ModuleInterface $module;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,9 +32,7 @@ class AbstractHookCollectorTest extends TestCase
             ->getMockForAbstractClass();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

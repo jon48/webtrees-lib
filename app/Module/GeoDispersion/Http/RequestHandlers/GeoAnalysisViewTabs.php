@@ -47,10 +47,7 @@ class GeoAnalysisViewTabs implements RequestHandlerInterface
         $this->geoviewdata_service = $geoviewdata_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         if ($this->module === null) {

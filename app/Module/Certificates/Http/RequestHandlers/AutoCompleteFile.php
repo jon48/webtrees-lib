@@ -58,10 +58,7 @@ class AutoCompleteFile extends AbstractAutocompleteHandler
         $this->url_obfuscator_service = $url_obfuscator_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Http\RequestHandlers\AbstractAutocompleteHandler::search()
-     */
+    #[\Override]
     protected function search(ServerRequestInterface $request): Collection
     {
         $tree = Validator::attributes($request)->tree();

@@ -56,28 +56,19 @@ class HooksModule extends AbstractModule implements
     private const SCHEMA_SETTING_NAME     = 'MAJ_HOOKS_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “Hooks” module */ I18N::translate('Hooks');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         return /* I18N: Description of the “Hooks” module */ I18N::translate('Implements hooks management.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitBoot();
@@ -89,10 +80,7 @@ class HooksModule extends AbstractModule implements
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -109,28 +97,19 @@ class HooksModule extends AbstractModule implements
         });
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.6-v.1';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleConfigInterface::getConfigLink()
-     */
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Hooks\ModuleHookSubscriberInterface::listSubscribedHooks()
-     */
+    #[\Override]
     public function listSubscribedHooks(): array
     {
         return [

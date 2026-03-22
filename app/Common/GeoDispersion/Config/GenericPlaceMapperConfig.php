@@ -50,28 +50,19 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::get()
-     */
+    #[\Override]
     public function get(string $key, $default = null)
     {
         return $this->config[$key] ?? $default;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::has()
-     */
+    #[\Override]
     public function has(string $key): bool
     {
         return key_exists($key, $this->config);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \JsonSerializable::jsonSerialize()
-     */
+    #[\Override]
     #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
@@ -91,13 +82,7 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
         return $this->config;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::jsonDeserialize()
-     *
-     * @param mixed $config
-     * @return $this
-     */
+    #[\Override]
     public function jsonDeserialize($config): self
     {
         if (is_string($config)) {
@@ -109,20 +94,13 @@ class GenericPlaceMapperConfig implements PlaceMapperConfigInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::configContent()
-     */
+    #[\Override]
     public function configContent(ModuleInterface $module, Tree $tree): string
     {
         return '';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperConfigInterface::withConfigUpdate()
-     * @return $this
-     */
+    #[\Override]
     public function withConfigUpdate(ServerRequestInterface $request): self
     {
         return $this;

@@ -19,9 +19,7 @@ class MapViewConfigTest extends TestCase
     /** @var PlaceMapperConfigInterface&\PHPUnit\Framework\MockObject\MockObject $mapper_config */
     protected PlaceMapperConfigInterface $mapper_config;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,9 +29,7 @@ class MapViewConfigTest extends TestCase
         $this->map_view_config = new MapViewConfig($this->map_mapping_property, $this->mapper_config);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

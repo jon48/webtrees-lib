@@ -63,10 +63,7 @@ class MapAdapterAddAction implements RequestHandlerInterface
         $this->map_definition_service = $map_definition_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $tree = Validator::attributes($request)->tree();

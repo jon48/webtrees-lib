@@ -34,24 +34,19 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
 {
     private ?MapColorsConfig $colors_config = null;
 
+    #[\Override]
     public function type(): string
     {
         return I18N::translateContext('GEODISPERSION', 'Map');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::icon()
-     */
+    #[\Override]
     public function icon(ModuleInterface $module): string
     {
         return view($module->name() . '::icons/view-map', ['type' => $this->type()]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalSettingsContent()
-     */
+    #[\Override]
     public function globalSettingsContent(ModuleInterface $module): string
     {
         return view($module->name() . '::admin/view-edit-map', [
@@ -62,11 +57,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::withGlobalSettingsUpdate()
-     * @return static
-     */
+    #[\Override]
     public function withGlobalSettingsUpdate(ServerRequestInterface $request): self
     {
         $default_color  = Validator::parsedBody($request)->string('view_map_color_default', '');
@@ -87,10 +78,7 @@ class GeoAnalysisMap extends AbstractGeoAnalysisView
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\GeoDispersion\Views\AbstractGeoAnalysisView::globalTabContent()
-     */
+    #[\Override]
     public function globalTabContent(GeoDispersionModule $module, GeoAnalysisResult $result, array $params): string
     {
         $map_adapters = app(MapAdapterDataService::class)->allForView($this);

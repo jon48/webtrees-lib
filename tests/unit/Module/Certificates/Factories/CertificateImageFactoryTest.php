@@ -31,9 +31,7 @@ class CertificateImageFactoryTest extends TestCase
     /** @var Tree&\PHPUnit\Framework\MockObject\MockObject $tree */
     protected Tree $tree;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -49,10 +47,7 @@ class CertificateImageFactoryTest extends TestCase
         self::$filesystem = new Filesystem($mem_adapter);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::setUp()
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -66,10 +61,7 @@ class CertificateImageFactoryTest extends TestCase
         $this->certificate_image_factory = new CertificateImageFactory($filesystem_service);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\TestCase::tearDown()
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

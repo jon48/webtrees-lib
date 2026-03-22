@@ -21,10 +21,7 @@ use Fisharebest\Webtrees\Schema\MigrationInterface;
  */
 class Migration0 implements MigrationInterface
 {
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Schema\MigrationInterface::upgrade()
-     */
+    #[\Override]
     public function upgrade(): void
     {
         // These migrations have been merged into migration 2.

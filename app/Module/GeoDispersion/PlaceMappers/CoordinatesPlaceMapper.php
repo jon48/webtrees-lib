@@ -40,26 +40,22 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
 
     private ?GeometryEngine $geometry_engine = null;
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return I18N::translate('Mapping on place coordinates');
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * {@internal The Place is associated to a Point only.
      * PlaceLocation can calculate a BoundingBox.
      * Using a BoundingBox could make the mapping more complex and potentially arbitary.
      * Furthermore, when no coordinate is found for the place or its children, then it bubbles up to the parents.
      * This could create the unwanted side effect of a very large area to consider}
-     *
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\PlaceMapperInterface::map()
      */
+    #[\Override]
     public function map(Place $place, string $feature_property): ?string
     {
         $location = new PlaceLocation($place->gedcomName());

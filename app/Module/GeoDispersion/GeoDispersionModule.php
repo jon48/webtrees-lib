@@ -78,29 +78,20 @@ class GeoDispersionModule extends AbstractModule implements
     private const SCHEMA_SETTING_NAME     = 'MAJ_GEODISP_SCHEMA_VERSION';
     private const SCHEMA_MIGRATION_PREFIX = __NAMESPACE__ . '\Schema';
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::title()
-     */
+    #[\Override]
     public function title(): string
     {
         return /* I18N: Name of the “GeoDispersion” module */ I18N::translate('Geographical dispersion');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::description()
-     */
+    #[\Override]
     public function description(): string
     {
         //phpcs:ignore Generic.Files.LineLength.TooLong
         return /* I18N: Description of the “GeoDispersion” module */ I18N::translate('Perform and display geographical dispersion analyses.');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\AbstractModule::boot()
-     */
+    #[\Override]
     public function boot(): void
     {
         $this->traitBoot();
@@ -111,19 +102,13 @@ class GeoDispersionModule extends AbstractModule implements
         );
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleCustomInterface::customModuleVersion()
-     */
+    #[\Override]
     public function customModuleVersion(): string
     {
         return '2.1.18-v.2';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Module\ModuleMyArtJaubInterface::loadRoutes()
-     */
+    #[\Override]
     public function loadRoutes(Map $router): void
     {
         $router->attach('', '', static function (Map $router): void {
@@ -185,44 +170,31 @@ class GeoDispersionModule extends AbstractModule implements
         });
     }
 
+    #[\Override]
     public function getConfigLink(): string
     {
         return route(AdminConfigPage::class);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleChartInterface::chartUrl()
-     *
-     * @param array<bool|int|string|array<mixed>|null> $parameters
-     */
+    #[\Override]
     public function chartUrl(Individual $individual, array $parameters = []): string
     {
         return route(GeoAnalysisViewsList::class, ['tree' => $individual->tree()->name()] + $parameters);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleChartInterface::chartMenuClass()
-     */
+    #[\Override]
     public function chartMenuClass(): string
     {
         return 'menu-maj-geodispersion';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Fisharebest\Webtrees\Module\ModuleGlobalInterface::headContent()
-     */
+    #[\Override]
     public function headContent(): string
     {
         return '<link rel="stylesheet" href="' . e($this->moduleCssUrl()) . '">';
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\ModulePlaceMapperProviderInterface::listPlaceMappers()
-     */
+    #[\Override]
     public function listPlaceMappers(): array
     {
         return [
@@ -232,10 +204,7 @@ class GeoDispersionModule extends AbstractModule implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\GeoDispersion\ModuleGeoAnalysisProviderInterface::listGeoAnalyses()
-     */
+    #[\Override]
     public function listGeoAnalyses(): array
     {
         return [

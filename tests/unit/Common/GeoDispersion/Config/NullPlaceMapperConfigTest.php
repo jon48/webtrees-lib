@@ -17,9 +17,7 @@ class NullPlaceMapperConfigTest extends TestCase
 {
     protected NullPlaceMapperConfig $null_place_mapper_config;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -27,9 +25,7 @@ class NullPlaceMapperConfigTest extends TestCase
         $this->null_place_mapper_config = new NullPlaceMapperConfig();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

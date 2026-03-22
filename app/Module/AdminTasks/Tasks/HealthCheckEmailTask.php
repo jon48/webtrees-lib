@@ -80,29 +80,19 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         $this->upgrade_service = $upgrade_service;
     }
 
-
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::name()
-     */
+    #[\Override]
     public function name(): string
     {
         return I18N::translate('Healthcheck Email');
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::defaultFrequency()
-     */
+    #[\Override]
     public function defaultFrequency(): int
     {
         return 10080; // = 1 week = 7 * 24 * 60 min
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Tasks\TaskInterface::run()
-     */
+    #[\Override]
     public function run(TaskSchedule $task_schedule): bool
     {
         if ($this->module === null) {
@@ -164,10 +154,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         return $res;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface::configView()
-     */
+    #[\Override]
     public function configView(ServerRequestInterface $request): string
     {
         return $this->module === null ? '' : view($this->module->name() . '::tasks/healthcheck/config', [
@@ -175,10 +162,7 @@ class HealthCheckEmailTask implements TaskInterface, ConfigurableTaskInterface
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \MyArtJaub\Webtrees\Contracts\Tasks\ConfigurableTaskInterface::updateConfig()
-     */
+    #[\Override]
     public function updateConfig(ServerRequestInterface $request, TaskSchedule $task_schedule): bool
     {
         try {

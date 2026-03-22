@@ -51,10 +51,7 @@ class AdminConfigPage implements RequestHandlerInterface
         $this->tree_service = $tree_service;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Psr\Http\Server\RequestHandlerInterface::handle()
-     */
+    #[\Override]
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $this->layout = 'layouts/administration';
