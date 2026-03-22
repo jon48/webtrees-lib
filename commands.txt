@@ -15,7 +15,7 @@ phpcbf --exclude=Generic.Files.LineEndings
 
 .\vendor\bin\phpunit --coverage-html ./tests/coverage/ --coverage-clover ./tests/coverage.xml
 
-[...]\php7-nts-current\php.exe [...]\php-bin\phpDocumentor.phar
+phpdoc run -d . -t docs/api
 
 phpmetrics --report-html=docs/metrics --git ./app
 

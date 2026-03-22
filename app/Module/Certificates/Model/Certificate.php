@@ -195,7 +195,7 @@ class Certificate
      */
     public function mimeType(): string
     {
-        return Mime::TYPES[$this->extension] ?? Mime::DEFAULT_TYPE;
+        return Mime::TYPES[$this->extension ?? ''] ?? Mime::DEFAULT_TYPE;
     }
 
     /**

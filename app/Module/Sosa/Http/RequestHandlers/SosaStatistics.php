@@ -137,11 +137,11 @@ class SosaStatistics implements RequestHandlerInterface
                     2 * (int) $stats_by_gen[$gen - 1]['sosaCount'] - (int) $stats_gen['sosaCount'] :
                     0,
                 'perc_missing' => $gen > 1 ?
-                    1 - $this->safeDivision(
+                    1.0 - $this->safeDivision(
                         BigInteger::of((int) $stats_gen['sosaCount']),
                         BigInteger::of(2 * (int) $stats_by_gen[$gen - 1]['sosaCount'])
                     ) :
-                    0,
+                    0.0,
                 'total_known' => (int) $stats_gen['sosaTotalCount'],
                 'perc_total_known' => $this->safeDivision(
                     BigInteger::of((int) $stats_gen['sosaTotalCount']),

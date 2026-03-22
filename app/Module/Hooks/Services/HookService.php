@@ -95,7 +95,7 @@ class HookService implements HookServiceInterface
                 $hook_info = $hooks_info->get($hook_collector->name()) ?? collect();
                 foreach (
                     $hook_instances->filter(
-                        fn(HookInterface $hook): bool => $hook instanceof $hook_interface
+                        fn(HookInterface $hook): bool => $hook instanceof ((string)$hook_interface)
                     ) as $hook_instance
                 ) {
                     $hook_module_info = $hook_info->get($hook_instance->module()->name(), collect())->first();

@@ -108,7 +108,7 @@ class Watermark
     public function adjustSize(int $width): void
     {
         $len = mb_strlen($this->text);
-        while ($this->stringLengthEstimate($len, $this->size) > 0.9 * $width) {
+        while ($this->stringLengthEstimate($len, $this->size) > 0.9 * floatval($width)) {
             $this->size--;
             if ($this->size === 2) {
                 return;
@@ -125,6 +125,6 @@ class Watermark
      */
     private function stringLengthEstimate(int $text_length, int $font_size): int
     {
-        return $text_length * (int) ceil(($font_size + 2) * 0.5);
+        return $text_length * intval(ceil(floatval($font_size + 2) * 0.5));
     }
 }

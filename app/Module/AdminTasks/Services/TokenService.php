@@ -42,10 +42,12 @@ class TokenService
 
         # Run each chunk through md5
         for ($i = 1; $i <= $chunks; $i++) {
-            $md5token .= md5(substr($token, $i * 32 - 32, 32));
+            $chunk = substr($token, $i * 32 - 32, 32);
+            $md5token .= md5($chunk === false ? '' : $chunk);
         }
 
         # Trim the token to the required length
-        return substr($md5token, 0, $length);
+        $token_trimmed = substr($md5token, 0, $length);
+        return  $token_trimmed === false ? '' : $token_trimmed;
     }
 }

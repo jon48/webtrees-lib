@@ -104,12 +104,12 @@ class CoordinatesPlaceMapper implements PlaceMapperInterface
      */
     protected function getGridCell(Point $point, Point $grid_NE, Point $grid_SW, int $grid_columns): ?array
     {
-        list($x, $y) = [$point->x() ?? 0, $point->y() ?? 0];
-        list($x_max, $y_max) = [$grid_NE->x() ?? 0, $grid_NE->y() ?? 0];
-        list($x_min, $y_min) = [$grid_SW->x() ?? 0, $grid_SW->y() ?? 0];
+        list($x, $y) = [$point->x() ?? 0.0, $point->y() ?? 0.0];
+        list($x_max, $y_max) = [$grid_NE->x() ?? 0.0, $grid_NE->y() ?? 0.0];
+        list($x_min, $y_min) = [$grid_SW->x() ?? 0.0, $grid_SW->y() ?? 0.0];
 
-        $x_step = ($x_max - $x_min) / $grid_columns;
-        $y_step = ($y_max - $y_min) / $grid_columns;
+        $x_step = ($x_max - $x_min) / floatval($grid_columns);
+        $y_step = ($y_max - $y_min) / floatval($grid_columns);
 
         if ($x_min <= $x && $x <= $x_max && $y_min <= $y && $y <= $y_max) {
             return [

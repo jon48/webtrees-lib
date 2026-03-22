@@ -82,12 +82,12 @@
         ]
     },
     "scripts": {
-        "webtrees-lib:phpcs" : "phpcs -s",
-        "webtrees-lib:phpcbf" : "phpcbf",
-        "webtrees-lib:phpstan" : "./vendor-bin/phpstan/vendor/bin/phpstan analyze",
+        "webtrees-lib:phpcs" : "./vendor-bin/php-cs/vendor/bin/phpcs -s --exclude=Generic.Files.LineEndings",
+        "webtrees-lib:phpcbf" : "./vendor-bin/php-cs/vendor/bin/phpcbf --exclude=Generic.Files.LineEndings",
+        "webtrees-lib:phpstan" : "./vendor-bin/phpstan/vendor/bin/phpstan analyze --no-progress",
         "webtrees-lib:sonar" : "sonar-scanner",
-        "webtrees-lib:test": "phpunit",
-        "webtrees-lib:coverage": "phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage"
+        "webtrees-lib:test": "./vendor/bin/phpunit",
+        "webtrees-lib:coverage": "./vendor/bin/phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage"
     },
 	"extra": {
 		"bamarni-bin": {

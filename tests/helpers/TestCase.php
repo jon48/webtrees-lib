@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace MyArtJaub\Tests\Helpers\Webtrees;
 
 use Fisharebest\Webtrees\View;
+use Exception;
 
 /**
  * MyArtJaub base class for unit tests
@@ -43,5 +44,16 @@ class TestCase extends \Fisharebest\Webtrees\TestCase
     {
         View::registerNamespace('maj-common', __DIR__ . '/../resources/views/common/');
         View::registerCustomView($view, 'maj-common::default');
+    }
+
+    /**
+     * Provides an error handler converting PHP errors to exceptions.
+     */
+    public static function errorToExceptionHandler(): callable
+    {
+        return static function (int $errno, string $errstr) {
+            restore_error_handler();
+            throw new Exception($errstr, $errno);
+        };
     }
 }

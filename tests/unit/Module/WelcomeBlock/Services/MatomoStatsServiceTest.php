@@ -89,7 +89,7 @@ class MatomoStatsServiceTest extends TestCase
      * @param array<Response> $responses
      * @param int|null $expected_visits
      */
-    public function testVisitsThisYear(array $responses, int $expected_visits = null): void
+    public function testVisitsThisYear(array $responses, ?int $expected_visits): void
     {
         $this->clearCache();
         $this->http_handler->reset();
@@ -120,7 +120,7 @@ class MatomoStatsServiceTest extends TestCase
      * @param array<Response> $responses
      * @param int $expected_visits
      */
-    public function testVisitsToday(array $responses, int $expected_visits = null): void
+    public function testVisitsToday(array $responses, ?int $expected_visits): void
     {
         $this->clearCache();
         $this->http_handler->reset();

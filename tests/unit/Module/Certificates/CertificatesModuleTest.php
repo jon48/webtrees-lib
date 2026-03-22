@@ -3,12 +3,13 @@
 namespace MyArtJaub\Tests\Unit\Webtrees\Module\Certificates;
 
 use Fisharebest\Webtrees\Auth;
-use Fisharebest\Webtrees\TestCase;
 use Fisharebest\Webtrees\Tree;
 use Fisharebest\Webtrees\User;
 use Fisharebest\Webtrees\Contracts\UserInterface;
 use Fisharebest\Webtrees\Services\UserService;
+use MyArtJaub\Tests\Helpers\Webtrees\TestCase;
 use MyArtJaub\Webtrees\Module\Certificates\CertificatesModule;
+use Exception;
 
 /**
  * Class CertificatesModuleTest.
@@ -47,6 +48,9 @@ class CertificatesModuleTest extends TestCase
 
     public function testHeadContent(): void
     {
+        set_error_handler(self::errorToExceptionHandler(), E_WARNING);
+
+        self::expectException(Exception::class);
         self::expectExceptionMessageMatches('/filemtime\(\): stat failed/');
         self::assertNotEmpty($this->certificates_module->headContent());
     }

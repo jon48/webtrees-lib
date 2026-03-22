@@ -98,7 +98,7 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
             $height = $image->height();
 
             $watermark->adjustSize($width);
-            $watermark_x = (int) ceil($watermark->textLengthEstimate() * 1.5);
+            $watermark_x = intval(ceil(floatval($watermark->textLengthEstimate()) * 1.5));
             $watermark_y = $watermark->size() * 12 + 1;
 
             $font_definition = function (AbstractFont $font) use ($watermark): void {
@@ -108,8 +108,8 @@ class CertificateImageFactory extends ImageFactory implements ImageFactoryInterf
                 $font->valign('top');
             };
 
-            for ($i = min((int) ceil($width * 0.1), $watermark_x); $i < $width; $i += $watermark_x) {
-                for ($j = min((int) ceil($height * 0.1), $watermark_y); $j < $height; $j += $watermark_y) {
+            for ($i = min(intval(ceil(floatval($width) * 0.1)), $watermark_x); $i < $width; $i += $watermark_x) {
+                for ($j = min(intval(ceil(floatval($height) * 0.1)), $watermark_y); $j < $height; $j += $watermark_y) {
                     $image = $image->text($watermark->text(), $i, $j, $font_definition);
                 }
             }
