@@ -87,7 +87,7 @@
         "webtrees-lib:phpstan" : "./vendor-bin/phpstan/vendor/bin/phpstan analyze --no-progress",
         "webtrees-lib:sonar" : "sonar-scanner",
         "webtrees-lib:test": "./vendor/bin/phpunit",
-        "webtrees-lib:coverage": "./vendor/bin/phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage"
+        "webtrees-lib:coverage": "./vendor/bin/phpunit --coverage-clover=tests/coverage.xml --coverage-html=tests/coverage --log-junit=tests/junit.xml"
     },
 	"extra": {
 		"bamarni-bin": {

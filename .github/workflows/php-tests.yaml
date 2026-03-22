@@ -34,8 +34,18 @@ jobs:
 
       - run: composer webtrees-lib:coverage
 
-      - uses: codecov/codecov-action@v5
+      - name: Upload coverage report to Codecov
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: coverage
           files: tests/coverage.xml
           flags: unittests
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          report_type: test_results
+          files: tests/junit.xml
